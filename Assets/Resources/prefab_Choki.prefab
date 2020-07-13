@@ -1,5 +1,29 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1087566137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510487768542478972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2d269bc2455bbe40bcb857ded3352c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  count_a: 1
+  sprite_Gu: {fileID: 21300000, guid: 3ac04f1ae881d69409e0c3616022e838, type: 3}
+  sprite_Choki: {fileID: 21300000, guid: 016f22a0d78871e4c8e3ee925edf82d9, type: 3}
+  sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
+  te1_1: {fileID: 0}
+  te1_2: {fileID: 0}
+  ken1_1: 0
+  ken1_2: 0
+  ken2_1: 0
+  ken2_2: 0
+  ken3_1: 0
+  ken3_2: 0
 --- !u!1 &8444912149156136921
 GameObject:
   m_ObjectHideFlags: 0
@@ -25,7 +49,7 @@ RectTransform:
   m_GameObject: {fileID: 8444912149156136921}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 0.6666667}
   m_Children:
   - {fileID: 510487768542478851}
   m_Father: {fileID: 0}
@@ -153,8 +177,19 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8225762255894808597, guid: 081fe0df27f0bf6468a6c2f36276eac4,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1087566137}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 081fe0df27f0bf6468a6c2f36276eac4, type: 3}
+--- !u!1 &510487768542478972 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8225762255894808683, guid: 081fe0df27f0bf6468a6c2f36276eac4,
+    type: 3}
+  m_PrefabInstance: {fileID: 8444912148710492695}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &510487768542478851 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8225762255894808596, guid: 081fe0df27f0bf6468a6c2f36276eac4,

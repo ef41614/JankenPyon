@@ -36,6 +36,30 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1948087894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3287500832572935353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2d269bc2455bbe40bcb857ded3352c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  count_a: 1
+  sprite_Gu: {fileID: 21300000, guid: 3ac04f1ae881d69409e0c3616022e838, type: 3}
+  sprite_Choki: {fileID: 21300000, guid: 016f22a0d78871e4c8e3ee925edf82d9, type: 3}
+  sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
+  te1_1: {fileID: 0}
+  te1_2: {fileID: 0}
+  ken1_1: 0
+  ken1_2: 0
+  ken2_1: 0
+  ken2_2: 0
+  ken3_1: 0
+  ken3_2: 0
 --- !u!1001 &1717225836113222032
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -153,8 +177,19 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4200525132972250411, guid: 98ac39bcf0ff7384d9e7a979edfcfc48,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1948087894}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98ac39bcf0ff7384d9e7a979edfcfc48, type: 3}
+--- !u!1 &3287500832572935353 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4200525132972250409, guid: 98ac39bcf0ff7384d9e7a979edfcfc48,
+    type: 3}
+  m_PrefabInstance: {fileID: 1717225836113222032}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &3287500832572935352 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4200525132972250408, guid: 98ac39bcf0ff7384d9e7a979edfcfc48,

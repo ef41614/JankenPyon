@@ -23,19 +23,11 @@ namespace BEFOOL.PhotonTest
         string PID3;
         string PID4;
         public Player[] allPlayers;
-        int count_a = 1;
 
         public Text PName1;
         public Text PName2;
         public Text PName3;
         public Text PName4;
-
-        public Sprite sprite_Gu;
-        public Sprite sprite_Choki;
-        public Sprite sprite_Pa;
-
-        public Image te1_1;
-        public Image te1_2;
 
         public int ken1_1;
         public int ken1_2;
@@ -149,71 +141,6 @@ namespace BEFOOL.PhotonTest
             {
                 joinedMembersText.text += p.NickName + "\n";
             }
-        }
-
-        public void SelectGu()
-        {
-            Debug.Log("今グー押したのは" + PhotonNetwork.NickName);
-            Debug.Log("今グー押したのは" + PhotonNetwork.PlayerList);
-            Debug.Log(count_a + ": count_a");
-            if (count_a == 1)
-            {
-                te1_1.gameObject.GetComponent<Image>().sprite = sprite_Gu;
-            }
-            else if (count_a == 2)
-            {
-                te1_2.gameObject.GetComponent<Image>().sprite = sprite_Gu;
-            }
-            else
-            {
-                Debug.Log("count_a 3以上");
-            }
-            count_a++;
-            Debug.Log(count_a + ": count_a");
-        }
-
-        public void SelectChoki()
-        {
-            Debug.Log("今チョキ押したのは" + PhotonNetwork.NickName);
-            Debug.Log("今チョキ押したのは" + PhotonNetwork.PlayerList);
-
-            Debug.Log(count_a + ": count_a");
-            if (count_a == 1)
-            {
-                te1_1.gameObject.GetComponent<Image>().sprite = sprite_Choki;
-            }
-            else if (count_a == 2)
-            {
-                te1_2.gameObject.GetComponent<Image>().sprite = sprite_Choki;
-            }
-            else
-            {
-                Debug.Log("count_a 3以上");
-            }
-            count_a++;
-            Debug.Log(count_a + ": count_a");
-        }
-
-        public void SelectPa()
-        {
-            Debug.Log("今パー押したのは" + PhotonNetwork.NickName);
-            Debug.Log("今パー押したのは" + PhotonNetwork.PlayerList);
-
-            Debug.Log(count_a + ": count_a");
-            if (count_a == 1)
-            {
-                te1_1.gameObject.GetComponent<Image>().sprite = sprite_Pa;
-            }
-            else if (count_a == 2)
-            {
-                te1_2.gameObject.GetComponent<Image>().sprite = sprite_Pa;
-            }
-            else
-            {
-                Debug.Log("count_a 3以上");
-            }
-            count_a++;
-            Debug.Log(count_a + ": count_a");
         }
 
     }
