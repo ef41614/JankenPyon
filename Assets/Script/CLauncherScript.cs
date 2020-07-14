@@ -41,9 +41,12 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     //ルームに入室前に呼び出される
     public override void OnConnectedToMaster()
     {
+        RoomOptions options = new RoomOptions();
         Debug.Log("OnConnectedToMasterが呼ばれました");
+        options.PublishUserId = true; // ★お互いにユーザＩＤが見えるようにする。
+        options.MaxPlayers = 4; // ★最大人数もきちんと定義しておく。
         // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
-        PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions(), TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom("room", options, TypedLobby.Default);
     }
 
     //ルームに入った時に呼ばれる

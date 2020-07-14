@@ -18,10 +18,10 @@ namespace BEFOOL.PhotonTest
         string PN3;
         string PN4;
 
-        string PID1;
-        string PID2;
-        string PID3;
-        string PID4;
+        public string PID1;
+        public string PID2;
+        public string PID3;
+        public string PID4;
         public Player[] allPlayers;
 
         public Text PName1;
@@ -29,14 +29,6 @@ namespace BEFOOL.PhotonTest
         public Text PName3;
         public Text PName4;
 
-        public int ken1_1;
-        public int ken1_2;
-
-        public int ken2_1;
-        public int ken2_2;
-
-        public int ken3_1;
-        public int ken3_2;
 
         void Start()
         {
