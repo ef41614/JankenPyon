@@ -12,7 +12,7 @@ namespace BEFOOL.PhotonTest
     public class TestRoomController : MonoBehaviourPunCallbacks
     {
         [SerializeField]
-        Text joinedMembersText;
+        Text joinedMembersText = null;
         string PN1;
         string PN2;
         string PN3;

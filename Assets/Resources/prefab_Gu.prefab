@@ -18,12 +18,52 @@ MonoBehaviour:
   sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
   te1_1: {fileID: 0}
   te1_2: {fileID: 0}
-  ken1_1: 0
-  ken1_2: 0
-  ken2_1: 0
-  ken2_2: 0
-  ken3_1: 0
-  ken3_2: 0
+  te1_3: {fileID: 0}
+  te1_4: {fileID: 0}
+  te1_5: {fileID: 0}
+  _Player1_Te1: -1
+  _Player1_Te2: -1
+  _Player1_Te3: -1
+  _Player1_Te4: -1
+  _Player1_Te5: -1
+  _Player2_Te1: -1
+  _Player2_Te2: -1
+  _Player2_Te3: -1
+  _Player2_Te4: -1
+  _Player2_Te5: -1
+  _Player3_Te1: -1
+  _Player3_Te2: -1
+  _Player3_Te3: -1
+  _Player3_Te4: -1
+  _Player3_Te5: -1
+  _Player4_Te1: -1
+  _Player4_Te2: -1
+  _Player4_Te3: -1
+  _Player4_Te4: -1
+  _Player4_Te5: -1
+  Player1_Te1: -1
+  Player1_Te2: -1
+  Player1_Te3: -1
+  Player1_Te4: -1
+  Player1_Te5: -1
+  Player2_Te1: -1
+  Player2_Te2: -1
+  Player2_Te3: -1
+  Player2_Te4: -1
+  Player2_Te5: -1
+  Player3_Te1: -1
+  Player3_Te2: -1
+  Player3_Te3: -1
+  Player3_Te4: -1
+  Player3_Te5: -1
+  Player4_Te1: -1
+  Player4_Te2: -1
+  Player4_Te3: -1
+  Player4_Te4: -1
+  Player4_Te5: -1
+  PresentPlayerID: 
+  ShuffleCardsManager: {fileID: 0}
+  TestRoomController: {fileID: 0}
 --- !u!1 &6489724627146627673
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,9 +219,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6467123108085658091, guid: e1dab957eecbe384988edf9b05ec0b1f,
         type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 7165611466276133596}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnMouseDown
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1dab957eecbe384988edf9b05ec0b1f, type: 3}
 --- !u!1 &265699294935772582 stripped

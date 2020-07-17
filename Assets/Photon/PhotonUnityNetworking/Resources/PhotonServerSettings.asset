@@ -38,6 +38,8 @@ MonoBehaviour:
   - RespawnSpaceship
   - Chat
   - DeleteChat
+  - HitByProjectile
+  - SelectJankenCard
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

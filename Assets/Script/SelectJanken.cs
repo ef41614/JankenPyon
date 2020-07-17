@@ -8,12 +8,13 @@ using System.Linq;
 using System;
 using say;　// 対象のスクリプトの情報を取得
 using BEFOOL.PhotonTest;
+//using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class SelectJanken : MonoBehaviourPunCallbacks
+public class SelectJanken : MonoBehaviour, IPunObservable
 {
     [SerializeField]
     public int count_a = 1;
-    
+
     public Sprite sprite_Gu;
     public Sprite sprite_Choki;
     public Sprite sprite_Pa;
@@ -24,51 +25,61 @@ public class SelectJanken : MonoBehaviourPunCallbacks
     public Image te1_4;
     public Image te1_5;
 
-    [HideInInspector]
+    public int _Player1_Te1 = -1;
+    public int _Player1_Te2 = -1;
+    public int _Player1_Te3 = -1;
+    public int _Player1_Te4 = -1;
+    public int _Player1_Te5 = -1;
+
+    public int _Player2_Te1 = -1;
+    public int _Player2_Te2 = -1;
+    public int _Player2_Te3 = -1;
+    public int _Player2_Te4 = -1;
+    public int _Player2_Te5 = -1;
+
+    public int _Player3_Te1 = -1;
+    public int _Player3_Te2 = -1;
+    public int _Player3_Te3 = -1;
+    public int _Player3_Te4 = -1;
+    public int _Player3_Te5 = -1;
+
+    public int _Player4_Te1 = -1;
+    public int _Player4_Te2 = -1;
+    public int _Player4_Te3 = -1;
+    public int _Player4_Te4 = -1;
+    public int _Player4_Te5 = -1;
+
+
     public int Player1_Te1 = -1;
-    [HideInInspector]
     public int Player1_Te2 = -1;
-    [HideInInspector]
     public int Player1_Te3 = -1;
-    [HideInInspector]
     public int Player1_Te4 = -1;
-    [HideInInspector]
     public int Player1_Te5 = -1;
 
-    [HideInInspector]
     public int Player2_Te1 = -1;
-    [HideInInspector]
     public int Player2_Te2 = -1;
-    [HideInInspector]
     public int Player2_Te3 = -1;
-    [HideInInspector]
     public int Player2_Te4 = -1;
-    [HideInInspector]
     public int Player2_Te5 = -1;
 
-    [HideInInspector]
     public int Player3_Te1 = -1;
-    [HideInInspector]
     public int Player3_Te2 = -1;
-    [HideInInspector]
     public int Player3_Te3 = -1;
-    [HideInInspector]
     public int Player3_Te4 = -1;
-    [HideInInspector]
     public int Player3_Te5 = -1;
 
-    [HideInInspector]
     public int Player4_Te1 = -1;
-    [HideInInspector]
+    //    {
+    //      get { return _Player4_Te1; }
+    //    set { _Player4_Te1 = value; RequestOwner(); }
+    //}
     public int Player4_Te2 = -1;
-    [HideInInspector]
     public int Player4_Te3 = -1;
-    [HideInInspector]
     public int Player4_Te4 = -1;
-    [HideInInspector]
     public int Player4_Te5 = -1;
 
     public string PresentPlayerID;
+    private PhotonView photonView = null;
 
     public GameObject ShuffleCardsManager;  //ヒエラルキー上のオブジェクト名
     ShuffleCards ShuffleCardsMSC; //スクリプト名 + このページ上でのニックネーム
@@ -76,23 +87,45 @@ public class SelectJanken : MonoBehaviourPunCallbacks
     public GameObject TestRoomController;  //ヒエラルキー上のオブジェクト名
     TestRoomController TestRoomControllerSC;
 
+
+    void Awake()
+    {
+        this.photonView = GetComponent<PhotonView>();
+        Debug.Log("SelectJanken 出席確認1");
+    }
+
     void Start()
     {
-        Debug.Log("SelectJanken 出席確認");
+        //var customProperties = photonView.Owner.CustomProperties;
+        Debug.Log("SelectJanken 出席確認2");
         count_a = 1;
         ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         ResetPlayerTeNum();
         CheckPlayerTeNum();
+     //   if (PhotonNetwork.LocalPlayer.CustomProperties["Score"] is int score)
+     //   {
+     //       Debug.Log("score :" +score);
+     //   }
+     //   if (PhotonNetwork.LocalPlayer.CustomProperties["Te11"] is int te11)
+     //   {
+     //       Debug.Log("te11 : " +te11);
+     //   }
     }
 
+    public void OnMouseDown()
+    {
+        photonView.RPC("SelectJankenCard", RpcTarget.All);
+    }
+
+    [PunRPC]
     public void SelectJankenCard()
     {
         CheckPlayerTeNum();
         PresentPlayerID = ""; //プレイヤーID初期化
         Debug.Log("PresentPlayerID 初期化確認 " + PresentPlayerID);
         Debug.Log("LocalPlayer.UserId : " + PhotonNetwork.LocalPlayer.UserId);
-        
+
         Debug.Log(TestRoomControllerSC.PID1 + ": PID1");
         Debug.Log(TestRoomControllerSC.PID2 + ": PID2");
         Debug.Log(TestRoomControllerSC.PID3 + ": PID3");
@@ -102,7 +135,7 @@ public class SelectJanken : MonoBehaviourPunCallbacks
         PresentPlayerID = PhotonNetwork.LocalPlayer.UserId;
         Debug.Log("PresentPlayerID セット確認 " + PresentPlayerID);
 
-        if(PresentPlayerID == TestRoomControllerSC.PID1)
+        if (PresentPlayerID == TestRoomControllerSC.PID1)
         {
             Debug.Log("現在プレイヤー1がボタン押したよ");
         }
@@ -250,9 +283,10 @@ public class SelectJanken : MonoBehaviourPunCallbacks
 
     public void PlayerTeNumSet(int PTN)  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
     {
+        Debug.Log("************ ********** *********** **********");
         Debug.Log(PTN + ": PTN");
         if (PresentPlayerID == TestRoomControllerSC.PID1)
-        {
+        { 
             Debug.Log("現在プレイヤー1がボタン押したよ");
             if (Player1_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
@@ -286,7 +320,7 @@ public class SelectJanken : MonoBehaviourPunCallbacks
                 Debug.Log("現在プレイヤー1の 5こすべて手が決まったよ");
             }
         }
-    
+
         else if (PresentPlayerID == TestRoomControllerSC.PID2)
         {
             Debug.Log("現在プレイヤー2がボタン押したよ");
@@ -406,33 +440,60 @@ public class SelectJanken : MonoBehaviourPunCallbacks
 
     public void CheckPlayerTeNum()
     {
-        Debug.Log("***				Player1	***********" );
+        Debug.Log("************ ********** *********** **********");
+
+        Debug.Log("***  Player1  ***********");
         Debug.Log("Player1_Te1 " + Player1_Te1);
         Debug.Log("Player1_Te2 " + Player1_Te2);
         Debug.Log("Player1_Te3 " + Player1_Te3);
         Debug.Log("Player1_Te4 " + Player1_Te4);
         Debug.Log("Player1_Te5 " + Player1_Te5);
 
-        Debug.Log("***				Player2	***********" );
+        Debug.Log("***  Player2  ***********");
         Debug.Log("Player2_Te1 " + Player2_Te1);
         Debug.Log("Player2_Te2 " + Player2_Te2);
         Debug.Log("Player2_Te3 " + Player2_Te3);
         Debug.Log("Player2_Te4 " + Player2_Te4);
         Debug.Log("Player2_Te5 " + Player2_Te5);
 
-        Debug.Log("***				Player3	***********" );
+        Debug.Log("***  Player3  ***********");
         Debug.Log("Player3_Te1 " + Player3_Te1);
         Debug.Log("Player3_Te2 " + Player3_Te2);
         Debug.Log("Player3_Te3 " + Player3_Te3);
         Debug.Log("Player3_Te4 " + Player3_Te4);
         Debug.Log("Player3_Te5 " + Player3_Te5);
 
-        Debug.Log("***				Player4	***********" );
+        Debug.Log("***  Player4  ***********");
         Debug.Log("Player4_Te1 " + Player4_Te1);
         Debug.Log("Player4_Te2 " + Player4_Te2);
         Debug.Log("Player4_Te3 " + Player4_Te3);
         Debug.Log("Player4_Te4 " + Player4_Te4);
         Debug.Log("Player4_Te5 " + Player4_Te5);
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        // オーナーの場合
+        if (stream.IsWriting)
+        {
+            stream.SendNext(this._Player1_Te1);
+        }
+        // オーナー以外の場合
+        else
+        {
+            this._Player1_Te1 = (int)stream.ReceiveNext();
+        }
+    }
+
+    private void RequestOwner()
+    {
+        if (this.photonView.IsMine == false)
+        {
+            if (this.photonView.OwnershipTransfer != OwnershipOption.Request)
+                Debug.LogError("OwnershipTransferをRequestに変更してください。");
+            else
+                this.photonView.RequestOwnership();
+        }
     }
     // End
 }
