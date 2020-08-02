@@ -14,25 +14,36 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
 
     #region Private変数
     //Private変数の定義はココで
+    private bool firstPush = false;
     #endregion
+
+    void Start()
+    {
+        firstPush = false; //初期化
+    }
+
 
     #region Public Methods
     //ログインボタンを押したときに実行される
     public void Connect()
     {
         Debug.Log("CLauncherScript で「Play」が押されました。");
-        Debug.Log("PhotonNetwork.NickName Play：" + PhotonNetwork.NickName);
-        if (string.IsNullOrWhiteSpace(PhotonNetwork.NickName))
+        if (!firstPush)
         {
-            Debug.Log("名前が空欄です");
-        }
-        else
-        { 
-            if (!PhotonNetwork.IsConnected)
-            {           //Photonに接続できていなければ
-                PhotonNetwork.ConnectUsingSettings();   //Photonに接続する
-                Debug.Log("Photonに接続しました。");
+            Debug.Log("PhotonNetwork.NickName Play：" + PhotonNetwork.NickName);
+            if (string.IsNullOrWhiteSpace(PhotonNetwork.NickName))
+            {
+                Debug.Log("名前が空欄です");
             }
+            else
+            {
+                if (!PhotonNetwork.IsConnected)
+                {           //Photonに接続できていなければ
+                    PhotonNetwork.ConnectUsingSettings();   //Photonに接続する
+                    Debug.Log("Photonに接続しました。");
+                }
+            }
+            firstPush = true; //ボタン押下済みフラグ
         }
     }
     #endregion
