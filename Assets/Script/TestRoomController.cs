@@ -38,6 +38,7 @@ namespace BEFOOL.PhotonTest
 
         void Start()
         {
+            //EntryCheck();
             Debug.Log("TestRoomController 出席確認");
             allPlayers = PhotonNetwork.PlayerList; // プレイヤーの配列（自身を含む）
             Debug.Log(allPlayers.Length + ": allPlayers.Length");
@@ -79,21 +80,21 @@ namespace BEFOOL.PhotonTest
                 Debug.Log(player.NickName + "が参加しました2");
 
                 PN1 = allPlayers[0].NickName;
-                Debug.Log(PN1 + ": PN1");
                 PID1 = allPlayers[0].UserId;
                 Debug.Log(PID1 + ": PID1");
                 Debug.Log(allPlayers.Length + ": allPlayers.Length");
 
-                PN2 = allPlayers[1].NickName;
-                Debug.Log(PN2 + ": PN2");
-                PID2 = allPlayers[1].UserId;
-                Debug.Log(PID2 + ": PID2");
-                Debug.Log(allPlayers.Length + ": allPlayers.Length");
+                if (allPlayers.Length >= 2)
+                {
+                    PN2 = allPlayers[1].NickName;
+                    PID2 = allPlayers[1].UserId;
+                    Debug.Log(PID2 + ": PID2");
+                    Debug.Log(allPlayers.Length + ": allPlayers.Length");
+                }
 
                 if (allPlayers.Length >= 3)
                 {
                     PN3 = allPlayers[2].NickName;
-                    Debug.Log(PN3 + ": PN3");
                     Debug.Log(allPlayers.Length + ": allPlayers.Length");
                     PID3 = allPlayers[2].UserId;
                     Debug.Log(PID3 + ": PID3");
@@ -102,13 +103,14 @@ namespace BEFOOL.PhotonTest
                 if (allPlayers.Length >= 4)
                 {
                     PN4 = allPlayers[3].NickName;
-                    Debug.Log(PN4 + ": PN4");
                     Debug.Log(allPlayers.Length + ": allPlayers.Length");
                     PID4 = allPlayers[3].UserId;
                     Debug.Log(PID4 + ": PID4");
                 }
 
                 //PN4 = allPlayers[3].NickName;
+                Debug.Log(PN1 + ": PN1");
+                Debug.Log(PN2 + ": PN2");
                 Debug.Log(PN3 + ": PN3");
                 Debug.Log(PN4 + ": PN4");
                 Debug.Log(player.NickName + "が参加しました3");
@@ -156,6 +158,24 @@ namespace BEFOOL.PhotonTest
             Debug.Log(PlayerID_2 + ": PlayerID_2");
             Debug.Log(PlayerID_3 + ": PlayerID_3");
             Debug.Log(PlayerID_4 + ": PlayerID_4");
+
+            Debug.Log("allPlayers[0].NickName" + allPlayers[0].NickName);
+            Debug.Log("allPlayers[0].UserId" + allPlayers[0].UserId);
+            if (allPlayers.Length >= 2)
+            {
+                Debug.Log("allPlayers[1].NickName" + allPlayers[1].NickName);
+                Debug.Log("allPlayers[1].UserId" + allPlayers[1].UserId);
+            }
+            if (allPlayers.Length >= 3)
+            {
+                Debug.Log("allPlayers[2].NickName" + allPlayers[2].NickName);
+                Debug.Log("allPlayers[2].UserId" + allPlayers[2].UserId);
+            }
+            if (allPlayers.Length >= 4)
+            {
+                Debug.Log("allPlayers[3].NickName" + allPlayers[3].NickName);
+                Debug.Log("allPlayers[3].UserId" + allPlayers[3].UserId);
+            }
         }
 
         // <summary>

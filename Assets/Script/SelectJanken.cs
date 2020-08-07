@@ -118,6 +118,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public string senderName = "anonymous";
     public string senderID = "2434";
+    public string MyName = "me";
+    public string MyID = "0000";
 
     void Awake()
     {
@@ -158,10 +160,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void MyPlayID()
     {
-        Debug.Log("私の名前は 「" + PhotonNetwork.LocalPlayer.UserId + " 」でござる");
-        Debug.Log("私の名前は 「" + PhotonNetwork.LocalPlayer.NickName + " 」でござる");
-        Debug.Log("NickName  " + PhotonNetwork.NickName);
-        Debug.Log("PlayerList  " + PhotonNetwork.PlayerList);
         photonView.RPC("PlayerIDCheck", RpcTarget.All);
     }
 
@@ -179,22 +177,30 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             senderName = mi.Sender.NickName;
             senderID = mi.Sender.UserId;
+            MyName = senderName;
+            MyID = senderID;
         }
-        Debug.Log("senderName  " + senderName);
-        Debug.Log("senderID  " + senderID);
+        Debug.Log("私の名前は 「" + PhotonNetwork.LocalPlayer.UserId + " 」でござる"); // accho1 で固定
+        Debug.Log("私の名前は 「" + PhotonNetwork.LocalPlayer.NickName + " 」でござる"); // accho1 で固定
+        Debug.Log("NickName  " + PhotonNetwork.NickName); //accho1 で固定
+        Debug.Log("PlayerList  " + PhotonNetwork.PlayerList);  //accho1 で固定
+        Debug.Log("senderName  " + senderName);  // 今ボタン押した人
+        Debug.Log("senderID  " + senderID);  // 今ボタン押した人
+        Debug.Log("MyName  " + MyName);  // 今ボタン押した人
+        Debug.Log("MyID  " + MyID);  // 今ボタン押した人
     }
 
 
     public void ToSelectJankenCard()
     {
-        if (this.photonView.IsMine)
+        if (MyID == senderID)
         {
-            Debug.Log("○○ ToSelectJankenCard IsMine");
+            Debug.Log("○○ MyID == senderID");
             photonView.RPC("SelectJankenCard", RpcTarget.All);
         }
         else
         {
-            Debug.Log("×× ToSelectJankenCard IsNotMine");
+            Debug.Log("×× MyID != senderID");
         }
     }
 
