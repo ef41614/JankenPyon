@@ -78,6 +78,30 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public int Player4_Te4 = -1;
     public int Player4_Te5 = -1;
 
+    public int receivePlayer1_Te1 = -5;
+    public int receivePlayer1_Te2 = -5;
+    public int receivePlayer1_Te3 = -5;
+    public int receivePlayer1_Te4 = -5;
+    public int receivePlayer1_Te5 = -5;
+
+    public int receivePlayer2_Te1 = -5;
+    public int receivePlayer2_Te2 = -5;
+    public int receivePlayer2_Te3 = -5;
+    public int receivePlayer2_Te4 = -5;
+    public int receivePlayer2_Te5 = -5;
+
+    public int receivePlayer3_Te1 = -5;
+    public int receivePlayer3_Te2 = -5;
+    public int receivePlayer3_Te3 = -5;
+    public int receivePlayer3_Te4 = -5;
+    public int receivePlayer3_Te5 = -5;
+
+    public int receivePlayer4_Te1 = -5;
+    public int receivePlayer4_Te2 = -5;
+    public int receivePlayer4_Te3 = -5;
+    public int receivePlayer4_Te4 = -5;
+    public int receivePlayer4_Te5 = -5;
+
     public string PresentPlayerID;
     private PhotonView photonView = null;
 
@@ -87,6 +111,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject TestRoomController;  //ヒエラルキー上のオブジェクト名
     TestRoomController TestRoomControllerSC;
 
+    public GameObject myPlayer;
+    public SelectJanken SelectJankenMSC;
+    public int rap1 = 0;
+    public int receiveRap1 = 0;
+
+    public string senderName = "anonymous";
+    public string senderID = "2434";
 
     void Awake()
     {
@@ -102,26 +133,79 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         ResetPlayerTeNum();
-        CheckPlayerTeNum();
-     //   if (PhotonNetwork.LocalPlayer.CustomProperties["Score"] is int score)
-     //   {
-     //       Debug.Log("score :" +score);
-     //   }
-     //   if (PhotonNetwork.LocalPlayer.CustomProperties["Te11"] is int te11)
-     //   {
-     //       Debug.Log("te11 : " +te11);
-     //   }
+        // photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
+        //   if (PhotonNetwork.LocalPlayer.CustomProperties["Score"] is int score)
+        //   {
+        //       Debug.Log("score :" +score);
+        //   }
+        //   if (PhotonNetwork.LocalPlayer.CustomProperties["Te11"] is int te11)
+        //   {
+        //       Debug.Log("te11 : " +te11);
+        //   }
+        myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
+        SelectJankenMSC = myPlayer.GetComponent<SelectJanken>();
     }
 
     public void OnMouseDown()
     {
-        photonView.RPC("SelectJankenCard", RpcTarget.All);
+       // photonView.RPC("SelectJankenCard", RpcTarget.All);
+    }
+
+    public void MyNameIs(Player player)
+    {
+        Debug.Log("私の名前は 「" + player.NickName + " 」でござる");
+    }
+
+    public void MyPlayID()
+    {
+        Debug.Log("私の名前は 「" + PhotonNetwork.LocalPlayer.UserId + " 」でござる");
+        Debug.Log("私の名前は 「" + PhotonNetwork.LocalPlayer.NickName + " 」でござる");
+        Debug.Log("NickName  " + PhotonNetwork.NickName);
+        Debug.Log("PlayerList  " + PhotonNetwork.PlayerList);
+        photonView.RPC("PlayerIDCheck", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+    /// </summary>
+    /// <param name="mi">現プレイヤー名とプレイヤーID 取得、共有</param>
+    [PunRPC]
+    public void PlayerIDCheck(PhotonMessageInfo mi)
+    {
+        Debug.Log("[PunRPC] PlayerIDCheck");
+        //string senderName = "anonymous";
+        //string senderID = "2434";
+        if (mi.Sender != null)
+        {
+            senderName = mi.Sender.NickName;
+            senderID = mi.Sender.UserId;
+        }
+        Debug.Log("senderName  " + senderName);
+        Debug.Log("senderID  " + senderID);
+    }
+
+
+    public void ToSelectJankenCard()
+    {
+        if (this.photonView.IsMine)
+        {
+            Debug.Log("○○ ToSelectJankenCard IsMine");
+            photonView.RPC("SelectJankenCard", RpcTarget.All);
+        }
+        else
+        {
+            Debug.Log("×× ToSelectJankenCard IsNotMine");
+        }
     }
 
     [PunRPC]
     public void SelectJankenCard()
     {
-        CheckPlayerTeNum();
+        MyPlayID();
+        Debug.Log("◎●◎◎●◎ [PunRPC] SelectJankenCard が起動しました ◎●◎◎●◎");
+        /*
+        Debug.Log("処理実施前確認");
+        photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
         PresentPlayerID = ""; //プレイヤーID初期化
         Debug.Log("PresentPlayerID 初期化確認 " + PresentPlayerID);
         Debug.Log("LocalPlayer.UserId : " + PhotonNetwork.LocalPlayer.UserId);
@@ -134,22 +218,29 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("PresentPlayerIDをセット");
         PresentPlayerID = PhotonNetwork.LocalPlayer.UserId;
         Debug.Log("PresentPlayerID セット確認 " + PresentPlayerID);
+        */
+        Debug.Log("senderName  " + senderName);
+        Debug.Log("senderID  " + senderID);
 
-        if (PresentPlayerID == TestRoomControllerSC.PID1)
+        if (senderID == TestRoomControllerSC.PID1)
         {
             Debug.Log("現在プレイヤー1がボタン押したよ");
         }
-        else if (PresentPlayerID == TestRoomControllerSC.PID2)
+        else if (senderID == TestRoomControllerSC.PID2)
         {
             Debug.Log("現在プレイヤー2がボタン押したよ");
         }
-        else if (PresentPlayerID == TestRoomControllerSC.PID3)
+        else if (senderID == TestRoomControllerSC.PID3)
         {
             Debug.Log("現在プレイヤー3がボタン押したよ");
         }
-        else if (PresentPlayerID == TestRoomControllerSC.PID4)
+        else if (senderID == TestRoomControllerSC.PID4)
         {
             Debug.Log("現在プレイヤー4がボタン押したよ");
+        }
+        else
+        {
+            Debug.Log("ID の条件、どれにも当てはまってない");
         }
 
         Debug.Log("RndCreateCard_C ： " + ShuffleCardsMSC.RndCreateCard_C);
@@ -170,13 +261,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("ランダム値の見直しが必要！！");
         }
 
-        CheckPlayerTeNum();
+        Debug.Log("処理実施後確認");
+        photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
+        Debug.Log("●●●●●● [PunRPC] SelectJankenCard の起動終わり ●●●●●●");
     }
 
     public void SelectGu()
     {
-        Debug.Log("今グー押したのは" + PhotonNetwork.NickName);
-        Debug.Log("今グー押したのは" + PhotonNetwork.PlayerList);
+        Debug.Log("今グー押したのは" + senderID);
+        Debug.Log("今グー押したのは" + senderName);
         Debug.Log(count_a + ": count_a");
 
         if (count_a == 1)
@@ -203,7 +296,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Debug.Log("count_a 6以上");
         }
-        PlayerTeNumSet(0); //手をグーにセット
+        //PlayerTeNumSet(0); //手をグーにセット
+        Debug.Log("手をグーにセット");
+        //photonView.RPC("PlayerTeNumSet", RpcTarget.All, 0);
+        PlayerTeNumSet(0);
+        Debug.Log("手をグーにセットend");
 
         count_a++;
         Debug.Log(count_a + ": count_a");
@@ -211,8 +308,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void SelectChoki()
     {
-        Debug.Log("今チョキ押したのは" + PhotonNetwork.NickName);
-        Debug.Log("今チョキ押したのは" + PhotonNetwork.PlayerList);
+        Debug.Log("今チョキ押したのは" + senderID);
+        Debug.Log("今チョキ押したのは" + senderName);
         Debug.Log(count_a + ": count_a");
 
         if (count_a == 1)
@@ -239,7 +336,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Debug.Log("count_a 6以上");
         }
-        PlayerTeNumSet(1); //手をチョキにセット
+        //PlayerTeNumSet(1); //手をチョキにセット
+        Debug.Log("手をチョキにセット");
+        //photonView.RPC("PlayerTeNumSet", RpcTarget.All, 1);
+        PlayerTeNumSet(1);
+        Debug.Log("手をチョキにセットend");
 
         count_a++;
         Debug.Log(count_a + ": count_a");
@@ -247,8 +348,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void SelectPa()
     {
-        Debug.Log("今パー押したのは" + PhotonNetwork.NickName);
-        Debug.Log("今パー押したのは" + PhotonNetwork.PlayerList);
+        Debug.Log("今パー押したのは" + senderID);
+        Debug.Log("今パー押したのは" + senderName);
         Debug.Log(count_a + ": count_a");
 
         if (count_a == 1)
@@ -275,44 +376,60 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Debug.Log("count_a 6以上");
         }
-        PlayerTeNumSet(2); //手をパーにセット
+        //PlayerTeNumSet(2); //手をパーにセット
+        Debug.Log("手をパーにセット");
+        //photonView.RPC("PlayerTeNumSet", RpcTarget.All,2);
+        PlayerTeNumSet(2);
+        Debug.Log("手をパーにセットend");
 
         count_a++;
         Debug.Log(count_a + ": count_a");
     }
 
+    //[PunRPC]
     public void PlayerTeNumSet(int PTN)  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
     {
         Debug.Log("************ ********** *********** **********");
         Debug.Log(PTN + ": PTN");
-        if (PresentPlayerID == TestRoomControllerSC.PID1)
+        Debug.Log(TestRoomControllerSC.PID1 + ": TestRoomControllerSC.PID1");
+        Debug.Log(TestRoomControllerSC.PID2 + ": TestRoomControllerSC.PID2");
+        Debug.Log(TestRoomControllerSC.PID3 + ": TestRoomControllerSC.PID3");
+        Debug.Log(TestRoomControllerSC.PID4 + ": TestRoomControllerSC.PID4");
+        Debug.Log(senderID + ": senderID");
+        
+        if (senderID == TestRoomControllerSC.PID1)
         { 
             Debug.Log("現在プレイヤー1がボタン押したよ");
             if (Player1_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Debug.Log("Player1_Te1 " + Player1_Te1);
+                Debug.Log("Player1_Te1 代入前" + Player1_Te1);
                 Player1_Te1 = PTN;
-                Debug.Log("Player1_Te1 " + Player1_Te1);
+                _Player1_Te1 = Player1_Te1;
+                Debug.Log("Player1_Te1 代入後" + Player1_Te1);
                 Debug.Log("プレイヤー1_1 手のセットOK");
             }
             else if (Player1_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player1_Te2 = PTN;
+                _Player1_Te2 = Player1_Te2;
                 Debug.Log("プレイヤー1_2 手のセットOK");
             }
             else if (Player1_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player1_Te3 = PTN;
+                _Player1_Te3 = Player1_Te3;
                 Debug.Log("プレイヤー1_3 手のセットOK");
             }
             else if (Player1_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player1_Te4 = PTN;
+                _Player1_Te4 = Player1_Te4;
                 Debug.Log("プレイヤー1_4 手のセットOK");
             }
             else if (Player1_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player1_Te5 = PTN;
+                _Player1_Te5 = Player1_Te5;
                 Debug.Log("プレイヤー1_5 手のセットOK");
             }
             else
@@ -321,28 +438,33 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             }
         }
 
-        else if (PresentPlayerID == TestRoomControllerSC.PID2)
+        else if (senderID == TestRoomControllerSC.PID2)
         {
             Debug.Log("現在プレイヤー2がボタン押したよ");
             if (Player2_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player2_Te1 = PTN;
+                _Player2_Te1 = Player2_Te1;
             }
             else if (Player2_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player2_Te2 = PTN;
+                _Player2_Te2 = Player2_Te2;
             }
             else if (Player2_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player2_Te3 = PTN;
+                _Player2_Te3 = Player2_Te3;
             }
             else if (Player2_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player2_Te4 = PTN;
+                _Player2_Te4 = Player2_Te4;
             }
             else if (Player2_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player2_Te5 = PTN;
+                _Player2_Te5 = Player2_Te5;
             }
             else
             {
@@ -350,28 +472,33 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             }
         }
 
-        else if (PresentPlayerID == TestRoomControllerSC.PID3)
+        else if (senderID == TestRoomControllerSC.PID3)
         {
             Debug.Log("現在プレイヤー3がボタン押したよ");
             if (Player3_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player3_Te1 = PTN;
+                _Player3_Te1 = Player3_Te1;
             }
             else if (Player3_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player3_Te2 = PTN;
+                _Player3_Te2 = Player3_Te2;
             }
             else if (Player3_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player3_Te3 = PTN;
+                _Player3_Te3 = Player3_Te3;
             }
             else if (Player3_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player3_Te4 = PTN;
+                _Player3_Te4 = Player3_Te4;
             }
             else if (Player3_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player3_Te5 = PTN;
+                _Player3_Te5 = Player3_Te5;
             }
             else
             {
@@ -379,35 +506,181 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             }
         }
 
-        else if (PresentPlayerID == TestRoomControllerSC.PID4)
+        else if (senderID == TestRoomControllerSC.PID4)
         {
             Debug.Log("現在プレイヤー4がボタン押したよ");
             if (Player4_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player4_Te1 = PTN;
+                _Player4_Te1 = Player4_Te1;
             }
             else if (Player4_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player4_Te2 = PTN;
+                _Player4_Te2 = Player4_Te2;
             }
             else if (Player4_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player4_Te3 = PTN;
+                _Player4_Te3 = Player4_Te3;
             }
             else if (Player4_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player4_Te4 = PTN;
+                _Player4_Te4 = Player4_Te4;
             }
             else if (Player4_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player4_Te5 = PTN;
+                _Player4_Te5 = Player4_Te5;
             }
             else
             {
                 Debug.Log("現在プレイヤー4 の5こすべて手が決まったよ");
             }
         }
+
+        else
+        {
+            Debug.Log("現在プレイヤー の条件、どれにも当てはまってない");
+        }
     }
+
+
+    public void ToSharePlayerTeNum()
+    {
+        photonView.RPC("SharePlayerTeNum", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void SharePlayerTeNum()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
+    {
+        Debug.Log("************ データ共有 SharePlayerTeNum **********");
+        Debug.Log(TestRoomControllerSC.PID1 + ": TestRoomControllerSC.PID1");
+        Debug.Log(TestRoomControllerSC.PID2 + ": TestRoomControllerSC.PID2");
+        Debug.Log(TestRoomControllerSC.PID3 + ": TestRoomControllerSC.PID3");
+        Debug.Log(TestRoomControllerSC.PID4 + ": TestRoomControllerSC.PID4");
+        Debug.Log(senderID + ": senderID");
+
+        if (senderID == TestRoomControllerSC.PID1)
+        {
+            Debug.Log("現在プレイヤー1がボタン押したよ");
+            if (Player1_Te1 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player1_Te1 = _Player1_Te1;
+            }
+            if (Player1_Te2 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player1_Te2 = _Player1_Te2;
+            }
+            if (Player1_Te3 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player1_Te3 = _Player1_Te3;
+            }
+            if (Player1_Te4 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player1_Te4 = _Player1_Te4;
+            }
+            if (Player1_Te5 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player1_Te5 = _Player1_Te5;
+            }
+            else
+            {
+                Debug.Log("現在プレイヤー1の 5こすべて手が決まったよ");
+            }
+        }
+
+        if (senderID == TestRoomControllerSC.PID2)
+        {
+            Debug.Log("現在プレイヤー2がボタン押したよ");
+            if (Player2_Te1 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player2_Te1 = _Player2_Te1;
+            }
+            if (Player2_Te2 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player2_Te2 = _Player2_Te2;
+            }
+            if (Player2_Te3 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player2_Te3 = _Player2_Te3;
+            }
+            if (Player2_Te4 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player2_Te4 = _Player2_Te4;
+            }
+            if (Player2_Te5 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player2_Te5 = _Player2_Te5;
+            }
+            else
+            {
+                Debug.Log("現在プレイヤー2 の5こすべて手が決まったよ");
+            }
+        }
+
+        if (senderID == TestRoomControllerSC.PID3)
+        {
+            Debug.Log("現在プレイヤー3がボタン押したよ");
+            if (Player3_Te1 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player3_Te1 = _Player3_Te1;
+            }
+            if (Player3_Te2 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player3_Te2 = _Player3_Te2;
+            }
+            if (Player3_Te3 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player3_Te3 = _Player3_Te3;
+            }
+            if (Player3_Te4 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player3_Te4 = _Player3_Te4;
+            }
+            if (Player3_Te5 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player3_Te5 = _Player3_Te5;
+            }
+            else
+            {
+                Debug.Log("現在プレイヤー3 の5こすべて手が決まったよ");
+            }
+        }
+
+        if (senderID == TestRoomControllerSC.PID4)
+        {
+            Debug.Log("現在プレイヤー4がボタン押したよ");
+            if (Player4_Te1 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player4_Te1 = _Player4_Te1;
+            }
+            if (Player4_Te2 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player4_Te2 = _Player4_Te2;
+            }
+            if (Player4_Te3 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player4_Te3 = _Player4_Te3;
+            }
+            if (Player4_Te4 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player4_Te4 = _Player4_Te4;
+            }
+            if (Player4_Te5 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            {
+                Player4_Te5 = _Player4_Te5;
+            }
+            else
+            {
+                Debug.Log("現在プレイヤー4 の5こすべて手が決まったよ");
+            }
+        }
+
+        Debug.Log("************ データ共有 SharePlayerTeNum おわり **********");
+    }
+
 
     public void ResetPlayerTeNum()
     {
@@ -438,9 +711,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("PlayerTeNum をリセットしました");
     }
 
+    [PunRPC]
     public void CheckPlayerTeNum()
     {
-        Debug.Log("************ ********** *********** **********");
+        Debug.Log("************ CheckPlayerTeNum *********** **********");
 
         Debug.Log("***  Player1  ***********");
         Debug.Log("Player1_Te1 " + Player1_Te1);
@@ -471,19 +745,46 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("Player4_Te5 " + Player4_Te5);
     }
 
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        // オーナーの場合
-        if (stream.IsWriting)
+        /*
+    // オーナーの場合
+    if (stream.IsWriting)
+    {
+        stream.SendNext(Player1_Te1);
+        stream.SendNext(Player2_Te1);
+        if (TestRoomControllerSC.allPlayers.Length >= 3)
         {
-            stream.SendNext(this._Player1_Te1);
+            stream.SendNext(Player3_Te1);
         }
-        // オーナー以外の場合
-        else
+        if (TestRoomControllerSC.allPlayers.Length >= 4)
         {
-            this._Player1_Te1 = (int)stream.ReceiveNext();
+            stream.SendNext(Player4_Te1);
         }
     }
+
+    // オーナー以外の場合
+    else
+    {
+        this.receivePlayer1_Te1 = (int)stream.ReceiveNext();
+        SelectJankenMSC.Player1_Te1 = receivePlayer1_Te1;
+        this.receivePlayer2_Te1 = (int)stream.ReceiveNext();
+        SelectJankenMSC.Player2_Te1 = receivePlayer2_Te1;
+        if (TestRoomControllerSC.allPlayers.Length >= 3)
+        {
+            this.receivePlayer3_Te1 = (int)stream.ReceiveNext();
+            SelectJankenMSC.Player3_Te1 = receivePlayer3_Te1;
+        }
+        if (TestRoomControllerSC.allPlayers.Length >= 4)
+        {
+            this.receivePlayer4_Te1 = (int)stream.ReceiveNext();
+            SelectJankenMSC.Player4_Te1 = receivePlayer4_Te1;
+        }
+    }
+    */
+    }
+
 
     private void RequestOwner()
     {
@@ -495,5 +796,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                 this.photonView.RequestOwnership();
         }
     }
+
+       
     // End
+
 }

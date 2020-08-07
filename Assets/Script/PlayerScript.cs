@@ -6,7 +6,7 @@ using DG.Tweening;
 public class PlayerScript : MonoBehaviour
 {
     public float speed;
-    public int MoveForwardNum; // 進む（ジャンプする）回数
+    [Header("進む（ジャンプする）回数")]public int MoveForwardNum; // 進む（ジャンプする）回数
     private Animator anim = null;
 
 

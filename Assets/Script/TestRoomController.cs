@@ -22,6 +22,11 @@ namespace BEFOOL.PhotonTest
         public string PID2;
         public string PID3;
         public string PID4;
+
+        public string PlayerID_1;
+        public string PlayerID_2;
+        public string PlayerID_3;
+        public string PlayerID_4;
         public Player[] allPlayers;
 
         public Text PName1;
@@ -29,6 +34,7 @@ namespace BEFOOL.PhotonTest
         public Text PName3;
         public Text PName4;
 
+        public SelectJanken SelectJankenMSC; //スクリプト名 + このページ上でのニックネーム
 
         void Start()
         {
@@ -46,6 +52,8 @@ namespace BEFOOL.PhotonTest
             Debug.Log(PN1 + ": PN1");
             PID1 = allPlayers[0].UserId;
             Debug.Log(PID1 + ": PID1");
+            SelectJankenMSC.MyPlayID();
+            EntryCheck();
         }
 
         // <summary>
@@ -55,11 +63,13 @@ namespace BEFOOL.PhotonTest
         public override void OnPlayerEnteredRoom(Player player)
         {
             LoginCheck(player);
+            EntryCheck();
         }
 
         public void LoginCheck(Player player)
         {
             {
+                UpdateMemberList();
                 Debug.Log(allPlayers.Length + ": allPlayers.Length");
                 Debug.Log(player.NickName + "が参加しました");
                 UpdateMemberList();
@@ -72,7 +82,6 @@ namespace BEFOOL.PhotonTest
                 Debug.Log(PN1 + ": PN1");
                 PID1 = allPlayers[0].UserId;
                 Debug.Log(PID1 + ": PID1");
-
                 Debug.Log(allPlayers.Length + ": allPlayers.Length");
 
                 PN2 = allPlayers[1].NickName;
@@ -112,6 +121,43 @@ namespace BEFOOL.PhotonTest
             }
         }
 
+        public void EntryCheck()
+        {
+            Debug.Log(" ＝＝＝ EntryCheck スタート！ ＝＝＝ ");
+            SelectJankenMSC.MyPlayID();
+
+            if (PlayerID_1 == "")
+            {
+                PlayerID_1 = SelectJankenMSC.senderID;
+            }
+            else if (PlayerID_2 == "")
+            {
+                PlayerID_2 = SelectJankenMSC.senderID;
+            }
+            else if (PlayerID_3 == "")
+            {
+                PlayerID_3 = SelectJankenMSC.senderID;
+            }
+            else if (PlayerID_4 == "")
+            {
+                PlayerID_4 = SelectJankenMSC.senderID;
+            }
+            else
+            {
+                Debug.Log(" EntryCheck 不要です");
+            }
+            PresentMemberCheck();
+            Debug.Log(" ＝＝＝ EntryCheck 終わり！ ＝＝＝ ");
+        }
+
+        public void PresentMemberCheck()
+        {
+            Debug.Log(PlayerID_1 + ": PlayerID_1");
+            Debug.Log(PlayerID_2 + ": PlayerID_2");
+            Debug.Log(PlayerID_3 + ": PlayerID_3");
+            Debug.Log(PlayerID_4 + ": PlayerID_4");
+        }
+
         // <summary>
         // リモートプレイヤーが退室した際にコールされる
         // </summary>
@@ -133,6 +179,11 @@ namespace BEFOOL.PhotonTest
             {
                 joinedMembersText.text += p.NickName + "\n";
             }
+        }
+
+        public void MyNameIs(Player player)
+        {
+            Debug.Log("私の名前は 「" + player.NickName + " 」でござる");
         }
 
     }
