@@ -112,7 +112,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     TestRoomController TestRoomControllerSC;
 
     public GameObject myPlayer;
-    public SelectJanken SelectJankenMSC;
+    
     public int rap1 = 0;
     public int receiveRap1 = 0;
 
@@ -145,7 +145,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         //       Debug.Log("te11 : " +te11);
         //   }
         myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
-        SelectJankenMSC = myPlayer.GetComponent<SelectJanken>();
+       // SelectJankenMSC = myPlayer.GetComponent<SelectJanken>();
     }
 
     public void OnMouseDown()
@@ -160,6 +160,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void MyPlayID()
     {
+       // TestRoomControllerSC.PNameCheck();
         photonView.RPC("PlayerIDCheck", RpcTarget.All);
     }
 

@@ -18,10 +18,10 @@ namespace BEFOOL.PhotonTest
         string PN3;
         string PN4;
 
-        public string PID1;
-        public string PID2;
-        public string PID3;
-        public string PID4;
+        public string PID1 = "1";
+        public string PID2 = "2";
+        public string PID3 = "3";
+        public string PID4 = "4";
 
         public string PlayerID_1;
         public string PlayerID_2;
@@ -79,6 +79,23 @@ namespace BEFOOL.PhotonTest
                 Debug.Log(allPlayers.Length + ": allPlayers.Length");
                 Debug.Log(player.NickName + "が参加しました2");
 
+                PNameCheck();
+
+                Debug.Log(player.NickName + "が参加しました3");
+                Debug.Log(allPlayers.Length + ": allPlayers.Length");
+
+                PName1.text = PN1;
+                PName2.text = PN2;
+                PName3.text = PN3;
+                PName4.text = PN4;
+            }
+        }
+
+        public void PNameCheck() // プレイヤー名が埋まっていなかったら入れる
+        {
+            if (PID4 != "5")
+            {
+                Debug.Log("PID4 まだ埋まっていない");
                 PN1 = allPlayers[0].NickName;
                 PID1 = allPlayers[0].UserId;
                 Debug.Log(PID1 + ": PID1");
@@ -113,13 +130,10 @@ namespace BEFOOL.PhotonTest
                 Debug.Log(PN2 + ": PN2");
                 Debug.Log(PN3 + ": PN3");
                 Debug.Log(PN4 + ": PN4");
-                Debug.Log(player.NickName + "が参加しました3");
-                Debug.Log(allPlayers.Length + ": allPlayers.Length");
-
-                PName1.text = PN1;
-                PName2.text = PN2;
-                PName3.text = PN3;
-                PName4.text = PN4;
+            }
+            else
+            {
+                Debug.Log("PID4 まで 既に埋まっています");
             }
         }
 
