@@ -43,11 +43,12 @@ namespace BEFOOL.PhotonTest
             allPlayers = PhotonNetwork.PlayerList; // プレイヤーの配列（自身を含む）
             Debug.Log(allPlayers.Length + ": allPlayers.Length");
 
+            /*
             PName1 = PName1.GetComponent<Text>();
             PName2 = PName2.GetComponent<Text>();
             PName3 = PName3.GetComponent<Text>();
             PName4 = PName4.GetComponent<Text>();
-
+            */
             UpdateMemberList();
             PN1 = allPlayers[0].NickName;
             Debug.Log(PN1 + ": PN1");
@@ -55,6 +56,8 @@ namespace BEFOOL.PhotonTest
             Debug.Log(PID1 + ": PID1");
             SelectJankenMSC.MyPlayID();
             EntryCheck();
+            PNameCheck();
+            SetPNameTextAll();
         }
 
         // <summary>
@@ -65,6 +68,8 @@ namespace BEFOOL.PhotonTest
         {
             LoginCheck(player);
             EntryCheck();
+            PNameCheck();
+            SetPNameTextAll();
         }
 
         public void LoginCheck(Player player)
@@ -83,11 +88,13 @@ namespace BEFOOL.PhotonTest
 
                 Debug.Log(player.NickName + "が参加しました3");
                 Debug.Log(allPlayers.Length + ": allPlayers.Length");
-
+                /*
                 PName1.text = PN1;
                 PName2.text = PN2;
                 PName3.text = PN3;
                 PName4.text = PN4;
+                */
+                SetPNameTextAll();
             }
         }
 
@@ -135,6 +142,7 @@ namespace BEFOOL.PhotonTest
             {
                 Debug.Log("PID4 まで 既に埋まっています");
             }
+            SetPNameTextAll();
         }
 
         public void EntryCheck()
@@ -162,12 +170,14 @@ namespace BEFOOL.PhotonTest
             {
                 Debug.Log(" EntryCheck 不要です");
             }
+
             PresentMemberCheck();
             Debug.Log(" ＝＝＝ EntryCheck 終わり！ ＝＝＝ ");
         }
 
         public void PresentMemberCheck()
         {
+
             Debug.Log(PlayerID_1 + ": PlayerID_1");
             Debug.Log(PlayerID_2 + ": PlayerID_2");
             Debug.Log(PlayerID_3 + ": PlayerID_3");
@@ -190,6 +200,7 @@ namespace BEFOOL.PhotonTest
                 Debug.Log("allPlayers[3].NickName" + allPlayers[3].NickName);
                 Debug.Log("allPlayers[3].UserId" + allPlayers[3].UserId);
             }
+            SetPNameTextAll();
         }
 
         // <summary>
@@ -220,5 +231,18 @@ namespace BEFOOL.PhotonTest
             Debug.Log("私の名前は 「" + player.NickName + " 」でござる");
         }
 
+        public void SetPNameTextAll()
+        {
+            /*
+            PName1.text = PlayerID_1;
+            PName2.text = PlayerID_1;
+            PName3.text = PlayerID_1;
+            PName4.text = PlayerID_1;
+            */
+            PName1.text = PN1;
+            PName2.text = PN2;
+            PName3.text = PN3;
+            PName4.text = PN4;
+        }
     }
 }

@@ -204,10 +204,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             MyName = senderName;
             MyID = senderID;
         }
+        /*
         Debug.Log("私の名前は 「" + PhotonNetwork.LocalPlayer.UserId + " 」でござる"); // accho1 で固定
         Debug.Log("私の名前は 「" + PhotonNetwork.LocalPlayer.NickName + " 」でござる"); // accho1 で固定
         Debug.Log("NickName  " + PhotonNetwork.NickName); //accho1 で固定
         Debug.Log("PlayerList  " + PhotonNetwork.PlayerList);  //accho1 で固定
+        */
         Debug.Log("senderName  " + senderName);  // 今ボタン押した人
         Debug.Log("senderID  " + senderID);  // 今ボタン押した人
         Debug.Log("MyName  " + MyName);  // 今ボタン押した人

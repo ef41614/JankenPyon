@@ -36,6 +36,9 @@ namespace say
         public GameObject Button_D;
         public GameObject Button_E;
 
+        public GameObject MyJankenPanel;
+
+
         /*
         public Button Btn_A;
         public Button Btn_B;
@@ -102,6 +105,7 @@ namespace say
         //####################################  other  ####################################
 
         //じゃんけんカードを一枚ランダムで生成する
+        /*
         public void CreateCard_A()
         {
             RndCreateCard_A = Random.Range(0, 3);
@@ -217,7 +221,9 @@ namespace say
                 Debug.Log("ジャンケン ERROR");
             }
         }
+        */
 
+        /*
         public void SetGu()
         {
             Debug.Log("今グーがセットされました" + PhotonNetwork.NickName);
@@ -265,9 +271,12 @@ namespace say
             count_selected++;
             Debug.Log(count_selected + ": count_selected");
         }
+        */
 
         public void JankenTe_Kettei()
         {
+            CloseMyJankenPanel();
+            /*
             count_selected = 1;
             CloseButton_A();
             count_selected = 1;
@@ -278,6 +287,7 @@ namespace say
             CloseButton_D();
             count_selected = 1;
             CloseButton_E();
+            */
         }
 
 
@@ -591,6 +601,17 @@ namespace say
             Button_E.SetActive(false);
         }
 
+        //●表示させる
+        public void AppearMyJankenPanel()
+        {
+            MyJankenPanel.SetActive(true);
+        }
+
+        //●非表示にする
+        public void CloseMyJankenPanel()
+        {
+            MyJankenPanel.SetActive(false);
+        }
         #endregion
 
         //#################################################################################
