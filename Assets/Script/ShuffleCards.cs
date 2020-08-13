@@ -36,6 +36,19 @@ namespace say
         public GameObject Button_D;
         public GameObject Button_E;
 
+        /*
+        public Button Btn_A;
+        public Button Btn_B;
+        public Button Btn_C;
+        public Button Btn_D;
+        public Button Btn_E;
+        */
+        public bool isSet_A = false;
+        public bool isSet_B = false;
+        public bool isSet_C = false;
+        public bool isSet_D = false;
+        public bool isSet_E = false;
+
         //☆################☆################  Start  ################☆################☆
 
         void Start()
@@ -46,12 +59,35 @@ namespace say
             AppearButton_C();
             AppearButton_D();
             AppearButton_E();
+            /*
+            Btn_A.interactable = true;
+            Btn_B.interactable = true;
+            Btn_C.interactable = true;
+            Btn_D.interactable = true;
+            Btn_E.interactable = true;
+
+            Btn_A = GetComponent<Button>();
+            Btn_B = GetComponent<Button>();
+            Btn_C = GetComponent<Button>();
+            Btn_D = GetComponent<Button>();
+            Btn_E = GetComponent<Button>();
+            */
             count_selected = 1;
+            /*
             CreateCard_A();
             CreateCard_B();
             CreateCard_C();
             CreateCard_D();
             CreateCard_E();
+            
+            A_Set();
+            B_Set();
+            C_Set();
+            D_Set();
+            E_Set();
+            */
+            Reset_All();
+            Set_All();
         }
 
 
@@ -244,6 +280,257 @@ namespace say
             CloseButton_E();
         }
 
+
+        #region// じゃんけんカード 手のセット
+
+        public void Set_All()
+        {
+            A_Set();
+            B_Set();
+            C_Set();
+            D_Set();
+            E_Set();
+        }
+
+        public void A_Set()
+        {
+            Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
+
+            if (isSet_A == false) // まだセットしていなければ
+            {
+                RndCreateCard_A = Random.Range(0, 3);
+                AppearButton_A();
+                Debug.Log(RndCreateCard_A + ": RndCreateCard_A");
+
+                if (RndCreateCard_A == 0)  //グー
+                {
+                    Te_A.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+                }
+                else if (RndCreateCard_A == 1)  //チョキ
+                {
+                    Te_A.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+                }
+                else if (RndCreateCard_A == 2) //パー
+                {
+                    Te_A.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+                }
+                else
+                {
+                    Debug.Log("ジャンケン ERROR");
+                }
+
+                isSet_A = true;
+
+            }
+            else
+            {
+                Debug.Log("カードセット済み");
+            }
+        }
+
+        public void B_Set()
+        {
+            Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
+
+            if (isSet_B == false) // まだセットしていなければ
+            {
+                RndCreateCard_B = Random.Range(0, 3);
+                AppearButton_B();
+                Debug.Log(RndCreateCard_B + ": RndCreateCard_B");
+
+                if (RndCreateCard_B == 0)  //グー
+                {
+                    Te_B.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+                }
+                else if (RndCreateCard_B == 1)  //チョキ
+                {
+                    Te_B.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+                }
+                else if (RndCreateCard_B == 2) //パー
+                {
+                    Te_B.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+                }
+                else
+                {
+                    Debug.Log("ジャンケン ERROR");
+                }
+
+                isSet_B = true;
+            }
+            else
+            {
+                Debug.Log("カードセット済み");
+            }
+        }
+
+        public void C_Set()
+        {
+            Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
+
+            if (isSet_C == false) // まだセットしていなければ
+            {
+                RndCreateCard_C = Random.Range(0, 3);
+                AppearButton_C();
+                Debug.Log(RndCreateCard_C + ": RndCreateCard_C");
+
+                if (RndCreateCard_C == 0)  //グー
+                {
+                    Te_C.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+                }
+                else if (RndCreateCard_C == 1)  //チョキ
+                {
+                    Te_C.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+                }
+                else if (RndCreateCard_C == 2) //パー
+                {
+                    Te_C.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+                }
+                else
+                {
+                    Debug.Log("ジャンケン ERROR");
+                }
+
+                isSet_C = true;
+            }
+            else
+            {
+                Debug.Log("カードセット済み");
+            }
+        }
+
+        public void D_Set()
+        {
+            Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
+
+            if (isSet_D == false) // まだセットしていなければ
+            {
+                RndCreateCard_D = Random.Range(0, 3);
+                AppearButton_D();
+                Debug.Log(RndCreateCard_D + ": RndCreateCard_D");
+
+                if (RndCreateCard_D == 0)  //グー
+                {
+                    Te_D.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+                }
+                else if (RndCreateCard_D == 1)  //チョキ
+                {
+                    Te_D.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+                }
+                else if (RndCreateCard_D == 2) //パー
+                {
+                    Te_D.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+                }
+                else
+                {
+                    Debug.Log("ジャンケン ERROR");
+                }
+
+                isSet_D = true;
+            }
+            else
+            {
+                Debug.Log("カードセット済み");
+            }
+        }
+
+        public void E_Set()
+        {
+            Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
+
+            if (isSet_E == false) // まだセットしていなければ
+            {
+                RndCreateCard_E = Random.Range(0, 3);
+                AppearButton_E();
+                Debug.Log(RndCreateCard_E + ": RndCreateCard_E");
+
+                if (RndCreateCard_E == 0)  //グー
+                {
+                    Te_E.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+                }
+                else if (RndCreateCard_E == 1)  //チョキ
+                {
+                    Te_E.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+                }
+                else if (RndCreateCard_E == 2) //パー
+                {
+                    Te_E.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+                }
+                else
+                {
+                    Debug.Log("ジャンケン ERROR");
+                }
+
+                isSet_E = true;
+            }
+            else
+            {
+                Debug.Log("カードセット済み");
+            }
+        }
+
+
+        #endregion
+
+        #region// じゃんけんカード 手のリセット
+
+        public void Reset_All()
+        {
+            A_Reset();
+            B_Reset();
+            C_Reset();
+            D_Reset();
+            E_Reset();
+        }
+
+        public void A_Reset()
+        {
+            Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
+            RndCreateCard_A = -1;
+            Debug.Log(RndCreateCard_A + ": RndCreateCard_A");
+            //Te_A.gameObject.GetComponent<Image>().sprite = null;
+            isSet_A = false;
+        }
+
+        public void B_Reset()
+        {
+            Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
+            RndCreateCard_B = -1;
+            Debug.Log(RndCreateCard_B + ": RndCreateCard_B");
+            //Te_B.gameObject.GetComponent<Image>().sprite = null;
+            isSet_B = false;
+        }
+
+        public void C_Reset()
+        {
+            Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
+            RndCreateCard_C = -1;
+            Debug.Log(RndCreateCard_C + ": RndCreateCard_C");
+            //Te_C.gameObject.GetComponent<Image>().sprite = null;
+            isSet_C = false;
+        }
+
+        public void D_Reset()
+        {
+            Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
+            RndCreateCard_D = -1;
+            Debug.Log(RndCreateCard_D + ": RndCreateCard_D");
+            //Te_D.gameObject.GetComponent<Image>().sprite = null;
+            isSet_D = false;
+        }
+
+        public void E_Reset()
+        {
+            Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
+            RndCreateCard_E = -1;
+            Debug.Log(RndCreateCard_E + ": RndCreateCard_E");
+            //Te_E.gameObject.GetComponent<Image>().sprite = null;
+            isSet_E = false;
+        }
+        #endregion
+
+
+        #region// じゃんけんカードボタン 表示・非表示の設定
+
         //●表示させる
         public void AppearButton_A()
         {
@@ -303,6 +590,8 @@ namespace say
         {
             Button_E.SetActive(false);
         }
+
+        #endregion
 
         //#################################################################################
 

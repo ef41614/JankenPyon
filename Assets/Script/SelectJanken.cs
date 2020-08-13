@@ -111,6 +111,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject TestRoomController;  //ヒエラルキー上のオブジェクト名
     TestRoomController TestRoomControllerSC;
 
+    public GameObject PushTeBtnManager; //ヒエラルキー上のオブジェクト名
+    PushTeBtn PushTeBtnMSC;
+
     public GameObject myPlayer;
     
     public int rap1 = 0;
@@ -120,6 +123,18 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public string senderID = "2434";
     public string MyName = "me";
     public string MyID = "0000";
+
+    public bool isSelected_A = false;
+    public bool isSelected_B = false;
+    public bool isSelected_C = false;
+    public bool isSelected_D = false;
+    public bool isSelected_E = false;
+
+    public Button Btn_A;
+    public Button Btn_B;
+    public Button Btn_C;
+    public Button Btn_D;
+    public Button Btn_E;
 
     void Awake()
     {
@@ -131,9 +146,17 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         //var customProperties = photonView.Owner.CustomProperties;
         Debug.Log("SelectJanken 出席確認2");
+        /*
+        Btn_A = GetComponent<Button>();
+        Btn_B = GetComponent<Button>();
+        Btn_C = GetComponent<Button>();
+        Btn_D = GetComponent<Button>();
+        Btn_E = GetComponent<Button>();
+        */
         count_a = 1;
         ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
+        //PushTeBtnMSC = PushTeBtnManager.GetComponent<PushTeBtn>();
         ResetPlayerTeNum();
         // photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
         //   if (PhotonNetwork.LocalPlayer.CustomProperties["Score"] is int score)
@@ -191,7 +214,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("MyID  " + MyID);  // 今ボタン押した人
     }
 
-
+    /*
     public void ToSelectJankenCard()
     {
         if (MyID == senderID)
@@ -204,6 +227,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("×× MyID != senderID");
         }
     }
+    */
 
     [PunRPC]
     public void SelectJankenCard()
@@ -250,6 +274,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("ID の条件、どれにも当てはまってない");
         }
 
+        /*
         Debug.Log("RndCreateCard_C ： " + ShuffleCardsMSC.RndCreateCard_C);
         if (ShuffleCardsMSC.RndCreateCard_C == 0) //グー
         {
@@ -267,12 +292,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Debug.Log("ランダム値の見直しが必要！！");
         }
+        */
 
         Debug.Log("処理実施後確認");
         photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
         Debug.Log("●●●●●● [PunRPC] SelectJankenCard の起動終わり ●●●●●●");
     }
 
+    /*
     public void SelectGu()
     {
         Debug.Log("今グー押したのは" + senderID);
@@ -392,6 +419,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         count_a++;
         Debug.Log(count_a + ": count_a");
     }
+    */
 
     //[PunRPC]
     public void PlayerTeNumSet(int PTN)  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
@@ -804,7 +832,71 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
-       
+    public void Reset_Rireki_All()
+    {
+        te1_1.gameObject.GetComponent<Image>().sprite = null;
+        te1_2.gameObject.GetComponent<Image>().sprite = null;
+        te1_3.gameObject.GetComponent<Image>().sprite = null;
+        te1_4.gameObject.GetComponent<Image>().sprite = null;
+        te1_5.gameObject.GetComponent<Image>().sprite = null;
+    }
+
+    /*
+    #region// じゃんけんボタン 押せるかどうかのフラグ
+
+    public void Push_Btn_A() // ボタン押したよ
+    {
+        Btn_A.interactable = false;
+    }
+
+    public void ToCanPush_A() // ボタン押せるようにするよ
+    {
+        Btn_A.interactable = true;
+    }
+
+    public void Push_Btn_B() // ボタン押したよ
+    {
+        Btn_B.interactable = false;
+    }
+
+    public void ToCanPush_B() // ボタン押せるようにするよ
+    {
+        Btn_B.interactable = true;
+    }
+
+    public void Push_Btn_C() // ボタン押したよ
+    {
+        Btn_C.interactable = false;
+    }
+
+    public void ToCanPush_C() // ボタン押せるようにするよ
+    {
+        Btn_C.interactable = true;
+    }
+
+    public void Push_Btn_D() // ボタン押したよ
+    {
+        Btn_D.interactable = false;
+    }
+
+    public void ToCanPush_D() // ボタン押せるようにするよ
+    {
+        Btn_D.interactable = true;
+    }
+
+    public void Push_Btn_E() // ボタン押したよ
+    {
+        Btn_E.interactable = false;
+    }
+
+    public void ToCanPush_E() // ボタン押せるようにするよ
+    {
+        Btn_E.interactable = true;
+    }
+
+    #endregion
+    */
+
     // End
 
 }
