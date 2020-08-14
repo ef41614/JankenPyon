@@ -31,11 +31,17 @@ public class PushTeBtn : MonoBehaviour
     public Image te1_4;
     public Image te1_5;
 
-    public int _Player1_Te1 = -1;
-    public int _Player1_Te2 = -1;
-    public int _Player1_Te3 = -1;
-    public int _Player1_Te4 = -1;
-    public int _Player1_Te5 = -1;
+    public int _MyJanken_Te1 = -1;
+    public int _MyJanken_Te2 = -1;
+    public int _MyJanken_Te3 = -1;
+    public int _MyJanken_Te4 = -1;
+    public int _MyJanken_Te5 = -1;
+
+    public int MyJanken_Te1 = -1;
+    public int MyJanken_Te2 = -1;
+    public int MyJanken_Te3 = -1;
+    public int MyJanken_Te4 = -1;
+    public int MyJanken_Te5 = -1;
 
     public int Player1_Te1 = -1;
     public int Player1_Te2 = -1;
@@ -64,6 +70,9 @@ public class PushTeBtn : MonoBehaviour
     public GameObject ShuffleCardsManager;  //ヒエラルキー上のオブジェクト名
     ShuffleCards ShuffleCardsMSC; //スクリプト名 + このページ上でのニックネーム
 
+    public SelectJanken SelectJankenMSC; //スクリプト名 + このページ上でのニックネーム
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -83,12 +92,23 @@ public class PushTeBtn : MonoBehaviour
         ToCanPush_All();
 
         ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
+        //SelectJankenMSC.MyPlayID();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void SharePlayerTeNum_Player1()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
+    {
+        SelectJankenMSC.Player1_Te1 = MyJanken_Te1;
+        SelectJankenMSC.Player1_Te2 = MyJanken_Te2;
+        SelectJankenMSC.Player1_Te3 = MyJanken_Te3;
+        SelectJankenMSC.Player1_Te4 = MyJanken_Te4;
+        SelectJankenMSC.Player1_Te5 = MyJanken_Te5;
+
     }
 
 
@@ -238,36 +258,36 @@ public class PushTeBtn : MonoBehaviour
         Debug.Log(PTN + ": PTN");
         
             Debug.Log("現在プレイヤー1がボタン押したよ");
-            if (Player1_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            if (MyJanken_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Debug.Log("Player1_Te1 代入前" + Player1_Te1);
-                Player1_Te1 = PTN;
-                _Player1_Te1 = Player1_Te1;
-                Debug.Log("Player1_Te1 代入後" + Player1_Te1);
+                Debug.Log("MyJanken_Te1 代入前" + MyJanken_Te1);
+                MyJanken_Te1 = PTN;
+                _MyJanken_Te1 = MyJanken_Te1;
+                Debug.Log("MyJanken_Te1 代入後" + MyJanken_Te1);
                 Debug.Log("プレイヤー1_1 手のセットOK");
             }
-            else if (Player1_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (MyJanken_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player1_Te2 = PTN;
-                _Player1_Te2 = Player1_Te2;
+                MyJanken_Te2 = PTN;
+                _MyJanken_Te2 = MyJanken_Te2;
                 Debug.Log("プレイヤー1_2 手のセットOK");
             }
-            else if (Player1_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (MyJanken_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player1_Te3 = PTN;
-                _Player1_Te3 = Player1_Te3;
+                MyJanken_Te3 = PTN;
+                _MyJanken_Te3 = MyJanken_Te3;
                 Debug.Log("プレイヤー1_3 手のセットOK");
             }
-            else if (Player1_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (MyJanken_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player1_Te4 = PTN;
-                _Player1_Te4 = Player1_Te4;
+                MyJanken_Te4 = PTN;
+                _MyJanken_Te4 = MyJanken_Te4;
                 Debug.Log("プレイヤー1_4 手のセットOK");
             }
-            else if (Player1_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (MyJanken_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player1_Te5 = PTN;
-                _Player1_Te5 = Player1_Te5;
+                MyJanken_Te5 = PTN;
+                _MyJanken_Te5 = MyJanken_Te5;
                 Debug.Log("プレイヤー1_5 手のセットOK");
             }
             else

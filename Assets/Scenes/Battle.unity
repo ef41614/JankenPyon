@@ -773,6 +773,36 @@ MonoBehaviour:
   te1_3: {fileID: 1722347205}
   te1_4: {fileID: 1190251985}
   te1_5: {fileID: 1920704764}
+  JankenTe_TextP1_1: {fileID: 0}
+  JankenTe_TextP1_2: {fileID: 0}
+  JankenTe_TextP1_3: {fileID: 0}
+  JankenTe_TextP1_4: {fileID: 0}
+  JankenTe_TextP1_5: {fileID: 0}
+  JankenTe_TextP2_1: {fileID: 0}
+  JankenTe_TextP2_2: {fileID: 0}
+  JankenTe_TextP2_3: {fileID: 0}
+  JankenTe_TextP2_4: {fileID: 0}
+  JankenTe_TextP2_5: {fileID: 0}
+  JankenTe_TextP3_1: {fileID: 0}
+  JankenTe_TextP3_2: {fileID: 0}
+  JankenTe_TextP3_3: {fileID: 0}
+  JankenTe_TextP3_4: {fileID: 0}
+  JankenTe_TextP3_5: {fileID: 0}
+  JankenTe_TextP4_1: {fileID: 0}
+  JankenTe_TextP4_2: {fileID: 0}
+  JankenTe_TextP4_3: {fileID: 0}
+  JankenTe_TextP4_4: {fileID: 0}
+  JankenTe_TextP4_5: {fileID: 0}
+  MyNumTe1_1: {fileID: 0}
+  MyNumTe1_2: {fileID: 0}
+  MyNumTe1_3: {fileID: 0}
+  MyNumTe1_4: {fileID: 0}
+  MyNumTe1_5: {fileID: 0}
+  ReMyJanken_Te1: -1
+  ReMyJanken_Te2: -1
+  ReMyJanken_Te3: -1
+  ReMyJanken_Te4: -1
+  ReMyJanken_Te5: -1
   _Player1_Te1: -1
   _Player1_Te2: -1
   _Player1_Te3: -1
@@ -833,6 +863,11 @@ MonoBehaviour:
   receivePlayer4_Te3: -5
   receivePlayer4_Te4: -5
   receivePlayer4_Te5: -5
+  MyJanken_Te1: -1
+  MyJanken_Te2: -1
+  MyJanken_Te3: -1
+  MyJanken_Te4: -1
+  MyJanken_Te5: -1
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
@@ -854,6 +889,11 @@ MonoBehaviour:
   Btn_C: {fileID: 0}
   Btn_D: {fileID: 0}
   Btn_E: {fileID: 0}
+  CanPushBtn_A: 1
+  CanPushBtn_B: 1
+  CanPushBtn_C: 1
+  CanPushBtn_D: 1
+  CanPushBtn_E: 1
 --- !u!114 &135123389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -897,7 +937,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1568602050}
+      - m_Target: {fileID: 1361133988}
         m_MethodName: Push_Btn_A
         m_Mode: 1
         m_Arguments:
@@ -960,7 +1000,7 @@ GameObject:
   - component: {fileID: 155710169}
   - component: {fileID: 155710168}
   m_Layer: 5
-  m_Name: NumText_3
+  m_Name: NumText3_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1334,7 +1374,7 @@ GameObject:
   - component: {fileID: 321209319}
   - component: {fileID: 321209318}
   m_Layer: 5
-  m_Name: te1_5
+  m_Name: te3_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1440,7 +1480,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 450}
+  m_AnchoredPosition: {x: -5, y: 450}
   m_SizeDelta: {x: 1600, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &338226853
@@ -1956,7 +1996,7 @@ GameObject:
   - component: {fileID: 388648165}
   - component: {fileID: 388648164}
   m_Layer: 5
-  m_Name: Image1_1
+  m_Name: Image4_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2031,7 +2071,7 @@ GameObject:
   - component: {fileID: 395158927}
   - component: {fileID: 395158926}
   m_Layer: 5
-  m_Name: te1_5
+  m_Name: te4_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2184,7 +2224,7 @@ GameObject:
   - component: {fileID: 435791339}
   - component: {fileID: 435791338}
   m_Layer: 5
-  m_Name: Image1_5
+  m_Name: Image3_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2354,7 +2394,7 @@ GameObject:
   - component: {fileID: 441679972}
   - component: {fileID: 441679971}
   m_Layer: 5
-  m_Name: te1_3
+  m_Name: te3_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2429,7 +2469,7 @@ GameObject:
   - component: {fileID: 469544506}
   - component: {fileID: 469544505}
   m_Layer: 5
-  m_Name: NumText_1
+  m_Name: NumText3_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2694,7 +2734,7 @@ GameObject:
   - component: {fileID: 496724695}
   - component: {fileID: 496724694}
   m_Layer: 5
-  m_Name: NumText_2
+  m_Name: NumText2_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2988,6 +3028,36 @@ MonoBehaviour:
   te1_3: {fileID: 1722347205}
   te1_4: {fileID: 1190251985}
   te1_5: {fileID: 1920704764}
+  JankenTe_TextP1_1: {fileID: 0}
+  JankenTe_TextP1_2: {fileID: 0}
+  JankenTe_TextP1_3: {fileID: 0}
+  JankenTe_TextP1_4: {fileID: 0}
+  JankenTe_TextP1_5: {fileID: 0}
+  JankenTe_TextP2_1: {fileID: 0}
+  JankenTe_TextP2_2: {fileID: 0}
+  JankenTe_TextP2_3: {fileID: 0}
+  JankenTe_TextP2_4: {fileID: 0}
+  JankenTe_TextP2_5: {fileID: 0}
+  JankenTe_TextP3_1: {fileID: 0}
+  JankenTe_TextP3_2: {fileID: 0}
+  JankenTe_TextP3_3: {fileID: 0}
+  JankenTe_TextP3_4: {fileID: 0}
+  JankenTe_TextP3_5: {fileID: 0}
+  JankenTe_TextP4_1: {fileID: 0}
+  JankenTe_TextP4_2: {fileID: 0}
+  JankenTe_TextP4_3: {fileID: 0}
+  JankenTe_TextP4_4: {fileID: 0}
+  JankenTe_TextP4_5: {fileID: 0}
+  MyNumTe1_1: {fileID: 0}
+  MyNumTe1_2: {fileID: 0}
+  MyNumTe1_3: {fileID: 0}
+  MyNumTe1_4: {fileID: 0}
+  MyNumTe1_5: {fileID: 0}
+  ReMyJanken_Te1: -1
+  ReMyJanken_Te2: -1
+  ReMyJanken_Te3: -1
+  ReMyJanken_Te4: -1
+  ReMyJanken_Te5: -1
   _Player1_Te1: -1
   _Player1_Te2: -1
   _Player1_Te3: -1
@@ -3048,6 +3118,11 @@ MonoBehaviour:
   receivePlayer4_Te3: -5
   receivePlayer4_Te4: -5
   receivePlayer4_Te5: -5
+  MyJanken_Te1: -1
+  MyJanken_Te2: -1
+  MyJanken_Te3: -1
+  MyJanken_Te4: -1
+  MyJanken_Te5: -1
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
@@ -3069,6 +3144,11 @@ MonoBehaviour:
   Btn_C: {fileID: 0}
   Btn_D: {fileID: 0}
   Btn_E: {fileID: 0}
+  CanPushBtn_A: 1
+  CanPushBtn_B: 1
+  CanPushBtn_C: 1
+  CanPushBtn_D: 1
+  CanPushBtn_E: 1
 --- !u!114 &578063751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3112,7 +3192,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1568602050}
+      - m_Target: {fileID: 1361133988}
         m_MethodName: Push_Btn_E
         m_Mode: 1
         m_Arguments:
@@ -3195,7 +3275,7 @@ GameObject:
   - component: {fileID: 581490710}
   - component: {fileID: 581490709}
   m_Layer: 5
-  m_Name: NumText_5
+  m_Name: NumText4_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3598,7 +3678,7 @@ GameObject:
   - component: {fileID: 668166445}
   - component: {fileID: 668166444}
   m_Layer: 5
-  m_Name: Image1_5
+  m_Name: Image4_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3754,7 +3834,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1568602050}
+      - m_Target: {fileID: 1361133988}
         m_MethodName: ResetTeNum_All
         m_Mode: 1
         m_Arguments:
@@ -3990,7 +4070,7 @@ GameObject:
   - component: {fileID: 697025703}
   - component: {fileID: 697025702}
   m_Layer: 5
-  m_Name: te1_1
+  m_Name: te2_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4710,7 +4790,7 @@ GameObject:
   - component: {fileID: 830136595}
   - component: {fileID: 830136594}
   m_Layer: 5
-  m_Name: NumText_1
+  m_Name: NumText1_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5050,7 +5130,7 @@ GameObject:
   - component: {fileID: 859962451}
   - component: {fileID: 859962450}
   m_Layer: 5
-  m_Name: NumText_2
+  m_Name: NumText3_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5199,7 +5279,7 @@ GameObject:
   - component: {fileID: 866296490}
   - component: {fileID: 866296489}
   m_Layer: 5
-  m_Name: te1_2
+  m_Name: te3_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5353,7 +5433,7 @@ GameObject:
   - component: {fileID: 954317882}
   - component: {fileID: 954317881}
   m_Layer: 5
-  m_Name: NumText_1
+  m_Name: NumText2_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5447,7 +5527,7 @@ GameObject:
   - component: {fileID: 970796357}
   - component: {fileID: 970796356}
   m_Layer: 5
-  m_Name: Image1_4
+  m_Name: Image3_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6067,7 +6147,7 @@ GameObject:
   - component: {fileID: 1043623105}
   - component: {fileID: 1043623104}
   m_Layer: 5
-  m_Name: Image1_2
+  m_Name: Image4_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6222,7 +6302,7 @@ GameObject:
   - component: {fileID: 1049464482}
   - component: {fileID: 1049464481}
   m_Layer: 5
-  m_Name: NumText_3
+  m_Name: NumText2_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6316,7 +6396,7 @@ GameObject:
   - component: {fileID: 1076726578}
   - component: {fileID: 1076726577}
   m_Layer: 5
-  m_Name: te1_3
+  m_Name: te2_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6622,7 +6702,7 @@ GameObject:
   - component: {fileID: 1089991618}
   - component: {fileID: 1089991617}
   m_Layer: 5
-  m_Name: Image1_3
+  m_Name: Image2_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6741,7 +6821,7 @@ GameObject:
   - component: {fileID: 1096893324}
   - component: {fileID: 1096893323}
   m_Layer: 5
-  m_Name: Image1_2
+  m_Name: Image2_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6816,7 +6896,7 @@ GameObject:
   - component: {fileID: 1101930809}
   - component: {fileID: 1101930808}
   m_Layer: 5
-  m_Name: Image1_4
+  m_Name: Image2_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6892,7 +6972,7 @@ GameObject:
   - component: {fileID: 1109494548}
   - component: {fileID: 1109494547}
   m_Layer: 5
-  m_Name: NumText_2
+  m_Name: NumText4_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7135,7 +7215,7 @@ GameObject:
   - component: {fileID: 1115100756}
   - component: {fileID: 1115100755}
   m_Layer: 5
-  m_Name: Image1_5
+  m_Name: Image2_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7780,7 +7860,7 @@ GameObject:
   - component: {fileID: 1186366231}
   - component: {fileID: 1186366230}
   m_Layer: 5
-  m_Name: te1_1
+  m_Name: te4_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7965,7 +8045,7 @@ GameObject:
   - component: {fileID: 1197956148}
   - component: {fileID: 1197956147}
   m_Layer: 5
-  m_Name: NumText_1
+  m_Name: NumText4_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8138,7 +8218,7 @@ GameObject:
   - component: {fileID: 1220181902}
   - component: {fileID: 1220181901}
   m_Layer: 5
-  m_Name: te1_2
+  m_Name: te2_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8213,7 +8293,7 @@ GameObject:
   - component: {fileID: 1223421638}
   - component: {fileID: 1223421637}
   m_Layer: 5
-  m_Name: NumText_4
+  m_Name: NumText1_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8307,7 +8387,7 @@ GameObject:
   - component: {fileID: 1288121734}
   - component: {fileID: 1288121733}
   m_Layer: 5
-  m_Name: te1_5
+  m_Name: te2_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8535,6 +8615,36 @@ MonoBehaviour:
   te1_3: {fileID: 1722347205}
   te1_4: {fileID: 1190251985}
   te1_5: {fileID: 1920704764}
+  JankenTe_TextP1_1: {fileID: 830136595}
+  JankenTe_TextP1_2: {fileID: 1737232900}
+  JankenTe_TextP1_3: {fileID: 1800017689}
+  JankenTe_TextP1_4: {fileID: 1223421638}
+  JankenTe_TextP1_5: {fileID: 1965520735}
+  JankenTe_TextP2_1: {fileID: 0}
+  JankenTe_TextP2_2: {fileID: 0}
+  JankenTe_TextP2_3: {fileID: 0}
+  JankenTe_TextP2_4: {fileID: 0}
+  JankenTe_TextP2_5: {fileID: 0}
+  JankenTe_TextP3_1: {fileID: 0}
+  JankenTe_TextP3_2: {fileID: 0}
+  JankenTe_TextP3_3: {fileID: 0}
+  JankenTe_TextP3_4: {fileID: 0}
+  JankenTe_TextP3_5: {fileID: 0}
+  JankenTe_TextP4_1: {fileID: 0}
+  JankenTe_TextP4_2: {fileID: 0}
+  JankenTe_TextP4_3: {fileID: 0}
+  JankenTe_TextP4_4: {fileID: 0}
+  JankenTe_TextP4_5: {fileID: 0}
+  MyNumTe1_1: {fileID: 369400115}
+  MyNumTe1_2: {fileID: 687799484}
+  MyNumTe1_3: {fileID: 440516197}
+  MyNumTe1_4: {fileID: 1900259816}
+  MyNumTe1_5: {fileID: 1462348523}
+  ReMyJanken_Te1: -1
+  ReMyJanken_Te2: -1
+  ReMyJanken_Te3: -1
+  ReMyJanken_Te4: -1
+  ReMyJanken_Te5: -1
   _Player1_Te1: -1
   _Player1_Te2: -1
   _Player1_Te3: -1
@@ -8595,6 +8705,11 @@ MonoBehaviour:
   receivePlayer4_Te3: -5
   receivePlayer4_Te4: -5
   receivePlayer4_Te5: -5
+  MyJanken_Te1: -1
+  MyJanken_Te2: -1
+  MyJanken_Te3: -1
+  MyJanken_Te4: -1
+  MyJanken_Te5: -1
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
@@ -8616,6 +8731,11 @@ MonoBehaviour:
   Btn_C: {fileID: 2101061708444296825}
   Btn_D: {fileID: 2088377379}
   Btn_E: {fileID: 578063751}
+  CanPushBtn_A: 1
+  CanPushBtn_B: 1
+  CanPushBtn_C: 1
+  CanPushBtn_D: 1
+  CanPushBtn_E: 1
 --- !u!4 &1361133989
 Transform:
   m_ObjectHideFlags: 0
@@ -8755,7 +8875,7 @@ GameObject:
   - component: {fileID: 1366885456}
   - component: {fileID: 1366885455}
   m_Layer: 5
-  m_Name: NumText_4
+  m_Name: NumText3_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8928,7 +9048,7 @@ GameObject:
   - component: {fileID: 1385734055}
   - component: {fileID: 1385734054}
   m_Layer: 5
-  m_Name: te1_4
+  m_Name: te4_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9116,7 +9236,7 @@ GameObject:
   - component: {fileID: 1417235830}
   - component: {fileID: 1417235829}
   m_Layer: 5
-  m_Name: te1_3
+  m_Name: te4_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9190,7 +9310,7 @@ GameObject:
   - component: {fileID: 1441679268}
   - component: {fileID: 1441679267}
   m_Layer: 5
-  m_Name: te1_2
+  m_Name: te4_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9264,6 +9384,8 @@ GameObject:
   - component: {fileID: 1449338725}
   - component: {fileID: 1449338724}
   - component: {fileID: 1449338723}
+  - component: {fileID: 1449338727}
+  - component: {fileID: 1449338726}
   m_Layer: 5
   m_Name: ShareButton
   m_TagString: Untagged
@@ -9384,6 +9506,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1449338721}
   m_CullTransparentMesh: 0
+--- !u!114 &1449338726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449338721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+--- !u!114 &1449338727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449338721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 1449338726}
+  viewIdField: 4
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1462348520
 GameObject:
   m_ObjectHideFlags: 0
@@ -9649,7 +9808,7 @@ GameObject:
   - component: {fileID: 1534259523}
   - component: {fileID: 1534259522}
   m_Layer: 5
-  m_Name: te1_4
+  m_Name: te3_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9865,7 +10024,7 @@ GameObject:
   - component: {fileID: 1548786762}
   - component: {fileID: 1548786761}
   m_Layer: 5
-  m_Name: te1_4
+  m_Name: te2_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10102,11 +10261,16 @@ MonoBehaviour:
   te1_3: {fileID: 1722347205}
   te1_4: {fileID: 1190251985}
   te1_5: {fileID: 1920704764}
-  _Player1_Te1: -1
-  _Player1_Te2: -1
-  _Player1_Te3: -1
-  _Player1_Te4: -1
-  _Player1_Te5: -1
+  _MyJanken_Te1: -1
+  _MyJanken_Te2: -1
+  _MyJanken_Te3: -1
+  _MyJanken_Te4: -1
+  _MyJanken_Te5: -1
+  MyJanken_Te1: -1
+  MyJanken_Te2: -1
+  MyJanken_Te3: -1
+  MyJanken_Te4: -1
+  MyJanken_Te5: -1
   Player1_Te1: -1
   Player1_Te2: -1
   Player1_Te3: -1
@@ -10123,6 +10287,7 @@ MonoBehaviour:
   CanPushBtn_D: 1
   CanPushBtn_E: 1
   ShuffleCardsManager: {fileID: 1540748809}
+  SelectJankenMSC: {fileID: 1361133988}
 --- !u!4 &1568602051
 Transform:
   m_ObjectHideFlags: 0
@@ -10149,7 +10314,7 @@ GameObject:
   - component: {fileID: 1569170984}
   - component: {fileID: 1569170983}
   m_Layer: 5
-  m_Name: Image1_3
+  m_Name: Image4_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10224,7 +10389,7 @@ GameObject:
   - component: {fileID: 1600252774}
   - component: {fileID: 1600252773}
   m_Layer: 5
-  m_Name: Image1_3
+  m_Name: Image3_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10299,7 +10464,7 @@ GameObject:
   - component: {fileID: 1609919967}
   - component: {fileID: 1609919966}
   m_Layer: 5
-  m_Name: Image1_2
+  m_Name: Image3_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10423,6 +10588,36 @@ MonoBehaviour:
   te1_3: {fileID: 1722347205}
   te1_4: {fileID: 1190251985}
   te1_5: {fileID: 1920704764}
+  JankenTe_TextP1_1: {fileID: 0}
+  JankenTe_TextP1_2: {fileID: 0}
+  JankenTe_TextP1_3: {fileID: 0}
+  JankenTe_TextP1_4: {fileID: 0}
+  JankenTe_TextP1_5: {fileID: 0}
+  JankenTe_TextP2_1: {fileID: 0}
+  JankenTe_TextP2_2: {fileID: 0}
+  JankenTe_TextP2_3: {fileID: 0}
+  JankenTe_TextP2_4: {fileID: 0}
+  JankenTe_TextP2_5: {fileID: 0}
+  JankenTe_TextP3_1: {fileID: 0}
+  JankenTe_TextP3_2: {fileID: 0}
+  JankenTe_TextP3_3: {fileID: 0}
+  JankenTe_TextP3_4: {fileID: 0}
+  JankenTe_TextP3_5: {fileID: 0}
+  JankenTe_TextP4_1: {fileID: 0}
+  JankenTe_TextP4_2: {fileID: 0}
+  JankenTe_TextP4_3: {fileID: 0}
+  JankenTe_TextP4_4: {fileID: 0}
+  JankenTe_TextP4_5: {fileID: 0}
+  MyNumTe1_1: {fileID: 0}
+  MyNumTe1_2: {fileID: 0}
+  MyNumTe1_3: {fileID: 0}
+  MyNumTe1_4: {fileID: 0}
+  MyNumTe1_5: {fileID: 0}
+  ReMyJanken_Te1: -1
+  ReMyJanken_Te2: -1
+  ReMyJanken_Te3: -1
+  ReMyJanken_Te4: -1
+  ReMyJanken_Te5: -1
   _Player1_Te1: -1
   _Player1_Te2: -1
   _Player1_Te3: -1
@@ -10483,6 +10678,11 @@ MonoBehaviour:
   receivePlayer4_Te3: -5
   receivePlayer4_Te4: -5
   receivePlayer4_Te5: -5
+  MyJanken_Te1: -1
+  MyJanken_Te2: -1
+  MyJanken_Te3: -1
+  MyJanken_Te4: -1
+  MyJanken_Te5: -1
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
@@ -10504,6 +10704,11 @@ MonoBehaviour:
   Btn_C: {fileID: 0}
   Btn_D: {fileID: 0}
   Btn_E: {fileID: 0}
+  CanPushBtn_A: 1
+  CanPushBtn_B: 1
+  CanPushBtn_C: 1
+  CanPushBtn_D: 1
+  CanPushBtn_E: 1
 --- !u!114 &1663580076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10547,7 +10752,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1568602050}
+      - m_Target: {fileID: 1361133988}
         m_MethodName: Push_Btn_B
         m_Mode: 1
         m_Arguments:
@@ -10679,7 +10884,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1568602050}
+      - m_Target: {fileID: 1361133988}
         m_MethodName: ToCanPush_All
         m_Mode: 1
         m_Arguments:
@@ -11118,7 +11323,7 @@ GameObject:
   - component: {fileID: 1737232900}
   - component: {fileID: 1737232899}
   m_Layer: 5
-  m_Name: NumText_2
+  m_Name: NumText1_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11213,7 +11418,7 @@ GameObject:
   - component: {fileID: 1764249104}
   - component: {fileID: 1764249103}
   m_Layer: 5
-  m_Name: NumText_3
+  m_Name: NumText4_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11307,7 +11512,7 @@ GameObject:
   - component: {fileID: 1775131209}
   - component: {fileID: 1775131208}
   m_Layer: 5
-  m_Name: Image1_1
+  m_Name: Image3_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11383,7 +11588,7 @@ GameObject:
   - component: {fileID: 1800017689}
   - component: {fileID: 1800017688}
   m_Layer: 5
-  m_Name: NumText_3
+  m_Name: NumText1_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11511,7 +11716,7 @@ GameObject:
   - component: {fileID: 1868643760}
   - component: {fileID: 1868643759}
   m_Layer: 5
-  m_Name: te1_1
+  m_Name: te3_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11990,7 +12195,7 @@ GameObject:
   - component: {fileID: 1907313518}
   - component: {fileID: 1907313517}
   m_Layer: 5
-  m_Name: NumText_4
+  m_Name: NumText2_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12238,7 +12443,7 @@ GameObject:
   - component: {fileID: 1942875389}
   - component: {fileID: 1942875388}
   m_Layer: 5
-  m_Name: NumText_5
+  m_Name: NumText3_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12333,7 +12538,7 @@ GameObject:
   - component: {fileID: 1943738863}
   - component: {fileID: 1943738862}
   m_Layer: 5
-  m_Name: NumText_4
+  m_Name: NumText4_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12569,6 +12774,36 @@ MonoBehaviour:
   te1_3: {fileID: 1722347205}
   te1_4: {fileID: 1190251985}
   te1_5: {fileID: 1920704764}
+  JankenTe_TextP1_1: {fileID: 0}
+  JankenTe_TextP1_2: {fileID: 0}
+  JankenTe_TextP1_3: {fileID: 0}
+  JankenTe_TextP1_4: {fileID: 0}
+  JankenTe_TextP1_5: {fileID: 0}
+  JankenTe_TextP2_1: {fileID: 0}
+  JankenTe_TextP2_2: {fileID: 0}
+  JankenTe_TextP2_3: {fileID: 0}
+  JankenTe_TextP2_4: {fileID: 0}
+  JankenTe_TextP2_5: {fileID: 0}
+  JankenTe_TextP3_1: {fileID: 0}
+  JankenTe_TextP3_2: {fileID: 0}
+  JankenTe_TextP3_3: {fileID: 0}
+  JankenTe_TextP3_4: {fileID: 0}
+  JankenTe_TextP3_5: {fileID: 0}
+  JankenTe_TextP4_1: {fileID: 0}
+  JankenTe_TextP4_2: {fileID: 0}
+  JankenTe_TextP4_3: {fileID: 0}
+  JankenTe_TextP4_4: {fileID: 0}
+  JankenTe_TextP4_5: {fileID: 0}
+  MyNumTe1_1: {fileID: 0}
+  MyNumTe1_2: {fileID: 0}
+  MyNumTe1_3: {fileID: 0}
+  MyNumTe1_4: {fileID: 0}
+  MyNumTe1_5: {fileID: 0}
+  ReMyJanken_Te1: -1
+  ReMyJanken_Te2: -1
+  ReMyJanken_Te3: -1
+  ReMyJanken_Te4: -1
+  ReMyJanken_Te5: -1
   _Player1_Te1: -1
   _Player1_Te2: -1
   _Player1_Te3: -1
@@ -12629,6 +12864,11 @@ MonoBehaviour:
   receivePlayer4_Te3: -5
   receivePlayer4_Te4: -5
   receivePlayer4_Te5: -5
+  MyJanken_Te1: -1
+  MyJanken_Te2: -1
+  MyJanken_Te3: -1
+  MyJanken_Te4: -1
+  MyJanken_Te5: -1
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
@@ -12650,6 +12890,11 @@ MonoBehaviour:
   Btn_C: {fileID: 0}
   Btn_D: {fileID: 0}
   Btn_E: {fileID: 0}
+  CanPushBtn_A: 1
+  CanPushBtn_B: 1
+  CanPushBtn_C: 1
+  CanPushBtn_D: 1
+  CanPushBtn_E: 1
 --- !u!1 &1961706137
 GameObject:
   m_ObjectHideFlags: 0
@@ -12663,7 +12908,7 @@ GameObject:
   - component: {fileID: 1961706140}
   - component: {fileID: 1961706139}
   m_Layer: 5
-  m_Name: NumText_5
+  m_Name: NumText2_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12832,7 +13077,7 @@ GameObject:
   - component: {fileID: 1965520735}
   - component: {fileID: 1965520734}
   m_Layer: 5
-  m_Name: NumText_5
+  m_Name: NumText1_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12926,7 +13171,7 @@ GameObject:
   - component: {fileID: 1971942334}
   - component: {fileID: 1971942333}
   m_Layer: 5
-  m_Name: Image1_4
+  m_Name: Image4_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13109,6 +13354,36 @@ MonoBehaviour:
   te1_3: {fileID: 1722347205}
   te1_4: {fileID: 1190251985}
   te1_5: {fileID: 1920704764}
+  JankenTe_TextP1_1: {fileID: 0}
+  JankenTe_TextP1_2: {fileID: 0}
+  JankenTe_TextP1_3: {fileID: 0}
+  JankenTe_TextP1_4: {fileID: 0}
+  JankenTe_TextP1_5: {fileID: 0}
+  JankenTe_TextP2_1: {fileID: 0}
+  JankenTe_TextP2_2: {fileID: 0}
+  JankenTe_TextP2_3: {fileID: 0}
+  JankenTe_TextP2_4: {fileID: 0}
+  JankenTe_TextP2_5: {fileID: 0}
+  JankenTe_TextP3_1: {fileID: 0}
+  JankenTe_TextP3_2: {fileID: 0}
+  JankenTe_TextP3_3: {fileID: 0}
+  JankenTe_TextP3_4: {fileID: 0}
+  JankenTe_TextP3_5: {fileID: 0}
+  JankenTe_TextP4_1: {fileID: 0}
+  JankenTe_TextP4_2: {fileID: 0}
+  JankenTe_TextP4_3: {fileID: 0}
+  JankenTe_TextP4_4: {fileID: 0}
+  JankenTe_TextP4_5: {fileID: 0}
+  MyNumTe1_1: {fileID: 0}
+  MyNumTe1_2: {fileID: 0}
+  MyNumTe1_3: {fileID: 0}
+  MyNumTe1_4: {fileID: 0}
+  MyNumTe1_5: {fileID: 0}
+  ReMyJanken_Te1: -1
+  ReMyJanken_Te2: -1
+  ReMyJanken_Te3: -1
+  ReMyJanken_Te4: -1
+  ReMyJanken_Te5: -1
   _Player1_Te1: -1
   _Player1_Te2: -1
   _Player1_Te3: -1
@@ -13169,6 +13444,11 @@ MonoBehaviour:
   receivePlayer4_Te3: -5
   receivePlayer4_Te4: -5
   receivePlayer4_Te5: -5
+  MyJanken_Te1: -1
+  MyJanken_Te2: -1
+  MyJanken_Te3: -1
+  MyJanken_Te4: -1
+  MyJanken_Te5: -1
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
@@ -13190,6 +13470,11 @@ MonoBehaviour:
   Btn_C: {fileID: 0}
   Btn_D: {fileID: 0}
   Btn_E: {fileID: 0}
+  CanPushBtn_A: 1
+  CanPushBtn_B: 1
+  CanPushBtn_C: 1
+  CanPushBtn_D: 1
+  CanPushBtn_E: 1
 --- !u!114 &2088377379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13233,7 +13518,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1568602050}
+      - m_Target: {fileID: 1361133988}
         m_MethodName: Push_Btn_D
         m_Mode: 1
         m_Arguments:
@@ -13394,7 +13679,7 @@ GameObject:
   - component: {fileID: 2113521411}
   - component: {fileID: 2113521410}
   m_Layer: 5
-  m_Name: Image1_1
+  m_Name: Image2_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13572,6 +13857,36 @@ MonoBehaviour:
   te1_3: {fileID: 1722347205}
   te1_4: {fileID: 1190251985}
   te1_5: {fileID: 1920704764}
+  JankenTe_TextP1_1: {fileID: 0}
+  JankenTe_TextP1_2: {fileID: 0}
+  JankenTe_TextP1_3: {fileID: 0}
+  JankenTe_TextP1_4: {fileID: 0}
+  JankenTe_TextP1_5: {fileID: 0}
+  JankenTe_TextP2_1: {fileID: 0}
+  JankenTe_TextP2_2: {fileID: 0}
+  JankenTe_TextP2_3: {fileID: 0}
+  JankenTe_TextP2_4: {fileID: 0}
+  JankenTe_TextP2_5: {fileID: 0}
+  JankenTe_TextP3_1: {fileID: 0}
+  JankenTe_TextP3_2: {fileID: 0}
+  JankenTe_TextP3_3: {fileID: 0}
+  JankenTe_TextP3_4: {fileID: 0}
+  JankenTe_TextP3_5: {fileID: 0}
+  JankenTe_TextP4_1: {fileID: 0}
+  JankenTe_TextP4_2: {fileID: 0}
+  JankenTe_TextP4_3: {fileID: 0}
+  JankenTe_TextP4_4: {fileID: 0}
+  JankenTe_TextP4_5: {fileID: 0}
+  MyNumTe1_1: {fileID: 0}
+  MyNumTe1_2: {fileID: 0}
+  MyNumTe1_3: {fileID: 0}
+  MyNumTe1_4: {fileID: 0}
+  MyNumTe1_5: {fileID: 0}
+  ReMyJanken_Te1: -1
+  ReMyJanken_Te2: -1
+  ReMyJanken_Te3: -1
+  ReMyJanken_Te4: -1
+  ReMyJanken_Te5: -1
   _Player1_Te1: -1
   _Player1_Te2: -1
   _Player1_Te3: -1
@@ -13632,6 +13947,11 @@ MonoBehaviour:
   receivePlayer4_Te3: -5
   receivePlayer4_Te4: -5
   receivePlayer4_Te5: -5
+  MyJanken_Te1: -1
+  MyJanken_Te2: -1
+  MyJanken_Te3: -1
+  MyJanken_Te4: -1
+  MyJanken_Te5: -1
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
@@ -13653,6 +13973,11 @@ MonoBehaviour:
   Btn_C: {fileID: 0}
   Btn_D: {fileID: 0}
   Btn_E: {fileID: 0}
+  CanPushBtn_A: 1
+  CanPushBtn_B: 1
+  CanPushBtn_C: 1
+  CanPushBtn_D: 1
+  CanPushBtn_E: 1
 --- !u!224 &2101061708444296824
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13716,7 +14041,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1568602050}
+      - m_Target: {fileID: 1361133988}
         m_MethodName: Push_Btn_C
         m_Mode: 1
         m_Arguments:

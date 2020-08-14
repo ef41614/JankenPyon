@@ -25,6 +25,42 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Image te1_4;
     public Image te1_5;
 
+    public Text JankenTe_TextP1_1;
+    public Text JankenTe_TextP1_2;
+    public Text JankenTe_TextP1_3;
+    public Text JankenTe_TextP1_4;
+    public Text JankenTe_TextP1_5;
+
+    public Text JankenTe_TextP2_1;
+    public Text JankenTe_TextP2_2;
+    public Text JankenTe_TextP2_3;
+    public Text JankenTe_TextP2_4;
+    public Text JankenTe_TextP2_5;
+
+    public Text JankenTe_TextP3_1;
+    public Text JankenTe_TextP3_2;
+    public Text JankenTe_TextP3_3;
+    public Text JankenTe_TextP3_4;
+    public Text JankenTe_TextP3_5;
+
+    public Text JankenTe_TextP4_1;
+    public Text JankenTe_TextP4_2;
+    public Text JankenTe_TextP4_3;
+    public Text JankenTe_TextP4_4;
+    public Text JankenTe_TextP4_5;
+
+    public Text MyNumTe1_1;
+    public Text MyNumTe1_2;
+    public Text MyNumTe1_3;
+    public Text MyNumTe1_4;
+    public Text MyNumTe1_5;
+
+    public int ReMyJanken_Te1 = -1;
+    public int ReMyJanken_Te2 = -1;
+    public int ReMyJanken_Te3 = -1;
+    public int ReMyJanken_Te4 = -1;
+    public int ReMyJanken_Te5 = -1;
+
     public int _Player1_Te1 = -1;
     public int _Player1_Te2 = -1;
     public int _Player1_Te3 = -1;
@@ -102,6 +138,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public int receivePlayer4_Te4 = -5;
     public int receivePlayer4_Te5 = -5;
 
+    public int MyJanken_Te1 = -1;
+    public int MyJanken_Te2 = -1;
+    public int MyJanken_Te3 = -1;
+    public int MyJanken_Te4 = -1;
+    public int MyJanken_Te5 = -1;
+
     public string PresentPlayerID;
     private PhotonView photonView = null;
 
@@ -113,9 +155,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public GameObject PushTeBtnManager; //ヒエラルキー上のオブジェクト名
     PushTeBtn PushTeBtnMSC;
+    //public PushTeBtn PushTeBtnMSC;
 
     public GameObject myPlayer;
-    
+
     public int rap1 = 0;
     public int receiveRap1 = 0;
 
@@ -135,6 +178,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Button Btn_C;
     public Button Btn_D;
     public Button Btn_E;
+
+    public bool CanPushBtn_A = true;
+    public bool CanPushBtn_B = true;
+    public bool CanPushBtn_C = true;
+    public bool CanPushBtn_D = true;
+    public bool CanPushBtn_E = true;
 
     void Awake()
     {
@@ -157,6 +206,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         //PushTeBtnMSC = PushTeBtnManager.GetComponent<PushTeBtn>();
+        //PushTeBtnMSC = PushTeBtnManager.GetComponent<PushTeBtn>();
         ResetPlayerTeNum();
         // photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
         //   if (PhotonNetwork.LocalPlayer.CustomProperties["Score"] is int score)
@@ -168,12 +218,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         //       Debug.Log("te11 : " +te11);
         //   }
         myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
-       // SelectJankenMSC = myPlayer.GetComponent<SelectJanken>();
+        // SelectJankenMSC = myPlayer.GetComponent<SelectJanken>();
+        // PushTeBtnMSC.Push_Btn_A();
+        //GetMyJankenNum();
+        //ShuffleCardsMSC.Reset_All();
+        //ToCanPush_All();
     }
 
     public void OnMouseDown()
     {
-       // photonView.RPC("SelectJankenCard", RpcTarget.All);
+        // photonView.RPC("SelectJankenCard", RpcTarget.All);
     }
 
     public void MyNameIs(Player player)
@@ -183,7 +237,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void MyPlayID()
     {
-       // TestRoomControllerSC.PNameCheck();
+        // TestRoomControllerSC.PNameCheck();
         photonView.RPC("PlayerIDCheck", RpcTarget.All);
     }
 
@@ -231,75 +285,77 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
     */
 
-    [PunRPC]
-    public void SelectJankenCard()
+    /*
+[PunRPC]
+public void SelectJankenCard()
+{
+    MyPlayID();
+    Debug.Log("◎●◎◎●◎ [PunRPC] SelectJankenCard が起動しました ◎●◎◎●◎");
+
+    Debug.Log("処理実施前確認");
+    photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
+    PresentPlayerID = ""; //プレイヤーID初期化
+    Debug.Log("PresentPlayerID 初期化確認 " + PresentPlayerID);
+    Debug.Log("LocalPlayer.UserId : " + PhotonNetwork.LocalPlayer.UserId);
+
+    Debug.Log(TestRoomControllerSC.PID1 + ": PID1");
+    Debug.Log(TestRoomControllerSC.PID2 + ": PID2");
+    Debug.Log(TestRoomControllerSC.PID3 + ": PID3");
+    Debug.Log(TestRoomControllerSC.PID4 + ": PID4");
+
+    Debug.Log("PresentPlayerIDをセット");
+    PresentPlayerID = PhotonNetwork.LocalPlayer.UserId;
+    Debug.Log("PresentPlayerID セット確認 " + PresentPlayerID);
+
+    Debug.Log("senderName  " + senderName);
+    Debug.Log("senderID  " + senderID);
+
+    if (senderID == TestRoomControllerSC.PID1)
     {
-        MyPlayID();
-        Debug.Log("◎●◎◎●◎ [PunRPC] SelectJankenCard が起動しました ◎●◎◎●◎");
-        /*
-        Debug.Log("処理実施前確認");
-        photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
-        PresentPlayerID = ""; //プレイヤーID初期化
-        Debug.Log("PresentPlayerID 初期化確認 " + PresentPlayerID);
-        Debug.Log("LocalPlayer.UserId : " + PhotonNetwork.LocalPlayer.UserId);
-
-        Debug.Log(TestRoomControllerSC.PID1 + ": PID1");
-        Debug.Log(TestRoomControllerSC.PID2 + ": PID2");
-        Debug.Log(TestRoomControllerSC.PID3 + ": PID3");
-        Debug.Log(TestRoomControllerSC.PID4 + ": PID4");
-
-        Debug.Log("PresentPlayerIDをセット");
-        PresentPlayerID = PhotonNetwork.LocalPlayer.UserId;
-        Debug.Log("PresentPlayerID セット確認 " + PresentPlayerID);
-        */
-        Debug.Log("senderName  " + senderName);
-        Debug.Log("senderID  " + senderID);
-
-        if (senderID == TestRoomControllerSC.PID1)
-        {
-            Debug.Log("現在プレイヤー1がボタン押したよ");
-        }
-        else if (senderID == TestRoomControllerSC.PID2)
-        {
-            Debug.Log("現在プレイヤー2がボタン押したよ");
-        }
-        else if (senderID == TestRoomControllerSC.PID3)
-        {
-            Debug.Log("現在プレイヤー3がボタン押したよ");
-        }
-        else if (senderID == TestRoomControllerSC.PID4)
-        {
-            Debug.Log("現在プレイヤー4がボタン押したよ");
-        }
-        else
-        {
-            Debug.Log("ID の条件、どれにも当てはまってない");
-        }
-
-        /*
-        Debug.Log("RndCreateCard_C ： " + ShuffleCardsMSC.RndCreateCard_C);
-        if (ShuffleCardsMSC.RndCreateCard_C == 0) //グー
-        {
-            SelectGu();
-        }
-        else if (ShuffleCardsMSC.RndCreateCard_C == 1) //チョキ
-        {
-            SelectChoki();
-        }
-        else if (ShuffleCardsMSC.RndCreateCard_C == 2) //パー
-        {
-            SelectPa();
-        }
-        else
-        {
-            Debug.Log("ランダム値の見直しが必要！！");
-        }
-        */
-
-        Debug.Log("処理実施後確認");
-        photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
-        Debug.Log("●●●●●● [PunRPC] SelectJankenCard の起動終わり ●●●●●●");
+        Debug.Log("現在プレイヤー1がボタン押したよ");
     }
+    else if (senderID == TestRoomControllerSC.PID2)
+    {
+        Debug.Log("現在プレイヤー2がボタン押したよ");
+    }
+    else if (senderID == TestRoomControllerSC.PID3)
+    {
+        Debug.Log("現在プレイヤー3がボタン押したよ");
+    }
+    else if (senderID == TestRoomControllerSC.PID4)
+    {
+        Debug.Log("現在プレイヤー4がボタン押したよ");
+    }
+    else
+    {
+        Debug.Log("ID の条件、どれにも当てはまってない");
+    }
+
+
+    Debug.Log("RndCreateCard_C ： " + ShuffleCardsMSC.RndCreateCard_C);
+    if (ShuffleCardsMSC.RndCreateCard_C == 0) //グー
+    {
+        SelectGu();
+    }
+    else if (ShuffleCardsMSC.RndCreateCard_C == 1) //チョキ
+    {
+        SelectChoki();
+    }
+    else if (ShuffleCardsMSC.RndCreateCard_C == 2) //パー
+    {
+        SelectPa();
+    }
+    else
+    {
+        Debug.Log("ランダム値の見直しが必要！！");
+    }
+
+
+    Debug.Log("処理実施後確認");
+    photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
+    Debug.Log("●●●●●● [PunRPC] SelectJankenCard の起動終わり ●●●●●●");
+}
+*/
 
     /*
     public void SelectGu()
@@ -423,6 +479,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
     */
 
+    /*
     //[PunRPC]
     public void PlayerTeNumSet(int PTN)  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
     {
@@ -582,7 +639,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("現在プレイヤー の条件、どれにも当てはまってない");
         }
     }
-
+    */
 
     public void ToSharePlayerTeNum()
     {
@@ -597,40 +654,37 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log(TestRoomControllerSC.PID2 + ": TestRoomControllerSC.PID2");
         Debug.Log(TestRoomControllerSC.PID3 + ": TestRoomControllerSC.PID3");
         Debug.Log(TestRoomControllerSC.PID4 + ": TestRoomControllerSC.PID4");
-        Debug.Log(senderID + ": senderID");
+        Debug.Log("senderName  " + senderName);  // 今ボタン押した人
+        Debug.Log("senderID  " + senderID);  // 今ボタン押した人
+        Debug.Log("MyName  " + MyName);  // 今ボタン押した人
+        Debug.Log("MyID  " + MyID);  // 今ボタン押した人
+
 
         if (senderID == TestRoomControllerSC.PID1)
         {
             Debug.Log("現在プレイヤー1がボタン押したよ");
-            if (Player1_Te1 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player1_Te1 = _Player1_Te1;
-            }
-            if (Player1_Te2 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player1_Te2 = _Player1_Te2;
-            }
-            if (Player1_Te3 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player1_Te3 = _Player1_Te3;
-            }
-            if (Player1_Te4 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player1_Te4 = _Player1_Te4;
-            }
-            if (Player1_Te5 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player1_Te5 = _Player1_Te5;
-            }
-            else
-            {
-                Debug.Log("現在プレイヤー1の 5こすべて手が決まったよ");
-            }
+            Debug.Log("MyName  " + MyName);  // 今ボタン押した人
+            //PushTeBtnMSC.SharePlayerTeNum_Player1();
+            /*
+            Player1_Te1 = PushTeBtnMSC.MyJanken_Te1;
+            Player1_Te2 = PushTeBtnMSC.MyJanken_Te2;
+            Player1_Te3 = PushTeBtnMSC.MyJanken_Te3;
+            Player1_Te4 = PushTeBtnMSC.MyJanken_Te4;
+            Player1_Te5 = PushTeBtnMSC.MyJanken_Te5;
+            */
+            SharePlayerTeNum_Player1();
+            JankenTe_TextP1_1.text = Player1_Te1.ToString();
+            JankenTe_TextP1_2.text = Player1_Te2.ToString();
+            JankenTe_TextP1_3.text = Player1_Te3.ToString();
+            JankenTe_TextP1_4.text = Player1_Te4.ToString();
+            JankenTe_TextP1_5.text = Player1_Te5.ToString();
+
         }
 
         if (senderID == TestRoomControllerSC.PID2)
         {
             Debug.Log("現在プレイヤー2がボタン押したよ");
+            Debug.Log("MyName  " + MyName);  // 今ボタン押した人
             if (Player2_Te1 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player2_Te1 = _Player2_Te1;
@@ -660,6 +714,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (senderID == TestRoomControllerSC.PID3)
         {
             Debug.Log("現在プレイヤー3がボタン押したよ");
+            Debug.Log("MyName  " + MyName);  // 今ボタン押した人
             if (Player3_Te1 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player3_Te1 = _Player3_Te1;
@@ -689,6 +744,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (senderID == TestRoomControllerSC.PID4)
         {
             Debug.Log("現在プレイヤー4がボタン押したよ");
+            Debug.Log("MyName  " + MyName);  // 今ボタン押した人
             if (Player4_Te1 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
                 Player4_Te1 = _Player4_Te1;
@@ -745,7 +801,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Player4_Te4 = -1;
         Player4_Te5 = -1;
 
-        Debug.Log("PlayerTeNum をリセットしました");
+        Debug.Log("PlayerTeNum を すべて「」リセットしました");
     }
 
     [PunRPC]
@@ -898,6 +954,385 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     #endregion
     */
+
+    public void GetMyJankenNum()
+    {
+        ReMyJanken_Te4 = PushTeBtnMSC.MyJanken_Te1;
+    }
+
+
+    public void SharePlayerTeNum_Player1()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
+    {
+        Player1_Te1 = MyJanken_Te1;
+        Player1_Te2 = MyJanken_Te2;
+        Player1_Te3 = MyJanken_Te3;
+        Player1_Te4 = MyJanken_Te4;
+        Player1_Te5 = MyJanken_Te5;
+    }
+
+    public void SelectGu()
+    {
+        Debug.Log(count_a + ": count_a");
+
+        if (count_a == 1)
+        {
+            te1_1.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyNumTe1_1.text = "0";
+        }
+        else if (count_a == 2)
+        {
+            te1_2.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyNumTe1_2.text = "0";
+        }
+        else if (count_a == 3)
+        {
+            te1_3.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyNumTe1_3.text = "0";
+        }
+        else if (count_a == 4)
+        {
+            te1_4.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyNumTe1_4.text = "0";
+        }
+        else if (count_a == 5)
+        {
+            te1_5.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyNumTe1_5.text = "0";
+        }
+        else
+        {
+            Debug.Log("count_a 6以上");
+        }
+        //PlayerTeNumSet(0); //手をグーにセット
+        Debug.Log("手をグーにセット");
+        //photonView.RPC("PlayerTeNumSet", RpcTarget.All, 0);
+        PlayerTeNumSet(0);
+        Debug.Log("手をグーにセットend");
+
+        count_a++;
+        Debug.Log(count_a + ": count_a");
+    }
+
+    public void SelectChoki()
+    {
+        Debug.Log(count_a + ": count_a");
+
+        if (count_a == 1)
+        {
+            te1_1.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            //Text NumTe = MyNumTe1_1.GetComponent<Text>();
+            //NumTe.text = "1";
+            MyNumTe1_1.text = "1";
+        }
+        else if (count_a == 2)
+        {
+            te1_2.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            //MyNumTe1_2.gameObject.GetComponent<Text>().text = "-1";
+            MyNumTe1_2.text = "1";
+        }
+        else if (count_a == 3)
+        {
+            te1_3.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyNumTe1_3.text = "1";
+        }
+        else if (count_a == 4)
+        {
+            te1_4.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyNumTe1_4.text = "1";
+        }
+        else if (count_a == 5)
+        {
+            te1_5.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyNumTe1_5.text = "1";
+        }
+        else
+        {
+            Debug.Log("count_a 6以上");
+        }
+        //PlayerTeNumSet(1); //手をチョキにセット
+        Debug.Log("手をチョキにセット");
+        //photonView.RPC("PlayerTeNumSet", RpcTarget.All, 1);
+        PlayerTeNumSet(1);
+        Debug.Log("手をチョキにセットend");
+
+        count_a++;
+        Debug.Log(count_a + ": count_a");
+    }
+
+    public void SelectPa()
+    {
+        Debug.Log(count_a + ": count_a");
+
+        if (count_a == 1)
+        {
+            te1_1.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyNumTe1_1.text = "2";
+        }
+        else if (count_a == 2)
+        {
+            te1_2.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyNumTe1_2.text = "2";
+        }
+        else if (count_a == 3)
+        {
+            te1_3.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyNumTe1_3.text = "2";
+        }
+        else if (count_a == 4)
+        {
+            te1_4.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyNumTe1_4.text = "2";
+        }
+        else if (count_a == 5)
+        {
+            te1_5.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyNumTe1_5.text = "2";
+        }
+        else
+        {
+            Debug.Log("count_a 6以上");
+        }
+        //PlayerTeNumSet(2); //手をパーにセット
+        Debug.Log("手をパーにセット");
+        //photonView.RPC("PlayerTeNumSet", RpcTarget.All,2);
+        PlayerTeNumSet(2);
+        Debug.Log("手をパーにセットend");
+
+        count_a++;
+        Debug.Log(count_a + ": count_a");
+    }
+
+    public void PlayerTeNumSet(int PTN)  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
+    {
+        Debug.Log("************ ********** *********** **********");
+        Debug.Log(PTN + ": PTN");
+
+        Debug.Log("現在プレイヤー1がボタン押したよ");
+        if (MyJanken_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+        {
+            Debug.Log("MyJanken_Te1 代入前" + MyJanken_Te1);
+            MyJanken_Te1 = PTN;
+            Debug.Log("MyJanken_Te1 代入後" + MyJanken_Te1);
+            Debug.Log("プレイヤー1_1 手のセットOK");
+        }
+        else if (MyJanken_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+        {
+            MyJanken_Te2 = PTN;
+            Debug.Log("プレイヤー1_2 手のセットOK");
+        }
+        else if (MyJanken_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+        {
+            MyJanken_Te3 = PTN;
+            Debug.Log("プレイヤー1_3 手のセットOK");
+        }
+        else if (MyJanken_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+        {
+            MyJanken_Te4 = PTN;
+            Debug.Log("プレイヤー1_4 手のセットOK");
+        }
+        else if (MyJanken_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+        {
+            MyJanken_Te5 = PTN;
+            Debug.Log("プレイヤー1_5 手のセットOK");
+        }
+        else
+        {
+            Debug.Log("現在プレイヤー1の 5こすべて手が決まったよ");
+        }
+    }
+
+
+    #region// じゃんけんボタン 押した時の処理（フラグを処理済みにする）
+
+    public void Push_Btn_A() // ボタン押したよ
+    {
+        if (CanPushBtn_A)
+        {
+            Debug.Log("RndCreateCard_A ： " + ShuffleCardsMSC.RndCreateCard_A);
+            if (ShuffleCardsMSC.RndCreateCard_A == 0) //グー
+            {
+                SelectGu();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_A == 1) //チョキ
+            {
+                SelectChoki();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_A == 2) //パー
+            {
+                SelectPa();
+            }
+            else
+            {
+                Debug.Log("ランダム値の見直しが必要！！");
+            }
+        }
+        Btn_A.interactable = false;
+        CanPushBtn_A = false;
+    }
+
+    public void Push_Btn_B() // ボタン押したよ
+    {
+        if (CanPushBtn_B)
+        {
+            Debug.Log("RndCreateCard_B ： " + ShuffleCardsMSC.RndCreateCard_B);
+            if (ShuffleCardsMSC.RndCreateCard_B == 0) //グー
+            {
+                SelectGu();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_B == 1) //チョキ
+            {
+                SelectChoki();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_B == 2) //パー
+            {
+                SelectPa();
+            }
+            else
+            {
+                Debug.Log("ランダム値の見直しが必要！！");
+            }
+        }
+        Btn_B.interactable = false;
+        CanPushBtn_B = false;
+    }
+
+    public void Push_Btn_C() // ボタン押したよ
+    {
+        if (CanPushBtn_C)
+        {
+            Debug.Log("RndCreateCard_C ： " + ShuffleCardsMSC.RndCreateCard_C);
+            if (ShuffleCardsMSC.RndCreateCard_C == 0) //グー
+            {
+                SelectGu();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_C == 1) //チョキ
+            {
+                SelectChoki();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_C == 2) //パー
+            {
+                SelectPa();
+            }
+            else
+            {
+                Debug.Log("ランダム値の見直しが必要！！");
+            }
+        }
+        Btn_C.interactable = false;
+        CanPushBtn_C = false;
+    }
+
+    public void Push_Btn_D() // ボタン押したよ
+    {
+        if (CanPushBtn_D)
+        {
+            Debug.Log("RndCreateCard_D ： " + ShuffleCardsMSC.RndCreateCard_D);
+            if (ShuffleCardsMSC.RndCreateCard_D == 0) //グー
+            {
+                SelectGu();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_D == 1) //チョキ
+            {
+                SelectChoki();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_D == 2) //パー
+            {
+                SelectPa();
+            }
+            else
+            {
+                Debug.Log("ランダム値の見直しが必要！！");
+            }
+        }
+        Btn_D.interactable = false;
+        CanPushBtn_D = false;
+    }
+
+    public void Push_Btn_E() // ボタン押したよ
+    {
+        if (CanPushBtn_E)
+        {
+            Debug.Log("RndCreateCard_E ： " + ShuffleCardsMSC.RndCreateCard_E);
+            if (ShuffleCardsMSC.RndCreateCard_E == 0) //グー
+            {
+                SelectGu();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_E == 1) //チョキ
+            {
+                SelectChoki();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_E == 2) //パー
+            {
+                SelectPa();
+            }
+            else
+            {
+                Debug.Log("ランダム値の見直しが必要！！");
+            }
+        }
+        Btn_E.interactable = false;
+        CanPushBtn_E = false;
+    }
+
+    #endregion
+
+
+    #region// じゃんけんボタン ボタン押せるようにする(フラグのリセット）
+
+    public void ToCanPush_All()
+    {
+        ToCanPush_A();
+        ToCanPush_B();
+        ToCanPush_C();
+        ToCanPush_D();
+        ToCanPush_E();
+    }
+
+    public void ToCanPush_A() // ボタン押せるようにするよ
+    {
+        Btn_A.interactable = true;
+        CanPushBtn_A = true;
+    }
+
+    public void ToCanPush_B() // ボタン押せるようにするよ
+    {
+        Btn_B.interactable = true;
+        CanPushBtn_B = true;
+    }
+
+    public void ToCanPush_C() // ボタン押せるようにするよ
+    {
+        Btn_C.interactable = true;
+        CanPushBtn_C = true;
+    }
+
+    public void ToCanPush_D() // ボタン押せるようにするよ
+    {
+        Btn_D.interactable = true;
+        CanPushBtn_D = true;
+    }
+
+    public void ToCanPush_E() // ボタン押せるようにするよ
+    {
+        Btn_E.interactable = true;
+        CanPushBtn_E = true;
+    }
+
+    #endregion
+
+    #region// じゃんけん手ナンバー リセット
+
+    public void ResetTeNum_All()
+    {
+        count_a = 1;
+
+        MyNumTe1_1.text = "-1";
+        MyNumTe1_2.text = "-1";
+        MyNumTe1_3.text = "-1";
+        MyNumTe1_4.text = "-1";
+        MyNumTe1_5.text = "-1";
+    }
+    #endregion
 
     // End
 
