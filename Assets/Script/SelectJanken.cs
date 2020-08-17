@@ -685,97 +685,44 @@ public void SelectJankenCard()
         {
             Debug.Log("現在プレイヤー2がボタン押したよ");
             Debug.Log("MyName  " + MyName);  // 今ボタン押した人
-            if (Player2_Te1 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player2_Te1 = _Player2_Te1;
-            }
-            if (Player2_Te2 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player2_Te2 = _Player2_Te2;
-            }
-            if (Player2_Te3 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player2_Te3 = _Player2_Te3;
-            }
-            if (Player2_Te4 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player2_Te4 = _Player2_Te4;
-            }
-            if (Player2_Te5 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player2_Te5 = _Player2_Te5;
-            }
-            else
-            {
-                Debug.Log("現在プレイヤー2 の5こすべて手が決まったよ");
-            }
+
+            SharePlayerTeNum_Player2();
+            JankenTe_TextP2_1.text = Player2_Te1.ToString();
+            JankenTe_TextP2_2.text = Player2_Te2.ToString();
+            JankenTe_TextP2_3.text = Player2_Te3.ToString();
+            JankenTe_TextP2_4.text = Player2_Te4.ToString();
+            JankenTe_TextP2_5.text = Player2_Te5.ToString();
         }
 
         if (senderID == TestRoomControllerSC.PID3)
         {
             Debug.Log("現在プレイヤー3がボタン押したよ");
             Debug.Log("MyName  " + MyName);  // 今ボタン押した人
-            if (Player3_Te1 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player3_Te1 = _Player3_Te1;
-            }
-            if (Player3_Te2 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player3_Te2 = _Player3_Te2;
-            }
-            if (Player3_Te3 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player3_Te3 = _Player3_Te3;
-            }
-            if (Player3_Te4 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player3_Te4 = _Player3_Te4;
-            }
-            if (Player3_Te5 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player3_Te5 = _Player3_Te5;
-            }
-            else
-            {
-                Debug.Log("現在プレイヤー3 の5こすべて手が決まったよ");
-            }
+            SharePlayerTeNum_Player3();
+            JankenTe_TextP3_1.text = Player3_Te1.ToString();
+            JankenTe_TextP3_2.text = Player3_Te2.ToString();
+            JankenTe_TextP3_3.text = Player3_Te3.ToString();
+            JankenTe_TextP3_4.text = Player3_Te4.ToString();
+            JankenTe_TextP3_5.text = Player3_Te5.ToString();
         }
 
         if (senderID == TestRoomControllerSC.PID4)
         {
             Debug.Log("現在プレイヤー4がボタン押したよ");
             Debug.Log("MyName  " + MyName);  // 今ボタン押した人
-            if (Player4_Te1 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player4_Te1 = _Player4_Te1;
-            }
-            if (Player4_Te2 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player4_Te2 = _Player4_Te2;
-            }
-            if (Player4_Te3 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player4_Te3 = _Player4_Te3;
-            }
-            if (Player4_Te4 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player4_Te4 = _Player4_Te4;
-            }
-            if (Player4_Te5 != -1) //手がまだ決まっていなければ（デフォルト値ならば）
-            {
-                Player4_Te5 = _Player4_Te5;
-            }
-            else
-            {
-                Debug.Log("現在プレイヤー4 の5こすべて手が決まったよ");
-            }
+            SharePlayerTeNum_Player4();
+            JankenTe_TextP4_1.text = Player4_Te1.ToString();
+            JankenTe_TextP4_2.text = Player4_Te2.ToString();
+            JankenTe_TextP4_3.text = Player4_Te3.ToString();
+            JankenTe_TextP4_4.text = Player4_Te4.ToString();
+            JankenTe_TextP4_5.text = Player4_Te5.ToString();
         }
 
         Debug.Log("************ データ共有 SharePlayerTeNum おわり **********");
     }
 
 
-    public void ResetPlayerTeNum()
+    public void ResetPlayerTeNum() // Player1 ～ Player4 のじゃんけん手 数値を -1 にリセット（int,text）
     {
         Player1_Te1 = -1;
         Player1_Te2 = -1;
@@ -800,6 +747,30 @@ public void SelectJankenCard()
         Player4_Te3 = -1;
         Player4_Te4 = -1;
         Player4_Te5 = -1;
+
+        JankenTe_TextP1_1.text =  "-1";
+        JankenTe_TextP1_2.text =  "-1";
+        JankenTe_TextP1_3.text =  "-1";
+        JankenTe_TextP1_4.text =  "-1";
+        JankenTe_TextP1_5.text =  "-1";
+
+        JankenTe_TextP2_1.text = "-1";
+        JankenTe_TextP2_2.text = "-1";
+        JankenTe_TextP2_3.text = "-1";
+        JankenTe_TextP2_4.text = "-1";
+        JankenTe_TextP2_5.text = "-1";
+        
+        JankenTe_TextP3_1.text = "-1";
+        JankenTe_TextP3_2.text = "-1";
+        JankenTe_TextP3_3.text = "-1";
+        JankenTe_TextP3_4.text = "-1";
+        JankenTe_TextP3_5.text = "-1";
+        
+        JankenTe_TextP4_1.text = "-1";
+        JankenTe_TextP4_2.text = "-1";
+        JankenTe_TextP4_3.text = "-1";
+        JankenTe_TextP4_4.text = "-1";
+        JankenTe_TextP4_5.text = "-1";
 
         Debug.Log("PlayerTeNum を すべて「」リセットしました");
     }
@@ -890,7 +861,7 @@ public void SelectJankenCard()
         }
     }
 
-    public void Reset_Rireki_All()
+    public void Reset_MyRireki_All() // Image
     {
         te1_1.gameObject.GetComponent<Image>().sprite = null;
         te1_2.gameObject.GetComponent<Image>().sprite = null;
@@ -968,6 +939,33 @@ public void SelectJankenCard()
         Player1_Te3 = MyJanken_Te3;
         Player1_Te4 = MyJanken_Te4;
         Player1_Te5 = MyJanken_Te5;
+    }
+
+    public void SharePlayerTeNum_Player2()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
+    {
+        Player2_Te1 = MyJanken_Te1;
+        Player2_Te2 = MyJanken_Te2;
+        Player2_Te3 = MyJanken_Te3;
+        Player2_Te4 = MyJanken_Te4;
+        Player2_Te5 = MyJanken_Te5;
+    }
+
+    public void SharePlayerTeNum_Player3()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
+    {
+        Player3_Te1 = MyJanken_Te1;
+        Player3_Te2 = MyJanken_Te2;
+        Player3_Te3 = MyJanken_Te3;
+        Player3_Te4 = MyJanken_Te4;
+        Player3_Te5 = MyJanken_Te5;
+    }
+
+    public void SharePlayerTeNum_Player4()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
+    {
+        Player4_Te1 = MyJanken_Te1;
+        Player4_Te2 = MyJanken_Te2;
+        Player4_Te3 = MyJanken_Te3;
+        Player4_Te4 = MyJanken_Te4;
+        Player4_Te5 = MyJanken_Te5;
     }
 
     public void SelectGu()
@@ -1322,7 +1320,7 @@ public void SelectJankenCard()
 
     #region// じゃんけん手ナンバー リセット
 
-    public void ResetTeNum_All()
+    public void ResetMyNumTe_All()  // 数値を -1 にリセット（text）
     {
         count_a = 1;
 
@@ -1333,6 +1331,15 @@ public void SelectJankenCard()
         MyNumTe1_5.text = "-1";
     }
     #endregion
+
+    public void ToNextTurn() // 次のターンへ移る プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
+    {
+        Debug.Log("ToNextTurn() // 次のターンへ移る");
+        ResetMyNumTe_All();      // MyNumTe 数値を -1 にリセット（text）
+        Reset_MyRireki_All();  // MyRireki 数値を -1 にリセット（Image）
+        ToCanPush_All();       // じゃんけんボタン ボタン押せるようにする(フラグのリセット）（bool）
+        ResetPlayerTeNum();    // Player1 ～ Player4 のじゃんけん手 数値を -1 にリセット（int,text）
+    }
 
     // End
 
