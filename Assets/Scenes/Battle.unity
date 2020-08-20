@@ -847,11 +847,36 @@ MonoBehaviour:
   sprite_Gu: {fileID: 21300000, guid: 3ac04f1ae881d69409e0c3616022e838, type: 3}
   sprite_Choki: {fileID: 21300000, guid: 016f22a0d78871e4c8e3ee925edf82d9, type: 3}
   sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
-  te1_1: {fileID: 855213336}
-  te1_2: {fileID: 1686465482}
-  te1_3: {fileID: 1722347205}
-  te1_4: {fileID: 1190251985}
-  te1_5: {fileID: 1920704764}
+  MyTeImg_1: {fileID: 0}
+  MyTeImg_2: {fileID: 0}
+  MyTeImg_3: {fileID: 0}
+  MyTeImg_4: {fileID: 0}
+  MyTeImg_5: {fileID: 0}
+  Img_P1_Te1: {fileID: 0}
+  Img_P1_Te2: {fileID: 0}
+  Img_P1_Te3: {fileID: 0}
+  Img_P1_Te4: {fileID: 0}
+  Img_P1_Te5: {fileID: 0}
+  Img_P2_Te1: {fileID: 0}
+  Img_P2_Te2: {fileID: 0}
+  Img_P2_Te3: {fileID: 0}
+  Img_P2_Te4: {fileID: 0}
+  Img_P2_Te5: {fileID: 0}
+  Img_P3_Te1: {fileID: 0}
+  Img_P3_Te2: {fileID: 0}
+  Img_P3_Te3: {fileID: 0}
+  Img_P3_Te4: {fileID: 0}
+  Img_P3_Te5: {fileID: 0}
+  Img_P4_Te1: {fileID: 0}
+  Img_P4_Te2: {fileID: 0}
+  Img_P4_Te3: {fileID: 0}
+  Img_P4_Te4: {fileID: 0}
+  Img_P4_Te5: {fileID: 0}
+  MyNumTeText_1: {fileID: 0}
+  MyNumTeText_2: {fileID: 0}
+  MyNumTeText_3: {fileID: 0}
+  MyNumTeText_4: {fileID: 0}
+  MyNumTeText_5: {fileID: 0}
   JankenTe_TextP1_1: {fileID: 0}
   JankenTe_TextP1_2: {fileID: 0}
   JankenTe_TextP1_3: {fileID: 0}
@@ -872,85 +897,79 @@ MonoBehaviour:
   JankenTe_TextP4_3: {fileID: 0}
   JankenTe_TextP4_4: {fileID: 0}
   JankenTe_TextP4_5: {fileID: 0}
-  MyNumTe1_1: {fileID: 0}
-  MyNumTe1_2: {fileID: 0}
-  MyNumTe1_3: {fileID: 0}
-  MyNumTe1_4: {fileID: 0}
-  MyNumTe1_5: {fileID: 0}
-  ReMyJanken_Te1: -1
-  ReMyJanken_Te2: -1
-  ReMyJanken_Te3: -1
-  ReMyJanken_Te4: -1
-  ReMyJanken_Te5: -1
-  _Player1_Te1: -1
-  _Player1_Te2: -1
-  _Player1_Te3: -1
-  _Player1_Te4: -1
-  _Player1_Te5: -1
-  _Player2_Te1: -1
-  _Player2_Te2: -1
-  _Player2_Te3: -1
-  _Player2_Te4: -1
-  _Player2_Te5: -1
-  _Player3_Te1: -1
-  _Player3_Te2: -1
-  _Player3_Te3: -1
-  _Player3_Te4: -1
-  _Player3_Te5: -1
-  _Player4_Te1: -1
-  _Player4_Te2: -1
-  _Player4_Te3: -1
-  _Player4_Te4: -1
-  _Player4_Te5: -1
-  Player1_Te1: -1
-  Player1_Te2: 0
-  Player1_Te3: 0
-  Player1_Te4: 0
-  Player1_Te5: 0
-  Player2_Te1: -1
-  Player2_Te2: 0
-  Player2_Te3: 0
-  Player2_Te4: 0
-  Player2_Te5: 0
-  Player3_Te1: -1
-  Player3_Te2: 0
-  Player3_Te3: 0
-  Player3_Te4: 0
-  Player3_Te5: 0
-  Player4_Te1: -1
-  Player4_Te2: 0
-  Player4_Te3: 0
-  Player4_Te4: 0
-  Player4_Te5: 0
-  receivePlayer1_Te1: -5
-  receivePlayer1_Te2: -5
-  receivePlayer1_Te3: -5
-  receivePlayer1_Te4: -5
-  receivePlayer1_Te5: -5
-  receivePlayer2_Te1: -5
-  receivePlayer2_Te2: -5
-  receivePlayer2_Te3: -5
-  receivePlayer2_Te4: -5
-  receivePlayer2_Te5: -5
-  receivePlayer3_Te1: -5
-  receivePlayer3_Te2: -5
-  receivePlayer3_Te3: -5
-  receivePlayer3_Te4: -5
-  receivePlayer3_Te5: -5
-  receivePlayer4_Te1: -5
-  receivePlayer4_Te2: -5
-  receivePlayer4_Te3: -5
-  receivePlayer4_Te4: -5
-  receivePlayer4_Te5: -5
-  MyJanken_Te1: -1
-  MyJanken_Te2: -1
-  MyJanken_Te3: -1
-  MyJanken_Te4: -1
-  MyJanken_Te5: -1
+  Int_MyJanken_Te1: -1
+  Int_MyJanken_Te2: -1
+  Int_MyJanken_Te3: -1
+  Int_MyJanken_Te4: -1
+  Int_MyJanken_Te5: -1
+  ReInt_MyJanken_Te1: -1
+  ReInt_MyJanken_Te2: -1
+  ReInt_MyJanken_Te3: -1
+  ReInt_MyJanken_Te4: -1
+  ReInt_MyJanken_Te5: -1
+  _int_Player1_Te1: -1
+  _int_Player1_Te2: -1
+  _int_Player1_Te3: -1
+  _int_Player1_Te4: -1
+  _int_Player1_Te5: -1
+  _int_Player2_Te1: -1
+  _int_Player2_Te2: -1
+  _int_Player2_Te3: -1
+  _int_Player2_Te4: -1
+  _int_Player2_Te5: -1
+  _int_Player3_Te1: -1
+  _int_Player3_Te2: -1
+  _int_Player3_Te3: -1
+  _int_Player3_Te4: -1
+  _int_Player3_Te5: -1
+  _int_Player4_Te1: -1
+  _int_Player4_Te2: -1
+  _int_Player4_Te3: -1
+  _int_Player4_Te4: -1
+  _int_Player4_Te5: -1
+  int_Player1_Te1: -1
+  int_Player1_Te2: -1
+  int_Player1_Te3: -1
+  int_Player1_Te4: -1
+  int_Player1_Te5: -1
+  int_Player2_Te1: -1
+  int_Player2_Te2: -1
+  int_Player2_Te3: -1
+  int_Player2_Te4: -1
+  int_Player2_Te5: -1
+  int_Player3_Te1: -1
+  int_Player3_Te2: -1
+  int_Player3_Te3: -1
+  int_Player3_Te4: -1
+  int_Player3_Te5: -1
+  int_Player4_Te1: -1
+  int_Player4_Te2: -1
+  int_Player4_Te3: -1
+  int_Player4_Te4: -1
+  int_Player4_Te5: -1
+  receiveint_Player1_Te1: -5
+  receiveint_Player1_Te2: -5
+  receiveint_Player1_Te3: -5
+  receiveint_Player1_Te4: -5
+  receiveint_Player1_Te5: -5
+  receiveint_Player2_Te1: -5
+  receiveint_Player2_Te2: -5
+  receiveint_Player2_Te3: -5
+  receiveint_Player2_Te4: -5
+  receiveint_Player2_Te5: -5
+  receiveint_Player3_Te1: -5
+  receiveint_Player3_Te2: -5
+  receiveint_Player3_Te3: -5
+  receiveint_Player3_Te4: -5
+  receiveint_Player3_Te5: -5
+  receiveint_Player4_Te1: -5
+  receiveint_Player4_Te2: -5
+  receiveint_Player4_Te3: -5
+  receiveint_Player4_Te4: -5
+  receiveint_Player4_Te5: -5
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
-  PushTeBtnManager: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0
   receiveRap1: 0
@@ -3103,11 +3122,36 @@ MonoBehaviour:
   sprite_Gu: {fileID: 21300000, guid: 3ac04f1ae881d69409e0c3616022e838, type: 3}
   sprite_Choki: {fileID: 21300000, guid: 016f22a0d78871e4c8e3ee925edf82d9, type: 3}
   sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
-  te1_1: {fileID: 855213336}
-  te1_2: {fileID: 1686465482}
-  te1_3: {fileID: 1722347205}
-  te1_4: {fileID: 1190251985}
-  te1_5: {fileID: 1920704764}
+  MyTeImg_1: {fileID: 0}
+  MyTeImg_2: {fileID: 0}
+  MyTeImg_3: {fileID: 0}
+  MyTeImg_4: {fileID: 0}
+  MyTeImg_5: {fileID: 0}
+  Img_P1_Te1: {fileID: 0}
+  Img_P1_Te2: {fileID: 0}
+  Img_P1_Te3: {fileID: 0}
+  Img_P1_Te4: {fileID: 0}
+  Img_P1_Te5: {fileID: 0}
+  Img_P2_Te1: {fileID: 0}
+  Img_P2_Te2: {fileID: 0}
+  Img_P2_Te3: {fileID: 0}
+  Img_P2_Te4: {fileID: 0}
+  Img_P2_Te5: {fileID: 0}
+  Img_P3_Te1: {fileID: 0}
+  Img_P3_Te2: {fileID: 0}
+  Img_P3_Te3: {fileID: 0}
+  Img_P3_Te4: {fileID: 0}
+  Img_P3_Te5: {fileID: 0}
+  Img_P4_Te1: {fileID: 0}
+  Img_P4_Te2: {fileID: 0}
+  Img_P4_Te3: {fileID: 0}
+  Img_P4_Te4: {fileID: 0}
+  Img_P4_Te5: {fileID: 0}
+  MyNumTeText_1: {fileID: 0}
+  MyNumTeText_2: {fileID: 0}
+  MyNumTeText_3: {fileID: 0}
+  MyNumTeText_4: {fileID: 0}
+  MyNumTeText_5: {fileID: 0}
   JankenTe_TextP1_1: {fileID: 0}
   JankenTe_TextP1_2: {fileID: 0}
   JankenTe_TextP1_3: {fileID: 0}
@@ -3128,85 +3172,79 @@ MonoBehaviour:
   JankenTe_TextP4_3: {fileID: 0}
   JankenTe_TextP4_4: {fileID: 0}
   JankenTe_TextP4_5: {fileID: 0}
-  MyNumTe1_1: {fileID: 0}
-  MyNumTe1_2: {fileID: 0}
-  MyNumTe1_3: {fileID: 0}
-  MyNumTe1_4: {fileID: 0}
-  MyNumTe1_5: {fileID: 0}
-  ReMyJanken_Te1: -1
-  ReMyJanken_Te2: -1
-  ReMyJanken_Te3: -1
-  ReMyJanken_Te4: -1
-  ReMyJanken_Te5: -1
-  _Player1_Te1: -1
-  _Player1_Te2: -1
-  _Player1_Te3: -1
-  _Player1_Te4: -1
-  _Player1_Te5: -1
-  _Player2_Te1: -1
-  _Player2_Te2: -1
-  _Player2_Te3: -1
-  _Player2_Te4: -1
-  _Player2_Te5: -1
-  _Player3_Te1: -1
-  _Player3_Te2: -1
-  _Player3_Te3: -1
-  _Player3_Te4: -1
-  _Player3_Te5: -1
-  _Player4_Te1: -1
-  _Player4_Te2: -1
-  _Player4_Te3: -1
-  _Player4_Te4: -1
-  _Player4_Te5: -1
-  Player1_Te1: -1
-  Player1_Te2: 0
-  Player1_Te3: 0
-  Player1_Te4: 0
-  Player1_Te5: 0
-  Player2_Te1: -1
-  Player2_Te2: 0
-  Player2_Te3: 0
-  Player2_Te4: 0
-  Player2_Te5: 0
-  Player3_Te1: -1
-  Player3_Te2: 0
-  Player3_Te3: 0
-  Player3_Te4: 0
-  Player3_Te5: 0
-  Player4_Te1: -1
-  Player4_Te2: 0
-  Player4_Te3: 0
-  Player4_Te4: 0
-  Player4_Te5: 0
-  receivePlayer1_Te1: -5
-  receivePlayer1_Te2: -5
-  receivePlayer1_Te3: -5
-  receivePlayer1_Te4: -5
-  receivePlayer1_Te5: -5
-  receivePlayer2_Te1: -5
-  receivePlayer2_Te2: -5
-  receivePlayer2_Te3: -5
-  receivePlayer2_Te4: -5
-  receivePlayer2_Te5: -5
-  receivePlayer3_Te1: -5
-  receivePlayer3_Te2: -5
-  receivePlayer3_Te3: -5
-  receivePlayer3_Te4: -5
-  receivePlayer3_Te5: -5
-  receivePlayer4_Te1: -5
-  receivePlayer4_Te2: -5
-  receivePlayer4_Te3: -5
-  receivePlayer4_Te4: -5
-  receivePlayer4_Te5: -5
-  MyJanken_Te1: -1
-  MyJanken_Te2: -1
-  MyJanken_Te3: -1
-  MyJanken_Te4: -1
-  MyJanken_Te5: -1
+  Int_MyJanken_Te1: -1
+  Int_MyJanken_Te2: -1
+  Int_MyJanken_Te3: -1
+  Int_MyJanken_Te4: -1
+  Int_MyJanken_Te5: -1
+  ReInt_MyJanken_Te1: -1
+  ReInt_MyJanken_Te2: -1
+  ReInt_MyJanken_Te3: -1
+  ReInt_MyJanken_Te4: -1
+  ReInt_MyJanken_Te5: -1
+  _int_Player1_Te1: -1
+  _int_Player1_Te2: -1
+  _int_Player1_Te3: -1
+  _int_Player1_Te4: -1
+  _int_Player1_Te5: -1
+  _int_Player2_Te1: -1
+  _int_Player2_Te2: -1
+  _int_Player2_Te3: -1
+  _int_Player2_Te4: -1
+  _int_Player2_Te5: -1
+  _int_Player3_Te1: -1
+  _int_Player3_Te2: -1
+  _int_Player3_Te3: -1
+  _int_Player3_Te4: -1
+  _int_Player3_Te5: -1
+  _int_Player4_Te1: -1
+  _int_Player4_Te2: -1
+  _int_Player4_Te3: -1
+  _int_Player4_Te4: -1
+  _int_Player4_Te5: -1
+  int_Player1_Te1: -1
+  int_Player1_Te2: -1
+  int_Player1_Te3: -1
+  int_Player1_Te4: -1
+  int_Player1_Te5: -1
+  int_Player2_Te1: -1
+  int_Player2_Te2: -1
+  int_Player2_Te3: -1
+  int_Player2_Te4: -1
+  int_Player2_Te5: -1
+  int_Player3_Te1: -1
+  int_Player3_Te2: -1
+  int_Player3_Te3: -1
+  int_Player3_Te4: -1
+  int_Player3_Te5: -1
+  int_Player4_Te1: -1
+  int_Player4_Te2: -1
+  int_Player4_Te3: -1
+  int_Player4_Te4: -1
+  int_Player4_Te5: -1
+  receiveint_Player1_Te1: -5
+  receiveint_Player1_Te2: -5
+  receiveint_Player1_Te3: -5
+  receiveint_Player1_Te4: -5
+  receiveint_Player1_Te5: -5
+  receiveint_Player2_Te1: -5
+  receiveint_Player2_Te2: -5
+  receiveint_Player2_Te3: -5
+  receiveint_Player2_Te4: -5
+  receiveint_Player2_Te5: -5
+  receiveint_Player3_Te1: -5
+  receiveint_Player3_Te2: -5
+  receiveint_Player3_Te3: -5
+  receiveint_Player3_Te4: -5
+  receiveint_Player3_Te5: -5
+  receiveint_Player4_Te1: -5
+  receiveint_Player4_Te2: -5
+  receiveint_Player4_Te3: -5
+  receiveint_Player4_Te4: -5
+  receiveint_Player4_Te5: -5
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
-  PushTeBtnManager: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0
   receiveRap1: 0
@@ -5096,7 +5134,7 @@ GameObject:
   - component: {fileID: 855213337}
   - component: {fileID: 855213336}
   m_Layer: 5
-  m_Name: te1_1
+  m_Name: MyTeImg_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5188,18 +5226,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joinedMembersText: {fileID: 1468700720}
-  PID1: 
-  PID2: 
-  PID3: 
-  PID4: 
-  PlayerID_1: 
-  PlayerID_2: 
-  PlayerID_3: 
-  PlayerID_4: 
-  PName1: {fileID: 1115728886}
-  PName2: {fileID: 2094172522}
-  PName3: {fileID: 54230192}
-  PName4: {fileID: 691937389}
+  string_PID1: 1
+  string_PID2: 2
+  string_PID3: 3
+  string_PID4: 4
+  string_PlayerID_1: 
+  string_PlayerID_2: 
+  string_PlayerID_3: 
+  string_PlayerID_4: 
+  Text_PName1: {fileID: 979545303}
+  Text_PName2: {fileID: 2094172522}
+  Text_PName3: {fileID: 54230192}
+  Text_PName4: {fileID: 691937389}
   SelectJankenMSC: {fileID: 1361133988}
 --- !u!4 &858086775
 Transform:
@@ -8146,7 +8184,7 @@ GameObject:
   - component: {fileID: 1190251986}
   - component: {fileID: 1190251985}
   m_Layer: 5
-  m_Name: te1_4
+  m_Name: MyTeImg_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8822,11 +8860,36 @@ MonoBehaviour:
   sprite_Gu: {fileID: 21300000, guid: 3ac04f1ae881d69409e0c3616022e838, type: 3}
   sprite_Choki: {fileID: 21300000, guid: 016f22a0d78871e4c8e3ee925edf82d9, type: 3}
   sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
-  te1_1: {fileID: 855213336}
-  te1_2: {fileID: 1686465482}
-  te1_3: {fileID: 1722347205}
-  te1_4: {fileID: 1190251985}
-  te1_5: {fileID: 1920704764}
+  MyTeImg_1: {fileID: 855213336}
+  MyTeImg_2: {fileID: 1686465482}
+  MyTeImg_3: {fileID: 1722347205}
+  MyTeImg_4: {fileID: 1190251985}
+  MyTeImg_5: {fileID: 1920704764}
+  Img_P1_Te1: {fileID: 1113175392}
+  Img_P1_Te2: {fileID: 816917270}
+  Img_P1_Te3: {fileID: 1088239513}
+  Img_P1_Te4: {fileID: 1535415859}
+  Img_P1_Te5: {fileID: 1964836617}
+  Img_P2_Te1: {fileID: 697025702}
+  Img_P2_Te2: {fileID: 1220181901}
+  Img_P2_Te3: {fileID: 1076726577}
+  Img_P2_Te4: {fileID: 1548786761}
+  Img_P2_Te5: {fileID: 1288121733}
+  Img_P3_Te1: {fileID: 1868643759}
+  Img_P3_Te2: {fileID: 866296489}
+  Img_P3_Te3: {fileID: 441679971}
+  Img_P3_Te4: {fileID: 1534259522}
+  Img_P3_Te5: {fileID: 321209318}
+  Img_P4_Te1: {fileID: 1186366230}
+  Img_P4_Te2: {fileID: 1441679267}
+  Img_P4_Te3: {fileID: 1417235829}
+  Img_P4_Te4: {fileID: 1385734054}
+  Img_P4_Te5: {fileID: 395158926}
+  MyNumTeText_1: {fileID: 369400115}
+  MyNumTeText_2: {fileID: 687799484}
+  MyNumTeText_3: {fileID: 440516197}
+  MyNumTeText_4: {fileID: 1900259816}
+  MyNumTeText_5: {fileID: 1462348523}
   JankenTe_TextP1_1: {fileID: 830136595}
   JankenTe_TextP1_2: {fileID: 1737232900}
   JankenTe_TextP1_3: {fileID: 1800017689}
@@ -8847,85 +8910,79 @@ MonoBehaviour:
   JankenTe_TextP4_3: {fileID: 1764249104}
   JankenTe_TextP4_4: {fileID: 1943738863}
   JankenTe_TextP4_5: {fileID: 581490710}
-  MyNumTe1_1: {fileID: 369400115}
-  MyNumTe1_2: {fileID: 687799484}
-  MyNumTe1_3: {fileID: 440516197}
-  MyNumTe1_4: {fileID: 1900259816}
-  MyNumTe1_5: {fileID: 1462348523}
-  ReMyJanken_Te1: -1
-  ReMyJanken_Te2: -1
-  ReMyJanken_Te3: -1
-  ReMyJanken_Te4: -1
-  ReMyJanken_Te5: -1
-  _Player1_Te1: -1
-  _Player1_Te2: -1
-  _Player1_Te3: -1
-  _Player1_Te4: -1
-  _Player1_Te5: -1
-  _Player2_Te1: -1
-  _Player2_Te2: -1
-  _Player2_Te3: -1
-  _Player2_Te4: -1
-  _Player2_Te5: -1
-  _Player3_Te1: -1
-  _Player3_Te2: -1
-  _Player3_Te3: -1
-  _Player3_Te4: -1
-  _Player3_Te5: -1
-  _Player4_Te1: -1
-  _Player4_Te2: -1
-  _Player4_Te3: -1
-  _Player4_Te4: -1
-  _Player4_Te5: -1
-  Player1_Te1: -1
-  Player1_Te2: -1
-  Player1_Te3: -1
-  Player1_Te4: -1
-  Player1_Te5: -1
-  Player2_Te1: -1
-  Player2_Te2: -1
-  Player2_Te3: -1
-  Player2_Te4: -1
-  Player2_Te5: -1
-  Player3_Te1: -1
-  Player3_Te2: -1
-  Player3_Te3: -1
-  Player3_Te4: -1
-  Player3_Te5: -1
-  Player4_Te1: -1
-  Player4_Te2: -1
-  Player4_Te3: -1
-  Player4_Te4: -1
-  Player4_Te5: -1
-  receivePlayer1_Te1: -5
-  receivePlayer1_Te2: -5
-  receivePlayer1_Te3: -5
-  receivePlayer1_Te4: -5
-  receivePlayer1_Te5: -5
-  receivePlayer2_Te1: -5
-  receivePlayer2_Te2: -5
-  receivePlayer2_Te3: -5
-  receivePlayer2_Te4: -5
-  receivePlayer2_Te5: -5
-  receivePlayer3_Te1: -5
-  receivePlayer3_Te2: -5
-  receivePlayer3_Te3: -5
-  receivePlayer3_Te4: -5
-  receivePlayer3_Te5: -5
-  receivePlayer4_Te1: -5
-  receivePlayer4_Te2: -5
-  receivePlayer4_Te3: -5
-  receivePlayer4_Te4: -5
-  receivePlayer4_Te5: -5
-  MyJanken_Te1: -1
-  MyJanken_Te2: -1
-  MyJanken_Te3: -1
-  MyJanken_Te4: -1
-  MyJanken_Te5: -1
+  Int_MyJanken_Te1: -1
+  Int_MyJanken_Te2: -1
+  Int_MyJanken_Te3: -1
+  Int_MyJanken_Te4: -1
+  Int_MyJanken_Te5: -1
+  ReInt_MyJanken_Te1: -1
+  ReInt_MyJanken_Te2: -1
+  ReInt_MyJanken_Te3: -1
+  ReInt_MyJanken_Te4: -1
+  ReInt_MyJanken_Te5: -1
+  _int_Player1_Te1: -1
+  _int_Player1_Te2: -1
+  _int_Player1_Te3: -1
+  _int_Player1_Te4: -1
+  _int_Player1_Te5: -1
+  _int_Player2_Te1: -1
+  _int_Player2_Te2: -1
+  _int_Player2_Te3: -1
+  _int_Player2_Te4: -1
+  _int_Player2_Te5: -1
+  _int_Player3_Te1: -1
+  _int_Player3_Te2: -1
+  _int_Player3_Te3: -1
+  _int_Player3_Te4: -1
+  _int_Player3_Te5: -1
+  _int_Player4_Te1: -1
+  _int_Player4_Te2: -1
+  _int_Player4_Te3: -1
+  _int_Player4_Te4: -1
+  _int_Player4_Te5: -1
+  int_Player1_Te1: -1
+  int_Player1_Te2: -1
+  int_Player1_Te3: -1
+  int_Player1_Te4: -1
+  int_Player1_Te5: -1
+  int_Player2_Te1: -1
+  int_Player2_Te2: -1
+  int_Player2_Te3: -1
+  int_Player2_Te4: -1
+  int_Player2_Te5: -1
+  int_Player3_Te1: -1
+  int_Player3_Te2: -1
+  int_Player3_Te3: -1
+  int_Player3_Te4: -1
+  int_Player3_Te5: -1
+  int_Player4_Te1: -1
+  int_Player4_Te2: -1
+  int_Player4_Te3: -1
+  int_Player4_Te4: -1
+  int_Player4_Te5: -1
+  receiveint_Player1_Te1: -5
+  receiveint_Player1_Te2: -5
+  receiveint_Player1_Te3: -5
+  receiveint_Player1_Te4: -5
+  receiveint_Player1_Te5: -5
+  receiveint_Player2_Te1: -5
+  receiveint_Player2_Te2: -5
+  receiveint_Player2_Te3: -5
+  receiveint_Player2_Te4: -5
+  receiveint_Player2_Te5: -5
+  receiveint_Player3_Te1: -5
+  receiveint_Player3_Te2: -5
+  receiveint_Player3_Te3: -5
+  receiveint_Player3_Te4: -5
+  receiveint_Player3_Te5: -5
+  receiveint_Player4_Te1: -5
+  receiveint_Player4_Te2: -5
+  receiveint_Player4_Te3: -5
+  receiveint_Player4_Te4: -5
+  receiveint_Player4_Te5: -5
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
-  PushTeBtnManager: {fileID: 1568602049}
   myPlayer: {fileID: 0}
   rap1: 0
   receiveRap1: 0
@@ -10446,7 +10503,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1568602050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10499,6 +10556,7 @@ MonoBehaviour:
   CanPushBtn_D: 1
   CanPushBtn_E: 1
   ShuffleCardsManager: {fileID: 1540748809}
+  ShuffleCardsMSC: {fileID: 0}
   SelectJankenMSC: {fileID: 1361133988}
 --- !u!4 &1568602051
 Transform:
@@ -10795,11 +10853,36 @@ MonoBehaviour:
   sprite_Gu: {fileID: 21300000, guid: 3ac04f1ae881d69409e0c3616022e838, type: 3}
   sprite_Choki: {fileID: 21300000, guid: 016f22a0d78871e4c8e3ee925edf82d9, type: 3}
   sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
-  te1_1: {fileID: 855213336}
-  te1_2: {fileID: 1686465482}
-  te1_3: {fileID: 1722347205}
-  te1_4: {fileID: 1190251985}
-  te1_5: {fileID: 1920704764}
+  MyTeImg_1: {fileID: 0}
+  MyTeImg_2: {fileID: 0}
+  MyTeImg_3: {fileID: 0}
+  MyTeImg_4: {fileID: 0}
+  MyTeImg_5: {fileID: 0}
+  Img_P1_Te1: {fileID: 0}
+  Img_P1_Te2: {fileID: 0}
+  Img_P1_Te3: {fileID: 0}
+  Img_P1_Te4: {fileID: 0}
+  Img_P1_Te5: {fileID: 0}
+  Img_P2_Te1: {fileID: 0}
+  Img_P2_Te2: {fileID: 0}
+  Img_P2_Te3: {fileID: 0}
+  Img_P2_Te4: {fileID: 0}
+  Img_P2_Te5: {fileID: 0}
+  Img_P3_Te1: {fileID: 0}
+  Img_P3_Te2: {fileID: 0}
+  Img_P3_Te3: {fileID: 0}
+  Img_P3_Te4: {fileID: 0}
+  Img_P3_Te5: {fileID: 0}
+  Img_P4_Te1: {fileID: 0}
+  Img_P4_Te2: {fileID: 0}
+  Img_P4_Te3: {fileID: 0}
+  Img_P4_Te4: {fileID: 0}
+  Img_P4_Te5: {fileID: 0}
+  MyNumTeText_1: {fileID: 0}
+  MyNumTeText_2: {fileID: 0}
+  MyNumTeText_3: {fileID: 0}
+  MyNumTeText_4: {fileID: 0}
+  MyNumTeText_5: {fileID: 0}
   JankenTe_TextP1_1: {fileID: 0}
   JankenTe_TextP1_2: {fileID: 0}
   JankenTe_TextP1_3: {fileID: 0}
@@ -10820,85 +10903,79 @@ MonoBehaviour:
   JankenTe_TextP4_3: {fileID: 0}
   JankenTe_TextP4_4: {fileID: 0}
   JankenTe_TextP4_5: {fileID: 0}
-  MyNumTe1_1: {fileID: 0}
-  MyNumTe1_2: {fileID: 0}
-  MyNumTe1_3: {fileID: 0}
-  MyNumTe1_4: {fileID: 0}
-  MyNumTe1_5: {fileID: 0}
-  ReMyJanken_Te1: -1
-  ReMyJanken_Te2: -1
-  ReMyJanken_Te3: -1
-  ReMyJanken_Te4: -1
-  ReMyJanken_Te5: -1
-  _Player1_Te1: -1
-  _Player1_Te2: -1
-  _Player1_Te3: -1
-  _Player1_Te4: -1
-  _Player1_Te5: -1
-  _Player2_Te1: -1
-  _Player2_Te2: -1
-  _Player2_Te3: -1
-  _Player2_Te4: -1
-  _Player2_Te5: -1
-  _Player3_Te1: -1
-  _Player3_Te2: -1
-  _Player3_Te3: -1
-  _Player3_Te4: -1
-  _Player3_Te5: -1
-  _Player4_Te1: -1
-  _Player4_Te2: -1
-  _Player4_Te3: -1
-  _Player4_Te4: -1
-  _Player4_Te5: -1
-  Player1_Te1: -1
-  Player1_Te2: 0
-  Player1_Te3: 0
-  Player1_Te4: 0
-  Player1_Te5: 0
-  Player2_Te1: -1
-  Player2_Te2: 0
-  Player2_Te3: 0
-  Player2_Te4: 0
-  Player2_Te5: 0
-  Player3_Te1: -1
-  Player3_Te2: 0
-  Player3_Te3: 0
-  Player3_Te4: 0
-  Player3_Te5: 0
-  Player4_Te1: -1
-  Player4_Te2: 0
-  Player4_Te3: 0
-  Player4_Te4: 0
-  Player4_Te5: 0
-  receivePlayer1_Te1: -5
-  receivePlayer1_Te2: -5
-  receivePlayer1_Te3: -5
-  receivePlayer1_Te4: -5
-  receivePlayer1_Te5: -5
-  receivePlayer2_Te1: -5
-  receivePlayer2_Te2: -5
-  receivePlayer2_Te3: -5
-  receivePlayer2_Te4: -5
-  receivePlayer2_Te5: -5
-  receivePlayer3_Te1: -5
-  receivePlayer3_Te2: -5
-  receivePlayer3_Te3: -5
-  receivePlayer3_Te4: -5
-  receivePlayer3_Te5: -5
-  receivePlayer4_Te1: -5
-  receivePlayer4_Te2: -5
-  receivePlayer4_Te3: -5
-  receivePlayer4_Te4: -5
-  receivePlayer4_Te5: -5
-  MyJanken_Te1: -1
-  MyJanken_Te2: -1
-  MyJanken_Te3: -1
-  MyJanken_Te4: -1
-  MyJanken_Te5: -1
+  Int_MyJanken_Te1: -1
+  Int_MyJanken_Te2: -1
+  Int_MyJanken_Te3: -1
+  Int_MyJanken_Te4: -1
+  Int_MyJanken_Te5: -1
+  ReInt_MyJanken_Te1: -1
+  ReInt_MyJanken_Te2: -1
+  ReInt_MyJanken_Te3: -1
+  ReInt_MyJanken_Te4: -1
+  ReInt_MyJanken_Te5: -1
+  _int_Player1_Te1: -1
+  _int_Player1_Te2: -1
+  _int_Player1_Te3: -1
+  _int_Player1_Te4: -1
+  _int_Player1_Te5: -1
+  _int_Player2_Te1: -1
+  _int_Player2_Te2: -1
+  _int_Player2_Te3: -1
+  _int_Player2_Te4: -1
+  _int_Player2_Te5: -1
+  _int_Player3_Te1: -1
+  _int_Player3_Te2: -1
+  _int_Player3_Te3: -1
+  _int_Player3_Te4: -1
+  _int_Player3_Te5: -1
+  _int_Player4_Te1: -1
+  _int_Player4_Te2: -1
+  _int_Player4_Te3: -1
+  _int_Player4_Te4: -1
+  _int_Player4_Te5: -1
+  int_Player1_Te1: -1
+  int_Player1_Te2: -1
+  int_Player1_Te3: -1
+  int_Player1_Te4: -1
+  int_Player1_Te5: -1
+  int_Player2_Te1: -1
+  int_Player2_Te2: -1
+  int_Player2_Te3: -1
+  int_Player2_Te4: -1
+  int_Player2_Te5: -1
+  int_Player3_Te1: -1
+  int_Player3_Te2: -1
+  int_Player3_Te3: -1
+  int_Player3_Te4: -1
+  int_Player3_Te5: -1
+  int_Player4_Te1: -1
+  int_Player4_Te2: -1
+  int_Player4_Te3: -1
+  int_Player4_Te4: -1
+  int_Player4_Te5: -1
+  receiveint_Player1_Te1: -5
+  receiveint_Player1_Te2: -5
+  receiveint_Player1_Te3: -5
+  receiveint_Player1_Te4: -5
+  receiveint_Player1_Te5: -5
+  receiveint_Player2_Te1: -5
+  receiveint_Player2_Te2: -5
+  receiveint_Player2_Te3: -5
+  receiveint_Player2_Te4: -5
+  receiveint_Player2_Te5: -5
+  receiveint_Player3_Te1: -5
+  receiveint_Player3_Te2: -5
+  receiveint_Player3_Te3: -5
+  receiveint_Player3_Te4: -5
+  receiveint_Player3_Te5: -5
+  receiveint_Player4_Te1: -5
+  receiveint_Player4_Te2: -5
+  receiveint_Player4_Te3: -5
+  receiveint_Player4_Te4: -5
+  receiveint_Player4_Te5: -5
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
-  PushTeBtnManager: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0
   receiveRap1: 0
@@ -11180,7 +11257,7 @@ GameObject:
   - component: {fileID: 1686465483}
   - component: {fileID: 1686465482}
   m_Layer: 5
-  m_Name: te1_2
+  m_Name: MyTeImg_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11386,7 +11463,7 @@ GameObject:
   - component: {fileID: 1722347206}
   - component: {fileID: 1722347205}
   m_Layer: 5
-  m_Name: te1_3
+  m_Name: MyTeImg_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12079,7 +12156,7 @@ GameObject:
   - component: {fileID: 1895724468}
   - component: {fileID: 1895724467}
   m_Layer: 5
-  m_Name: NameCheckButton
+  m_Name: "NameCheck\u30DC\u30BF\u30F3"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12580,7 +12657,7 @@ GameObject:
   - component: {fileID: 1920704765}
   - component: {fileID: 1920704764}
   m_Layer: 5
-  m_Name: te1_5
+  m_Name: MyTeImg_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12981,11 +13058,36 @@ MonoBehaviour:
   sprite_Gu: {fileID: 21300000, guid: 3ac04f1ae881d69409e0c3616022e838, type: 3}
   sprite_Choki: {fileID: 21300000, guid: 016f22a0d78871e4c8e3ee925edf82d9, type: 3}
   sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
-  te1_1: {fileID: 855213336}
-  te1_2: {fileID: 1686465482}
-  te1_3: {fileID: 1722347205}
-  te1_4: {fileID: 1190251985}
-  te1_5: {fileID: 1920704764}
+  MyTeImg_1: {fileID: 0}
+  MyTeImg_2: {fileID: 0}
+  MyTeImg_3: {fileID: 0}
+  MyTeImg_4: {fileID: 0}
+  MyTeImg_5: {fileID: 0}
+  Img_P1_Te1: {fileID: 0}
+  Img_P1_Te2: {fileID: 0}
+  Img_P1_Te3: {fileID: 0}
+  Img_P1_Te4: {fileID: 0}
+  Img_P1_Te5: {fileID: 0}
+  Img_P2_Te1: {fileID: 0}
+  Img_P2_Te2: {fileID: 0}
+  Img_P2_Te3: {fileID: 0}
+  Img_P2_Te4: {fileID: 0}
+  Img_P2_Te5: {fileID: 0}
+  Img_P3_Te1: {fileID: 0}
+  Img_P3_Te2: {fileID: 0}
+  Img_P3_Te3: {fileID: 0}
+  Img_P3_Te4: {fileID: 0}
+  Img_P3_Te5: {fileID: 0}
+  Img_P4_Te1: {fileID: 0}
+  Img_P4_Te2: {fileID: 0}
+  Img_P4_Te3: {fileID: 0}
+  Img_P4_Te4: {fileID: 0}
+  Img_P4_Te5: {fileID: 0}
+  MyNumTeText_1: {fileID: 0}
+  MyNumTeText_2: {fileID: 0}
+  MyNumTeText_3: {fileID: 0}
+  MyNumTeText_4: {fileID: 0}
+  MyNumTeText_5: {fileID: 0}
   JankenTe_TextP1_1: {fileID: 0}
   JankenTe_TextP1_2: {fileID: 0}
   JankenTe_TextP1_3: {fileID: 0}
@@ -13006,85 +13108,79 @@ MonoBehaviour:
   JankenTe_TextP4_3: {fileID: 0}
   JankenTe_TextP4_4: {fileID: 0}
   JankenTe_TextP4_5: {fileID: 0}
-  MyNumTe1_1: {fileID: 0}
-  MyNumTe1_2: {fileID: 0}
-  MyNumTe1_3: {fileID: 0}
-  MyNumTe1_4: {fileID: 0}
-  MyNumTe1_5: {fileID: 0}
-  ReMyJanken_Te1: -1
-  ReMyJanken_Te2: -1
-  ReMyJanken_Te3: -1
-  ReMyJanken_Te4: -1
-  ReMyJanken_Te5: -1
-  _Player1_Te1: -1
-  _Player1_Te2: -1
-  _Player1_Te3: -1
-  _Player1_Te4: -1
-  _Player1_Te5: -1
-  _Player2_Te1: -1
-  _Player2_Te2: -1
-  _Player2_Te3: -1
-  _Player2_Te4: -1
-  _Player2_Te5: -1
-  _Player3_Te1: -1
-  _Player3_Te2: -1
-  _Player3_Te3: -1
-  _Player3_Te4: -1
-  _Player3_Te5: -1
-  _Player4_Te1: -1
-  _Player4_Te2: -1
-  _Player4_Te3: -1
-  _Player4_Te4: -1
-  _Player4_Te5: -1
-  Player1_Te1: -1
-  Player1_Te2: -1
-  Player1_Te3: -1
-  Player1_Te4: -1
-  Player1_Te5: -1
-  Player2_Te1: -1
-  Player2_Te2: -1
-  Player2_Te3: -1
-  Player2_Te4: -1
-  Player2_Te5: -1
-  Player3_Te1: -1
-  Player3_Te2: -1
-  Player3_Te3: -1
-  Player3_Te4: -1
-  Player3_Te5: -1
-  Player4_Te1: -1
-  Player4_Te2: -1
-  Player4_Te3: -1
-  Player4_Te4: -1
-  Player4_Te5: -1
-  receivePlayer1_Te1: -5
-  receivePlayer1_Te2: -5
-  receivePlayer1_Te3: -5
-  receivePlayer1_Te4: -5
-  receivePlayer1_Te5: -5
-  receivePlayer2_Te1: -5
-  receivePlayer2_Te2: -5
-  receivePlayer2_Te3: -5
-  receivePlayer2_Te4: -5
-  receivePlayer2_Te5: -5
-  receivePlayer3_Te1: -5
-  receivePlayer3_Te2: -5
-  receivePlayer3_Te3: -5
-  receivePlayer3_Te4: -5
-  receivePlayer3_Te5: -5
-  receivePlayer4_Te1: -5
-  receivePlayer4_Te2: -5
-  receivePlayer4_Te3: -5
-  receivePlayer4_Te4: -5
-  receivePlayer4_Te5: -5
-  MyJanken_Te1: -1
-  MyJanken_Te2: -1
-  MyJanken_Te3: -1
-  MyJanken_Te4: -1
-  MyJanken_Te5: -1
+  Int_MyJanken_Te1: -1
+  Int_MyJanken_Te2: -1
+  Int_MyJanken_Te3: -1
+  Int_MyJanken_Te4: -1
+  Int_MyJanken_Te5: -1
+  ReInt_MyJanken_Te1: -1
+  ReInt_MyJanken_Te2: -1
+  ReInt_MyJanken_Te3: -1
+  ReInt_MyJanken_Te4: -1
+  ReInt_MyJanken_Te5: -1
+  _int_Player1_Te1: -1
+  _int_Player1_Te2: -1
+  _int_Player1_Te3: -1
+  _int_Player1_Te4: -1
+  _int_Player1_Te5: -1
+  _int_Player2_Te1: -1
+  _int_Player2_Te2: -1
+  _int_Player2_Te3: -1
+  _int_Player2_Te4: -1
+  _int_Player2_Te5: -1
+  _int_Player3_Te1: -1
+  _int_Player3_Te2: -1
+  _int_Player3_Te3: -1
+  _int_Player3_Te4: -1
+  _int_Player3_Te5: -1
+  _int_Player4_Te1: -1
+  _int_Player4_Te2: -1
+  _int_Player4_Te3: -1
+  _int_Player4_Te4: -1
+  _int_Player4_Te5: -1
+  int_Player1_Te1: -1
+  int_Player1_Te2: -1
+  int_Player1_Te3: -1
+  int_Player1_Te4: -1
+  int_Player1_Te5: -1
+  int_Player2_Te1: -1
+  int_Player2_Te2: -1
+  int_Player2_Te3: -1
+  int_Player2_Te4: -1
+  int_Player2_Te5: -1
+  int_Player3_Te1: -1
+  int_Player3_Te2: -1
+  int_Player3_Te3: -1
+  int_Player3_Te4: -1
+  int_Player3_Te5: -1
+  int_Player4_Te1: -1
+  int_Player4_Te2: -1
+  int_Player4_Te3: -1
+  int_Player4_Te4: -1
+  int_Player4_Te5: -1
+  receiveint_Player1_Te1: -5
+  receiveint_Player1_Te2: -5
+  receiveint_Player1_Te3: -5
+  receiveint_Player1_Te4: -5
+  receiveint_Player1_Te5: -5
+  receiveint_Player2_Te1: -5
+  receiveint_Player2_Te2: -5
+  receiveint_Player2_Te3: -5
+  receiveint_Player2_Te4: -5
+  receiveint_Player2_Te5: -5
+  receiveint_Player3_Te1: -5
+  receiveint_Player3_Te2: -5
+  receiveint_Player3_Te3: -5
+  receiveint_Player3_Te4: -5
+  receiveint_Player3_Te5: -5
+  receiveint_Player4_Te1: -5
+  receiveint_Player4_Te2: -5
+  receiveint_Player4_Te3: -5
+  receiveint_Player4_Te4: -5
+  receiveint_Player4_Te5: -5
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
-  PushTeBtnManager: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0
   receiveRap1: 0
@@ -13561,11 +13657,36 @@ MonoBehaviour:
   sprite_Gu: {fileID: 21300000, guid: 3ac04f1ae881d69409e0c3616022e838, type: 3}
   sprite_Choki: {fileID: 21300000, guid: 016f22a0d78871e4c8e3ee925edf82d9, type: 3}
   sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
-  te1_1: {fileID: 855213336}
-  te1_2: {fileID: 1686465482}
-  te1_3: {fileID: 1722347205}
-  te1_4: {fileID: 1190251985}
-  te1_5: {fileID: 1920704764}
+  MyTeImg_1: {fileID: 0}
+  MyTeImg_2: {fileID: 0}
+  MyTeImg_3: {fileID: 0}
+  MyTeImg_4: {fileID: 0}
+  MyTeImg_5: {fileID: 0}
+  Img_P1_Te1: {fileID: 0}
+  Img_P1_Te2: {fileID: 0}
+  Img_P1_Te3: {fileID: 0}
+  Img_P1_Te4: {fileID: 0}
+  Img_P1_Te5: {fileID: 0}
+  Img_P2_Te1: {fileID: 0}
+  Img_P2_Te2: {fileID: 0}
+  Img_P2_Te3: {fileID: 0}
+  Img_P2_Te4: {fileID: 0}
+  Img_P2_Te5: {fileID: 0}
+  Img_P3_Te1: {fileID: 0}
+  Img_P3_Te2: {fileID: 0}
+  Img_P3_Te3: {fileID: 0}
+  Img_P3_Te4: {fileID: 0}
+  Img_P3_Te5: {fileID: 0}
+  Img_P4_Te1: {fileID: 0}
+  Img_P4_Te2: {fileID: 0}
+  Img_P4_Te3: {fileID: 0}
+  Img_P4_Te4: {fileID: 0}
+  Img_P4_Te5: {fileID: 0}
+  MyNumTeText_1: {fileID: 0}
+  MyNumTeText_2: {fileID: 0}
+  MyNumTeText_3: {fileID: 0}
+  MyNumTeText_4: {fileID: 0}
+  MyNumTeText_5: {fileID: 0}
   JankenTe_TextP1_1: {fileID: 0}
   JankenTe_TextP1_2: {fileID: 0}
   JankenTe_TextP1_3: {fileID: 0}
@@ -13586,85 +13707,79 @@ MonoBehaviour:
   JankenTe_TextP4_3: {fileID: 0}
   JankenTe_TextP4_4: {fileID: 0}
   JankenTe_TextP4_5: {fileID: 0}
-  MyNumTe1_1: {fileID: 0}
-  MyNumTe1_2: {fileID: 0}
-  MyNumTe1_3: {fileID: 0}
-  MyNumTe1_4: {fileID: 0}
-  MyNumTe1_5: {fileID: 0}
-  ReMyJanken_Te1: -1
-  ReMyJanken_Te2: -1
-  ReMyJanken_Te3: -1
-  ReMyJanken_Te4: -1
-  ReMyJanken_Te5: -1
-  _Player1_Te1: -1
-  _Player1_Te2: -1
-  _Player1_Te3: -1
-  _Player1_Te4: -1
-  _Player1_Te5: -1
-  _Player2_Te1: -1
-  _Player2_Te2: -1
-  _Player2_Te3: -1
-  _Player2_Te4: -1
-  _Player2_Te5: -1
-  _Player3_Te1: -1
-  _Player3_Te2: -1
-  _Player3_Te3: -1
-  _Player3_Te4: -1
-  _Player3_Te5: -1
-  _Player4_Te1: -1
-  _Player4_Te2: -1
-  _Player4_Te3: -1
-  _Player4_Te4: -1
-  _Player4_Te5: -1
-  Player1_Te1: -1
-  Player1_Te2: 0
-  Player1_Te3: 0
-  Player1_Te4: 0
-  Player1_Te5: 0
-  Player2_Te1: -1
-  Player2_Te2: 0
-  Player2_Te3: 0
-  Player2_Te4: 0
-  Player2_Te5: 0
-  Player3_Te1: -1
-  Player3_Te2: 0
-  Player3_Te3: 0
-  Player3_Te4: 0
-  Player3_Te5: 0
-  Player4_Te1: -1
-  Player4_Te2: 0
-  Player4_Te3: 0
-  Player4_Te4: 0
-  Player4_Te5: 0
-  receivePlayer1_Te1: -5
-  receivePlayer1_Te2: -5
-  receivePlayer1_Te3: -5
-  receivePlayer1_Te4: -5
-  receivePlayer1_Te5: -5
-  receivePlayer2_Te1: -5
-  receivePlayer2_Te2: -5
-  receivePlayer2_Te3: -5
-  receivePlayer2_Te4: -5
-  receivePlayer2_Te5: -5
-  receivePlayer3_Te1: -5
-  receivePlayer3_Te2: -5
-  receivePlayer3_Te3: -5
-  receivePlayer3_Te4: -5
-  receivePlayer3_Te5: -5
-  receivePlayer4_Te1: -5
-  receivePlayer4_Te2: -5
-  receivePlayer4_Te3: -5
-  receivePlayer4_Te4: -5
-  receivePlayer4_Te5: -5
-  MyJanken_Te1: -1
-  MyJanken_Te2: -1
-  MyJanken_Te3: -1
-  MyJanken_Te4: -1
-  MyJanken_Te5: -1
+  Int_MyJanken_Te1: -1
+  Int_MyJanken_Te2: -1
+  Int_MyJanken_Te3: -1
+  Int_MyJanken_Te4: -1
+  Int_MyJanken_Te5: -1
+  ReInt_MyJanken_Te1: -1
+  ReInt_MyJanken_Te2: -1
+  ReInt_MyJanken_Te3: -1
+  ReInt_MyJanken_Te4: -1
+  ReInt_MyJanken_Te5: -1
+  _int_Player1_Te1: -1
+  _int_Player1_Te2: -1
+  _int_Player1_Te3: -1
+  _int_Player1_Te4: -1
+  _int_Player1_Te5: -1
+  _int_Player2_Te1: -1
+  _int_Player2_Te2: -1
+  _int_Player2_Te3: -1
+  _int_Player2_Te4: -1
+  _int_Player2_Te5: -1
+  _int_Player3_Te1: -1
+  _int_Player3_Te2: -1
+  _int_Player3_Te3: -1
+  _int_Player3_Te4: -1
+  _int_Player3_Te5: -1
+  _int_Player4_Te1: -1
+  _int_Player4_Te2: -1
+  _int_Player4_Te3: -1
+  _int_Player4_Te4: -1
+  _int_Player4_Te5: -1
+  int_Player1_Te1: -1
+  int_Player1_Te2: -1
+  int_Player1_Te3: -1
+  int_Player1_Te4: -1
+  int_Player1_Te5: -1
+  int_Player2_Te1: -1
+  int_Player2_Te2: -1
+  int_Player2_Te3: -1
+  int_Player2_Te4: -1
+  int_Player2_Te5: -1
+  int_Player3_Te1: -1
+  int_Player3_Te2: -1
+  int_Player3_Te3: -1
+  int_Player3_Te4: -1
+  int_Player3_Te5: -1
+  int_Player4_Te1: -1
+  int_Player4_Te2: -1
+  int_Player4_Te3: -1
+  int_Player4_Te4: -1
+  int_Player4_Te5: -1
+  receiveint_Player1_Te1: -5
+  receiveint_Player1_Te2: -5
+  receiveint_Player1_Te3: -5
+  receiveint_Player1_Te4: -5
+  receiveint_Player1_Te5: -5
+  receiveint_Player2_Te1: -5
+  receiveint_Player2_Te2: -5
+  receiveint_Player2_Te3: -5
+  receiveint_Player2_Te4: -5
+  receiveint_Player2_Te5: -5
+  receiveint_Player3_Te1: -5
+  receiveint_Player3_Te2: -5
+  receiveint_Player3_Te3: -5
+  receiveint_Player3_Te4: -5
+  receiveint_Player3_Te5: -5
+  receiveint_Player4_Te1: -5
+  receiveint_Player4_Te2: -5
+  receiveint_Player4_Te3: -5
+  receiveint_Player4_Te4: -5
+  receiveint_Player4_Te5: -5
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
-  PushTeBtnManager: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0
   receiveRap1: 0
@@ -14064,11 +14179,36 @@ MonoBehaviour:
   sprite_Gu: {fileID: 21300000, guid: 3ac04f1ae881d69409e0c3616022e838, type: 3}
   sprite_Choki: {fileID: 21300000, guid: 016f22a0d78871e4c8e3ee925edf82d9, type: 3}
   sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
-  te1_1: {fileID: 855213336}
-  te1_2: {fileID: 1686465482}
-  te1_3: {fileID: 1722347205}
-  te1_4: {fileID: 1190251985}
-  te1_5: {fileID: 1920704764}
+  MyTeImg_1: {fileID: 0}
+  MyTeImg_2: {fileID: 0}
+  MyTeImg_3: {fileID: 0}
+  MyTeImg_4: {fileID: 0}
+  MyTeImg_5: {fileID: 0}
+  Img_P1_Te1: {fileID: 0}
+  Img_P1_Te2: {fileID: 0}
+  Img_P1_Te3: {fileID: 0}
+  Img_P1_Te4: {fileID: 0}
+  Img_P1_Te5: {fileID: 0}
+  Img_P2_Te1: {fileID: 0}
+  Img_P2_Te2: {fileID: 0}
+  Img_P2_Te3: {fileID: 0}
+  Img_P2_Te4: {fileID: 0}
+  Img_P2_Te5: {fileID: 0}
+  Img_P3_Te1: {fileID: 0}
+  Img_P3_Te2: {fileID: 0}
+  Img_P3_Te3: {fileID: 0}
+  Img_P3_Te4: {fileID: 0}
+  Img_P3_Te5: {fileID: 0}
+  Img_P4_Te1: {fileID: 0}
+  Img_P4_Te2: {fileID: 0}
+  Img_P4_Te3: {fileID: 0}
+  Img_P4_Te4: {fileID: 0}
+  Img_P4_Te5: {fileID: 0}
+  MyNumTeText_1: {fileID: 0}
+  MyNumTeText_2: {fileID: 0}
+  MyNumTeText_3: {fileID: 0}
+  MyNumTeText_4: {fileID: 0}
+  MyNumTeText_5: {fileID: 0}
   JankenTe_TextP1_1: {fileID: 0}
   JankenTe_TextP1_2: {fileID: 0}
   JankenTe_TextP1_3: {fileID: 0}
@@ -14089,85 +14229,79 @@ MonoBehaviour:
   JankenTe_TextP4_3: {fileID: 0}
   JankenTe_TextP4_4: {fileID: 0}
   JankenTe_TextP4_5: {fileID: 0}
-  MyNumTe1_1: {fileID: 0}
-  MyNumTe1_2: {fileID: 0}
-  MyNumTe1_3: {fileID: 0}
-  MyNumTe1_4: {fileID: 0}
-  MyNumTe1_5: {fileID: 0}
-  ReMyJanken_Te1: -1
-  ReMyJanken_Te2: -1
-  ReMyJanken_Te3: -1
-  ReMyJanken_Te4: -1
-  ReMyJanken_Te5: -1
-  _Player1_Te1: -1
-  _Player1_Te2: -1
-  _Player1_Te3: -1
-  _Player1_Te4: -1
-  _Player1_Te5: -1
-  _Player2_Te1: -1
-  _Player2_Te2: -1
-  _Player2_Te3: -1
-  _Player2_Te4: -1
-  _Player2_Te5: -1
-  _Player3_Te1: -1
-  _Player3_Te2: -1
-  _Player3_Te3: -1
-  _Player3_Te4: -1
-  _Player3_Te5: -1
-  _Player4_Te1: -1
-  _Player4_Te2: -1
-  _Player4_Te3: -1
-  _Player4_Te4: -1
-  _Player4_Te5: -1
-  Player1_Te1: -1
-  Player1_Te2: 0
-  Player1_Te3: 0
-  Player1_Te4: 0
-  Player1_Te5: 0
-  Player2_Te1: -1
-  Player2_Te2: 0
-  Player2_Te3: 0
-  Player2_Te4: 0
-  Player2_Te5: 0
-  Player3_Te1: -1
-  Player3_Te2: 0
-  Player3_Te3: 0
-  Player3_Te4: 0
-  Player3_Te5: 0
-  Player4_Te1: -1
-  Player4_Te2: 0
-  Player4_Te3: 0
-  Player4_Te4: 0
-  Player4_Te5: 0
-  receivePlayer1_Te1: -5
-  receivePlayer1_Te2: -5
-  receivePlayer1_Te3: -5
-  receivePlayer1_Te4: -5
-  receivePlayer1_Te5: -5
-  receivePlayer2_Te1: -5
-  receivePlayer2_Te2: -5
-  receivePlayer2_Te3: -5
-  receivePlayer2_Te4: -5
-  receivePlayer2_Te5: -5
-  receivePlayer3_Te1: -5
-  receivePlayer3_Te2: -5
-  receivePlayer3_Te3: -5
-  receivePlayer3_Te4: -5
-  receivePlayer3_Te5: -5
-  receivePlayer4_Te1: -5
-  receivePlayer4_Te2: -5
-  receivePlayer4_Te3: -5
-  receivePlayer4_Te4: -5
-  receivePlayer4_Te5: -5
-  MyJanken_Te1: -1
-  MyJanken_Te2: -1
-  MyJanken_Te3: -1
-  MyJanken_Te4: -1
-  MyJanken_Te5: -1
+  Int_MyJanken_Te1: -1
+  Int_MyJanken_Te2: -1
+  Int_MyJanken_Te3: -1
+  Int_MyJanken_Te4: -1
+  Int_MyJanken_Te5: -1
+  ReInt_MyJanken_Te1: -1
+  ReInt_MyJanken_Te2: -1
+  ReInt_MyJanken_Te3: -1
+  ReInt_MyJanken_Te4: -1
+  ReInt_MyJanken_Te5: -1
+  _int_Player1_Te1: -1
+  _int_Player1_Te2: -1
+  _int_Player1_Te3: -1
+  _int_Player1_Te4: -1
+  _int_Player1_Te5: -1
+  _int_Player2_Te1: -1
+  _int_Player2_Te2: -1
+  _int_Player2_Te3: -1
+  _int_Player2_Te4: -1
+  _int_Player2_Te5: -1
+  _int_Player3_Te1: -1
+  _int_Player3_Te2: -1
+  _int_Player3_Te3: -1
+  _int_Player3_Te4: -1
+  _int_Player3_Te5: -1
+  _int_Player4_Te1: -1
+  _int_Player4_Te2: -1
+  _int_Player4_Te3: -1
+  _int_Player4_Te4: -1
+  _int_Player4_Te5: -1
+  int_Player1_Te1: -1
+  int_Player1_Te2: -1
+  int_Player1_Te3: -1
+  int_Player1_Te4: -1
+  int_Player1_Te5: -1
+  int_Player2_Te1: -1
+  int_Player2_Te2: -1
+  int_Player2_Te3: -1
+  int_Player2_Te4: -1
+  int_Player2_Te5: -1
+  int_Player3_Te1: -1
+  int_Player3_Te2: -1
+  int_Player3_Te3: -1
+  int_Player3_Te4: -1
+  int_Player3_Te5: -1
+  int_Player4_Te1: -1
+  int_Player4_Te2: -1
+  int_Player4_Te3: -1
+  int_Player4_Te4: -1
+  int_Player4_Te5: -1
+  receiveint_Player1_Te1: -5
+  receiveint_Player1_Te2: -5
+  receiveint_Player1_Te3: -5
+  receiveint_Player1_Te4: -5
+  receiveint_Player1_Te5: -5
+  receiveint_Player2_Te1: -5
+  receiveint_Player2_Te2: -5
+  receiveint_Player2_Te3: -5
+  receiveint_Player2_Te4: -5
+  receiveint_Player2_Te5: -5
+  receiveint_Player3_Te1: -5
+  receiveint_Player3_Te2: -5
+  receiveint_Player3_Te3: -5
+  receiveint_Player3_Te4: -5
+  receiveint_Player3_Te5: -5
+  receiveint_Player4_Te1: -5
+  receiveint_Player4_Te2: -5
+  receiveint_Player4_Te3: -5
+  receiveint_Player4_Te4: -5
+  receiveint_Player4_Te5: -5
   PresentPlayerID: 0
   ShuffleCardsManager: {fileID: 1540748809}
   TestRoomController: {fileID: 858086773}
-  PushTeBtnManager: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0
   receiveRap1: 0

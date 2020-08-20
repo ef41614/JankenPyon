@@ -191,13 +191,13 @@ public class CInRoomChat : MonoBehaviourPunCallbacks
         //全てのプレイヤーオブジェクトから自キャラをIDで検索し、取り出す
         foreach (GameObject player in players)
         {
-            int playerLoopId = player.GetComponent<PhotonView>().Owner.ActorNumber;
-            if (playerLoopId == player_id)
+            int playerLoostring_PID = player.GetComponent<PhotonView>().Owner.ActorNumber;
+            if (playerLoostring_PID == player_id)
             {
                 //自プレイヤーオブジェクトを取得
                 myPlayer = player;
                 PlayerManager = myPlayer.GetComponent<CPlayerManager>();
-                myID = playerLoopId;
+                myID = playerLoostring_PID;
                 PlayerName = player.GetComponent<PhotonView>().Owner.NickName;
                 return true;
             }

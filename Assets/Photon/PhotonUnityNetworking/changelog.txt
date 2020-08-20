@@ -5,7 +5,7 @@ v2.18.1 (30. April 2020)
 Fixed: String serialization issue in the Photon3Unity3d.dll (v4.1.4.0). Updated to Photon3Unity3d.dll (v4.1.4.1).
 v2.18 (28. April 2020)
 Fixed: Support for Unity 2019.3. As Unity 2020 is still beta, there may be more import / build issues. Please report via mail.
-Note: We noticed upgrading projects may create more than one PhotonServerSettings file. If your AppId seems gone, look up these files and keep the one with settings.
+Note: We noticed upgrading projects may create more than one PhotonServerSettings file. If your Apstring_PID seems gone, look up these files and keep the one with settings.
 Fixed: Asteroid Demo bullet instantation uses the position sent via the rpc, instead of the current local position.
 Updated: Nicer format for the countdown utility script to avoid floating points.
 Fixed: NullReferenceExceptions in PhotonTeamsManager.OnPlayerEnteredRoom and PhotonTeamsManager.OnPlayerLeftRoom.
@@ -239,7 +239,7 @@ Removed: Surplus warning logged when the lower-level connection reports a Discon
 Fixed: When using the 4.x mono runtime in Unity, the Socket.Receive method could get stuck and cause timeouts (in Editor and builds). The LoadBalancingClient now works around this by using the SocketUdpAsync class from our Photon dll in those cases. Please report if there are network-issues with 4.x runtime, mono.
 Changed: Enum DisconnectCause. Replace TimeoutDisconnect with ClientTimeout. Replace DisconnectByServer with ServerTimeout. Replace DisconnectByServerUserLimit with MaxCcuReached.
 Added: Enum DisconnectCause.DisconnectByServerReasonUnknown for the case it's neither a ccu-limit, timeout nor a disconnect by the room's logic.
-Changed: Warning-dialog "AppId not set" is not shown, if the configuration points to a Master Server (Photon OnPremise). When the new server SDK expects an AppId, too, this could be reverted.
+Changed: Warning-dialog "Apstring_PID not set" is not shown, if the configuration points to a Master Server (Photon OnPremise). When the new server SDK expects an Apstring_PID, too, this could be reverted.
 Updated: Cockpit demo scene to expose automaticallySyncLevel and load level form. Updated links to docs.
 Updated: The readme.txt.
 Updated: The Photon3Unity3d.dll to v4.1.2.2, which has a few changes. See release_history.txt.
@@ -249,7 +249,7 @@ Added: Assembly Definitions for Unity 2017.3 and up. PUN, Realtime, Chat, the We
 Added: Chat Demo. An updated version of the UI from PUN Classic.
 Fixed: PunCockpit integration fixed, scene camera was not set properly. This fixes the black screen over any demo which uses the cockpit.
 Fixed: OnCustomAuthenticationFailed() was not virtual in MonoBehaviourPunCallbacks. Now it is and you can override it.
-Changed: Custom editor for PhotonServerSettings, which hides AppIdVoice and AppIdChat when the APIs are not present in a project.
+Changed: Custom editor for PhotonServerSettings, which hides Apstring_PIDVoice and Apstring_PIDChat when the APIs are not present in a project.
 Removed: PhotonNetwork.InstantiateInRoomOnly. If you need to instantiate game objects before getting into a room, assign a PhotonView and PhotonView.viewID, when you arrive in a room.
 
 v2.1  (13th September 2018)

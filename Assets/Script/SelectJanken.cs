@@ -19,11 +19,42 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Sprite sprite_Choki;
     public Sprite sprite_Pa;
 
-    public Image te1_1;
-    public Image te1_2;
-    public Image te1_3;
-    public Image te1_4;
-    public Image te1_5;
+    public Image MyTeImg_1;
+    public Image MyTeImg_2;
+    public Image MyTeImg_3;
+    public Image MyTeImg_4;
+    public Image MyTeImg_5;
+
+    public Image Img_P1_Te1;
+    public Image Img_P1_Te2;
+    public Image Img_P1_Te3;
+    public Image Img_P1_Te4;
+    public Image Img_P1_Te5;
+
+    public Image Img_P2_Te1;
+    public Image Img_P2_Te2;
+    public Image Img_P2_Te3;
+    public Image Img_P2_Te4;
+    public Image Img_P2_Te5;
+
+    public Image Img_P3_Te1;
+    public Image Img_P3_Te2;
+    public Image Img_P3_Te3;
+    public Image Img_P3_Te4;
+    public Image Img_P3_Te5;
+
+    public Image Img_P4_Te1;
+    public Image Img_P4_Te2;
+    public Image Img_P4_Te3;
+    public Image Img_P4_Te4;
+    public Image Img_P4_Te5;
+
+
+    public Text MyNumTeText_1;
+    public Text MyNumTeText_2;
+    public Text MyNumTeText_3;
+    public Text MyNumTeText_4;
+    public Text MyNumTeText_5;
 
     public Text JankenTe_TextP1_1;
     public Text JankenTe_TextP1_2;
@@ -49,100 +80,95 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Text JankenTe_TextP4_4;
     public Text JankenTe_TextP4_5;
 
-    public Text MyNumTe1_1;
-    public Text MyNumTe1_2;
-    public Text MyNumTe1_3;
-    public Text MyNumTe1_4;
-    public Text MyNumTe1_5;
 
-    public int ReMyJanken_Te1 = -1;
-    public int ReMyJanken_Te2 = -1;
-    public int ReMyJanken_Te3 = -1;
-    public int ReMyJanken_Te4 = -1;
-    public int ReMyJanken_Te5 = -1;
+    public int Int_MyJanken_Te1 = -1;
+    public int Int_MyJanken_Te2 = -1;
+    public int Int_MyJanken_Te3 = -1;
+    public int Int_MyJanken_Te4 = -1;
+    public int Int_MyJanken_Te5 = -1;
 
-    public int _Player1_Te1 = -1;
-    public int _Player1_Te2 = -1;
-    public int _Player1_Te3 = -1;
-    public int _Player1_Te4 = -1;
-    public int _Player1_Te5 = -1;
+    public int ReInt_MyJanken_Te1 = -1;
+    public int ReInt_MyJanken_Te2 = -1;
+    public int ReInt_MyJanken_Te3 = -1;
+    public int ReInt_MyJanken_Te4 = -1;
+    public int ReInt_MyJanken_Te5 = -1;
 
-    public int _Player2_Te1 = -1;
-    public int _Player2_Te2 = -1;
-    public int _Player2_Te3 = -1;
-    public int _Player2_Te4 = -1;
-    public int _Player2_Te5 = -1;
+    public int _int_Player1_Te1 = -1;
+    public int _int_Player1_Te2 = -1;
+    public int _int_Player1_Te3 = -1;
+    public int _int_Player1_Te4 = -1;
+    public int _int_Player1_Te5 = -1;
 
-    public int _Player3_Te1 = -1;
-    public int _Player3_Te2 = -1;
-    public int _Player3_Te3 = -1;
-    public int _Player3_Te4 = -1;
-    public int _Player3_Te5 = -1;
+    public int _int_Player2_Te1 = -1;
+    public int _int_Player2_Te2 = -1;
+    public int _int_Player2_Te3 = -1;
+    public int _int_Player2_Te4 = -1;
+    public int _int_Player2_Te5 = -1;
 
-    public int _Player4_Te1 = -1;
-    public int _Player4_Te2 = -1;
-    public int _Player4_Te3 = -1;
-    public int _Player4_Te4 = -1;
-    public int _Player4_Te5 = -1;
+    public int _int_Player3_Te1 = -1;
+    public int _int_Player3_Te2 = -1;
+    public int _int_Player3_Te3 = -1;
+    public int _int_Player3_Te4 = -1;
+    public int _int_Player3_Te5 = -1;
 
+    public int _int_Player4_Te1 = -1;
+    public int _int_Player4_Te2 = -1;
+    public int _int_Player4_Te3 = -1;
+    public int _int_Player4_Te4 = -1;
+    public int _int_Player4_Te5 = -1;
 
-    public int Player1_Te1 = -1;
-    public int Player1_Te2 = -1;
-    public int Player1_Te3 = -1;
-    public int Player1_Te4 = -1;
-    public int Player1_Te5 = -1;
+    public int int_Player1_Te1 = -1;
+    public int int_Player1_Te2 = -1;
+    public int int_Player1_Te3 = -1;
+    public int int_Player1_Te4 = -1;
+    public int int_Player1_Te5 = -1;
 
-    public int Player2_Te1 = -1;
-    public int Player2_Te2 = -1;
-    public int Player2_Te3 = -1;
-    public int Player2_Te4 = -1;
-    public int Player2_Te5 = -1;
+    public int int_Player2_Te1 = -1;
+    public int int_Player2_Te2 = -1;
+    public int int_Player2_Te3 = -1;
+    public int int_Player2_Te4 = -1;
+    public int int_Player2_Te5 = -1;
 
-    public int Player3_Te1 = -1;
-    public int Player3_Te2 = -1;
-    public int Player3_Te3 = -1;
-    public int Player3_Te4 = -1;
-    public int Player3_Te5 = -1;
+    public int int_Player3_Te1 = -1;
+    public int int_Player3_Te2 = -1;
+    public int int_Player3_Te3 = -1;
+    public int int_Player3_Te4 = -1;
+    public int int_Player3_Te5 = -1;
 
-    public int Player4_Te1 = -1;
+    public int int_Player4_Te1 = -1;
     //    {
-    //      get { return _Player4_Te1; }
-    //    set { _Player4_Te1 = value; RequestOwner(); }
+    //      get { return _int_Player4_Te1; }
+    //    set { _int_Player4_Te1 = value; RequestOwner(); }
     //}
-    public int Player4_Te2 = -1;
-    public int Player4_Te3 = -1;
-    public int Player4_Te4 = -1;
-    public int Player4_Te5 = -1;
+    public int int_Player4_Te2 = -1;
+    public int int_Player4_Te3 = -1;
+    public int int_Player4_Te4 = -1;
+    public int int_Player4_Te5 = -1;
 
-    public int receivePlayer1_Te1 = -5;
-    public int receivePlayer1_Te2 = -5;
-    public int receivePlayer1_Te3 = -5;
-    public int receivePlayer1_Te4 = -5;
-    public int receivePlayer1_Te5 = -5;
+    public int receiveint_Player1_Te1 = -5;
+    public int receiveint_Player1_Te2 = -5;
+    public int receiveint_Player1_Te3 = -5;
+    public int receiveint_Player1_Te4 = -5;
+    public int receiveint_Player1_Te5 = -5;
 
-    public int receivePlayer2_Te1 = -5;
-    public int receivePlayer2_Te2 = -5;
-    public int receivePlayer2_Te3 = -5;
-    public int receivePlayer2_Te4 = -5;
-    public int receivePlayer2_Te5 = -5;
+    public int receiveint_Player2_Te1 = -5;
+    public int receiveint_Player2_Te2 = -5;
+    public int receiveint_Player2_Te3 = -5;
+    public int receiveint_Player2_Te4 = -5;
+    public int receiveint_Player2_Te5 = -5;
 
-    public int receivePlayer3_Te1 = -5;
-    public int receivePlayer3_Te2 = -5;
-    public int receivePlayer3_Te3 = -5;
-    public int receivePlayer3_Te4 = -5;
-    public int receivePlayer3_Te5 = -5;
+    public int receiveint_Player3_Te1 = -5;
+    public int receiveint_Player3_Te2 = -5;
+    public int receiveint_Player3_Te3 = -5;
+    public int receiveint_Player3_Te4 = -5;
+    public int receiveint_Player3_Te5 = -5;
 
-    public int receivePlayer4_Te1 = -5;
-    public int receivePlayer4_Te2 = -5;
-    public int receivePlayer4_Te3 = -5;
-    public int receivePlayer4_Te4 = -5;
-    public int receivePlayer4_Te5 = -5;
+    public int receiveint_Player4_Te1 = -5;
+    public int receiveint_Player4_Te2 = -5;
+    public int receiveint_Player4_Te3 = -5;
+    public int receiveint_Player4_Te4 = -5;
+    public int receiveint_Player4_Te5 = -5;
 
-    public int MyJanken_Te1 = -1;
-    public int MyJanken_Te2 = -1;
-    public int MyJanken_Te3 = -1;
-    public int MyJanken_Te4 = -1;
-    public int MyJanken_Te5 = -1;
 
     public string PresentPlayerID;
     private PhotonView photonView = null;
@@ -153,8 +179,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject TestRoomController;  //ヒエラルキー上のオブジェクト名
     TestRoomController TestRoomControllerSC;
 
-    public GameObject PushTeBtnManager; //ヒエラルキー上のオブジェクト名
-    PushTeBtn PushTeBtnMSC;
+    //public GameObject PushTeBtnManager; //ヒエラルキー上のオブジェクト名
+    //PushTeBtn PushTeBtnMSC;
     //public PushTeBtn PushTeBtnMSC;
 
     public GameObject myPlayer;
@@ -207,7 +233,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         //PushTeBtnMSC = PushTeBtnManager.GetComponent<PushTeBtn>();
         //PushTeBtnMSC = PushTeBtnManager.GetComponent<PushTeBtn>();
-        ResetPlayerTeNum();
+        //ResetPlayerTeNum();
         // photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
         //   if (PhotonNetwork.LocalPlayer.CustomProperties["Score"] is int score)
         //   {
@@ -235,7 +261,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("私の名前は 「" + player.NickName + " 」でござる");
     }
 
-    public void MyPlayID()
+    public void MyPlayID() // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
     {
         // TestRoomControllerSC.PNameCheck();
         photonView.RPC("PlayerIDCheck", RpcTarget.All);
@@ -291,38 +317,33 @@ public void SelectJankenCard()
 {
     MyPlayID();
     Debug.Log("◎●◎◎●◎ [PunRPC] SelectJankenCard が起動しました ◎●◎◎●◎");
-
     Debug.Log("処理実施前確認");
     photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
     PresentPlayerID = ""; //プレイヤーID初期化
     Debug.Log("PresentPlayerID 初期化確認 " + PresentPlayerID);
     Debug.Log("LocalPlayer.UserId : " + PhotonNetwork.LocalPlayer.UserId);
-
-    Debug.Log(TestRoomControllerSC.PID1 + ": PID1");
-    Debug.Log(TestRoomControllerSC.PID2 + ": PID2");
-    Debug.Log(TestRoomControllerSC.PID3 + ": PID3");
-    Debug.Log(TestRoomControllerSC.PID4 + ": PID4");
-
+    Debug.Log(TestRoomControllerSC.string_PID1 + ": string_PID1");
+    Debug.Log(TestRoomControllerSC.string_PID2 + ": string_PID2");
+    Debug.Log(TestRoomControllerSC.string_PID3 + ": string_PID3");
+    Debug.Log(TestRoomControllerSC.string_PID4 + ": string_PID4");
     Debug.Log("PresentPlayerIDをセット");
     PresentPlayerID = PhotonNetwork.LocalPlayer.UserId;
     Debug.Log("PresentPlayerID セット確認 " + PresentPlayerID);
-
     Debug.Log("senderName  " + senderName);
     Debug.Log("senderID  " + senderID);
-
-    if (senderID == TestRoomControllerSC.PID1)
+    if (senderID == TestRoomControllerSC.string_PID1)
     {
         Debug.Log("現在プレイヤー1がボタン押したよ");
     }
-    else if (senderID == TestRoomControllerSC.PID2)
+    else if (senderID == TestRoomControllerSC.string_PID2)
     {
         Debug.Log("現在プレイヤー2がボタン押したよ");
     }
-    else if (senderID == TestRoomControllerSC.PID3)
+    else if (senderID == TestRoomControllerSC.string_PID3)
     {
         Debug.Log("現在プレイヤー3がボタン押したよ");
     }
-    else if (senderID == TestRoomControllerSC.PID4)
+    else if (senderID == TestRoomControllerSC.string_PID4)
     {
         Debug.Log("現在プレイヤー4がボタン押したよ");
     }
@@ -330,8 +351,6 @@ public void SelectJankenCard()
     {
         Debug.Log("ID の条件、どれにも当てはまってない");
     }
-
-
     Debug.Log("RndCreateCard_C ： " + ShuffleCardsMSC.RndCreateCard_C);
     if (ShuffleCardsMSC.RndCreateCard_C == 0) //グー
     {
@@ -349,8 +368,6 @@ public void SelectJankenCard()
     {
         Debug.Log("ランダム値の見直しが必要！！");
     }
-
-
     Debug.Log("処理実施後確認");
     photonView.RPC("CheckPlayerTeNum", RpcTarget.All);
     Debug.Log("●●●●●● [PunRPC] SelectJankenCard の起動終わり ●●●●●●");
@@ -363,26 +380,25 @@ public void SelectJankenCard()
         Debug.Log("今グー押したのは" + senderID);
         Debug.Log("今グー押したのは" + senderName);
         Debug.Log(count_a + ": count_a");
-
         if (count_a == 1)
         {
-            te1_1.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyTeImg_1.gameObject.GetComponent<Image>().sprite = sprite_Gu;
         }
         else if (count_a == 2)
         {
-            te1_2.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyTeImg_2.gameObject.GetComponent<Image>().sprite = sprite_Gu;
         }
         else if (count_a == 3)
         {
-            te1_3.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyTeImg_3.gameObject.GetComponent<Image>().sprite = sprite_Gu;
         }
         else if (count_a == 4)
         {
-            te1_4.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyTeImg_4.gameObject.GetComponent<Image>().sprite = sprite_Gu;
         }
         else if (count_a == 5)
         {
-            te1_5.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyTeImg_5.gameObject.GetComponent<Image>().sprite = sprite_Gu;
         }
         else
         {
@@ -393,36 +409,33 @@ public void SelectJankenCard()
         //photonView.RPC("PlayerTeNumSet", RpcTarget.All, 0);
         PlayerTeNumSet(0);
         Debug.Log("手をグーにセットend");
-
         count_a++;
         Debug.Log(count_a + ": count_a");
     }
-
     public void SelectChoki()
     {
         Debug.Log("今チョキ押したのは" + senderID);
         Debug.Log("今チョキ押したのは" + senderName);
         Debug.Log(count_a + ": count_a");
-
         if (count_a == 1)
         {
-            te1_1.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyTeImg_1.gameObject.GetComponent<Image>().sprite = sprite_Choki;
         }
         else if (count_a == 2)
         {
-            te1_2.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyTeImg_2.gameObject.GetComponent<Image>().sprite = sprite_Choki;
         }
         else if (count_a == 3)
         {
-            te1_3.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyTeImg_3.gameObject.GetComponent<Image>().sprite = sprite_Choki;
         }
         else if (count_a == 4)
         {
-            te1_4.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyTeImg_4.gameObject.GetComponent<Image>().sprite = sprite_Choki;
         }
         else if (count_a == 5)
         {
-            te1_5.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyTeImg_5.gameObject.GetComponent<Image>().sprite = sprite_Choki;
         }
         else
         {
@@ -433,36 +446,33 @@ public void SelectJankenCard()
         //photonView.RPC("PlayerTeNumSet", RpcTarget.All, 1);
         PlayerTeNumSet(1);
         Debug.Log("手をチョキにセットend");
-
         count_a++;
         Debug.Log(count_a + ": count_a");
     }
-
     public void SelectPa()
     {
         Debug.Log("今パー押したのは" + senderID);
         Debug.Log("今パー押したのは" + senderName);
         Debug.Log(count_a + ": count_a");
-
         if (count_a == 1)
         {
-            te1_1.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyTeImg_1.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         }
         else if (count_a == 2)
         {
-            te1_2.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyTeImg_2.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         }
         else if (count_a == 3)
         {
-            te1_3.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyTeImg_3.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         }
         else if (count_a == 4)
         {
-            te1_4.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyTeImg_4.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         }
         else if (count_a == 5)
         {
-            te1_5.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyTeImg_5.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         }
         else
         {
@@ -473,7 +483,6 @@ public void SelectJankenCard()
         //photonView.RPC("PlayerTeNumSet", RpcTarget.All,2);
         PlayerTeNumSet(2);
         Debug.Log("手をパーにセットend");
-
         count_a++;
         Debug.Log(count_a + ": count_a");
     }
@@ -485,45 +494,45 @@ public void SelectJankenCard()
     {
         Debug.Log("************ ********** *********** **********");
         Debug.Log(PTN + ": PTN");
-        Debug.Log(TestRoomControllerSC.PID1 + ": TestRoomControllerSC.PID1");
-        Debug.Log(TestRoomControllerSC.PID2 + ": TestRoomControllerSC.PID2");
-        Debug.Log(TestRoomControllerSC.PID3 + ": TestRoomControllerSC.PID3");
-        Debug.Log(TestRoomControllerSC.PID4 + ": TestRoomControllerSC.PID4");
+        Debug.Log(TestRoomControllerSC.string_PID1 + ": TestRoomControllerSC.string_PID1");
+        Debug.Log(TestRoomControllerSC.string_PID2 + ": TestRoomControllerSC.string_PID2");
+        Debug.Log(TestRoomControllerSC.string_PID3 + ": TestRoomControllerSC.string_PID3");
+        Debug.Log(TestRoomControllerSC.string_PID4 + ": TestRoomControllerSC.string_PID4");
         Debug.Log(senderID + ": senderID");
         
-        if (senderID == TestRoomControllerSC.PID1)
+        if (senderID == TestRoomControllerSC.string_PID1)
         { 
             Debug.Log("現在プレイヤー1がボタン押したよ");
-            if (Player1_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            if (int_Player1_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Debug.Log("Player1_Te1 代入前" + Player1_Te1);
-                Player1_Te1 = PTN;
-                _Player1_Te1 = Player1_Te1;
-                Debug.Log("Player1_Te1 代入後" + Player1_Te1);
+                Debug.Log("int_Player1_Te1 代入前" + int_Player1_Te1);
+                int_Player1_Te1 = PTN;
+                _int_Player1_Te1 = int_Player1_Te1;
+                Debug.Log("int_Player1_Te1 代入後" + int_Player1_Te1);
                 Debug.Log("プレイヤー1_1 手のセットOK");
             }
-            else if (Player1_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player1_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player1_Te2 = PTN;
-                _Player1_Te2 = Player1_Te2;
+                int_Player1_Te2 = PTN;
+                _int_Player1_Te2 = int_Player1_Te2;
                 Debug.Log("プレイヤー1_2 手のセットOK");
             }
-            else if (Player1_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player1_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player1_Te3 = PTN;
-                _Player1_Te3 = Player1_Te3;
+                int_Player1_Te3 = PTN;
+                _int_Player1_Te3 = int_Player1_Te3;
                 Debug.Log("プレイヤー1_3 手のセットOK");
             }
-            else if (Player1_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player1_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player1_Te4 = PTN;
-                _Player1_Te4 = Player1_Te4;
+                int_Player1_Te4 = PTN;
+                _int_Player1_Te4 = int_Player1_Te4;
                 Debug.Log("プレイヤー1_4 手のセットOK");
             }
-            else if (Player1_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player1_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player1_Te5 = PTN;
-                _Player1_Te5 = Player1_Te5;
+                int_Player1_Te5 = PTN;
+                _int_Player1_Te5 = int_Player1_Te5;
                 Debug.Log("プレイヤー1_5 手のセットOK");
             }
             else
@@ -531,109 +540,105 @@ public void SelectJankenCard()
                 Debug.Log("現在プレイヤー1の 5こすべて手が決まったよ");
             }
         }
-
-        else if (senderID == TestRoomControllerSC.PID2)
+        else if (senderID == TestRoomControllerSC.string_PID2)
         {
             Debug.Log("現在プレイヤー2がボタン押したよ");
-            if (Player2_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            if (int_Player2_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player2_Te1 = PTN;
-                _Player2_Te1 = Player2_Te1;
+                int_Player2_Te1 = PTN;
+                _int_Player2_Te1 = int_Player2_Te1;
             }
-            else if (Player2_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player2_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player2_Te2 = PTN;
-                _Player2_Te2 = Player2_Te2;
+                int_Player2_Te2 = PTN;
+                _int_Player2_Te2 = int_Player2_Te2;
             }
-            else if (Player2_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player2_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player2_Te3 = PTN;
-                _Player2_Te3 = Player2_Te3;
+                int_Player2_Te3 = PTN;
+                _int_Player2_Te3 = int_Player2_Te3;
             }
-            else if (Player2_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player2_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player2_Te4 = PTN;
-                _Player2_Te4 = Player2_Te4;
+                int_Player2_Te4 = PTN;
+                _int_Player2_Te4 = int_Player2_Te4;
             }
-            else if (Player2_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player2_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player2_Te5 = PTN;
-                _Player2_Te5 = Player2_Te5;
+                int_Player2_Te5 = PTN;
+                _int_Player2_Te5 = int_Player2_Te5;
             }
             else
             {
                 Debug.Log("現在プレイヤー2 の5こすべて手が決まったよ");
             }
         }
-
-        else if (senderID == TestRoomControllerSC.PID3)
+        else if (senderID == TestRoomControllerSC.string_PID3)
         {
             Debug.Log("現在プレイヤー3がボタン押したよ");
-            if (Player3_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            if (int_Player3_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player3_Te1 = PTN;
-                _Player3_Te1 = Player3_Te1;
+                int_Player3_Te1 = PTN;
+                _int_Player3_Te1 = int_Player3_Te1;
             }
-            else if (Player3_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player3_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player3_Te2 = PTN;
-                _Player3_Te2 = Player3_Te2;
+                int_Player3_Te2 = PTN;
+                _int_Player3_Te2 = int_Player3_Te2;
             }
-            else if (Player3_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player3_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player3_Te3 = PTN;
-                _Player3_Te3 = Player3_Te3;
+                int_Player3_Te3 = PTN;
+                _int_Player3_Te3 = int_Player3_Te3;
             }
-            else if (Player3_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player3_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player3_Te4 = PTN;
-                _Player3_Te4 = Player3_Te4;
+                int_Player3_Te4 = PTN;
+                _int_Player3_Te4 = int_Player3_Te4;
             }
-            else if (Player3_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player3_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player3_Te5 = PTN;
-                _Player3_Te5 = Player3_Te5;
+                int_Player3_Te5 = PTN;
+                _int_Player3_Te5 = int_Player3_Te5;
             }
             else
             {
                 Debug.Log("現在プレイヤー3 の5こすべて手が決まったよ");
             }
         }
-
-        else if (senderID == TestRoomControllerSC.PID4)
+        else if (senderID == TestRoomControllerSC.string_PID4)
         {
             Debug.Log("現在プレイヤー4がボタン押したよ");
-            if (Player4_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            if (int_Player4_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player4_Te1 = PTN;
-                _Player4_Te1 = Player4_Te1;
+                int_Player4_Te1 = PTN;
+                _int_Player4_Te1 = int_Player4_Te1;
             }
-            else if (Player4_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player4_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player4_Te2 = PTN;
-                _Player4_Te2 = Player4_Te2;
+                int_Player4_Te2 = PTN;
+                _int_Player4_Te2 = int_Player4_Te2;
             }
-            else if (Player4_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player4_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player4_Te3 = PTN;
-                _Player4_Te3 = Player4_Te3;
+                int_Player4_Te3 = PTN;
+                _int_Player4_Te3 = int_Player4_Te3;
             }
-            else if (Player4_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player4_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player4_Te4 = PTN;
-                _Player4_Te4 = Player4_Te4;
+                int_Player4_Te4 = PTN;
+                _int_Player4_Te4 = int_Player4_Te4;
             }
-            else if (Player4_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+            else if (int_Player4_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
             {
-                Player4_Te5 = PTN;
-                _Player4_Te5 = Player4_Te5;
+                int_Player4_Te5 = PTN;
+                _int_Player4_Te5 = int_Player4_Te5;
             }
             else
             {
                 Debug.Log("現在プレイヤー4 の5こすべて手が決まったよ");
             }
         }
-
         else
         {
             Debug.Log("現在プレイヤー の条件、どれにも当てはまってない");
@@ -643,6 +648,8 @@ public void SelectJankenCard()
 
     public void ToSharePlayerTeNum()
     {
+        TestRoomControllerSC.PNameCheck(); // プレイヤー名が埋まっていなかったら入れる
+        MyPlayID();  // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
         photonView.RPC("SharePlayerTeNum", RpcTarget.All);
     }
 
@@ -650,72 +657,74 @@ public void SelectJankenCard()
     public void SharePlayerTeNum()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
     {
         Debug.Log("************ データ共有 SharePlayerTeNum **********");
-        Debug.Log(TestRoomControllerSC.PID1 + ": TestRoomControllerSC.PID1");
-        Debug.Log(TestRoomControllerSC.PID2 + ": TestRoomControllerSC.PID2");
-        Debug.Log(TestRoomControllerSC.PID3 + ": TestRoomControllerSC.PID3");
-        Debug.Log(TestRoomControllerSC.PID4 + ": TestRoomControllerSC.PID4");
+        Debug.Log(TestRoomControllerSC.string_PID1 + ": TestRoomControllerSC.string_PID1");
+        Debug.Log(TestRoomControllerSC.string_PID2 + ": TestRoomControllerSC.string_PID2");
+        Debug.Log(TestRoomControllerSC.string_PID3 + ": TestRoomControllerSC.string_PID3");
+        Debug.Log(TestRoomControllerSC.string_PID4 + ": TestRoomControllerSC.string_PID4");
         Debug.Log("senderName  " + senderName);  // 今ボタン押した人
         Debug.Log("senderID  " + senderID);  // 今ボタン押した人
         Debug.Log("MyName  " + MyName);  // 今ボタン押した人
         Debug.Log("MyID  " + MyID);  // 今ボタン押した人
 
+        //Debug.Log("PhotonNetwork.player.ID  " + PhotonNetwork.player.ID);  // 今ボタン押した人
 
-        if (senderID == TestRoomControllerSC.PID1)
+
+        if (senderID == TestRoomControllerSC.string_PID1)
         {
             Debug.Log("現在プレイヤー1がボタン押したよ");
             Debug.Log("MyName  " + MyName);  // 今ボタン押した人
             //PushTeBtnMSC.SharePlayerTeNum_Player1();
             /*
-            Player1_Te1 = PushTeBtnMSC.MyJanken_Te1;
-            Player1_Te2 = PushTeBtnMSC.MyJanken_Te2;
-            Player1_Te3 = PushTeBtnMSC.MyJanken_Te3;
-            Player1_Te4 = PushTeBtnMSC.MyJanken_Te4;
-            Player1_Te5 = PushTeBtnMSC.MyJanken_Te5;
+            int_Player1_Te1 = PushTeBtnMSC.Int_MyJanken_Te1;
+            int_Player1_Te2 = PushTeBtnMSC.Int_MyJanken_Te2;
+            int_Player1_Te3 = PushTeBtnMSC.Int_MyJanken_Te3;
+            int_Player1_Te4 = PushTeBtnMSC.Int_MyJanken_Te4;
+            int_Player1_Te5 = PushTeBtnMSC.Int_MyJanken_Te5;
             */
             SharePlayerTeNum_Player1();
-            JankenTe_TextP1_1.text = Player1_Te1.ToString();
-            JankenTe_TextP1_2.text = Player1_Te2.ToString();
-            JankenTe_TextP1_3.text = Player1_Te3.ToString();
-            JankenTe_TextP1_4.text = Player1_Te4.ToString();
-            JankenTe_TextP1_5.text = Player1_Te5.ToString();
+            JankenTe_TextP1_1.text = int_Player1_Te1.ToString();
+            JankenTe_TextP1_2.text = int_Player1_Te2.ToString();
+            JankenTe_TextP1_3.text = int_Player1_Te3.ToString();
+            JankenTe_TextP1_4.text = int_Player1_Te4.ToString();
+            JankenTe_TextP1_5.text = int_Player1_Te5.ToString();
 
         }
 
-        if (senderID == TestRoomControllerSC.PID2)
+        if (senderID == TestRoomControllerSC.string_PID2)
         {
             Debug.Log("現在プレイヤー2がボタン押したよ");
             Debug.Log("MyName  " + MyName);  // 今ボタン押した人
 
             SharePlayerTeNum_Player2();
-            JankenTe_TextP2_1.text = Player2_Te1.ToString();
-            JankenTe_TextP2_2.text = Player2_Te2.ToString();
-            JankenTe_TextP2_3.text = Player2_Te3.ToString();
-            JankenTe_TextP2_4.text = Player2_Te4.ToString();
-            JankenTe_TextP2_5.text = Player2_Te5.ToString();
+            JankenTe_TextP2_1.text = int_Player2_Te1.ToString();
+            JankenTe_TextP2_2.text = int_Player2_Te2.ToString();
+            JankenTe_TextP2_3.text = int_Player2_Te3.ToString();
+            JankenTe_TextP2_4.text = int_Player2_Te4.ToString();
+            JankenTe_TextP2_5.text = int_Player2_Te5.ToString();
         }
 
-        if (senderID == TestRoomControllerSC.PID3)
+        if (senderID == TestRoomControllerSC.string_PID3)
         {
             Debug.Log("現在プレイヤー3がボタン押したよ");
             Debug.Log("MyName  " + MyName);  // 今ボタン押した人
             SharePlayerTeNum_Player3();
-            JankenTe_TextP3_1.text = Player3_Te1.ToString();
-            JankenTe_TextP3_2.text = Player3_Te2.ToString();
-            JankenTe_TextP3_3.text = Player3_Te3.ToString();
-            JankenTe_TextP3_4.text = Player3_Te4.ToString();
-            JankenTe_TextP3_5.text = Player3_Te5.ToString();
+            JankenTe_TextP3_1.text = int_Player3_Te1.ToString();
+            JankenTe_TextP3_2.text = int_Player3_Te2.ToString();
+            JankenTe_TextP3_3.text = int_Player3_Te3.ToString();
+            JankenTe_TextP3_4.text = int_Player3_Te4.ToString();
+            JankenTe_TextP3_5.text = int_Player3_Te5.ToString();
         }
 
-        if (senderID == TestRoomControllerSC.PID4)
+        if (senderID == TestRoomControllerSC.string_PID4)
         {
             Debug.Log("現在プレイヤー4がボタン押したよ");
             Debug.Log("MyName  " + MyName);  // 今ボタン押した人
             SharePlayerTeNum_Player4();
-            JankenTe_TextP4_1.text = Player4_Te1.ToString();
-            JankenTe_TextP4_2.text = Player4_Te2.ToString();
-            JankenTe_TextP4_3.text = Player4_Te3.ToString();
-            JankenTe_TextP4_4.text = Player4_Te4.ToString();
-            JankenTe_TextP4_5.text = Player4_Te5.ToString();
+            JankenTe_TextP4_1.text = int_Player4_Te1.ToString();
+            JankenTe_TextP4_2.text = int_Player4_Te2.ToString();
+            JankenTe_TextP4_3.text = int_Player4_Te3.ToString();
+            JankenTe_TextP4_4.text = int_Player4_Te4.ToString();
+            JankenTe_TextP4_5.text = int_Player4_Te5.ToString();
         }
 
         Debug.Log("************ データ共有 SharePlayerTeNum おわり **********");
@@ -724,48 +733,48 @@ public void SelectJankenCard()
 
     public void ResetPlayerTeNum() // Player1 ～ Player4 のじゃんけん手 数値を -1 にリセット（int,text）
     {
-        Player1_Te1 = -1;
-        Player1_Te2 = -1;
-        Player1_Te3 = -1;
-        Player1_Te4 = -1;
-        Player1_Te5 = -1;
+        int_Player1_Te1 = -1;
+        int_Player1_Te2 = -1;
+        int_Player1_Te3 = -1;
+        int_Player1_Te4 = -1;
+        int_Player1_Te5 = -1;
 
-        Player2_Te1 = -1;
-        Player2_Te2 = -1;
-        Player2_Te3 = -1;
-        Player2_Te4 = -1;
-        Player2_Te5 = -1;
+        int_Player2_Te1 = -1;
+        int_Player2_Te2 = -1;
+        int_Player2_Te3 = -1;
+        int_Player2_Te4 = -1;
+        int_Player2_Te5 = -1;
 
-        Player3_Te1 = -1;
-        Player3_Te2 = -1;
-        Player3_Te3 = -1;
-        Player3_Te4 = -1;
-        Player3_Te5 = -1;
+        int_Player3_Te1 = -1;
+        int_Player3_Te2 = -1;
+        int_Player3_Te3 = -1;
+        int_Player3_Te4 = -1;
+        int_Player3_Te5 = -1;
 
-        Player4_Te1 = -1;
-        Player4_Te2 = -1;
-        Player4_Te3 = -1;
-        Player4_Te4 = -1;
-        Player4_Te5 = -1;
+        int_Player4_Te1 = -1;
+        int_Player4_Te2 = -1;
+        int_Player4_Te3 = -1;
+        int_Player4_Te4 = -1;
+        int_Player4_Te5 = -1;
 
-        JankenTe_TextP1_1.text =  "-1";
-        JankenTe_TextP1_2.text =  "-1";
-        JankenTe_TextP1_3.text =  "-1";
-        JankenTe_TextP1_4.text =  "-1";
-        JankenTe_TextP1_5.text =  "-1";
+        JankenTe_TextP1_1.text = "-1";
+        JankenTe_TextP1_2.text = "-1";
+        JankenTe_TextP1_3.text = "-1";
+        JankenTe_TextP1_4.text = "-1";
+        JankenTe_TextP1_5.text = "-1";
 
         JankenTe_TextP2_1.text = "-1";
         JankenTe_TextP2_2.text = "-1";
         JankenTe_TextP2_3.text = "-1";
         JankenTe_TextP2_4.text = "-1";
         JankenTe_TextP2_5.text = "-1";
-        
+
         JankenTe_TextP3_1.text = "-1";
         JankenTe_TextP3_2.text = "-1";
         JankenTe_TextP3_3.text = "-1";
         JankenTe_TextP3_4.text = "-1";
         JankenTe_TextP3_5.text = "-1";
-        
+
         JankenTe_TextP4_1.text = "-1";
         JankenTe_TextP4_2.text = "-1";
         JankenTe_TextP4_3.text = "-1";
@@ -781,32 +790,32 @@ public void SelectJankenCard()
         Debug.Log("************ CheckPlayerTeNum *********** **********");
 
         Debug.Log("***  Player1  ***********");
-        Debug.Log("Player1_Te1 " + Player1_Te1);
-        Debug.Log("Player1_Te2 " + Player1_Te2);
-        Debug.Log("Player1_Te3 " + Player1_Te3);
-        Debug.Log("Player1_Te4 " + Player1_Te4);
-        Debug.Log("Player1_Te5 " + Player1_Te5);
+        Debug.Log("int_Player1_Te1 " + int_Player1_Te1);
+        Debug.Log("int_Player1_Te2 " + int_Player1_Te2);
+        Debug.Log("int_Player1_Te3 " + int_Player1_Te3);
+        Debug.Log("int_Player1_Te4 " + int_Player1_Te4);
+        Debug.Log("int_Player1_Te5 " + int_Player1_Te5);
 
         Debug.Log("***  Player2  ***********");
-        Debug.Log("Player2_Te1 " + Player2_Te1);
-        Debug.Log("Player2_Te2 " + Player2_Te2);
-        Debug.Log("Player2_Te3 " + Player2_Te3);
-        Debug.Log("Player2_Te4 " + Player2_Te4);
-        Debug.Log("Player2_Te5 " + Player2_Te5);
+        Debug.Log("int_Player2_Te1 " + int_Player2_Te1);
+        Debug.Log("int_Player2_Te2 " + int_Player2_Te2);
+        Debug.Log("int_Player2_Te3 " + int_Player2_Te3);
+        Debug.Log("int_Player2_Te4 " + int_Player2_Te4);
+        Debug.Log("int_Player2_Te5 " + int_Player2_Te5);
 
         Debug.Log("***  Player3  ***********");
-        Debug.Log("Player3_Te1 " + Player3_Te1);
-        Debug.Log("Player3_Te2 " + Player3_Te2);
-        Debug.Log("Player3_Te3 " + Player3_Te3);
-        Debug.Log("Player3_Te4 " + Player3_Te4);
-        Debug.Log("Player3_Te5 " + Player3_Te5);
+        Debug.Log("int_Player3_Te1 " + int_Player3_Te1);
+        Debug.Log("int_Player3_Te2 " + int_Player3_Te2);
+        Debug.Log("int_Player3_Te3 " + int_Player3_Te3);
+        Debug.Log("int_Player3_Te4 " + int_Player3_Te4);
+        Debug.Log("int_Player3_Te5 " + int_Player3_Te5);
 
         Debug.Log("***  Player4  ***********");
-        Debug.Log("Player4_Te1 " + Player4_Te1);
-        Debug.Log("Player4_Te2 " + Player4_Te2);
-        Debug.Log("Player4_Te3 " + Player4_Te3);
-        Debug.Log("Player4_Te4 " + Player4_Te4);
-        Debug.Log("Player4_Te5 " + Player4_Te5);
+        Debug.Log("int_Player4_Te1 " + int_Player4_Te1);
+        Debug.Log("int_Player4_Te2 " + int_Player4_Te2);
+        Debug.Log("int_Player4_Te3 " + int_Player4_Te3);
+        Debug.Log("int_Player4_Te4 " + int_Player4_Te4);
+        Debug.Log("int_Player4_Te5 " + int_Player4_Te5);
     }
 
 
@@ -816,34 +825,33 @@ public void SelectJankenCard()
     // オーナーの場合
     if (stream.IsWriting)
     {
-        stream.SendNext(Player1_Te1);
-        stream.SendNext(Player2_Te1);
+        stream.SendNext(int_Player1_Te1);
+        stream.SendNext(int_Player2_Te1);
         if (TestRoomControllerSC.allPlayers.Length >= 3)
         {
-            stream.SendNext(Player3_Te1);
+            stream.SendNext(int_Player3_Te1);
         }
         if (TestRoomControllerSC.allPlayers.Length >= 4)
         {
-            stream.SendNext(Player4_Te1);
+            stream.SendNext(int_Player4_Te1);
         }
     }
-
     // オーナー以外の場合
     else
     {
-        this.receivePlayer1_Te1 = (int)stream.ReceiveNext();
-        SelectJankenMSC.Player1_Te1 = receivePlayer1_Te1;
-        this.receivePlayer2_Te1 = (int)stream.ReceiveNext();
-        SelectJankenMSC.Player2_Te1 = receivePlayer2_Te1;
+        this.receiveint_Player1_Te1 = (int)stream.ReceiveNext();
+        SelectJankenMSC.int_Player1_Te1 = receiveint_Player1_Te1;
+        this.receiveint_Player2_Te1 = (int)stream.ReceiveNext();
+        SelectJankenMSC.int_Player2_Te1 = receiveint_Player2_Te1;
         if (TestRoomControllerSC.allPlayers.Length >= 3)
         {
-            this.receivePlayer3_Te1 = (int)stream.ReceiveNext();
-            SelectJankenMSC.Player3_Te1 = receivePlayer3_Te1;
+            this.receiveint_Player3_Te1 = (int)stream.ReceiveNext();
+            SelectJankenMSC.int_Player3_Te1 = receiveint_Player3_Te1;
         }
         if (TestRoomControllerSC.allPlayers.Length >= 4)
         {
-            this.receivePlayer4_Te1 = (int)stream.ReceiveNext();
-            SelectJankenMSC.Player4_Te1 = receivePlayer4_Te1;
+            this.receiveint_Player4_Te1 = (int)stream.ReceiveNext();
+            SelectJankenMSC.int_Player4_Te1 = receiveint_Player4_Te1;
         }
     }
     */
@@ -863,109 +871,157 @@ public void SelectJankenCard()
 
     public void Reset_MyRireki_All() // Image
     {
-        te1_1.gameObject.GetComponent<Image>().sprite = null;
-        te1_2.gameObject.GetComponent<Image>().sprite = null;
-        te1_3.gameObject.GetComponent<Image>().sprite = null;
-        te1_4.gameObject.GetComponent<Image>().sprite = null;
-        te1_5.gameObject.GetComponent<Image>().sprite = null;
+        MyTeImg_1.gameObject.GetComponent<Image>().sprite = null;
+        MyTeImg_2.gameObject.GetComponent<Image>().sprite = null;
+        MyTeImg_3.gameObject.GetComponent<Image>().sprite = null;
+        MyTeImg_4.gameObject.GetComponent<Image>().sprite = null;
+        MyTeImg_5.gameObject.GetComponent<Image>().sprite = null;
+    }
+
+    public void ResetImg_PlayerRireki_All() // Image
+    {
+        Img_P1_Te1.gameObject.GetComponent<Image>().sprite = null;
+        Img_P1_Te2.gameObject.GetComponent<Image>().sprite = null;
+        Img_P1_Te3.gameObject.GetComponent<Image>().sprite = null;
+        Img_P1_Te4.gameObject.GetComponent<Image>().sprite = null;
+        Img_P1_Te5.gameObject.GetComponent<Image>().sprite = null;
+
+        Img_P2_Te1.gameObject.GetComponent<Image>().sprite = null;
+        Img_P2_Te2.gameObject.GetComponent<Image>().sprite = null;
+        Img_P2_Te3.gameObject.GetComponent<Image>().sprite = null;
+        Img_P2_Te4.gameObject.GetComponent<Image>().sprite = null;
+        Img_P2_Te5.gameObject.GetComponent<Image>().sprite = null;
+
+        Img_P3_Te1.gameObject.GetComponent<Image>().sprite = null;
+        Img_P3_Te2.gameObject.GetComponent<Image>().sprite = null;
+        Img_P3_Te3.gameObject.GetComponent<Image>().sprite = null;
+        Img_P3_Te4.gameObject.GetComponent<Image>().sprite = null;
+        Img_P3_Te5.gameObject.GetComponent<Image>().sprite = null;
+
+        Img_P4_Te1.gameObject.GetComponent<Image>().sprite = null;
+        Img_P4_Te2.gameObject.GetComponent<Image>().sprite = null;
+        Img_P4_Te3.gameObject.GetComponent<Image>().sprite = null;
+        Img_P4_Te4.gameObject.GetComponent<Image>().sprite = null;
+        Img_P4_Te5.gameObject.GetComponent<Image>().sprite = null;
     }
 
     /*
     #region// じゃんけんボタン 押せるかどうかのフラグ
-
     public void Push_Btn_A() // ボタン押したよ
     {
         Btn_A.interactable = false;
     }
-
     public void ToCanPush_A() // ボタン押せるようにするよ
     {
         Btn_A.interactable = true;
     }
-
     public void Push_Btn_B() // ボタン押したよ
     {
         Btn_B.interactable = false;
     }
-
     public void ToCanPush_B() // ボタン押せるようにするよ
     {
         Btn_B.interactable = true;
     }
-
     public void Push_Btn_C() // ボタン押したよ
     {
         Btn_C.interactable = false;
     }
-
     public void ToCanPush_C() // ボタン押せるようにするよ
     {
         Btn_C.interactable = true;
     }
-
     public void Push_Btn_D() // ボタン押したよ
     {
         Btn_D.interactable = false;
     }
-
     public void ToCanPush_D() // ボタン押せるようにするよ
     {
         Btn_D.interactable = true;
     }
-
     public void Push_Btn_E() // ボタン押したよ
     {
         Btn_E.interactable = false;
     }
-
     public void ToCanPush_E() // ボタン押せるようにするよ
     {
         Btn_E.interactable = true;
     }
-
     #endregion
     */
 
     public void GetMyJankenNum()
     {
-        ReMyJanken_Te4 = PushTeBtnMSC.MyJanken_Te1;
+        //ReInt_MyJanken_Te4 = PushTeBtnMSC.Int_MyJanken_Te1;
     }
 
 
     public void SharePlayerTeNum_Player1()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
     {
-        Player1_Te1 = MyJanken_Te1;
-        Player1_Te2 = MyJanken_Te2;
-        Player1_Te3 = MyJanken_Te3;
-        Player1_Te4 = MyJanken_Te4;
-        Player1_Te5 = MyJanken_Te5;
+        // int の反映
+        int_Player1_Te1 = Int_MyJanken_Te1;
+        int_Player1_Te2 = Int_MyJanken_Te2;
+        int_Player1_Te3 = Int_MyJanken_Te3;
+        int_Player1_Te4 = Int_MyJanken_Te4;
+        int_Player1_Te5 = Int_MyJanken_Te5;
+
+        // Image の反映
+        Img_P1_Te1.sprite = MyTeImg_1.sprite;
+        Img_P1_Te2.sprite = MyTeImg_2.sprite;
+        Img_P1_Te3.sprite = MyTeImg_3.sprite;
+        Img_P1_Te4.sprite = MyTeImg_4.sprite;
+        Img_P1_Te5.sprite = MyTeImg_5.sprite;
     }
 
     public void SharePlayerTeNum_Player2()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
     {
-        Player2_Te1 = MyJanken_Te1;
-        Player2_Te2 = MyJanken_Te2;
-        Player2_Te3 = MyJanken_Te3;
-        Player2_Te4 = MyJanken_Te4;
-        Player2_Te5 = MyJanken_Te5;
+        // int の反映
+        int_Player2_Te1 = Int_MyJanken_Te1;
+        int_Player2_Te2 = Int_MyJanken_Te2;
+        int_Player2_Te3 = Int_MyJanken_Te3;
+        int_Player2_Te4 = Int_MyJanken_Te4;
+        int_Player2_Te5 = Int_MyJanken_Te5;
+
+        // Image の反映
+        Img_P2_Te1.sprite = MyTeImg_1.sprite;
+        Img_P2_Te2.sprite = MyTeImg_2.sprite;
+        Img_P2_Te3.sprite = MyTeImg_3.sprite;
+        Img_P2_Te4.sprite = MyTeImg_4.sprite;
+        Img_P2_Te5.sprite = MyTeImg_5.sprite;
     }
 
     public void SharePlayerTeNum_Player3()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
     {
-        Player3_Te1 = MyJanken_Te1;
-        Player3_Te2 = MyJanken_Te2;
-        Player3_Te3 = MyJanken_Te3;
-        Player3_Te4 = MyJanken_Te4;
-        Player3_Te5 = MyJanken_Te5;
+        // int の反映
+        int_Player3_Te1 = Int_MyJanken_Te1;
+        int_Player3_Te2 = Int_MyJanken_Te2;
+        int_Player3_Te3 = Int_MyJanken_Te3;
+        int_Player3_Te4 = Int_MyJanken_Te4;
+        int_Player3_Te5 = Int_MyJanken_Te5;
+
+        // Image の反映
+        Img_P3_Te1.sprite = MyTeImg_1.sprite;
+        Img_P3_Te2.sprite = MyTeImg_2.sprite;
+        Img_P3_Te3.sprite = MyTeImg_3.sprite;
+        Img_P3_Te4.sprite = MyTeImg_4.sprite;
+        Img_P3_Te5.sprite = MyTeImg_5.sprite;
     }
 
     public void SharePlayerTeNum_Player4()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
     {
-        Player4_Te1 = MyJanken_Te1;
-        Player4_Te2 = MyJanken_Te2;
-        Player4_Te3 = MyJanken_Te3;
-        Player4_Te4 = MyJanken_Te4;
-        Player4_Te5 = MyJanken_Te5;
+        // int の反映
+        int_Player4_Te1 = Int_MyJanken_Te1;
+        int_Player4_Te2 = Int_MyJanken_Te2;
+        int_Player4_Te3 = Int_MyJanken_Te3;
+        int_Player4_Te4 = Int_MyJanken_Te4;
+        int_Player4_Te5 = Int_MyJanken_Te5;
+
+        // Image の反映
+        Img_P4_Te1.sprite = MyTeImg_1.sprite;
+        Img_P4_Te2.sprite = MyTeImg_2.sprite;
+        Img_P4_Te3.sprite = MyTeImg_3.sprite;
+        Img_P4_Te4.sprite = MyTeImg_4.sprite;
+        Img_P4_Te5.sprite = MyTeImg_5.sprite;
     }
 
     public void SelectGu()
@@ -974,28 +1030,28 @@ public void SelectJankenCard()
 
         if (count_a == 1)
         {
-            te1_1.gameObject.GetComponent<Image>().sprite = sprite_Gu;
-            MyNumTe1_1.text = "0";
+            MyTeImg_1.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyNumTeText_1.text = "0";
         }
         else if (count_a == 2)
         {
-            te1_2.gameObject.GetComponent<Image>().sprite = sprite_Gu;
-            MyNumTe1_2.text = "0";
+            MyTeImg_2.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyNumTeText_2.text = "0";
         }
         else if (count_a == 3)
         {
-            te1_3.gameObject.GetComponent<Image>().sprite = sprite_Gu;
-            MyNumTe1_3.text = "0";
+            MyTeImg_3.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyNumTeText_3.text = "0";
         }
         else if (count_a == 4)
         {
-            te1_4.gameObject.GetComponent<Image>().sprite = sprite_Gu;
-            MyNumTe1_4.text = "0";
+            MyTeImg_4.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyNumTeText_4.text = "0";
         }
         else if (count_a == 5)
         {
-            te1_5.gameObject.GetComponent<Image>().sprite = sprite_Gu;
-            MyNumTe1_5.text = "0";
+            MyTeImg_5.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyNumTeText_5.text = "0";
         }
         else
         {
@@ -1017,31 +1073,31 @@ public void SelectJankenCard()
 
         if (count_a == 1)
         {
-            te1_1.gameObject.GetComponent<Image>().sprite = sprite_Choki;
-            //Text NumTe = MyNumTe1_1.GetComponent<Text>();
+            MyTeImg_1.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            //Text NumTe = MyNumTeText_1.GetComponent<Text>();
             //NumTe.text = "1";
-            MyNumTe1_1.text = "1";
+            MyNumTeText_1.text = "1";
         }
         else if (count_a == 2)
         {
-            te1_2.gameObject.GetComponent<Image>().sprite = sprite_Choki;
-            //MyNumTe1_2.gameObject.GetComponent<Text>().text = "-1";
-            MyNumTe1_2.text = "1";
+            MyTeImg_2.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            //MyNumTeText_2.gameObject.GetComponent<Text>().text = "-1";
+            MyNumTeText_2.text = "1";
         }
         else if (count_a == 3)
         {
-            te1_3.gameObject.GetComponent<Image>().sprite = sprite_Choki;
-            MyNumTe1_3.text = "1";
+            MyTeImg_3.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyNumTeText_3.text = "1";
         }
         else if (count_a == 4)
         {
-            te1_4.gameObject.GetComponent<Image>().sprite = sprite_Choki;
-            MyNumTe1_4.text = "1";
+            MyTeImg_4.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyNumTeText_4.text = "1";
         }
         else if (count_a == 5)
         {
-            te1_5.gameObject.GetComponent<Image>().sprite = sprite_Choki;
-            MyNumTe1_5.text = "1";
+            MyTeImg_5.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyNumTeText_5.text = "1";
         }
         else
         {
@@ -1063,28 +1119,28 @@ public void SelectJankenCard()
 
         if (count_a == 1)
         {
-            te1_1.gameObject.GetComponent<Image>().sprite = sprite_Pa;
-            MyNumTe1_1.text = "2";
+            MyTeImg_1.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyNumTeText_1.text = "2";
         }
         else if (count_a == 2)
         {
-            te1_2.gameObject.GetComponent<Image>().sprite = sprite_Pa;
-            MyNumTe1_2.text = "2";
+            MyTeImg_2.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyNumTeText_2.text = "2";
         }
         else if (count_a == 3)
         {
-            te1_3.gameObject.GetComponent<Image>().sprite = sprite_Pa;
-            MyNumTe1_3.text = "2";
+            MyTeImg_3.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyNumTeText_3.text = "2";
         }
         else if (count_a == 4)
         {
-            te1_4.gameObject.GetComponent<Image>().sprite = sprite_Pa;
-            MyNumTe1_4.text = "2";
+            MyTeImg_4.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyNumTeText_4.text = "2";
         }
         else if (count_a == 5)
         {
-            te1_5.gameObject.GetComponent<Image>().sprite = sprite_Pa;
-            MyNumTe1_5.text = "2";
+            MyTeImg_5.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyNumTeText_5.text = "2";
         }
         else
         {
@@ -1106,31 +1162,31 @@ public void SelectJankenCard()
         Debug.Log(PTN + ": PTN");
 
         Debug.Log("現在プレイヤー1がボタン押したよ");
-        if (MyJanken_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+        if (Int_MyJanken_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
-            Debug.Log("MyJanken_Te1 代入前" + MyJanken_Te1);
-            MyJanken_Te1 = PTN;
-            Debug.Log("MyJanken_Te1 代入後" + MyJanken_Te1);
+            Debug.Log("Int_MyJanken_Te1 代入前" + Int_MyJanken_Te1);
+            Int_MyJanken_Te1 = PTN;
+            Debug.Log("Int_MyJanken_Te1 代入後" + Int_MyJanken_Te1);
             Debug.Log("プレイヤー1_1 手のセットOK");
         }
-        else if (MyJanken_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+        else if (Int_MyJanken_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
-            MyJanken_Te2 = PTN;
+            Int_MyJanken_Te2 = PTN;
             Debug.Log("プレイヤー1_2 手のセットOK");
         }
-        else if (MyJanken_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+        else if (Int_MyJanken_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
-            MyJanken_Te3 = PTN;
+            Int_MyJanken_Te3 = PTN;
             Debug.Log("プレイヤー1_3 手のセットOK");
         }
-        else if (MyJanken_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+        else if (Int_MyJanken_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
-            MyJanken_Te4 = PTN;
+            Int_MyJanken_Te4 = PTN;
             Debug.Log("プレイヤー1_4 手のセットOK");
         }
-        else if (MyJanken_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
+        else if (Int_MyJanken_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
-            MyJanken_Te5 = PTN;
+            Int_MyJanken_Te5 = PTN;
             Debug.Log("プレイヤー1_5 手のセットOK");
         }
         else
@@ -1320,25 +1376,32 @@ public void SelectJankenCard()
 
     #region// じゃんけん手ナンバー リセット
 
-    public void ResetMyNumTe_All()  // 数値を -1 にリセット（text）
+    public void ResetMyNumTe_All()  // 数値を -1 にリセット（int,text）
     {
         count_a = 1;
 
-        MyNumTe1_1.text = "-1";
-        MyNumTe1_2.text = "-1";
-        MyNumTe1_3.text = "-1";
-        MyNumTe1_4.text = "-1";
-        MyNumTe1_5.text = "-1";
+        MyNumTeText_1.text = "-1";
+        MyNumTeText_2.text = "-1";
+        MyNumTeText_3.text = "-1";
+        MyNumTeText_4.text = "-1";
+        MyNumTeText_5.text = "-1";
+
+        Int_MyJanken_Te1 = -1;
+        Int_MyJanken_Te2 = -1;
+        Int_MyJanken_Te3 = -1;
+        Int_MyJanken_Te4 = -1;
+        Int_MyJanken_Te5 = -1;
     }
     #endregion
 
     public void ToNextTurn() // 次のターンへ移る プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
     {
         Debug.Log("ToNextTurn() // 次のターンへ移る");
-        ResetMyNumTe_All();      // MyNumTe 数値を -1 にリセット（text）
-        Reset_MyRireki_All();  // MyRireki 数値を -1 にリセット（Image）
+        ResetMyNumTe_All();      // MyNumTe 数値を -1 にリセット（int,text）
+        Reset_MyRireki_All();  // MyRireki イメージを null にリセット（Image）
         ToCanPush_All();       // じゃんけんボタン ボタン押せるようにする(フラグのリセット）（bool）
         ResetPlayerTeNum();    // Player1 ～ Player4 のじゃんけん手 数値を -1 にリセット（int,text）
+        ResetImg_PlayerRireki_All(); // Player1 ～ Player4 のじゃんけん手 履歴イメージを null にリセット（Image）
     }
 
     // End

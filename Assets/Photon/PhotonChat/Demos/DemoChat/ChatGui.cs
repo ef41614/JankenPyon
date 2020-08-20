@@ -26,7 +26,7 @@ using Photon.Pun;
 /// some friends are already set in the Chat demo "DemoChat-Scene", 'Joe', 'Jane' and 'Bob', simply log with them so that you can see the status changes in the Interface
 ///
 /// Workflow:
-/// Create ChatClient, Connect to a server with your AppID, Authenticate the user (apply a unique name,)
+/// Create ChatClient, Connect to a server with your ApPID, Authenticate the user (apply a unique name,)
 /// and subscribe to some channels.
 /// Subscribe a channel before you publish to that channel!
 ///
@@ -55,7 +55,7 @@ public class ChatGui : MonoBehaviour, IChatClientListener
     protected internal ChatAppSettings chatAppSettings;
 
 
-    public GameObject missingAppIdErrorPanel;
+    public GameObject missingApPIDErrorPanel;
 	public GameObject ConnectingLabel;
 
 	public RectTransform ChatPanel;     // set in inspector (to enable/disable panel)
@@ -131,12 +131,12 @@ public class ChatGui : MonoBehaviour, IChatClientListener
         this.chatAppSettings = PhotonNetwork.PhotonServerSettings.AppSettings.GetChatSettings();
         #endif
 
-        bool appIdPresent = !string.IsNullOrEmpty(this.chatAppSettings.AppId);
+        bool appIDPresent = !string.IsNullOrEmpty(this.chatAppSettings.AppId);
 
-	    this.missingAppIdErrorPanel.SetActive(!appIdPresent);
-		this.UserIdFormPanel.gameObject.SetActive(appIdPresent);
+	    this.missingApPIDErrorPanel.SetActive(!appIDPresent);
+		this.UserIdFormPanel.gameObject.SetActive(appIDPresent);
 
-		if (!appIdPresent)
+		if (!appIDPresent)
 		{
 			Debug.LogError("You need to set the chat app ID in the PhotonServerSettings file in order to continue.");
 		}

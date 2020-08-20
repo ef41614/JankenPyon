@@ -191,7 +191,7 @@ LoadBalancing:
     Added: Client-side checks and limits for OpFindFriends.
     Added: Optional parameter sendAuthCookie to OpLeaveRoom. The app can control what's passed from Photon to a server via WebHook.
     Changes: The room list for lobbies is no longer part of the LoadBalancingClient. Instead, implement the callback for the changed room list.
-    Added: AppSettings, a base class to host AppId and some settings for a title. This will help make it available across products. Right now, the LoadBalancingClient is not using it yet.
+    Added: AppSettings, a base class to host Apstring_PID and some settings for a title. This will help make it available across products. Right now, the LoadBalancingClient is not using it yet.
     Changed: Player.ID is now .ActorNumber, which mirrors the server's naming.
     Fixed: Unity compile defines to support Unity 2018,
 
@@ -449,7 +449,7 @@ LoadBalancing (Realtime and Turnbased API)
     Internal: Related to the refactoring of Join/Create, the LoadBalancingClient now creates a Room instance when the client arrived on the GameServer (before, it got created in the initial "create" call).
 Chat
     Added: More sanity checks on operations (empty userId or secret, max friends).
-    Added: Special debug logging when the server returns an error for "Operation Unknown". In this case, it's highly likely that you don't use a Chat AppId.
+    Added: Special debug logging when the server returns an error for "Operation Unknown". In this case, it's highly likely that you don't use a Chat Apstring_PID.
     Added: More helpful error logging.
 
 *** Version 4.0.0.10 (14. July 2015 - rev2988)
@@ -949,7 +949,7 @@ Internal:
 - Note: The API of the client libraries didn't change. The new features were added on top of the known API
 - Added: VS2010 solutions for DotNet and Windows Phone SDKs containing the demos and APIs in the package
 - Added: readme.txt with initial help to setup the Cloud/Loadbalancing demos
-- Added: default appId for Loadblanacing demos: "<insert your appid here>"
+- Added: default apstring_PID for Loadblanacing demos: "<insert your apstring_PID here>"
 
 *** Version 3.0.0.10
 - Added: When UDP StartConnection (internal method) fails, callbacks to OnStatusChanged(StatusCode.Disconnect) are now done additionally to the SecurityExceptionOnConnect and ExceptionOnConnect calls. This happens direcly inside PhotonPeer.Connect()!

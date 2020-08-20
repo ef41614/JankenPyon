@@ -30,7 +30,7 @@ Integration
 
 Clean PUN Import (no demos)
     To get a clean import of PUN, just skip all folders named "Demos".
-    The folder "UtilityScripts" can be useful for rapid prototyping but the components are optional.
+    The folder "UtilityScripts" can be useful for rastring_PID prototyping but the components are optional.
 
 
 Server
@@ -49,13 +49,13 @@ Server
 
 PUN+ Subscriptions
     Follow these steps when you bought an asset that includes a Photon Cloud subscription:
-        ï Sign in and open the Dashboard.                       https://dashboard.photonengine.com
+        ÅESign in and open the Dashboard.                       https://dashboard.photonengine.com
           Use an existing Photon Cloud Account or register.
-        ï Select the Application/Subscription to upgrade and click "Add Coupon / PUN+".
-        ï Enter your Unity Invoice Number.
+        ÅESelect the Application/Subscription to upgrade and click "Add Coupon / PUN+".
+        ÅEEnter your Unity Invoice Number.
 
-        ï Find the App ID on: https://dashboard.photonengine.com
-        ï Find your Unity Invoice Number in the Unity AssetStore:
+        ÅEFind the App ID on: https://dashboard.photonengine.com
+        ÅEFind your Unity Invoice Number in the Unity AssetStore:
             https://www.assetstore.unity3d.com/en/#!/account/transactions
             Or while logged in to the Asset Store, click on your name on the top right.
             From the drop-down select the payment method you used in your purchase.
