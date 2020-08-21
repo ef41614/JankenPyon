@@ -44,6 +44,66 @@ MonoBehaviour:
   - CheckPlayerTeNum
   - PlayerIDCheck
   - SharePlayerTeNum
+  - SharePlayerTeNum_Player1_1_is_Gu
+  - SharePlayerTeNum_Player1_1_is_Choki
+  - SharePlayerTeNum_Player1_1_is_Pa
+  - SharePlayerTeNum_Player1_2_is_Choki
+  - SharePlayerTeNum_Player1_2_is_Gu
+  - SharePlayerTeNum_Player1_2_is_Pa
+  - SharePlayerTeNum_Player1_3_is_Choki
+  - SharePlayerTeNum_Player1_3_is_Gu
+  - SharePlayerTeNum_Player1_3_is_Pa
+  - SharePlayerTeNum_Player1_4_is_Choki
+  - SharePlayerTeNum_Player1_4_is_Gu
+  - SharePlayerTeNum_Player1_4_is_Pa
+  - SharePlayerTeNum_Player1_5_is_Choki
+  - SharePlayerTeNum_Player1_5_is_Gu
+  - SharePlayerTeNum_Player1_5_is_Pa
+  - SharePlayerTeNum_Player2_1_is_Choki
+  - SharePlayerTeNum_Player2_1_is_Gu
+  - SharePlayerTeNum_Player2_1_is_Pa
+  - SharePlayerTeNum_Player2_2_is_Choki
+  - SharePlayerTeNum_Player2_2_is_Gu
+  - SharePlayerTeNum_Player2_2_is_Pa
+  - SharePlayerTeNum_Player2_3_is_Choki
+  - SharePlayerTeNum_Player2_3_is_Gu
+  - SharePlayerTeNum_Player2_3_is_Pa
+  - SharePlayerTeNum_Player2_4_is_Choki
+  - SharePlayerTeNum_Player2_4_is_Gu
+  - SharePlayerTeNum_Player2_4_is_Pa
+  - SharePlayerTeNum_Player2_5_is_Choki
+  - SharePlayerTeNum_Player2_5_is_Gu
+  - SharePlayerTeNum_Player2_5_is_Pa
+  - SharePlayerTeNum_Player3_1_is_Choki
+  - SharePlayerTeNum_Player3_1_is_Gu
+  - SharePlayerTeNum_Player3_1_is_Pa
+  - SharePlayerTeNum_Player3_2_is_Choki
+  - SharePlayerTeNum_Player3_2_is_Gu
+  - SharePlayerTeNum_Player3_2_is_Pa
+  - SharePlayerTeNum_Player3_3_is_Choki
+  - SharePlayerTeNum_Player3_3_is_Gu
+  - SharePlayerTeNum_Player3_3_is_Pa
+  - SharePlayerTeNum_Player3_4_is_Choki
+  - SharePlayerTeNum_Player3_4_is_Gu
+  - SharePlayerTeNum_Player3_4_is_Pa
+  - SharePlayerTeNum_Player3_5_is_Choki
+  - SharePlayerTeNum_Player3_5_is_Gu
+  - SharePlayerTeNum_Player3_5_is_Pa
+  - SharePlayerTeNum_Player4_1_is_Choki
+  - SharePlayerTeNum_Player4_1_is_Gu
+  - SharePlayerTeNum_Player4_1_is_Pa
+  - SharePlayerTeNum_Player4_2_is_Choki
+  - SharePlayerTeNum_Player4_2_is_Gu
+  - SharePlayerTeNum_Player4_2_is_Pa
+  - SharePlayerTeNum_Player4_3_is_Choki
+  - SharePlayerTeNum_Player4_3_is_Gu
+  - SharePlayerTeNum_Player4_3_is_Pa
+  - SharePlayerTeNum_Player4_4_is_Choki
+  - SharePlayerTeNum_Player4_4_is_Gu
+  - SharePlayerTeNum_Player4_4_is_Pa
+  - SharePlayerTeNum_Player4_5_is_Choki
+  - SharePlayerTeNum_Player4_5_is_Gu
+  - SharePlayerTeNum_Player4_5_is_Pa
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
