@@ -8,12 +8,15 @@ using System.Linq;
 using System;
 using say;　// 対象のスクリプトの情報を取得
 using BEFOOL.PhotonTest;
+using DG.Tweening;
 //using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class SelectJanken : MonoBehaviour, IPunObservable
 {
     [SerializeField]
     public int count_a = 1;
+    public int NumLivePlayer = 4; // 残りのプレイヤー人数
+    public int countHanteiTurn = 1; // ジャンケン勝ち負け判定のループ回数
 
     public Sprite sprite_Gu;
     public Sprite sprite_Choki;
@@ -87,36 +90,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public int Int_MyJanken_Te4 = -1;
     public int Int_MyJanken_Te5 = -1;
 
-    public int ReInt_MyJanken_Te1 = -1;
-    public int ReInt_MyJanken_Te2 = -1;
-    public int ReInt_MyJanken_Te3 = -1;
-    public int ReInt_MyJanken_Te4 = -1;
-    public int ReInt_MyJanken_Te5 = -1;
-
-    public int _int_Player1_Te1 = -1;
-    public int _int_Player1_Te2 = -1;
-    public int _int_Player1_Te3 = -1;
-    public int _int_Player1_Te4 = -1;
-    public int _int_Player1_Te5 = -1;
-
-    public int _int_Player2_Te1 = -1;
-    public int _int_Player2_Te2 = -1;
-    public int _int_Player2_Te3 = -1;
-    public int _int_Player2_Te4 = -1;
-    public int _int_Player2_Te5 = -1;
-
-    public int _int_Player3_Te1 = -1;
-    public int _int_Player3_Te2 = -1;
-    public int _int_Player3_Te3 = -1;
-    public int _int_Player3_Te4 = -1;
-    public int _int_Player3_Te5 = -1;
-
-    public int _int_Player4_Te1 = -1;
-    public int _int_Player4_Te2 = -1;
-    public int _int_Player4_Te3 = -1;
-    public int _int_Player4_Te4 = -1;
-    public int _int_Player4_Te5 = -1;
-
     public int int_Player1_Te1 = -1;
     public int int_Player1_Te2 = -1;
     public int int_Player1_Te3 = -1;
@@ -136,39 +109,24 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public int int_Player3_Te5 = -1;
 
     public int int_Player4_Te1 = -1;
-    //    {
-    //      get { return _int_Player4_Te1; }
-    //    set { _int_Player4_Te1 = value; RequestOwner(); }
-    //}
     public int int_Player4_Te2 = -1;
     public int int_Player4_Te3 = -1;
     public int int_Player4_Te4 = -1;
     public int int_Player4_Te5 = -1;
 
-    public int receiveint_Player1_Te1 = -5;
-    public int receiveint_Player1_Te2 = -5;
-    public int receiveint_Player1_Te3 = -5;
-    public int receiveint_Player1_Te4 = -5;
-    public int receiveint_Player1_Te5 = -5;
+    public int KP1 = -1; // ジャンケン勝敗判定に使う、仮の値 （0：グー、1：チョキ、2：パー）
+    public int KP2 = -1;
+    public int KP3 = -1;
+    public int KP4 = -1;
 
-    public int receiveint_Player2_Te1 = -5;
-    public int receiveint_Player2_Te2 = -5;
-    public int receiveint_Player2_Te3 = -5;
-    public int receiveint_Player2_Te4 = -5;
-    public int receiveint_Player2_Te5 = -5;
+    public int alivePlayer1 = 1; // ジャンケンで残留してれば 1 、負けたら -1
+    public int alivePlayer2 = 1;
+    public int alivePlayer3 = 1;
+    public int alivePlayer4 = 1;
 
-    public int receiveint_Player3_Te1 = -5;
-    public int receiveint_Player3_Te2 = -5;
-    public int receiveint_Player3_Te3 = -5;
-    public int receiveint_Player3_Te4 = -5;
-    public int receiveint_Player3_Te5 = -5;
-
-    public int receiveint_Player4_Te1 = -5;
-    public int receiveint_Player4_Te2 = -5;
-    public int receiveint_Player4_Te3 = -5;
-    public int receiveint_Player4_Te4 = -5;
-    public int receiveint_Player4_Te5 = -5;
-
+    public bool NoneGu = false;
+    public bool NoneChoki = false;
+    public bool NonePa = false;
 
     public string PresentPlayerID;
     private PhotonView photonView = null;
@@ -226,6 +184,461 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
     }
+
+    #region// Hantei_Group  ジャンケン勝敗 判定 一連のグループ
+
+    public void Hantei_Stream()
+    {
+        Debug.Log("ジャンケン勝敗 判定開始");
+        ResetAlivePlayer();  // 各種カウンター リセット
+        while (NumLivePlayer > 1) // ジャンケンで残留している人数が 2名以上であるならば
+        {
+            SetKP_counter();    // ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
+            Syohai_Hantei();    // N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定 → 人数が減る
+            CountLivePlayer();  // 残留しているプレイヤー人数をカウントする
+            countHanteiTurn++;  // N回目 のループ を 1 進める ： NumLivePlayer を取得
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(2f, () => WaitTime_2nd());
+            Debug.Log("NumLivePlayer 残留プレイヤー数 ： " + NumLivePlayer);
+        }
+        Debug.Log("ジャンケン勝敗 判定おわり");
+    }
+
+    public void WaitTime_2nd()
+    {
+        Debug.Log("2秒待ち");
+    }
+
+    public void ResetAlivePlayer()
+    {
+        alivePlayer1 = 1; // ジャンケンで残留してれば 1 、負けたら 0
+        alivePlayer2 = 1;
+        alivePlayer3 = 1;
+        alivePlayer4 = 1;
+
+        countHanteiTurn = 1;
+    }
+
+    public void CountLivePlayer()    // 残留しているプレイヤー人数をカウントする
+    {
+        NumLivePlayer = alivePlayer1 + alivePlayer2 + alivePlayer3 + alivePlayer4;
+    }
+
+    public void SetKP_counter() // ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
+    {
+        if (countHanteiTurn == 1)
+        {
+            KP1 = int_Player1_Te1;
+            KP2 = int_Player2_Te1;
+            KP3 = int_Player3_Te1;
+            KP4 = int_Player4_Te1;
+        }
+        else if (countHanteiTurn == 2)
+        {
+            KP1 = int_Player1_Te2;
+            KP2 = int_Player2_Te2;
+            KP3 = int_Player3_Te2;
+            KP4 = int_Player4_Te2;
+        }
+        else if (countHanteiTurn == 3)
+        {
+            KP1 = int_Player1_Te3;
+            KP2 = int_Player2_Te3;
+            KP3 = int_Player3_Te3;
+            KP4 = int_Player4_Te3;
+        }
+        else if (countHanteiTurn == 4)
+        {
+            KP1 = int_Player1_Te4;
+            KP2 = int_Player2_Te4;
+            KP3 = int_Player3_Te4;
+            KP4 = int_Player4_Te4;
+        }
+        else if (countHanteiTurn == 5)
+        {
+            KP1 = int_Player1_Te5;
+            KP2 = int_Player2_Te5;
+            KP3 = int_Player3_Te5;
+            KP4 = int_Player4_Te5;
+        }
+        else
+        {
+            Debug.Log("countHanteiTurn ６回 超えました");
+        }
+    }
+
+    public void Check_Gu_Existence() // NoneGu の判定を返す
+    {
+        bool NoneGuP1 = true;
+        bool NoneGuP2 = true;
+        bool NoneGuP3 = true;
+        bool NoneGuP4 = true;
+
+        if (alivePlayer1 == 1) // Player1 が生きている
+        {
+            if (KP1 != 0) // グー ではない
+            {
+                NoneGuP1 = true; // グー 無し
+            }
+            else
+            {
+                NoneGuP1 = false; // グー 有り
+            }
+        }
+        else  // Player1 が脱落後
+        {
+            NoneGuP1 = true; // グー無しON
+        }
+
+        if (alivePlayer2 == 1) // Player2 が生きている
+        {
+            if (KP2 != 0) // グー ではない
+            {
+                NoneGuP2 = true; // グー 無し
+            }
+            else
+            {
+                NoneGuP2 = false; // グー 有り
+            }
+        }
+        else  // Player2 が脱落後
+        {
+            NoneGuP2 = true; // グー無しON
+        }
+
+        if (alivePlayer3 == 1) // Player3 が生きている
+        {
+            if (KP3 != 0) // グー ではない
+            {
+                NoneGuP3 = true; // グー 無し
+            }
+            else
+            {
+                NoneGuP3 = false; // グー 有り
+            }
+        }
+        else  // Player3 が脱落後
+        {
+            NoneGuP3 = true; // グー無しON
+        }
+
+        if (alivePlayer4 == 1) // Player4 が生きている
+        {
+            if (KP4 != 0) // グー ではない
+            {
+                NoneGuP4 = true; // グー 無し
+            }
+            else
+            {
+                NoneGuP4 = false; // グー 有り
+            }
+        }
+        else  // Player4 が脱落後
+        {
+            NoneGuP4 = true; // グー無しON
+        }
+
+        if (NoneGuP1 && NoneGuP2 && NoneGuP3 && NoneGuP4)
+        {
+            NoneGu = true; // グー無しON
+        }
+        else
+        {
+            NoneGu = false; // グー無しOFF
+        }
+    }
+
+    public void Check_Choki_Existence() // NoneChoki の判定を返す
+    {
+        bool NoneChokiP1 = true;
+        bool NoneChokiP2 = true;
+        bool NoneChokiP3 = true;
+        bool NoneChokiP4 = true;
+
+        if (alivePlayer1 == 1) // Player1 が生きている
+        {
+            if (KP1 != 0) // チョキ ではない
+            {
+                NoneChokiP1 = true; // チョキ 無し
+            }
+            else
+            {
+                NoneChokiP1 = false; // チョキ 有り
+            }
+        }
+        else  // Player1 が脱落後
+        {
+            NoneChokiP1 = true; // チョキ無しON
+        }
+
+        if (alivePlayer2 == 1) // Player2 が生きている
+        {
+            if (KP2 != 0) // チョキ ではない
+            {
+                NoneChokiP2 = true; // チョキ 無し
+            }
+            else
+            {
+                NoneChokiP2 = false; // チョキ 有り
+            }
+        }
+        else  // Player2 が脱落後
+        {
+            NoneChokiP2 = true; // チョキ無しON
+        }
+
+        if (alivePlayer3 == 1) // Player3 が生きている
+        {
+            if (KP3 != 0) // チョキ ではない
+            {
+                NoneChokiP3 = true; // チョキ 無し
+            }
+            else
+            {
+                NoneChokiP3 = false; // チョキ 有り
+            }
+        }
+        else  // Player3 が脱落後
+        {
+            NoneChokiP3 = true; // チョキ無しON
+        }
+
+        if (alivePlayer4 == 1) // Player4 が生きている
+        {
+            if (KP4 != 0) // チョキ ではない
+            {
+                NoneChokiP4 = true; // チョキ 無し
+            }
+            else
+            {
+                NoneChokiP4 = false; // チョキ 有り
+            }
+        }
+        else  // Player4 が脱落後
+        {
+            NoneChokiP4 = true; // チョキ無しON
+        }
+
+        if (NoneChokiP1 && NoneChokiP2 && NoneChokiP3 && NoneChokiP4)
+        {
+            NoneChoki = true; // チョキ無しON
+        }
+        else
+        {
+            NoneChoki = false; // チョキ無しOFF
+        }
+    }
+
+    public void Check_Pa_Existence() // NonePa の判定を返す
+    {
+        bool NonePaP1 = true;
+        bool NonePaP2 = true;
+        bool NonePaP3 = true;
+        bool NonePaP4 = true;
+
+        if (alivePlayer1 == 1) // Player1 が生きている
+        {
+            if (KP1 != 0) // パー ではない
+            {
+                NonePaP1 = true; // パー 無し
+            }
+            else
+            {
+                NonePaP1 = false; // パー 有り
+            }
+        }
+        else  // Player1 が脱落後
+        {
+            NonePaP1 = true; // パー無しON
+        }
+
+        if (alivePlayer2 == 1) // Player2 が生きている
+        {
+            if (KP2 != 0) // パー ではない
+            {
+                NonePaP2 = true; // パー 無し
+            }
+            else
+            {
+                NonePaP2 = false; // パー 有り
+            }
+        }
+        else  // Player2 が脱落後
+        {
+            NonePaP2 = true; // パー無しON
+        }
+
+        if (alivePlayer3 == 1) // Player3 が生きている
+        {
+            if (KP3 != 0) // パー ではない
+            {
+                NonePaP3 = true; // パー 無し
+            }
+            else
+            {
+                NonePaP3 = false; // パー 有り
+            }
+        }
+        else  // Player3 が脱落後
+        {
+            NonePaP3 = true; // パー無しON
+        }
+
+        if (alivePlayer4 == 1) // Player4 が生きている
+        {
+            if (KP4 != 0) // パー ではない
+            {
+                NonePaP4 = true; // パー 無し
+            }
+            else
+            {
+                NonePaP4 = false; // パー 有り
+            }
+        }
+        else  // Player4 が脱落後
+        {
+            NonePaP4 = true; // パー無しON
+        }
+
+        if (NonePaP1 && NonePaP2 && NonePaP3 && NonePaP4)
+        {
+            NonePa = true; // パー無しON
+        }
+        else
+        {
+            NonePa = false; // パー無しOFF
+        }
+    }
+
+    public void Syohai_Hantei()  // N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定 → 人数が減る
+    {
+        Check_Gu_Existence();     // N回目の すべてのプレイヤーの手 の中に グー(0)   があるか ： NoneGu を取得
+        Check_Choki_Existence();  // N回目の すべてのプレイヤーの手 の中に チョキ(1) があるか ： NoneChoki を取得
+        Check_Pa_Existence();     // N回目の すべてのプレイヤーの手 の中に パー(2)   があるか ： NonePa を取得
+
+        if (NoneGu) // 全員 Gu 無し (ちょき か ぱー)
+        {
+            if (NoneChoki) // 全員 Choki 無し (ぱー のみ)
+            {
+                Aiko(); // ぱー のみ
+            }
+            else // ちょき か ぱー
+            {
+                Win_Choki();
+                Lose_Pa();    // ぱー の人のみ 脱落
+            }
+        }
+        else if (NoneChoki) //(全員 Choki 無し) ぐー か ぱー （↓これ以降、ぐー は必ずある）
+        {
+            if (NonePa) //(全員 Pa 無し) ぐー のみ
+            {
+                Aiko(); // ぐー のみ
+            }
+            else // ぐー か ぱー
+            {
+                Win_Pa();
+                Lose_Gu();  // ぐー の人のみ 脱落
+            }
+        }
+        else if (NonePa) //(全員 Pa 無し)  ぐー か ちょき （↓これ以降、ぐー と ちょき は必ずある）
+        {
+            if (NoneGu) //(全員 Gu 無し) ちょき のみ
+            {
+                Aiko(); // ちょき のみ
+            }
+            else // ぐー か ちょき
+            {
+                Win_Gu();
+                Lose_Choki();  // ちょき の人のみ 脱落
+            }
+        }
+        else // ぐー か ちょき か ぱー（↓これ以降、ぐー と ちょき と ぱー は必ずある）
+        {
+            Aiko(); // ぐー ちょき ぱー 全部
+        }
+    }
+
+    public void Aiko()
+    {
+        // 残っている人、全員残留
+    }
+
+    public void Win_Gu()
+    {
+        // ぐー の人のみ 残留
+    }
+
+    public void Win_Choki()
+    {
+        // ちょき の人のみ 残留
+    }
+
+    public void Win_Pa()
+    {
+        // ぱー の人のみ 残留
+    }
+
+    public void Lose_Gu()   // ぐー の人のみ 脱落
+    {
+       if(KP1 == 0)
+       {
+            alivePlayer1 = 0;
+       }
+       if (KP2 == 0)
+       {
+            alivePlayer2 = 0;
+       }
+       if (KP3 == 0)
+       {
+            alivePlayer3 = 0;
+       }
+       if (KP4 == 0)
+       {
+            alivePlayer4 = 0;
+       }
+    }
+
+    public void Lose_Choki()  // ちょき の人のみ 脱落
+    {
+        if (KP1 == 1)
+        {
+            alivePlayer1 = 0;
+        }
+        if (KP2 == 1)
+        {
+            alivePlayer2 = 0;
+        }
+        if (KP3 == 1)
+        {
+            alivePlayer3 = 0;
+        }
+        if (KP4 == 1)
+        {
+            alivePlayer4 = 0;
+        }
+    }
+
+    public void Lose_Pa()  // ぱー の人のみ 脱落
+    {
+        if (KP1 == 2)
+        {
+            alivePlayer1 = 0;
+        }
+        if (KP2 == 2)
+        {
+            alivePlayer2 = 0;
+        }
+        if (KP3 == 2)
+        {
+            alivePlayer3 = 0;
+        }
+        if (KP4 == 2)
+        {
+            alivePlayer4 = 0;
+        }
+    }
+    #endregion
+
 
     public void OnMouseDown()
     {
