@@ -28,6 +28,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Image MyTeImg_4;
     public Image MyTeImg_5;
 
+    public Image Img_CoverBlack_P1;
+    public Image Img_CoverBlack_P2;
+    public Image Img_CoverBlack_P3;
+    public Image Img_CoverBlack_P4;
+
     public Image Img_Player1_Te1;
     public Image Img_Player1_Te2;
     public Image Img_Player1_Te3;
@@ -183,6 +188,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
+        ResetAlivePlayer();  // 各種カウンター リセット
     }
 
     #region// Hantei_Group  ジャンケン勝敗 判定 一連のグループ
@@ -195,13 +201,51 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             SetKP_counter();    // ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
             Syohai_Hantei();    // N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定 → 人数が減る
-            CountLivePlayer();  // 残留しているプレイヤー人数をカウントする
-            countHanteiTurn++;  // N回目 のループ を 1 進める ： NumLivePlayer を取得
+            CountLivePlayer();  // 残留しているプレイヤー人数をカウントする ： NumLivePlayer を取得
+            countHanteiTurn++;  // N回目 のループ を 1 進める
             var sequence = DOTween.Sequence();
             sequence.InsertCallback(2f, () => WaitTime_2nd());
-            Debug.Log("NumLivePlayer 残留プレイヤー数 ： " + NumLivePlayer);
+            LoopOver6thCheck();
         }
         Debug.Log("ジャンケン勝敗 判定おわり");
+        WhoIsWinner();  // ジャンケン勝敗の勝利者は？
+    }
+
+    public void LoopOver6thCheck() // ループが6回目突入か？ → 突入ならジャンケンカード選択へ
+    {
+        if (countHanteiTurn == 6)
+        {
+            Debug.Log("ループが6回目突入 → ジャンケンカード選択へ");
+        }
+        if (countHanteiTurn >= 7)
+        {
+            Debug.Log("！！！ ループが7回目突入 → 要スクリプト見直し ！！！");
+            NumLivePlayer = 0;
+        }
+    }
+
+    public void WhoIsWinner()  // ジャンケン勝敗の勝利者は？
+    {
+        if (alivePlayer1 == 1)
+        {
+            Debug.Log("Player1 勝利");
+        }
+        else if (alivePlayer2 == 1)
+        {
+            Debug.Log("Player2 勝利");
+        }
+        else if (alivePlayer3 == 1)
+        {
+            Debug.Log("Player3 勝利");
+        }
+        else if (alivePlayer4 == 1)
+        {
+            Debug.Log("Player4 勝利");
+        }
+        else
+        {
+            Debug.Log("勝利いない？");
+        }
     }
 
     public void WaitTime_2nd()
@@ -209,23 +253,27 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("2秒待ち");
     }
 
-    public void ResetAlivePlayer()
+    public void ResetAlivePlayer()  // 各種カウンター リセット
     {
         alivePlayer1 = 1; // ジャンケンで残留してれば 1 、負けたら 0
         alivePlayer2 = 1;
         alivePlayer3 = 1;
         alivePlayer4 = 1;
 
+        CloseImg_CoverBlack_All(); // ジャンケン手の黒カバーをリセット（非表示）
+        
         countHanteiTurn = 1;
     }
 
     public void CountLivePlayer()    // 残留しているプレイヤー人数をカウントする
     {
         NumLivePlayer = alivePlayer1 + alivePlayer2 + alivePlayer3 + alivePlayer4;
+        Debug.Log("NumLivePlayer 残留プレイヤー数 ： " + NumLivePlayer);
     }
 
     public void SetKP_counter() // ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
     {
+        Debug.Log("countHanteiTurn" + countHanteiTurn);
         if (countHanteiTurn == 1)
         {
             KP1 = int_Player1_Te1;
@@ -264,7 +312,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         else
         {
             Debug.Log("countHanteiTurn ６回 超えました");
+            // 再度、ジャンケン手カードの選択をする
         }
+        Debug.Log("KP1 ： " + KP1);
+        Debug.Log("KP2 ： " + KP2);
+        Debug.Log("KP3 ： " + KP3);
+        Debug.Log("KP4 ： " + KP4);
     }
 
     public void Check_Gu_Existence() // NoneGu の判定を返す
@@ -346,6 +399,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             NoneGu = false; // グー無しOFF
         }
+        Debug.Log("NoneGuP1 ： " + NoneGuP1);
+        Debug.Log("NoneGuP2 ： " + NoneGuP2);
+        Debug.Log("NoneGuP3 ： " + NoneGuP3);
+        Debug.Log("NoneGuP4 ： " + NoneGuP4);
     }
 
     public void Check_Choki_Existence() // NoneChoki の判定を返す
@@ -357,7 +414,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer1 == 1) // Player1 が生きている
         {
-            if (KP1 != 0) // チョキ ではない
+            if (KP1 != 1) // チョキ ではない
             {
                 NoneChokiP1 = true; // チョキ 無し
             }
@@ -373,7 +430,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer2 == 1) // Player2 が生きている
         {
-            if (KP2 != 0) // チョキ ではない
+            if (KP2 != 1) // チョキ ではない
             {
                 NoneChokiP2 = true; // チョキ 無し
             }
@@ -389,7 +446,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer3 == 1) // Player3 が生きている
         {
-            if (KP3 != 0) // チョキ ではない
+            if (KP3 != 1) // チョキ ではない
             {
                 NoneChokiP3 = true; // チョキ 無し
             }
@@ -405,7 +462,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer4 == 1) // Player4 が生きている
         {
-            if (KP4 != 0) // チョキ ではない
+            if (KP4 != 1) // チョキ ではない
             {
                 NoneChokiP4 = true; // チョキ 無し
             }
@@ -427,6 +484,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             NoneChoki = false; // チョキ無しOFF
         }
+        Debug.Log("NoneChokiP1 ： " + NoneChokiP1);
+        Debug.Log("NoneChokiP2 ： " + NoneChokiP2);
+        Debug.Log("NoneChokiP3 ： " + NoneChokiP3);
+        Debug.Log("NoneChokiP4 ： " + NoneChokiP4);
     }
 
     public void Check_Pa_Existence() // NonePa の判定を返す
@@ -438,7 +499,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer1 == 1) // Player1 が生きている
         {
-            if (KP1 != 0) // パー ではない
+            if (KP1 != 2) // パー ではない
             {
                 NonePaP1 = true; // パー 無し
             }
@@ -454,7 +515,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer2 == 1) // Player2 が生きている
         {
-            if (KP2 != 0) // パー ではない
+            if (KP2 != 2) // パー ではない
             {
                 NonePaP2 = true; // パー 無し
             }
@@ -470,7 +531,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer3 == 1) // Player3 が生きている
         {
-            if (KP3 != 0) // パー ではない
+            if (KP3 != 2) // パー ではない
             {
                 NonePaP3 = true; // パー 無し
             }
@@ -486,7 +547,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer4 == 1) // Player4 が生きている
         {
-            if (KP4 != 0) // パー ではない
+            if (KP4 != 2) // パー ではない
             {
                 NonePaP4 = true; // パー 無し
             }
@@ -508,16 +569,22 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             NonePa = false; // パー無しOFF
         }
+        Debug.Log("NonePaP1 ： " + NonePaP1);
+        Debug.Log("NonePaP2 ： " + NonePaP2);
+        Debug.Log("NonePaP3 ： " + NonePaP3);
+        Debug.Log("NonePaP4 ： " + NonePaP4);
     }
 
     public void Syohai_Hantei()  // N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定 → 人数が減る
     {
+        Debug.Log("Syohai_Hantei スタート");
         Check_Gu_Existence();     // N回目の すべてのプレイヤーの手 の中に グー(0)   があるか ： NoneGu を取得
         Check_Choki_Existence();  // N回目の すべてのプレイヤーの手 の中に チョキ(1) があるか ： NoneChoki を取得
         Check_Pa_Existence();     // N回目の すべてのプレイヤーの手 の中に パー(2)   があるか ： NonePa を取得
 
         if (NoneGu) // 全員 Gu 無し (ちょき か ぱー)
         {
+            Debug.Log("(NoneGu) です");
             if (NoneChoki) // 全員 Choki 無し (ぱー のみ)
             {
                 Aiko(); // ぱー のみ
@@ -530,6 +597,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else if (NoneChoki) //(全員 Choki 無し) ぐー か ぱー （↓これ以降、ぐー は必ずある）
         {
+            Debug.Log("(NoneChoki) です");
             if (NonePa) //(全員 Pa 無し) ぐー のみ
             {
                 Aiko(); // ぐー のみ
@@ -542,6 +610,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else if (NonePa) //(全員 Pa 無し)  ぐー か ちょき （↓これ以降、ぐー と ちょき は必ずある）
         {
+            Debug.Log("(NonePa) です");
             if (NoneGu) //(全員 Gu 無し) ちょき のみ
             {
                 Aiko(); // ちょき のみ
@@ -561,6 +630,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Aiko()
     {
         // 残っている人、全員残留
+        Debug.Log("あいこ です");
     }
 
     public void Win_Gu()
@@ -580,22 +650,26 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Lose_Gu()   // ぐー の人のみ 脱落
     {
-       if(KP1 == 0)
-       {
+        if (KP1 == 0)
+        {
             alivePlayer1 = 0;
-       }
-       if (KP2 == 0)
-       {
+            AppearImg_CoverBlack_P1();
+        }
+        if (KP2 == 0)
+        {
             alivePlayer2 = 0;
-       }
-       if (KP3 == 0)
-       {
+            AppearImg_CoverBlack_P2();
+        }
+        if (KP3 == 0)
+        {
             alivePlayer3 = 0;
-       }
-       if (KP4 == 0)
-       {
+            AppearImg_CoverBlack_P3();
+        }
+        if (KP4 == 0)
+        {
             alivePlayer4 = 0;
-       }
+            AppearImg_CoverBlack_P4();
+        }
     }
 
     public void Lose_Choki()  // ちょき の人のみ 脱落
@@ -603,18 +677,22 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (KP1 == 1)
         {
             alivePlayer1 = 0;
+            AppearImg_CoverBlack_P1();
         }
         if (KP2 == 1)
         {
             alivePlayer2 = 0;
+            AppearImg_CoverBlack_P2();
         }
         if (KP3 == 1)
         {
             alivePlayer3 = 0;
+            AppearImg_CoverBlack_P3();
         }
         if (KP4 == 1)
         {
             alivePlayer4 = 0;
+            AppearImg_CoverBlack_P4();
         }
     }
 
@@ -623,20 +701,75 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (KP1 == 2)
         {
             alivePlayer1 = 0;
+            AppearImg_CoverBlack_P1();
         }
         if (KP2 == 2)
         {
             alivePlayer2 = 0;
+            AppearImg_CoverBlack_P2();
         }
         if (KP3 == 2)
         {
             alivePlayer3 = 0;
+            AppearImg_CoverBlack_P3();
         }
         if (KP4 == 2)
         {
             alivePlayer4 = 0;
+            AppearImg_CoverBlack_P4();
         }
     }
+
+
+    public void AppearImg_CoverBlack_P1() // 黒カバー 表示させる
+    {
+        Img_CoverBlack_P1.enabled = true;
+    }
+
+    public void AppearImg_CoverBlack_P2() // 黒カバー 表示させる
+    {
+        Img_CoverBlack_P2.enabled = true;
+    }
+
+    public void AppearImg_CoverBlack_P3() // 黒カバー 表示させる
+    {
+        Img_CoverBlack_P3.enabled = true;
+    }
+
+    public void AppearImg_CoverBlack_P4() // 黒カバー 表示させる
+    {
+        Img_CoverBlack_P4.enabled = true;
+    }
+
+
+    public void CloseImg_CoverBlack_All()
+    {
+        CloseImg_CoverBlack_P1();
+        CloseImg_CoverBlack_P2();
+        CloseImg_CoverBlack_P3();
+        CloseImg_CoverBlack_P4();
+    }
+
+    public void CloseImg_CoverBlack_P1() // 黒カバー 非表示にする（デフォルトに戻す）
+    {
+        Img_CoverBlack_P1.enabled = false;
+    }
+
+    public void CloseImg_CoverBlack_P2() // 黒カバー 非表示にする（デフォルトに戻す）
+    {
+        Img_CoverBlack_P2.enabled = false;
+    }
+
+    public void CloseImg_CoverBlack_P3() // 黒カバー 非表示にする（デフォルトに戻す）
+    {
+        Img_CoverBlack_P3.enabled = false;
+    }
+
+    public void CloseImg_CoverBlack_P4() // 黒カバー 非表示にする（デフォルトに戻す）
+    {
+        Img_CoverBlack_P4.enabled = false;
+    }
+
     #endregion
 
 
@@ -1745,7 +1878,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void SharePlayerTeNum_Player1()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
     {
-        if(Int_MyJanken_Te1 == 0)
+        if (Int_MyJanken_Te1 == 0)
         {
             ToSharePlayerTeNum_Player1_1_is_Gu();
         }
@@ -1816,14 +1949,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Player1_Te3 = Int_MyJanken_Te3;
         int_Player1_Te4 = Int_MyJanken_Te4;
         int_Player1_Te5 = Int_MyJanken_Te5;
-
         // Image の反映
         Img_Player1_Te1.sprite = MyTeImg_1.sprite;
         Img_Player1_Te2.sprite = MyTeImg_2.sprite;
         Img_Player1_Te3.sprite = MyTeImg_3.sprite;
         Img_Player1_Te4.sprite = MyTeImg_4.sprite;
         Img_Player1_Te5.sprite = MyTeImg_5.sprite;
-
         // Text の反映
         Text_JankenPlayer1_Te1.text = Int_MyJanken_Te1.ToString();
         Text_JankenPlayer1_Te2.text = Int_MyJanken_Te2.ToString();
@@ -1906,14 +2037,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Player2_Te3 = Int_MyJanken_Te3;
         int_Player2_Te4 = Int_MyJanken_Te4;
         int_Player2_Te5 = Int_MyJanken_Te5;
-
         // Image の反映
         Img_Player2_Te1.sprite = MyTeImg_1.sprite;
         Img_Player2_Te2.sprite = MyTeImg_2.sprite;
         Img_Player2_Te3.sprite = MyTeImg_3.sprite;
         Img_Player2_Te4.sprite = MyTeImg_4.sprite;
         Img_Player2_Te5.sprite = MyTeImg_5.sprite;
-
         // Text の反映
         Text_JankenPlayer2_Te1.text = Int_MyJanken_Te1.ToString();
         Text_JankenPlayer2_Te2.text = Int_MyJanken_Te2.ToString();
@@ -1996,14 +2125,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Player3_Te3 = Int_MyJanken_Te3;
         int_Player3_Te4 = Int_MyJanken_Te4;
         int_Player3_Te5 = Int_MyJanken_Te5;
-
         // Image の反映
         Img_Player3_Te1.sprite = MyTeImg_1.sprite;
         Img_Player3_Te2.sprite = MyTeImg_2.sprite;
         Img_Player3_Te3.sprite = MyTeImg_3.sprite;
         Img_Player3_Te4.sprite = MyTeImg_4.sprite;
         Img_Player3_Te5.sprite = MyTeImg_5.sprite;
-
         // Text の反映
         Text_JankenPlayer3_Te1.text = Int_MyJanken_Te1.ToString();
         Text_JankenPlayer3_Te2.text = Int_MyJanken_Te2.ToString();
@@ -2086,14 +2213,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Player4_Te3 = Int_MyJanken_Te3;
         int_Player4_Te4 = Int_MyJanken_Te4;
         int_Player4_Te5 = Int_MyJanken_Te5;
-
         // Image の反映
         Img_Player4_Te1.sprite = MyTeImg_1.sprite;
         Img_Player4_Te2.sprite = MyTeImg_2.sprite;
         Img_Player4_Te3.sprite = MyTeImg_3.sprite;
         Img_Player4_Te4.sprite = MyTeImg_4.sprite;
         Img_Player4_Te5.sprite = MyTeImg_5.sprite;
-
         // Text の反映
         Text_JankenPlayer4_Te1.text = Int_MyJanken_Te1.ToString();
         Text_JankenPlayer4_Te2.text = Int_MyJanken_Te2.ToString();
@@ -2478,6 +2603,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ToCanPush_All();       // じゃんけんボタン ボタン押せるようにする(フラグのリセット）（bool）
         ResetPlayerTeNum();    // Player1 ～ Player4 のじゃんけん手 数値を -1 にリセット（int,text）
         ResetImg_PlayerlayerRireki_All(); // Player1 ～ Player4 のじゃんけん手 履歴イメージを null にリセット（Image）
+        ResetAlivePlayer();  // 各種カウンター リセット
     }
 
     // End
