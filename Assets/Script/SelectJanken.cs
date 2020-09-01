@@ -13,6 +13,43 @@ using DG.Tweening;
 
 public class SelectJanken : MonoBehaviour, IPunObservable
 {
+    #region// 変数宣言
+    //誰かがログインする度に生成するプレイヤーPrefab
+    public GameObject MyPlayerPrefab;
+    public GameObject playerPrefab_utako;
+    public GameObject playerPrefab_unitychan;
+    public GameObject playerPrefab_pchan;
+    public GameObject playerPrefab_mobuchan;
+
+    public GameObject StartLine1;  // スタートラインのオブジェクト
+    public GameObject StartLine2;  // スタートラインのオブジェクト
+    public GameObject StartLine3;  // スタートラインのオブジェクト
+    public GameObject StartLine4;  // スタートラインのオブジェクト
+    public GameObject PosPlayer1_obj;
+    public GameObject PosPlayer2_obj;
+    public GameObject PosPlayer3_obj;
+    public GameObject PosPlayer4_obj;
+       
+    Transform StartTransform1;  // スタートラインの位置情報 (Transform)
+    Transform StartTransform2;  // スタートラインの位置情報 (Transform)
+    Transform StartTransform3;  // スタートラインの位置情報 (Transform)
+    Transform StartTransform4;  // スタートラインの位置情報 (Transform)
+    Transform transformPlayer1;
+    Transform transformPlayer2;
+    Transform transformPlayer3;
+    Transform transformPlayer4;
+
+    Vector3 PosStartLine1;     // スタートラインの位置情報 (Vector3)
+    Vector3 PosStartLine2;     // スタートラインの位置情報 (Vector3)
+    Vector3 PosStartLine3;     // スタートラインの位置情報 (Vector3)
+    Vector3 PosStartLine4;     // スタートラインの位置情報 (Vector3)
+    Vector3 PosPlayer1;
+    Vector3 PosPlayer2;
+    Vector3 PosPlayer3;
+    Vector3 PosPlayer4;
+
+    public int int_conMyCharaAvatar;
+
     [SerializeField]
     public int count_a = 1;
     public int NumLivePlayer = 4; // 残りのプレイヤー人数
@@ -174,10 +211,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public bool CanPushBtn_D = true;
     public bool CanPushBtn_E = true;
 
+    #endregion
+
     void Awake()
     {
         this.photonView = GetComponent<PhotonView>();
         Debug.Log("SelectJanken 出席確認1");
+        int_conMyCharaAvatar = CLauncherScript.get_int_MyCharaAvatar(); // キャラ アバター 誰を選んだか（ログイン前画面からコンバート）
     }
 
     void Start()
@@ -189,6 +229,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
         ResetAlivePlayer();  // 各種カウンター リセット
+
+        //Photonに接続していれば自プレイヤーを生成
+        CreatePlayerPrefab();
+
+        //スタートラインに移動させる
+        MoveToStartLine();
     }
 
     #region// Hantei_Group  ジャンケン勝敗 判定 一連のグループ
@@ -2604,6 +2650,61 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ResetPlayerTeNum();    // Player1 ～ Player4 のじゃんけん手 数値を -1 にリセット（int,text）
         ResetImg_PlayerlayerRireki_All(); // Player1 ～ Player4 のじゃんけん手 履歴イメージを null にリセット（Image）
         ResetAlivePlayer();  // 各種カウンター リセット
+    }
+
+
+
+
+    public void CreatePlayerPrefab()
+    {
+        Debug.Log("Photonに接続したので 自プレイヤーを生成");
+
+        //GameObject MyPlayer = PhotonNetwork.Instantiate(this.MyPlayerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+        //GameObject MyPlayer = PhotonNetwork.Instantiate(this.MyPlayerPrefab.name);
+        //GameObject Player1 = PhotonNetwork.Instantiate(this.playerPrefab.name);
+
+        /* ★後で復活
+        if (int_conMyCharaAvatar == 1)  // うたこ
+        {
+            GameObject MyPlayer = PhotonNetwork.Instantiate(playerPrefab_utako.name);
+        }
+        else if (int_conMyCharaAvatar == 2) // Unityちゃん
+        {
+            GameObject MyPlayer = PhotonNetwork.Instantiate(playerPrefab_unitychan.name);
+        }
+        else if (int_conMyCharaAvatar == 3) // Pちゃん
+        {
+            GameObject MyPlayer = PhotonNetwork.Instantiate(playerPrefab_pchan.name);
+        }
+        else if (int_conMyCharaAvatar == 4) // モブちゃん
+        {
+            GameObject MyPlayer = PhotonNetwork.Instantiate(playerPrefab_mobuchan.name);
+        }
+        */
+
+    }
+
+    public void MoveToStartLine()
+    {
+        // transformを取得
+        StartTransform1 = StartLine1.transform;
+        StartTransform2 = StartLine2.transform;
+        StartTransform3 = StartLine3.transform;
+        StartTransform4 = StartLine4.transform;
+
+        // スタートラインの座標を取得
+        PosStartLine1 = StartTransform1.position;
+        PosStartLine2 = StartTransform2.position;
+        PosStartLine3 = StartTransform3.position;
+        PosStartLine4 = StartTransform4.position;
+
+        // プレイヤー位置をスタートラインに移動
+        /* ★後で復活
+        Player1.transform.position = PosStartLine1;
+        Player2.transform.position = PosStartLine2;
+        Player3.transform.position = PosStartLine3;
+        Player4.transform.position = PosStartLine4;
+        */
     }
 
     // End

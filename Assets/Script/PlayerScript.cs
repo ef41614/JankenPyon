@@ -42,10 +42,24 @@ public class PlayerScript : MonoBehaviour
 
        // OnBtnSpeed200();
         // 移動終了地点  // ジャンプする力  // ジャンプする回数   // アニメーション時間
-        transform.DOJump(new Vector3(MoveForwardNum*1.0f, 0f), 0.5f, MoveForwardNum, MoveForwardNum*1.0f).SetRelative().SetEase(Ease.Linear)
-                    .SetRelative()
+        transform
+            .DOJump(new Vector3(MoveForwardNum*1.0f, 0f), 0.5f, MoveForwardNum, MoveForwardNum*1.0f)
+            .SetRelative()
+            .SetEase(Ease.Linear)
+            .SetRelative()
             .OnComplete(() => {       // ジャンプが終了したら、以下の操作をする
                 anim.SetBool("run", false);  // アニメーションを run → stand に遷移させる
+            });
+    }
+
+    public void receivedDammage() // ダメージを受ける
+    {
+        anim.SetBool("damage", true);
+
+        transform
+            .DOShakePosition(1.2f,0.1f)
+            .OnComplete(() => {       // 上の処理が終了したら、以下の操作をする
+                anim.SetBool("damage", false);  // アニメーションを 遷移させる
             });
     }
 

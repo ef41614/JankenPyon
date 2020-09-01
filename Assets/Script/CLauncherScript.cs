@@ -9,6 +9,11 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     #region Public変数定義
 
     //Public変数の定義はココで
+    public static int int_MyCharaAvatar = -1;
+    static int int_player1_CharaAvatar = -1;
+    static int int_player2_CharaAvatar = -1;
+    static int int_player3_CharaAvatar = -1;
+    static int int_player4_CharaAvatar = -1;
 
     #endregion
 
@@ -45,6 +50,31 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
             }
             firstPush = true; //ボタン押下済みフラグ
         }
+    }
+
+    public void Select_CharaAvatar_utako()
+    {
+        int_MyCharaAvatar = 1;
+    }
+
+    public void Select_CharaAvatar_unitychan()
+    {
+        int_MyCharaAvatar = 2;
+    }
+
+    public void Select_CharaAvatar_pchan()
+    {
+        int_MyCharaAvatar = 3;
+    }
+
+    public void Select_CharaAvatar_mobuchan()
+    {
+        int_MyCharaAvatar = 4;
+    }
+
+    public static int get_int_MyCharaAvatar()
+    {
+        return int_MyCharaAvatar;
     }
     #endregion
 
