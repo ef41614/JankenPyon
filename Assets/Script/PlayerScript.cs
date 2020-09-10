@@ -57,7 +57,7 @@ public class PlayerScript : MonoBehaviour
         anim.SetBool("damage", true);
 
         transform
-            .DOShakePosition(1.2f,0.1f)
+            .DOShakePosition(1.2f,0.1f)  // キャラを揺らす
             .OnComplete(() => {       // 上の処理が終了したら、以下の操作をする
                 anim.SetBool("damage", false);  // アニメーションを 遷移させる
             });

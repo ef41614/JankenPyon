@@ -15,6 +15,12 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     static int int_player3_CharaAvatar = -1;
     static int int_player4_CharaAvatar = -1;
 
+    public GameObject Utako_Button;
+    public GameObject Unitychan_Button;
+    public GameObject Pchan_Button;
+    public GameObject Mobuchan_Button;
+
+    public GameObject PlayStartButton;
     #endregion
 
     #region Private変数
@@ -25,6 +31,8 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     void Start()
     {
         firstPush = false; //初期化
+        Reset_AvatarAll();
+        ClosePlayStartButton();
     }
 
 
@@ -52,6 +60,7 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         }
     }
 
+
     public void Select_CharaAvatar_utako()
     {
         int_MyCharaAvatar = 1;
@@ -76,6 +85,52 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     {
         return int_MyCharaAvatar;
     }
+
+    public void Select_Utako_Avatar()
+    {
+        Reset_AvatarAll();
+        Utako_Button.GetComponent< Image > ().color = Color.green;
+    }
+
+    public void Select_Unitychan_Avatar()
+    {
+        Reset_AvatarAll();
+        Unitychan_Button.GetComponent<Image>().color = Color.green;
+    }
+
+    public void Select_Pchan_Avatar()
+    {
+        Reset_AvatarAll();
+        Pchan_Button.GetComponent<Image>().color = Color.green;
+    }
+
+    public void Select_Mobuchan_Avatar()
+    {
+        Reset_AvatarAll();
+        Mobuchan_Button.GetComponent<Image>().color = Color.green;
+    }
+
+    public void Reset_AvatarAll()
+    {
+        Utako_Button.GetComponent<Image>().color = Color.gray;
+        Unitychan_Button.GetComponent<Image>().color = Color.gray;
+        Pchan_Button.GetComponent<Image>().color = Color.gray;
+        Mobuchan_Button.GetComponent<Image>().color = Color.gray;
+    }
+
+    //●表示させる
+    public void AppearPlayStartButton()
+    {
+        PlayStartButton.SetActive(true);
+    }
+
+    //●非表示にする
+    public void ClosePlayStartButton()
+    {
+        PlayStartButton.SetActive(false);
+        Debug.Log("ClosePlayStartButton");
+    }
+
     #endregion
 
     #region Photonコールバック

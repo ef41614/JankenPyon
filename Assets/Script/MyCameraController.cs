@@ -5,20 +5,14 @@ using UnityEngine;
 public class MyCameraController : MonoBehaviour
 {
     //Unityちゃんのオブジェクト
-    private GameObject player;
+    public GameObject player;
     //Unityちゃんとカメラの距離
-    private float difference;
+    public float difference;
 
     // Use this for initialization
     void Start()
     {
-        //Unityちゃんのオブジェクトを取得
-        this.player = GameObject.Find("player");
-        //Unityちゃんとカメラの位置（z座標）の差を求める
-        this.difference = player.transform.position.z - this.transform.position.z;
         Debug.Log("MyCameraController 出席確認");
-
-
     }
 
     // Update is called once per frame
@@ -26,5 +20,15 @@ public class MyCameraController : MonoBehaviour
     {
         //Unityちゃんの位置に合わせてカメラの位置を移動
         this.transform.position = new Vector3(player.transform.position.x, this.transform.position.y, this.transform.position.z);
+    }
+
+
+    public void SetMyCamera()
+    {
+        Debug.Log("SetMyCamera 実行確認");
+        //Unityちゃんのオブジェクトを取得
+        this.player = GameObject.FindWithTag("MyPlayer");
+        //Unityちゃんとカメラの位置（z座標）の差を求める
+        this.difference = player.transform.position.z - this.transform.position.z;
     }
 }

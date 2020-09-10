@@ -21,6 +21,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject playerPrefab_pchan;
     public GameObject playerPrefab_mobuchan;
 
+    public GameObject StartCorn_Head;  // スタートラインのコーン
+    public GameObject StartCorn_Foot;  // スタートラインのコーン
     public GameObject StartLine1;  // スタートラインのオブジェクト
     public GameObject StartLine2;  // スタートラインのオブジェクト
     public GameObject StartLine3;  // スタートラインのオブジェクト
@@ -29,7 +31,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject PosPlayer2_obj;
     public GameObject PosPlayer3_obj;
     public GameObject PosPlayer4_obj;
-       
+
+    Transform StartCorn_HeadTransform;  // スタートラインの位置情報 (Transform)
+    Transform StartCorn_FootTransform;  // スタートラインの位置情報 (Transform)
     Transform StartTransform1;  // スタートラインの位置情報 (Transform)
     Transform StartTransform2;  // スタートラインの位置情報 (Transform)
     Transform StartTransform3;  // スタートラインの位置情報 (Transform)
@@ -39,6 +43,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     Transform transformPlayer3;
     Transform transformPlayer4;
 
+    Vector3 PosStartCorn_Head;     // スタートラインの位置情報 (Vector3)
+    Vector3 PosStartCorn_Foot;     // スタートラインの位置情報 (Vector3)
     Vector3 PosStartLine1;     // スタートラインの位置情報 (Vector3)
     Vector3 PosStartLine2;     // スタートラインの位置情報 (Vector3)
     Vector3 PosStartLine3;     // スタートラインの位置情報 (Vector3)
@@ -48,7 +54,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     Vector3 PosPlayer3;
     Vector3 PosPlayer4;
 
-    public int int_conMyCharaAvatar;
+    public int int_conMyCharaAvatar = 0;
 
     [SerializeField]
     public int count_a = 1;
@@ -179,6 +185,18 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject TestRoomController;  //ヒエラルキー上のオブジェクト名
     TestRoomController TestRoomControllerSC;
 
+    public GameObject pchanClone; //ヒエラルキー上のオブジェクト名
+    public GameObject utakoClone; //ヒエラルキー上のオブジェクト名
+    public GameObject unitychanClone; //ヒエラルキー上のオブジェクト名
+    public GameObject mobuchanClone; //ヒエラルキー上のオブジェクト名
+    PlayerScript PlayerSC;//スクリプト名 + このページ上でのニックネーム
+
+    public GameObject MainCamera; //ヒエラルキー上のオブジェクト名
+    MyCameraController MyCameraControllerMSC;//スクリプト名 + このページ上でのニックネーム
+
+    public GameObject MyKageController; //ヒエラルキー上のオブジェクト名
+    MyKageController MyKageControllerMSC;//スクリプト名 + このページ上でのニックネーム
+
     //public GameObject PushTeBtnManager; //ヒエラルキー上のオブジェクト名
     //PushTeBtn PushTeBtnMSC;
     //public PushTeBtn PushTeBtnMSC;
@@ -217,24 +235,36 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         this.photonView = GetComponent<PhotonView>();
         Debug.Log("SelectJanken 出席確認1");
-        int_conMyCharaAvatar = CLauncherScript.get_int_MyCharaAvatar(); // キャラ アバター 誰を選んだか（ログイン前画面からコンバート）
+        int_conMyCharaAvatar = CLauncherScript.get_int_MyCharaAvatar(); // キャラ アバター 誰を選んだか（ログイン前画面からコンバートする）
     }
 
     void Start()
     {
         //var customProperties = photonView.Owner.CustomProperties;
         Debug.Log("SelectJanken 出席確認2");
+        Debug.Log("int_conMyCharaAvatar（★キャラアバター） ： " + int_conMyCharaAvatar);
+
         count_a = 1;
         ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
+        MyCameraControllerMSC = MainCamera.GetComponent<MyCameraController>();
+        MyKageControllerMSC = MyKageController.GetComponent<MyKageController>();
         myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
         ResetAlivePlayer();  // 各種カウンター リセット
 
         //Photonに接続していれば自プレイヤーを生成
+        Debug.Log("自プレイヤーを生成します");
         CreatePlayerPrefab();
 
         //スタートラインに移動させる
+        Debug.Log("スタートラインに移動させます");
         MoveToStartLine();
+
+        Debug.Log("MyPlayer にカメラを追従するようにセットします");
+        MyCameraControllerMSC.SetMyCamera();  //MyPlayer にカメラを追従するようにセット
+
+        Debug.Log("MyPlayer に かげ を追従するようにセットします");
+        MyKageControllerMSC.SetMyKage();  //MyPlayer に かげ を追従するようにセット
     }
 
     #region// Hantei_Group  ジャンケン勝敗 判定 一連のグループ
@@ -2663,48 +2693,93 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         //GameObject MyPlayer = PhotonNetwork.Instantiate(this.MyPlayerPrefab.name);
         //GameObject Player1 = PhotonNetwork.Instantiate(this.playerPrefab.name);
 
-        /* ★後で復活
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
-            GameObject MyPlayer = PhotonNetwork.Instantiate(playerPrefab_utako.name);
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_utako.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            utakoClone = GameObject.FindWithTag("MyPlayer");
+            Debug.Log("utakoClone の名前は: " + utakoClone.name);
+            PlayerSC = utakoClone.GetComponent<PlayerScript>();
         }
         else if (int_conMyCharaAvatar == 2) // Unityちゃん
         {
-            GameObject MyPlayer = PhotonNetwork.Instantiate(playerPrefab_unitychan.name);
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_unitychan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            unitychanClone = GameObject.FindWithTag("MyPlayer");
+            Debug.Log("unitychanClone の名前は: " + unitychanClone.name);
+            PlayerSC = unitychanClone.GetComponent<PlayerScript>();
         }
         else if (int_conMyCharaAvatar == 3) // Pちゃん
         {
-            GameObject MyPlayer = PhotonNetwork.Instantiate(playerPrefab_pchan.name);
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_pchan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            pchanClone = GameObject.FindWithTag("MyPlayer");
+            Debug.Log("pchanClone の名前は: " + pchanClone.name);
+            PlayerSC = pchanClone.GetComponent<PlayerScript>();
         }
         else if (int_conMyCharaAvatar == 4) // モブちゃん
         {
-            GameObject MyPlayer = PhotonNetwork.Instantiate(playerPrefab_mobuchan.name);
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_mobuchan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            mobuchanClone = GameObject.FindWithTag("MyPlayer");
+            Debug.Log("mobuchanClone の名前は: " + mobuchanClone.name);
+            PlayerSC = mobuchanClone.GetComponent<PlayerScript>();
         }
-        */
+    }
 
+    public void bridge_JumpToRight()
+    {
+        Debug.Log("bridge_JumpToRight を実行します");
+        PlayerSC.JumpRight();
+    }
+
+    public void bridge_GetDamage()
+    {
+        Debug.Log("bridge_GetDamage を実行します");
+        PlayerSC.receivedDammage();
     }
 
     public void MoveToStartLine()
     {
+        /* ★後で復活
+// transformを取得
+StartTransform1 = StartLine1.transform;
+//StartTransform2 = StartLine2.transform;
+//StartTransform3 = StartLine3.transform;
+//StartTransform4 = StartLine4.transform;
+
+// スタートラインの座標を取得
+PosStartLine1 = StartTransform1.position;
+//PosStartLine2 = StartTransform2.position;
+//PosStartLine3 = StartTransform3.position;
+//PosStartLine4 = StartTransform4.position;
+
+// プレイヤー位置をスタートラインに移動
+myPlayer.transform.position = PosStartLine1;
+
+Player1.transform.position = PosStartLine1;
+Player2.transform.position = PosStartLine2;
+Player3.transform.position = PosStartLine3;
+Player4.transform.position = PosStartLine4;
+*/
+
         // transformを取得
-        StartTransform1 = StartLine1.transform;
-        StartTransform2 = StartLine2.transform;
-        StartTransform3 = StartLine3.transform;
-        StartTransform4 = StartLine4.transform;
+        StartCorn_HeadTransform = StartCorn_Head.transform;
+        StartCorn_FootTransform = StartCorn_Foot.transform;
 
         // スタートラインの座標を取得
-        PosStartLine1 = StartTransform1.position;
-        PosStartLine2 = StartTransform2.position;
-        PosStartLine3 = StartTransform3.position;
-        PosStartLine4 = StartTransform4.position;
+        PosStartCorn_Head = StartCorn_HeadTransform.position;
+        PosStartCorn_Foot = StartCorn_FootTransform.position;
 
+        Debug.Log("PosStartCorn_Head ：X " + StartCorn_HeadTransform.position.x);
+        Debug.Log("PosStartCorn_Head ：Y " + StartCorn_HeadTransform.position.y);
+        Debug.Log("PosStartCorn_Head ：Z " + StartCorn_HeadTransform.position.z);
+        Debug.Log("PosStartCorn_Foot ：X " + StartCorn_FootTransform.position.x);
+        Debug.Log("PosStartCorn_Foot ：Y " + StartCorn_FootTransform.position.y);
+        Debug.Log("PosStartCorn_Foot ：Z " + StartCorn_FootTransform.position.z);
+
+        float Rnd_PosX = UnityEngine.Random.Range(-0.5f, -1.0f);
+        float Rnd_PosY = UnityEngine.Random.Range(-0.2f, -2.0f);
         // プレイヤー位置をスタートラインに移動
-        /* ★後で復活
-        Player1.transform.position = PosStartLine1;
-        Player2.transform.position = PosStartLine2;
-        Player3.transform.position = PosStartLine3;
-        Player4.transform.position = PosStartLine4;
-        */
+        //myPlayer.transform.position = PosStartCorn_Head;
+        myPlayer.transform.position = new Vector3(StartCorn_HeadTransform.position.x+Rnd_PosX, StartCorn_HeadTransform.position.y+Rnd_PosY, StartCorn_HeadTransform.position.z);
+
     }
 
     // End
