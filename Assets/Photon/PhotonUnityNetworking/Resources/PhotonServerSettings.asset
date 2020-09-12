@@ -104,6 +104,10 @@ MonoBehaviour:
   - SharePlayerTeNum_Player4_5_is_Choki
   - SharePlayerTeNum_Player4_5_is_Gu
   - SharePlayerTeNum_Player4_5_is_Pa
+  - SharePlayerIcon_Player1
+  - SharePlayerIcon_Player2
+  - SharePlayerIcon_Player3
+  - SharePlayerIcon_Player4
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

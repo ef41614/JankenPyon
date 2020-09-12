@@ -13,6 +13,8 @@ namespace BEFOOL.PhotonTest
     {
         [SerializeField]
         Text joinedMembersText = null;
+
+        string string_MyName;
         string string_PName1;
         string string_PName2;
         string string_PName3;
@@ -29,6 +31,7 @@ namespace BEFOOL.PhotonTest
         public string string_PlayerID_4;
         public Player[] allPlayers;
 
+        public GameObject Text_MyHeadName;
         public Text Text_PName1;
         public Text Text_PName2;
         public Text Text_PName3;
@@ -58,6 +61,7 @@ namespace BEFOOL.PhotonTest
             EntryCheck();
             PNameCheck();
             Set_PNameTextAll();
+            Set_MyHeadName();
         }
 
         // <summary>
@@ -229,6 +233,24 @@ namespace BEFOOL.PhotonTest
         public void MyNameIs(Player player)
         {
             Debug.Log("私の名前は 「" + player.NickName + " 」でござる");
+            string_MyName = player.NickName;
+            string_MyName = PhotonNetwork.NickName;
+
+            Text_MyHeadName = GameObject.FindWithTag("MyHeadName");
+            // Text_MyHeadName = GameObject.FindWithTag("MyHeadName");
+            Text_MyHeadName.GetComponent<Text>().text = string_MyName;
+        }
+
+        public void Set_MyHeadName() // Myプレイヤー名をキャラの頭上に表示
+        {
+            Debug.Log(" Myプレイヤー名をキャラの頭上に表示します");
+            Debug.Log("私の名前は 「" + PhotonNetwork.NickName + " 」でござる");
+            string_MyName = PhotonNetwork.NickName;
+            Debug.Log("string_MyName : " + string_MyName);
+
+            Text_MyHeadName = GameObject.FindWithTag("MyHeadName");
+            // Text_MyHeadName = GameObject.FindWithTag("MyHeadName");
+            Text_MyHeadName.GetComponent<Text>().text = string_MyName;
         }
 
         public void Set_PNameTextAll()

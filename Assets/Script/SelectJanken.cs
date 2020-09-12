@@ -9,6 +9,7 @@ using System;
 using say;　// 対象のスクリプトの情報を取得
 using BEFOOL.PhotonTest;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 //using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class SelectJanken : MonoBehaviour, IPunObservable
@@ -65,6 +66,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Sprite sprite_Choki;
     public Sprite sprite_Pa;
 
+    public Sprite sprite_Icon_utako;
+    public Sprite sprite_Icon_Unitychan;
+    public Sprite sprite_Icon_Pchan;
+    public Sprite sprite_Icon_mobuchan;
+
     public Image MyTeImg_1;
     public Image MyTeImg_2;
     public Image MyTeImg_3;
@@ -100,6 +106,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Image Img_Player4_Te4;
     public Image Img_Player4_Te5;
 
+    public Image Img_Icon_Player1;
+    public Image Img_Icon_Player2;
+    public Image Img_Icon_Player3;
+    public Image Img_Icon_Player4;
 
     public Text MyNumTeText_1;
     public Text MyNumTeText_2;
@@ -197,6 +207,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject MyKageController; //ヒエラルキー上のオブジェクト名
     MyKageController MyKageControllerMSC;//スクリプト名 + このページ上でのニックネーム
 
+    public GameObject Text_MyHeadName; //ヒエラルキー上のオブジェクト名
+    MyHeadNameController MyHeadNameControllerMSC;//スクリプト名 + このページ上でのニックネーム
+
     //public GameObject PushTeBtnManager; //ヒエラルキー上のオブジェクト名
     //PushTeBtn PushTeBtnMSC;
     //public PushTeBtn PushTeBtnMSC;
@@ -249,6 +262,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         MyCameraControllerMSC = MainCamera.GetComponent<MyCameraController>();
         MyKageControllerMSC = MyKageController.GetComponent<MyKageController>();
+        MyHeadNameControllerMSC = Text_MyHeadName.GetComponent<MyHeadNameController>();
         myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
         ResetAlivePlayer();  // 各種カウンター リセット
 
@@ -265,7 +279,145 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         Debug.Log("MyPlayer に かげ を追従するようにセットします");
         MyKageControllerMSC.SetMyKage();  //MyPlayer に かげ を追従するようにセット
+
+        Debug.Log("MyPlayer に MyHeadName を追従するようにセットします");
+        MyHeadNameControllerMSC.SetMyHeadName();
+
+        Debug.Log("プレイヤー顔アイコンをセットして共有します");
+        ToSharePlayerIcon();
     }
+
+
+    #region// Battleシーン遷移後、初期設定・配置の処理一覧（アイコンのセット）
+
+    public void ToSharePlayerIcon()
+    {
+        TestRoomControllerSC.PNameCheck(); // プレイヤー名が埋まっていなかったら入れる
+        MyPlayID();  // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+        SharePlayerIcon();
+    }
+
+    public void SharePlayerIcon() // プレイヤー名 横の顔アイコンをセットして共有する
+    {
+        Debug.Log("* SharePlayerIcon 実行 *");
+        Debug.Log("MyName  " + MyName);
+        Debug.Log("MyID  " + MyID);
+
+        if (MyID == TestRoomControllerSC.string_PID1)
+        {
+            Debug.Log("プレイヤー1のアイコンをセットします");
+            SharePlayerIcon_Player1();
+        }
+
+        else if (MyID == TestRoomControllerSC.string_PID2)
+        {
+            Debug.Log("プレイヤー2のアイコンをセットします");
+            SharePlayerIcon_Player2();
+        }
+
+        else if (MyID == TestRoomControllerSC.string_PID3)
+        {
+            Debug.Log("プレイヤー3のアイコンをセットします");
+            SharePlayerIcon_Player3();
+        }
+
+        else if (MyID == TestRoomControllerSC.string_PID4)
+        {
+            Debug.Log("プレイヤー4のアイコンをセットします");
+            SharePlayerIcon_Player4();
+        }
+    }
+
+
+    [PunRPC]
+    public void SharePlayerIcon_Player1()  // プレイヤー1 のアイコンをセットします
+    {
+        if (int_conMyCharaAvatar == 1)  // うたこ
+        {
+            Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+        }
+        else if (int_conMyCharaAvatar == 2) // Unityちゃん
+        {
+            Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+        }
+        else if (int_conMyCharaAvatar == 3) // Pちゃん
+        {
+            Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+        }
+        else if (int_conMyCharaAvatar == 4) // モブちゃん
+        {
+            Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+        }
+    }
+
+
+    [PunRPC]
+    public void SharePlayerIcon_Player2()  // プレイヤー2 のアイコンをセットします
+    {
+        if (int_conMyCharaAvatar == 1)  // うたこ
+        {
+            Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+        }
+        else if (int_conMyCharaAvatar == 2) // Unityちゃん
+        {
+            Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+        }
+        else if (int_conMyCharaAvatar == 3) // Pちゃん
+        {
+            Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+        }
+        else if (int_conMyCharaAvatar == 4) // モブちゃん
+        {
+            Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+        }
+    }
+
+
+    [PunRPC]
+    public void SharePlayerIcon_Player3()  // プレイヤー3 のアイコンをセットします
+    {
+        if (int_conMyCharaAvatar == 1)  // うたこ
+        {
+            Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+        }
+        else if (int_conMyCharaAvatar == 2) // Unityちゃん
+        {
+            Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+        }
+        else if (int_conMyCharaAvatar == 3) // Pちゃん
+        {
+            Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+        }
+        else if (int_conMyCharaAvatar == 4) // モブちゃん
+        {
+            Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+        }
+    }
+
+
+    [PunRPC]
+    public void SharePlayerIcon_Player4()  // プレイヤー4 のアイコンをセットします
+    {
+        if (int_conMyCharaAvatar == 1)  // うたこ
+        {
+            Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+        }
+        else if (int_conMyCharaAvatar == 2) // Unityちゃん
+        {
+            Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+        }
+        else if (int_conMyCharaAvatar == 3) // Pちゃん
+        {
+            Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+        }
+        else if (int_conMyCharaAvatar == 4) // モブちゃん
+        {
+            Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+        }
+    }
+
+    #endregion
+
 
     #region// Hantei_Group  ジャンケン勝敗 判定 一連のグループ
 
@@ -337,7 +489,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         alivePlayer4 = 1;
 
         CloseImg_CoverBlack_All(); // ジャンケン手の黒カバーをリセット（非表示）
-        
+
         countHanteiTurn = 1;
     }
 
@@ -2743,16 +2895,13 @@ StartTransform1 = StartLine1.transform;
 //StartTransform2 = StartLine2.transform;
 //StartTransform3 = StartLine3.transform;
 //StartTransform4 = StartLine4.transform;
-
 // スタートラインの座標を取得
 PosStartLine1 = StartTransform1.position;
 //PosStartLine2 = StartTransform2.position;
 //PosStartLine3 = StartTransform3.position;
 //PosStartLine4 = StartTransform4.position;
-
 // プレイヤー位置をスタートラインに移動
 myPlayer.transform.position = PosStartLine1;
-
 Player1.transform.position = PosStartLine1;
 Player2.transform.position = PosStartLine2;
 Player3.transform.position = PosStartLine3;
@@ -2778,8 +2927,20 @@ Player4.transform.position = PosStartLine4;
         float Rnd_PosY = UnityEngine.Random.Range(-0.2f, -2.0f);
         // プレイヤー位置をスタートラインに移動
         //myPlayer.transform.position = PosStartCorn_Head;
-        myPlayer.transform.position = new Vector3(StartCorn_HeadTransform.position.x+Rnd_PosX, StartCorn_HeadTransform.position.y+Rnd_PosY, StartCorn_HeadTransform.position.z);
+        myPlayer.transform.position = new Vector3(StartCorn_HeadTransform.position.x + Rnd_PosX, StartCorn_HeadTransform.position.y + Rnd_PosY, StartCorn_HeadTransform.position.z);
 
+    }
+
+    public void BackTo_TitleScene() // タイトル画面へ戻ります
+    {
+        PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene("Launcher");
+    }
+
+    public void BackTo_LobbyScene() // ロビー画面へ戻ります
+    {
+        PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene("Lobby");
     }
 
     // End

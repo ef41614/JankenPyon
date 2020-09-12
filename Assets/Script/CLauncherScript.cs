@@ -28,6 +28,28 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     private bool firstPush = false;
     #endregion
 
+    private void Awake()
+    {
+        Debug.Log("****** CLauncherScript Awake **");
+        Debug.Log(" firstPush ： " + firstPush);
+        Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
+
+        firstPush = false; //初期化
+        if (PhotonNetwork.IsConnected)
+        {
+            Debug.Log("ルームに入っていたので、一旦退出します");
+            PhotonNetwork.Disconnect();
+            //PhotonNetwork.LeaveRoom();
+            Debug.Log("ルームから退出しました");
+        }
+        else
+        {
+            Debug.Log("今、ルームには入っていません");
+        }
+        Debug.Log(" firstPush ： " + firstPush);
+        Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
+    }
+
     void Start()
     {
         firstPush = false; //初期化
@@ -41,8 +63,11 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     public void Connect()
     {
         Debug.Log("CLauncherScript で「Play」が押されました。");
+        Debug.Log(" firstPush ： " + firstPush);
+        Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
         if (!firstPush)
         {
+            Debug.Log("Connect 処理中");
             Debug.Log("PhotonNetwork.NickName Play：" + PhotonNetwork.NickName);
             if (string.IsNullOrWhiteSpace(PhotonNetwork.NickName))
             {
@@ -51,13 +76,25 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
             else
             {
                 if (!PhotonNetwork.IsConnected)
-                {           //Photonに接続できていなければ
+                {
+                    Debug.Log("Photonに接続をします");
+                    //Photonに接続できていなければ
                     PhotonNetwork.ConnectUsingSettings();   //Photonに接続する
                     Debug.Log("Photonに接続しました。");
+                }
+                else
+                {
+                    Debug.Log("Photonに接続できませんで した。");
                 }
             }
             firstPush = true; //ボタン押下済みフラグ
         }
+        else
+        {
+            Debug.Log("Connect 処理に失敗しました");
+        }
+        Debug.Log(" firstPush ： " + firstPush);
+        Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
     }
 
 
@@ -137,12 +174,19 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     //ルームに入室前に呼び出される
     public override void OnConnectedToMaster()
     {
-        RoomOptions options = new RoomOptions();
-        Debug.Log("OnConnectedToMasterが呼ばれました");
-        options.PublishUserId = true; // ★お互いにユーザＩＤが見えるようにする。
-        options.MaxPlayers = 4; // ★最大人数もきちんと定義しておく。
-        // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
-        PhotonNetwork.JoinOrCreateRoom("room", options, TypedLobby.Default);
+        if (firstPush)
+        {
+            RoomOptions options = new RoomOptions();
+            Debug.Log("OnConnectedToMasterが呼ばれました");
+            options.PublishUserId = true; // ★お互いにユーザＩＤが見えるようにする。
+            options.MaxPlayers = 4; // ★最大人数もきちんと定義しておく。
+                                    // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
+            PhotonNetwork.JoinOrCreateRoom("room", options, TypedLobby.Default);
+        }
+        else
+        {
+            Debug.Log("まだスタートボタンを押していません");
+        }
     }
 
     //ルームに入った時に呼ばれる
