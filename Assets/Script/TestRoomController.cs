@@ -61,7 +61,7 @@ namespace BEFOOL.PhotonTest
             EntryCheck();
             PNameCheck();
             Set_PNameTextAll();
-            Set_MyHeadName();
+            ToSet_MyHeadName();
         }
 
         // <summary>
@@ -74,11 +74,12 @@ namespace BEFOOL.PhotonTest
             EntryCheck();
             PNameCheck();
             Set_PNameTextAll();
+            SelectJankenMSC.ToSharePlayerIcon(); // プレイヤー名 横の顔アイコンをセットして共有する
+            ToSet_MyHeadName();                  // Myプレイヤー名をキャラの頭上に表示
         }
 
         public void LoginCheck(Player player)
         {
-            {
                 UpdateMemberList();
                 Debug.Log(allPlayers.Length + ": allPlayers.Length");
                 Debug.Log(player.NickName + "が参加しました");
@@ -99,7 +100,6 @@ namespace BEFOOL.PhotonTest
                 Text_PName4.text = string_PName4;
                 */
                 Set_PNameTextAll();
-            }
         }
 
         public void PNameCheck() // プレイヤー名が埋まっていなかったら入れる
@@ -241,6 +241,12 @@ namespace BEFOOL.PhotonTest
             Text_MyHeadName.GetComponent<Text>().text = string_MyName;
         }
 
+        public void ToSet_MyHeadName() // Myプレイヤー名をキャラの頭上に表示
+        {
+            photonView.RPC("Set_MyHeadName", RpcTarget.All);
+        }
+
+        [PunRPC]
         public void Set_MyHeadName() // Myプレイヤー名をキャラの頭上に表示
         {
             Debug.Log(" Myプレイヤー名をキャラの頭上に表示します");

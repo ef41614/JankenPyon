@@ -108,6 +108,7 @@ MonoBehaviour:
   - SharePlayerIcon_Player2
   - SharePlayerIcon_Player3
   - SharePlayerIcon_Player4
+  - Set_MyHeadName
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

@@ -306,25 +306,29 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (MyID == TestRoomControllerSC.string_PID1)
         {
             Debug.Log("プレイヤー1のアイコンをセットします");
-            SharePlayerIcon_Player1();
+            //SharePlayerIcon_Player1();
+            photonView.RPC("SharePlayerIcon_Player1", RpcTarget.All);
         }
 
         else if (MyID == TestRoomControllerSC.string_PID2)
         {
             Debug.Log("プレイヤー2のアイコンをセットします");
-            SharePlayerIcon_Player2();
+            //SharePlayerIcon_Player2();
+            photonView.RPC("SharePlayerIcon_Player2", RpcTarget.All);
         }
 
         else if (MyID == TestRoomControllerSC.string_PID3)
         {
             Debug.Log("プレイヤー3のアイコンをセットします");
-            SharePlayerIcon_Player3();
+            //SharePlayerIcon_Player3();
+            photonView.RPC("SharePlayerIcon_Player3", RpcTarget.All);
         }
 
         else if (MyID == TestRoomControllerSC.string_PID4)
         {
             Debug.Log("プレイヤー4のアイコンをセットします");
-            SharePlayerIcon_Player4();
+            //SharePlayerIcon_Player4();
+            photonView.RPC("SharePlayerIcon_Player4", RpcTarget.All);
         }
     }
 
@@ -332,6 +336,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void SharePlayerIcon_Player1()  // プレイヤー1 のアイコンをセットします
     {
+        Debug.Log("プレイヤー1のアイコンをセットします");
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
             Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
@@ -354,6 +359,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void SharePlayerIcon_Player2()  // プレイヤー2 のアイコンをセットします
     {
+        Debug.Log("プレイヤー2のアイコンをセットします");
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
             Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
@@ -376,6 +382,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void SharePlayerIcon_Player3()  // プレイヤー3 のアイコンをセットします
     {
+        Debug.Log("プレイヤー3のアイコンをセットします");
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
             Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
@@ -398,6 +405,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void SharePlayerIcon_Player4()  // プレイヤー4 のアイコンをセットします
     {
+        Debug.Log("プレイヤー4のアイコンをセットします");
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
             Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
