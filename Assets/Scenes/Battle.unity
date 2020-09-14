@@ -1230,7 +1230,7 @@ MonoBehaviour:
   unitychanClone: {fileID: 0}
   mobuchanClone: {fileID: 0}
   MainCamera: {fileID: 0}
-  MyKageController: {fileID: 0}
+  MyKage: {fileID: 0}
   Text_MyHeadName: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0
@@ -4164,7 +4164,7 @@ MonoBehaviour:
   unitychanClone: {fileID: 0}
   mobuchanClone: {fileID: 0}
   MainCamera: {fileID: 0}
-  MyKageController: {fileID: 0}
+  MyKage: {fileID: 0}
   Text_MyHeadName: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0
@@ -11132,13 +11132,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MyPlayerPrefab: {fileID: 0}
-  playerPrefab_utako: {fileID: 4564533208180674388, guid: 0b21657f021417446b84e6cdf8c8d238,
+  playerPrefab_utako: {fileID: 4589749714993881286, guid: 0b21657f021417446b84e6cdf8c8d238,
     type: 3}
-  playerPrefab_unitychan: {fileID: 6568197020264804761, guid: c383db6425352c9468410f6b18951cba,
+  playerPrefab_unitychan: {fileID: 4471266383330976691, guid: c383db6425352c9468410f6b18951cba,
     type: 3}
-  playerPrefab_pchan: {fileID: 8918724449199946620, guid: 951d5defec470e746a1c8be0e3863877,
+  playerPrefab_pchan: {fileID: 2961768085066510341, guid: 951d5defec470e746a1c8be0e3863877,
     type: 3}
-  playerPrefab_mobuchan: {fileID: 8158444196712399551, guid: 2bffeb6a5e7ded643aad02a3d0132eb9,
+  playerPrefab_mobuchan: {fileID: 2890334192973475193, guid: 2bffeb6a5e7ded643aad02a3d0132eb9,
     type: 3}
   StartCorn_Head: {fileID: 1969343987}
   StartCorn_Foot: {fileID: 784401418}
@@ -11265,7 +11265,7 @@ MonoBehaviour:
   unitychanClone: {fileID: 0}
   mobuchanClone: {fileID: 0}
   MainCamera: {fileID: 521856297}
-  MyKageController: {fileID: 2075209226}
+  MyKage: {fileID: 0}
   Text_MyHeadName: {fileID: 633919728}
   myPlayer: {fileID: 0}
   rap1: 0
@@ -13545,7 +13545,7 @@ MonoBehaviour:
   unitychanClone: {fileID: 0}
   mobuchanClone: {fileID: 0}
   MainCamera: {fileID: 0}
-  MyKageController: {fileID: 0}
+  MyKage: {fileID: 0}
   Text_MyHeadName: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0
@@ -15911,7 +15911,7 @@ MonoBehaviour:
   unitychanClone: {fileID: 0}
   mobuchanClone: {fileID: 0}
   MainCamera: {fileID: 0}
-  MyKageController: {fileID: 0}
+  MyKage: {fileID: 0}
   Text_MyHeadName: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0
@@ -16610,7 +16610,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &2075209227
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -16847,7 +16847,7 @@ MonoBehaviour:
   unitychanClone: {fileID: 0}
   mobuchanClone: {fileID: 0}
   MainCamera: {fileID: 0}
-  MyKageController: {fileID: 0}
+  MyKage: {fileID: 0}
   Text_MyHeadName: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0
@@ -17479,7 +17479,7 @@ MonoBehaviour:
   unitychanClone: {fileID: 0}
   mobuchanClone: {fileID: 0}
   MainCamera: {fileID: 0}
-  MyKageController: {fileID: 0}
+  MyKage: {fileID: 0}
   Text_MyHeadName: {fileID: 0}
   myPlayer: {fileID: 0}
   rap1: 0

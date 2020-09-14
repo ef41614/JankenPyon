@@ -8,6 +8,7 @@ public class MyCameraController : MonoBehaviour
     public GameObject player;
     //Unityちゃんとカメラの距離
     public float difference;
+    bool FirstSetOK = false;
 
     // Use this for initialization
     void Start()
@@ -18,8 +19,11 @@ public class MyCameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Unityちゃんの位置に合わせてカメラの位置を移動
-        this.transform.position = new Vector3(player.transform.position.x, this.transform.position.y, this.transform.position.z);
+        if (FirstSetOK)
+        {
+            //Unityちゃんの位置に合わせてカメラの位置を移動
+            this.transform.position = new Vector3(player.transform.position.x, this.transform.position.y, this.transform.position.z);
+        }
     }
 
 
@@ -30,5 +34,6 @@ public class MyCameraController : MonoBehaviour
         this.player = GameObject.FindWithTag("MyPlayer");
         //Unityちゃんとカメラの位置（z座標）の差を求める
         this.difference = player.transform.position.z - this.transform.position.z;
+        FirstSetOK = true;
     }
 }

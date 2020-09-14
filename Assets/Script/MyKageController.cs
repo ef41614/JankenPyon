@@ -9,13 +9,13 @@ public class MyKageController : MonoBehaviour
     //Unityちゃんとかげの距離
     public float difference;
 
-    Transform PosStartTransform;  // 開始位置の位置情報 (Transform)
-    Vector3 PosStart;             // 開始位置の位置情報 (Vector3)
-
+    Transform PosStartTrans;  // 開始位置の位置情報 (Transform)
+    Vector3 PosStartV3;             // 開始位置の位置情報 (Vector3)
+    bool FirstSetOK = false;
     // Use this for initialization
     void Start()
     {
-        this.MyAshi = GameObject.FindWithTag("MyAshi");
+        //this.MyAshi = GameObject.FindWithTag("MyAshi");
         Debug.Log("MyKageController 出席確認");
         Debug.Log("MyAshi.transform.position.y まえ1" + MyAshi.transform.position.y);
         Debug.Log("this.transform.position.y まえ1" + transform.position.y);
@@ -24,13 +24,18 @@ public class MyKageController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Unityちゃんの位置に合わせてかげの位置を移動
-//        this.transform.position = new Vector3(MyAshi.transform.position.x, this.transform.position.y, this.transform.position.z);
-        this.transform.position = new Vector3(MyAshi.transform.position.x, PosStart.y, this.transform.position.z);
+        if (FirstSetOK)
+        {
+            //Unityちゃんの位置に合わせてかげの位置を移動
+            //        this.transform.position = new Vector3(MyAshi.transform.position.x, this.transform.position.y, this.transform.position.z);
+            this.transform.position = new Vector3(MyAshi.transform.position.x, PosStartV3.y, MyAshi.transform.position.z);
+            //        this.transform.position = new Vector3(this.transform.position.x, PosStartV3.y, this.transform.position.z);
+            //Debug.Log("PosStartV3.y ： " + PosStartV3.y);
+        }
     }
 
 
-    public void SetMyKage()
+    public void SetMyKage() // スタートラインに移動してからの処理（位置の保存）
     {
         Debug.Log("SetMyCamera 実行確認");
         //Unityちゃんのオブジェクトを取得
@@ -43,14 +48,20 @@ public class MyKageController : MonoBehaviour
         this.transform.position = new Vector3(MyAshi.transform.position.x, MyAshi.transform.position.y, MyAshi.transform.position.z);
         Debug.Log("this.transform.position.y あと1" + transform.position.y);
 
+        //this.MyAshi = GameObject.FindWithTag("MyAshi");
+
         // transformを取得
-        PosStartTransform = this.transform;
+        //PosStartTrans = this.transform;
+        PosStartTrans = MyAshi.transform;
 
         // 開始位置の座標を取得
-        PosStart = PosStartTransform.position;
+        PosStartV3 = PosStartTrans.position;
+
+        Debug.Log("****** PosStartV3.y ： " + PosStartV3.y);
+
 
         // 親子関係を解除する
         //this.gameObject.transform.parent = null;
-        this.MyAshi = GameObject.FindWithTag("MyAshi");
+        FirstSetOK = true;
     }
 }

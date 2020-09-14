@@ -109,6 +109,22 @@ MonoBehaviour:
   - SharePlayerIcon_Player3
   - SharePlayerIcon_Player4
   - Set_MyHeadName
+  - SetIconP1_mobuchan
+  - SetIconP1_Pchan
+  - SetIconP1_Unitychan
+  - SetIconP1_utako
+  - SetIconP2_mobuchan
+  - SetIconP2_Pchan
+  - SetIconP2_Unitychan
+  - SetIconP2_utako
+  - SetIconP3_mobuchan
+  - SetIconP3_Pchan
+  - SetIconP3_Unitychan
+  - SetIconP3_utako
+  - SetIconP4_mobuchan
+  - SetIconP4_Pchan
+  - SetIconP4_Unitychan
+  - SetIconP4_utako
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

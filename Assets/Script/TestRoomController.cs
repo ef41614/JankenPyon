@@ -61,7 +61,7 @@ namespace BEFOOL.PhotonTest
             EntryCheck();
             PNameCheck();
             Set_PNameTextAll();
-            ToSet_MyHeadName();
+            //ToSet_MyHeadName();
         }
 
         // <summary>
@@ -75,31 +75,31 @@ namespace BEFOOL.PhotonTest
             PNameCheck();
             Set_PNameTextAll();
             SelectJankenMSC.ToSharePlayerIcon(); // プレイヤー名 横の顔アイコンをセットして共有する
-            ToSet_MyHeadName();                  // Myプレイヤー名をキャラの頭上に表示
+            //ToSet_MyHeadName();                  // Myプレイヤー名をキャラの頭上に表示
         }
 
         public void LoginCheck(Player player)
         {
-                UpdateMemberList();
-                Debug.Log(allPlayers.Length + ": allPlayers.Length");
-                Debug.Log(player.NickName + "が参加しました");
-                UpdateMemberList();
-                Debug.Log(allPlayers.Length + ": allPlayers.Length");
-                UpdateMemberList();
-                Debug.Log(allPlayers.Length + ": allPlayers.Length");
-                Debug.Log(player.NickName + "が参加しました2");
+            UpdateMemberList();
+            Debug.Log(allPlayers.Length + ": allPlayers.Length");
+            Debug.Log(player.NickName + "が参加しました");
+            UpdateMemberList();
+            Debug.Log(allPlayers.Length + ": allPlayers.Length");
+            UpdateMemberList();
+            Debug.Log(allPlayers.Length + ": allPlayers.Length");
+            Debug.Log(player.NickName + "が参加しました2");
 
-                PNameCheck();
+            PNameCheck();
 
-                Debug.Log(player.NickName + "が参加しました3");
-                Debug.Log(allPlayers.Length + ": allPlayers.Length");
-                /*
-                Text_PName1.text = string_PName1;
-                Text_PName2.text = string_PName2;
-                Text_PName3.text = string_PName3;
-                Text_PName4.text = string_PName4;
-                */
-                Set_PNameTextAll();
+            Debug.Log(player.NickName + "が参加しました3");
+            Debug.Log(allPlayers.Length + ": allPlayers.Length");
+            /*
+            Text_PName1.text = string_PName1;
+            Text_PName2.text = string_PName2;
+            Text_PName3.text = string_PName3;
+            Text_PName4.text = string_PName4;
+            */
+            Set_PNameTextAll();
         }
 
         public void PNameCheck() // プレイヤー名が埋まっていなかったら入れる
@@ -241,6 +241,7 @@ namespace BEFOOL.PhotonTest
             Text_MyHeadName.GetComponent<Text>().text = string_MyName;
         }
 
+        /*
         public void ToSet_MyHeadName() // Myプレイヤー名をキャラの頭上に表示
         {
             photonView.RPC("Set_MyHeadName", RpcTarget.All);
@@ -258,6 +259,7 @@ namespace BEFOOL.PhotonTest
             // Text_MyHeadName = GameObject.FindWithTag("MyHeadName");
             Text_MyHeadName.GetComponent<Text>().text = string_MyName;
         }
+        */
 
         public void Set_PNameTextAll()
         {

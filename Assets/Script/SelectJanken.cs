@@ -204,7 +204,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject MainCamera; //ヒエラルキー上のオブジェクト名
     MyCameraController MyCameraControllerMSC;//スクリプト名 + このページ上でのニックネーム
 
-    public GameObject MyKageController; //ヒエラルキー上のオブジェクト名
+    public GameObject MyKage; //ヒエラルキー上のオブジェクト名
     MyKageController MyKageControllerMSC;//スクリプト名 + このページ上でのニックネーム
 
     public GameObject Text_MyHeadName; //ヒエラルキー上のオブジェクト名
@@ -261,8 +261,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         MyCameraControllerMSC = MainCamera.GetComponent<MyCameraController>();
-        MyKageControllerMSC = MyKageController.GetComponent<MyKageController>();
-        MyHeadNameControllerMSC = Text_MyHeadName.GetComponent<MyHeadNameController>();
+        //MyHeadNameControllerMSC = Text_MyHeadName.GetComponent<MyHeadNameController>();
         myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
         ResetAlivePlayer();  // 各種カウンター リセット
 
@@ -278,10 +277,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         MyCameraControllerMSC.SetMyCamera();  //MyPlayer にカメラを追従するようにセット
 
         Debug.Log("MyPlayer に かげ を追従するようにセットします");
+        MyKage = GameObject.FindWithTag("MyKage");
+        MyKageControllerMSC = MyKage.GetComponent<MyKageController>();
         MyKageControllerMSC.SetMyKage();  //MyPlayer に かげ を追従するようにセット
 
         Debug.Log("MyPlayer に MyHeadName を追従するようにセットします");
-        MyHeadNameControllerMSC.SetMyHeadName();
+        //MyHeadNameControllerMSC.SetMyHeadName();
 
         Debug.Log("プレイヤー顔アイコンをセットして共有します");
         ToSharePlayerIcon();
@@ -289,12 +290,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
 
     #region// Battleシーン遷移後、初期設定・配置の処理一覧（アイコンのセット）
-
     public void ToSharePlayerIcon()
     {
         TestRoomControllerSC.PNameCheck(); // プレイヤー名が埋まっていなかったら入れる
-        MyPlayID();  // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
-        SharePlayerIcon();
+        MyPlayID();                        // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+        SharePlayerIcon();                 // プレイヤー名 横の顔アイコンをセットして共有する
     }
 
     public void SharePlayerIcon() // プレイヤー名 横の顔アイコンをセットして共有する
@@ -303,127 +303,194 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("MyName  " + MyName);
         Debug.Log("MyID  " + MyID);
 
-        if (MyID == TestRoomControllerSC.string_PID1)
+        if (MyID == TestRoomControllerSC.string_PID1) // 自身がプレイヤー1 であるなら
         {
             Debug.Log("プレイヤー1のアイコンをセットします");
-            //SharePlayerIcon_Player1();
-            photonView.RPC("SharePlayerIcon_Player1", RpcTarget.All);
+            SharePlayerIcon_Player1();
         }
 
-        else if (MyID == TestRoomControllerSC.string_PID2)
+        else if (MyID == TestRoomControllerSC.string_PID2) // 自身がプレイヤー2 であるなら
         {
             Debug.Log("プレイヤー2のアイコンをセットします");
-            //SharePlayerIcon_Player2();
-            photonView.RPC("SharePlayerIcon_Player2", RpcTarget.All);
+            SharePlayerIcon_Player2();
         }
 
-        else if (MyID == TestRoomControllerSC.string_PID3)
+        else if (MyID == TestRoomControllerSC.string_PID3) // 自身がプレイヤー3 であるなら
         {
             Debug.Log("プレイヤー3のアイコンをセットします");
-            //SharePlayerIcon_Player3();
-            photonView.RPC("SharePlayerIcon_Player3", RpcTarget.All);
+            SharePlayerIcon_Player3();
         }
 
-        else if (MyID == TestRoomControllerSC.string_PID4)
+        else if (MyID == TestRoomControllerSC.string_PID4) // 自身がプレイヤー4 であるなら
         {
             Debug.Log("プレイヤー4のアイコンをセットします");
-            //SharePlayerIcon_Player4();
-            photonView.RPC("SharePlayerIcon_Player4", RpcTarget.All);
+            SharePlayerIcon_Player4();
         }
     }
 
-
-    [PunRPC]
     public void SharePlayerIcon_Player1()  // プレイヤー1 のアイコンをセットします
     {
-        Debug.Log("プレイヤー1のアイコンをセットします");
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
-            Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+            photonView.RPC("SetIconP1_utako", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 2) // Unityちゃん
         {
-            Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+            photonView.RPC("SetIconP1_Unitychan", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 3) // Pちゃん
         {
-            Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+            photonView.RPC("SetIconP1_Pchan", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 4) // モブちゃん
         {
-            Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+            photonView.RPC("SetIconP1_mobuchan", RpcTarget.All);
         }
+        Debug.Log("プレイヤー1のアイコンをセットしました");
+    }
+    [PunRPC]
+    public void SetIconP1_utako()  // アイコンを うたこ にセット
+    {
+        Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+    }
+    [PunRPC]
+    public void SetIconP1_Unitychan()  // アイコンを Unityちゃん にセット
+    {
+        Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+    }
+    [PunRPC]
+    public void SetIconP1_Pchan()  // アイコンを Pちゃん にセット
+    {
+        Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+    }
+    [PunRPC]
+    public void SetIconP1_mobuchan()  // アイコンを モブちゃん にセット
+    {
+        Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
     }
 
-
-    [PunRPC]
     public void SharePlayerIcon_Player2()  // プレイヤー2 のアイコンをセットします
     {
-        Debug.Log("プレイヤー2のアイコンをセットします");
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
-            Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+            photonView.RPC("SetIconP2_utako", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 2) // Unityちゃん
         {
-            Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+            photonView.RPC("SetIconP2_Unitychan", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 3) // Pちゃん
         {
-            Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+            photonView.RPC("SetIconP2_Pchan", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 4) // モブちゃん
         {
-            Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+            photonView.RPC("SetIconP2_mobuchan", RpcTarget.All);
         }
+        Debug.Log("プレイヤー2のアイコンをセットしました");
+    }
+    [PunRPC]
+    public void SetIconP2_utako()  // アイコンを うたこ にセット
+    {
+        Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+    }
+    [PunRPC]
+    public void SetIconP2_Unitychan()  // アイコンを Unityちゃん にセット
+    {
+        Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+    }
+    [PunRPC]
+    public void SetIconP2_Pchan()  // アイコンを Pちゃん にセット
+    {
+        Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+    }
+    [PunRPC]
+    public void SetIconP2_mobuchan()  // アイコンを モブちゃん にセット
+    {
+        Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
     }
 
-
-    [PunRPC]
     public void SharePlayerIcon_Player3()  // プレイヤー3 のアイコンをセットします
     {
-        Debug.Log("プレイヤー3のアイコンをセットします");
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
-            Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+            photonView.RPC("SetIconP3_utako", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 2) // Unityちゃん
         {
-            Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+            photonView.RPC("SetIconP3_Unitychan", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 3) // Pちゃん
         {
-            Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+            photonView.RPC("SetIconP3_Pchan", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 4) // モブちゃん
         {
-            Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+            photonView.RPC("SetIconP3_mobuchan", RpcTarget.All);
         }
+        Debug.Log("プレイヤー3のアイコンをセットしました");
+    }
+    [PunRPC]
+    public void SetIconP3_utako()  // アイコンを うたこ にセット
+    {
+        Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+    }
+    [PunRPC]
+    public void SetIconP3_Unitychan()  // アイコンを Unityちゃん にセット
+    {
+        Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+    }
+    [PunRPC]
+    public void SetIconP3_Pchan()  // アイコンを Pちゃん にセット
+    {
+        Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+    }
+    [PunRPC]
+    public void SetIconP3_mobuchan()  // アイコンを モブちゃん にセット
+    {
+        Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
     }
 
-
-    [PunRPC]
     public void SharePlayerIcon_Player4()  // プレイヤー4 のアイコンをセットします
     {
-        Debug.Log("プレイヤー4のアイコンをセットします");
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
-            Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+            photonView.RPC("SetIconP4_utako", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 2) // Unityちゃん
         {
-            Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+            photonView.RPC("SetIconP4_Unitychan", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 3) // Pちゃん
         {
-            Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+            photonView.RPC("SetIconP4_Pchan", RpcTarget.All);
         }
         else if (int_conMyCharaAvatar == 4) // モブちゃん
         {
-            Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+            photonView.RPC("SetIconP4_mobuchan", RpcTarget.All);
         }
+        Debug.Log("プレイヤー4のアイコンをセットしました");
     }
-
+    [PunRPC]
+    public void SetIconP4_utako()  // アイコンを うたこ にセット
+    {
+        Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+    }
+    [PunRPC]
+    public void SetIconP4_Unitychan()  // アイコンを Unityちゃん にセット
+    {
+        Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+    }
+    [PunRPC]
+    public void SetIconP4_Pchan()  // アイコンを Pちゃん にセット
+    {
+        Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+    }
+    [PunRPC]
+    public void SetIconP4_mobuchan()  // アイコンを モブちゃん にセット
+    {
+        Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+    }
     #endregion
 
 
