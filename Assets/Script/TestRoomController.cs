@@ -74,8 +74,8 @@ namespace BEFOOL.PhotonTest
             EntryCheck();
             PNameCheck();
             Set_PNameTextAll();
-            SelectJankenMSC.ToSharePlayerIcon(); // プレイヤー名 横の顔アイコンをセットして共有する
-            //ToSet_MyHeadName();                  // Myプレイヤー名をキャラの頭上に表示
+            SelectJankenMSC.ToShare_InitialSetting();   // プレイヤー名 横の顔アイコンをセットして共有する
+            //ToSet_MyHeadName();                       // Myプレイヤー名をキャラの頭上に表示
         }
 
         public void LoginCheck(Player player)

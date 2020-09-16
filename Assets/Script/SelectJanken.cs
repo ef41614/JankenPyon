@@ -10,6 +10,7 @@ using say;　// 対象のスクリプトの情報を取得
 using BEFOOL.PhotonTest;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
 //using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class SelectJanken : MonoBehaviour, IPunObservable
@@ -21,13 +22,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject playerPrefab_unitychan;
     public GameObject playerPrefab_pchan;
     public GameObject playerPrefab_mobuchan;
+    [SerializeField] SortingGroup MysortingGroup;
 
     public GameObject StartCorn_Head;  // スタートラインのコーン
     public GameObject StartCorn_Foot;  // スタートラインのコーン
-    public GameObject StartLine1;  // スタートラインのオブジェクト
-    public GameObject StartLine2;  // スタートラインのオブジェクト
-    public GameObject StartLine3;  // スタートラインのオブジェクト
-    public GameObject StartLine4;  // スタートラインのオブジェクト
+    public GameObject StartMark1;  // スタートラインのオブジェクト
+    public GameObject StartMark2;  // スタートラインのオブジェクト
+    public GameObject StartMark3;  // スタートラインのオブジェクト
+    public GameObject StartMark4;  // スタートラインのオブジェクト
     public GameObject PosPlayer1_obj;
     public GameObject PosPlayer2_obj;
     public GameObject PosPlayer3_obj;
@@ -35,10 +37,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     Transform StartCorn_HeadTransform;  // スタートラインの位置情報 (Transform)
     Transform StartCorn_FootTransform;  // スタートラインの位置情報 (Transform)
-    Transform StartTransform1;  // スタートラインの位置情報 (Transform)
-    Transform StartTransform2;  // スタートラインの位置情報 (Transform)
-    Transform StartTransform3;  // スタートラインの位置情報 (Transform)
-    Transform StartTransform4;  // スタートラインの位置情報 (Transform)
+    Transform StartTrans1;  // スタートラインの位置情報 (Transform)
+    Transform StartTrans2;  // スタートラインの位置情報 (Transform)
+    Transform StartTrans3;  // スタートラインの位置情報 (Transform)
+    Transform StartTrans4;  // スタートラインの位置情報 (Transform)
     Transform transformPlayer1;
     Transform transformPlayer2;
     Transform transformPlayer3;
@@ -46,21 +48,22 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     Vector3 PosStartCorn_Head;     // スタートラインの位置情報 (Vector3)
     Vector3 PosStartCorn_Foot;     // スタートラインの位置情報 (Vector3)
-    Vector3 PosStartLine1;     // スタートラインの位置情報 (Vector3)
-    Vector3 PosStartLine2;     // スタートラインの位置情報 (Vector3)
-    Vector3 PosStartLine3;     // スタートラインの位置情報 (Vector3)
-    Vector3 PosStartLine4;     // スタートラインの位置情報 (Vector3)
+    Vector3 PosStartMark1;     // スタートラインの位置情報 (Vector3)
+    Vector3 PosStartMark2;     // スタートラインの位置情報 (Vector3)
+    Vector3 PosStartMark3;     // スタートラインの位置情報 (Vector3)
+    Vector3 PosStartMark4;     // スタートラインの位置情報 (Vector3)
     Vector3 PosPlayer1;
     Vector3 PosPlayer2;
     Vector3 PosPlayer3;
     Vector3 PosPlayer4;
 
-    public int int_conMyCharaAvatar = 0;
+    public int int_MatchPlayerMaxNum = 4;   // このルームの最大プレイヤー人数（4人 / 10人 / 20人）
+    public int int_conMyCharaAvatar = 0;    // ログイン前に選んだキャラクターのアバター番号
 
     [SerializeField]
     public int count_a = 1;
-    public int NumLivePlayer = 4; // 残りのプレイヤー人数
-    public int countHanteiTurn = 1; // ジャンケン勝ち負け判定のループ回数
+    public int NumLivePlayer = 4;       // 残りのプレイヤー人数
+    public int countHanteiTurn = 1;     // ジャンケン勝ち負け判定のループ回数
 
     public Sprite sprite_Gu;
     public Sprite sprite_Choki;
@@ -182,6 +185,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public int alivePlayer3 = 1;
     public int alivePlayer4 = 1;
 
+    public int WinnerNum = -1;     // 勝ったプレイヤーの番号
+
+    public int original_StepNum;  // ジャンプして移動するステップ数（の元となる変数）
+
     public bool NoneGu = false;
     public bool NoneChoki = false;
     public bool NonePa = false;
@@ -269,37 +276,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("自プレイヤーを生成します");
         CreatePlayerPrefab();
 
-        //スタートラインに移動させる
-        Debug.Log("スタートラインに移動させます");
-        MoveToStartLine();
+        //スタートラインにランダムに移動させる
+        Debug.Log("スタートラインにランダムに移動させます");
+        MoveToStartLineRandom();
 
         Debug.Log("MyPlayer にカメラを追従するようにセットします");
         MyCameraControllerMSC.SetMyCamera();  //MyPlayer にカメラを追従するようにセット
 
-        Debug.Log("MyPlayer に かげ を追従するようにセットします");
         MyKage = GameObject.FindWithTag("MyKage");
         MyKageControllerMSC = MyKage.GetComponent<MyKageController>();
-        MyKageControllerMSC.SetMyKage();  //MyPlayer に かげ を追従するようにセット
 
         Debug.Log("MyPlayer に MyHeadName を追従するようにセットします");
         //MyHeadNameControllerMSC.SetMyHeadName();
 
-        Debug.Log("プレイヤー顔アイコンをセットして共有します");
-        ToSharePlayerIcon();
+        Debug.Log("スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）");
+        ToShare_InitialSetting();
     }
 
 
-    #region// Battleシーン遷移後、初期設定・配置の処理一覧（アイコンのセット）
-    public void ToSharePlayerIcon()
+    #region// Battleシーン遷移後、初期設定・配置の処理一覧（アイコンのセット等）
+    public void ToShare_InitialSetting()
     {
-        TestRoomControllerSC.PNameCheck(); // プレイヤー名が埋まっていなかったら入れる
-        MyPlayID();                        // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
-        SharePlayerIcon();                 // プレイヤー名 横の顔アイコンをセットして共有する
+        TestRoomControllerSC.PNameCheck();  // プレイヤー名が埋まっていなかったら入れる
+        MyPlayID();                         // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+        Share_InitialSetting();             // スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）
+        if (int_MatchPlayerMaxNum > 4)       // マッチ人数が5人以上であるならば
+        {
+            Debug.Log("スタートラインにランダムに移動させます");
+            MoveToStartLineRandom();       // スタートラインにランダムに移動させる
+        }
     }
 
-    public void SharePlayerIcon() // プレイヤー名 横の顔アイコンをセットして共有する
+    public void Share_InitialSetting() // スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）
     {
-        Debug.Log("* SharePlayerIcon 実行 *");
+        Debug.Log("* Share_InitialSetting 実行 *");
         Debug.Log("MyName  " + MyName);
         Debug.Log("MyID  " + MyID);
 
@@ -307,25 +317,98 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Debug.Log("プレイヤー1のアイコンをセットします");
             SharePlayerIcon_Player1();
+            MoveToStartMark1();                // スタートマーク1 の位置へ移動する
+            PlayerSC.int_MySpriteOrder = 1;    // order in layer の順番調整に使用する整数
         }
 
         else if (MyID == TestRoomControllerSC.string_PID2) // 自身がプレイヤー2 であるなら
         {
             Debug.Log("プレイヤー2のアイコンをセットします");
             SharePlayerIcon_Player2();
+            MoveToStartMark2();          // スタートマーク2 の位置へ移動する
+            PlayerSC.int_MySpriteOrder = 2;    // order in layer の順番調整に使用する整数
         }
 
         else if (MyID == TestRoomControllerSC.string_PID3) // 自身がプレイヤー3 であるなら
         {
             Debug.Log("プレイヤー3のアイコンをセットします");
             SharePlayerIcon_Player3();
+            MoveToStartMark3();          // スタートマーク3 の位置へ移動する
+            PlayerSC.int_MySpriteOrder = 3;    // order in layer の順番調整に使用する整数
         }
 
         else if (MyID == TestRoomControllerSC.string_PID4) // 自身がプレイヤー4 であるなら
         {
             Debug.Log("プレイヤー4のアイコンをセットします");
             SharePlayerIcon_Player4();
+            MoveToStartMark4();          // スタートマーク4 の位置へ移動する
+            PlayerSC.int_MySpriteOrder = 4;    // order in layer の順番調整に使用する整数
         }
+        Debug.Log("MyPlayer に かげ を追従するようにセットします");
+        MyKageControllerMSC.SetMyKage();  //MyPlayer に かげ を追従するようにセット
+        PlayerSC.SortMySpriteOrder();      // order in layer （画像表示順）の順番調整を実施する
+        Debug.Log("StartMark1.transform.position.z : " + StartMark1.transform.position.z);
+        Debug.Log("StartMark2.transform.position.z : " + StartMark2.transform.position.z);
+        Debug.Log("StartMark3.transform.position.z : " + StartMark3.transform.position.z);
+        Debug.Log("StartMark4.transform.position.z : " + StartMark4.transform.position.z);
+    }
+
+    public void MoveToStartLineRandom()  // プレイヤーをスタートラインにランダムに移動(配置)させる
+    {
+        // transformを取得
+        StartCorn_HeadTransform = StartCorn_Head.transform;
+        StartCorn_FootTransform = StartCorn_Foot.transform;
+
+        // スタートラインの座標を取得
+        PosStartCorn_Head = StartCorn_HeadTransform.position;
+        PosStartCorn_Foot = StartCorn_FootTransform.position;
+
+        Debug.Log("PosStartCorn_Head ：X " + StartCorn_HeadTransform.position.x);
+        Debug.Log("PosStartCorn_Head ：Y " + StartCorn_HeadTransform.position.y);
+        Debug.Log("PosStartCorn_Head ：Z " + StartCorn_HeadTransform.position.z);
+        Debug.Log("PosStartCorn_Foot ：X " + StartCorn_FootTransform.position.x);
+        Debug.Log("PosStartCorn_Foot ：Y " + StartCorn_FootTransform.position.y);
+        Debug.Log("PosStartCorn_Foot ：Z " + StartCorn_FootTransform.position.z);
+
+        float Rnd_PosX = UnityEngine.Random.Range(-0.5f, -1.0f);
+        float Rnd_PosY = UnityEngine.Random.Range(-0.2f, -2.0f);
+        // プレイヤー位置をスタートラインにランダムに移動
+        //myPlayer.transform.position = PosStartCorn_Head;
+        myPlayer.transform.position = new Vector3(StartCorn_HeadTransform.position.x + Rnd_PosX, StartCorn_HeadTransform.position.y + Rnd_PosY, StartCorn_HeadTransform.position.z);
+    }
+
+    public void MoveToStartMark1() // スタートマーク1 の位置へ移動する
+    {
+        Debug.Log("StartMark1.transform.position.z : " + StartMark1.transform.position.z);
+        Debug.Log("myPlayer.transform.position.z : " + myPlayer.transform.position.z);
+        Debug.Log("PosStartMark1.z : " + PosStartMark1.z);
+
+        StartTrans1 = StartMark1.transform;           // transformを取得
+        PosStartMark1 = StartTrans1.position;         // スタートマーク1 の座標を取得
+        myPlayer.transform.position = PosStartMark1;  // プレイヤー位置を スタートマーク1 に移動
+        Debug.Log("myPlayer.transform.position.z : " + myPlayer.transform.position.z);
+        Debug.Log("PosStartMark1.z : " + PosStartMark1.z);
+    }
+
+    public void MoveToStartMark2() // スタートマーク2 の位置へ移動する
+    {
+        StartTrans2 = StartMark2.transform;           // transformを取得
+        PosStartMark2 = StartTrans2.position;         // スタートマーク2 の座標を取得
+        myPlayer.transform.position = PosStartMark2;  // プレイヤー位置を スタートマーク2 に移動
+    }
+
+    public void MoveToStartMark3() // スタートマーク3 の位置へ移動する
+    {
+        StartTrans3 = StartMark3.transform;           // transformを取得
+        PosStartMark3 = StartTrans3.position;         // スタートマーク3 の座標を取得
+        myPlayer.transform.position = PosStartMark3;  // プレイヤー位置を スタートマーク3 に移動
+    }
+
+    public void MoveToStartMark4() // スタートマーク4 の位置へ移動する
+    {
+        StartTrans4 = StartMark4.transform;           // transformを取得
+        PosStartMark4 = StartTrans4.position;         // スタートマーク4 の座標を取得
+        myPlayer.transform.position = PosStartMark4;  // プレイヤー位置を スタートマーク4 に移動
     }
 
     public void SharePlayerIcon_Player1()  // プレイヤー1 のアイコンをセットします
@@ -500,7 +583,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Debug.Log("ジャンケン勝敗 判定開始");
         ResetAlivePlayer();  // 各種カウンター リセット
-        while (NumLivePlayer > 1) // ジャンケンで残留している人数が 2名以上であるならば
+        while (NumLivePlayer > 1) // ジャンケンで残留している人数が 2名以上であるならば ループ継続
         {
             SetKP_counter();    // ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
             Syohai_Hantei();    // N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定 → 人数が減る
@@ -510,8 +593,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             sequence.InsertCallback(2f, () => WaitTime_2nd());
             LoopOver6thCheck();
         }
-        Debug.Log("ジャンケン勝敗 判定おわり");
-        WhoIsWinner();  // ジャンケン勝敗の勝利者は？
+        Debug.Log("ジャンケン勝敗 判定おわり");    // ここでジャンケンの勝者が 1名 決まっている
+        WhoIsWinner();          // ジャンケン勝敗の勝利者は？
+        ToCheck_Iam_Winner();        // ジャンケンで自分が勝利者かどうかの確認をする
     }
 
     public void LoopOver6thCheck() // ループが6回目突入か？ → 突入ならジャンケンカード選択へ
@@ -529,25 +613,80 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void WhoIsWinner()  // ジャンケン勝敗の勝利者は？
     {
+        WinnerNum = -1;        // 一旦リセット
         if (alivePlayer1 == 1)
         {
             Debug.Log("Player1 勝利");
+            WinnerNum = 1;
         }
         else if (alivePlayer2 == 1)
         {
             Debug.Log("Player2 勝利");
+            WinnerNum = 2;
         }
         else if (alivePlayer3 == 1)
         {
             Debug.Log("Player3 勝利");
+            WinnerNum = 3;
         }
         else if (alivePlayer4 == 1)
         {
             Debug.Log("Player4 勝利");
+            WinnerNum = 4;
         }
         else
         {
             Debug.Log("勝利いない？");
+        }
+    }
+
+    public void ToCheck_Iam_Winner()        // ジャンケンで自分が勝利者かどうかの確認をする
+    {
+        TestRoomControllerSC.PNameCheck();  // プレイヤー名が埋まっていなかったら入れる
+        MyPlayID();                         // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+        Check_Iam_Winner();
+    }
+
+    public void Check_Iam_Winner()          // ジャンケンで自分が勝利者かどうかの確認をする
+    {
+        Debug.Log("* ジャンケンで自分が勝利者かどうかの確認をします *");
+        Debug.Log("MyName  " + MyName);
+        Debug.Log("MyID  " + MyID);
+
+        if (MyID == TestRoomControllerSC.string_PID1) // 自身がプレイヤー1 であるなら
+        {
+            if (WinnerNum == 1)          // プレイヤー1 が勝利者
+            {
+                Debug.Log("自分の勝利！！ 前に進みます！");
+                FromWin_ToJump();     // ジャンケンに勝ったのでジャンプで移動する その一連の処理
+            }
+        }
+
+        else if (MyID == TestRoomControllerSC.string_PID2) // 自身がプレイヤー2 であるなら
+        {
+            if (WinnerNum == 2)          // プレイヤー2 が勝利者
+            {
+                Debug.Log("自分の勝利！！ 前に進みます！");
+                FromWin_ToJump();     // ジャンケンに勝ったのでジャンプで移動する その一連の処理
+            }
+        }
+
+        else if (MyID == TestRoomControllerSC.string_PID3) // 自身がプレイヤー3 であるなら
+        {
+            if (WinnerNum == 3)          // プレイヤー3 が勝利者
+            {
+                Debug.Log("自分の勝利！！ 前に進みます！");
+                FromWin_ToJump();     // ジャンケンに勝ったのでジャンプで移動する その一連の処理
+            }
+        }
+
+        else if (MyID == TestRoomControllerSC.string_PID4) // 自身がプレイヤー4 であるなら
+        {
+            if (WinnerNum == 4)          // プレイヤー4 が勝利者
+            {
+                Debug.Log("自分の勝利！！ 前に進みます！");
+                FromWin_ToJump();     // ジャンケンに勝ったのでジャンプで移動する その一連の処理
+            }
         }
     }
 
@@ -939,16 +1078,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Win_Gu()
     {
         // ぐー の人のみ 残留
+        original_StepNum = 3;     // 移動ステップ数を 3 に上書き
     }
 
     public void Win_Choki()
     {
         // ちょき の人のみ 残留
+        original_StepNum = 6;     // 移動ステップ数を 6 に上書き
     }
 
     public void Win_Pa()
     {
         // ぱー の人のみ 残留
+        original_StepNum = 6;     // 移動ステップ数を 6 に上書き
     }
 
     public void Lose_Gu()   // ぐー の人のみ 脱落
@@ -2950,7 +3092,21 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
-    public void bridge_JumpToRight()
+
+    public void FromWin_ToJump()     // ジャンケンに勝ったのでジャンプで移動する その一連の処理
+    {
+        Debug.Log("FromWin_ToJump を実行します");
+        Set_StepNum();               // ジャンプする回数を設定する（変数上書き） 
+        bridge_JumpToRight();        // 右方向へ 指定された回数 ぴょん と跳ねながら移動する
+    }
+
+    public void Set_StepNum()        // ジャンプする回数を設定する（変数上書き） 
+    {
+        Debug.Log("ジャンプする回数を設定（変数上書き）します");
+        PlayerSC.MoveForward_StepNum = original_StepNum;   // ジャンプして移動するステップ数（の元となる変数）に上書きする
+    }
+
+    public void bridge_JumpToRight()  // 右方向へ 指定された回数 ぴょん と跳ねながら移動する
     {
         Debug.Log("bridge_JumpToRight を実行します");
         PlayerSC.JumpRight();
@@ -2962,49 +3118,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         PlayerSC.receivedDammage();
     }
 
-    public void MoveToStartLine()
-    {
-        /* ★後で復活
-// transformを取得
-StartTransform1 = StartLine1.transform;
-//StartTransform2 = StartLine2.transform;
-//StartTransform3 = StartLine3.transform;
-//StartTransform4 = StartLine4.transform;
-// スタートラインの座標を取得
-PosStartLine1 = StartTransform1.position;
-//PosStartLine2 = StartTransform2.position;
-//PosStartLine3 = StartTransform3.position;
-//PosStartLine4 = StartTransform4.position;
-// プレイヤー位置をスタートラインに移動
-myPlayer.transform.position = PosStartLine1;
-Player1.transform.position = PosStartLine1;
-Player2.transform.position = PosStartLine2;
-Player3.transform.position = PosStartLine3;
-Player4.transform.position = PosStartLine4;
-*/
 
-        // transformを取得
-        StartCorn_HeadTransform = StartCorn_Head.transform;
-        StartCorn_FootTransform = StartCorn_Foot.transform;
-
-        // スタートラインの座標を取得
-        PosStartCorn_Head = StartCorn_HeadTransform.position;
-        PosStartCorn_Foot = StartCorn_FootTransform.position;
-
-        Debug.Log("PosStartCorn_Head ：X " + StartCorn_HeadTransform.position.x);
-        Debug.Log("PosStartCorn_Head ：Y " + StartCorn_HeadTransform.position.y);
-        Debug.Log("PosStartCorn_Head ：Z " + StartCorn_HeadTransform.position.z);
-        Debug.Log("PosStartCorn_Foot ：X " + StartCorn_FootTransform.position.x);
-        Debug.Log("PosStartCorn_Foot ：Y " + StartCorn_FootTransform.position.y);
-        Debug.Log("PosStartCorn_Foot ：Z " + StartCorn_FootTransform.position.z);
-
-        float Rnd_PosX = UnityEngine.Random.Range(-0.5f, -1.0f);
-        float Rnd_PosY = UnityEngine.Random.Range(-0.2f, -2.0f);
-        // プレイヤー位置をスタートラインに移動
-        //myPlayer.transform.position = PosStartCorn_Head;
-        myPlayer.transform.position = new Vector3(StartCorn_HeadTransform.position.x + Rnd_PosX, StartCorn_HeadTransform.position.y + Rnd_PosY, StartCorn_HeadTransform.position.z);
-
-    }
 
     public void BackTo_TitleScene() // タイトル画面へ戻ります
     {

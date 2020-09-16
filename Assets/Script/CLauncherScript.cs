@@ -10,10 +10,10 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
 
     //Public変数の定義はココで
     public static int int_MyCharaAvatar = -1;
-    static int int_player1_CharaAvatar = -1;
-    static int int_player2_CharaAvatar = -1;
-    static int int_player3_CharaAvatar = -1;
-    static int int_player4_CharaAvatar = -1;
+    //static int int_player1_CharaAvatar = -1;
+    //static int int_player2_CharaAvatar = -1;
+    //static int int_player3_CharaAvatar = -1;
+    //static int int_player4_CharaAvatar = -1;
 
     public GameObject Utako_Button;
     public GameObject Unitychan_Button;

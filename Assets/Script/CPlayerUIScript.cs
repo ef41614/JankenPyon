@@ -8,16 +8,16 @@ public class CPlayerUIScript : MonoBehaviour
 {
     #region Public Properties
     //キャラの頭上に乗るように調整するためのOffset
-    public Vector3 ScreenOffset = new Vector3(0f, 30f, 0f);
+    //public Vector3 ScreenOffset = new Vector3(0f, 30f, 0f);
 
     //プレイヤー名前設定用Text
     public Text PlayerNameText;
 
     //プレイヤーのHP用Slider
-    public Slider PlayerHPSlider;
+    //public Slider PlayerHPSlider;
 
     //プレイヤーのチャット用Text
-    public Text ChatText;
+    //public Text ChatText;
 
     public GameObject PlayerManager;
 
@@ -25,7 +25,7 @@ public class CPlayerUIScript : MonoBehaviour
 
     #region Private Properties
     //追従するキャラのPlayerManager情報
-    CPlayerManager _target;
+    public CPlayerManager _target;
     float _characterControllerHeight;
     Transform _targetTransform;
     Vector3 _targetPosition;
@@ -35,7 +35,7 @@ public class CPlayerUIScript : MonoBehaviour
     void Awake()
     {
         //このオブジェクトはCanvasオブジェクトの子オブジェクトとして生成
-        this.GetComponent<Transform>().SetParent(GameObject.Find("Canvas").GetComponent<Transform>());
+        //this.GetComponent<Transform>().SetParent(GameObject.Find("Canvas").GetComponent<Transform>());
     }
 
     void Update()
@@ -48,16 +48,16 @@ public class CPlayerUIScript : MonoBehaviour
         }
 
         // 現在のHPをSliderに適用
-        if (PlayerHPSlider != null)
-        {
-            PlayerHPSlider.value = _target.HP;
-        }
+        //if (PlayerHPSlider != null)
+        //{
+        //    PlayerHPSlider.value = _target.HP;
+        //}
 
         // 頭上チャットを表示
-        if (ChatText != null)
-        {
-            ChatText.text = _target.ChatText;
-        }
+        //if (ChatText != null)
+        //{
+        //    ChatText.text = _target.ChatText;
+        //}
     }
 
     void LateUpdate()
@@ -65,10 +65,10 @@ public class CPlayerUIScript : MonoBehaviour
         //targetのオブジェクトを追跡する
         if (_targetTransform != null)
         {
-            _targetPosition = _targetTransform.position;    //三次元空間上のtargetの座標を得る
-            _targetPosition.y += _characterControllerHeight;  //キャラクターの背の高さを考慮する
-            //targetの座標から頭上UIの画面上の二次元座標を計算して移動させる
-            this.transform.position = Camera.main.WorldToScreenPoint(_targetPosition) + ScreenOffset;
+           // _targetPosition = _targetTransform.position;    //三次元空間上のtargetの座標を得る
+           // _targetPosition.y += _characterControllerHeight;  //キャラクターの背の高さを考慮する
+           // targetの座標から頭上UIの画面上の二次元座標を計算して移動させる
+           // this.transform.position = Camera.main.WorldToScreenPoint(_targetPosition) + ScreenOffset;
         }
     }
     #endregion
@@ -86,26 +86,26 @@ public class CPlayerUIScript : MonoBehaviour
         _targetTransform = _target.GetComponent<Transform>();
 
         //CharacterController取得
-        CharacterController _characterController = _target.GetComponent<CharacterController>();
+        //CharacterController _characterController = _target.GetComponent<CharacterController>();
 
         //PlayerManagerの頭上UIに表示したいデータをコピー
-        if (_characterController != null)
-        {
-            _characterControllerHeight = _characterController.height;
-        }
+        //if (_characterController != null)
+        //{
+        //    _characterControllerHeight = _characterController.height;
+        //}
 
         if (PlayerNameText != null)
         {
             PlayerNameText.text = _target.photonView.Owner.NickName;    //プレイヤー名
         }
-        if (PlayerHPSlider != null)
-        {
-            PlayerHPSlider.value = _target.HP;                          //HP
-        }
-        if (ChatText != null)
-        {
-            ChatText.text = _target.ChatText;                           //頭上チャットText
-        }
+        //if (PlayerHPSlider != null)
+        //{
+        //    PlayerHPSlider.value = _target.HP;                          //HP
+        //}
+        //if (ChatText != null)
+        //{
+        //    ChatText.text = _target.ChatText;                           //頭上チャットText
+        //}
     }
     #endregion
 }

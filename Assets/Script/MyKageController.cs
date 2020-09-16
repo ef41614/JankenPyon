@@ -17,7 +17,7 @@ public class MyKageController : MonoBehaviour
     {
         //this.MyAshi = GameObject.FindWithTag("MyAshi");
         Debug.Log("MyKageController 出席確認");
-        Debug.Log("MyAshi.transform.position.y まえ1" + MyAshi.transform.position.y);
+//        Debug.Log("MyAshi.transform.position.y まえ1" + MyAshi.transform.position.y);
         Debug.Log("this.transform.position.y まえ1" + transform.position.y);
     }
 
