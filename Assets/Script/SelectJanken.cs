@@ -57,14 +57,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     Vector3 PosPlayer3;
     Vector3 PosPlayer4;
 
-    public int int_MatchPlayerMaxNum = 4;   // このルームの最大プレイヤー人数（4人 / 10人 / 20人）
-    public int int_conMyCharaAvatar = 0;    // ログイン前に選んだキャラクターのアバター番号
-
-    [SerializeField]
-    public int count_a = 1;
-    public int NumLivePlayer = 4;       // 残りのプレイヤー人数
-    public int countHanteiTurn = 1;     // ジャンケン勝ち負け判定のループ回数
-
     public Sprite sprite_Gu;
     public Sprite sprite_Choki;
     public Sprite sprite_Pa;
@@ -113,6 +105,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Image Img_Icon_Player2;
     public Image Img_Icon_Player3;
     public Image Img_Icon_Player4;
+
+    public Image Img_Head_MyIcon;
+    public Text Text_Head_MyPName;
+    public Image Img_MyIcon_SelectPanel;
+    public Text Text_MyPName_SelectPanel;
 
     public Text MyNumTeText_1;
     public Text MyNumTeText_2;
@@ -180,14 +177,32 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public int KP3 = -1;
     public int KP4 = -1;
 
+    public int int_IamNowWaiting = 0;        // 自分のジャンケン手 決定して待機中 （0：まだ決定してない、1：決定して待機中）
+    public int int_NowWaiting_Player1 = 0;   // ジャンケン手 決定して待機中 （0：まだ決定してない、1：決定して待機中）
+    public int int_NowWaiting_Player2 = 0;
+    public int int_NowWaiting_Player3 = 0;
+    public int int_NowWaiting_Player4 = 0;
+
+    public int Iam_alive = 1;
     public int alivePlayer1 = 1; // ジャンケンで残留してれば 1 、負けたら -1
     public int alivePlayer2 = 1;
     public int alivePlayer3 = 1;
     public int alivePlayer4 = 1;
 
+    int SankaNinzu = 0;       // 総参加人数
+    int int_WaitingPlayers = 0;   // 現在待機中の総人数
+    int anzenPoint = 0;
     public int WinnerNum = -1;     // 勝ったプレイヤーの番号
 
     public int original_StepNum;  // ジャンプして移動するステップ数（の元となる変数）
+
+    public int int_MatchPlayerMaxNum = 4;   // このルームの最大プレイヤー人数（4人 / 10人 / 20人）
+    public int int_conMyCharaAvatar = 0;    // ログイン前に選んだキャラクターのアバター番号
+
+    [SerializeField]
+    public int count_a = 1;
+    public int NumLivePlayer = 0;       // 残りのプレイヤー人数
+    public int countHanteiTurn = 1;     // ジャンケン勝ち負け判定のループ回数
 
     public bool NoneGu = false;
     public bool NoneChoki = false;
@@ -291,6 +306,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         Debug.Log("スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）");
         ToShare_InitialSetting();
+        Check_CanAppear_KetteiBtn();  // ジャンケン手決定ボタンを表示できるか確認
+        NinzuCheck();                 // 総参加人数 と 現在待機中の総人数
+        NumLivePlayer = SankaNinzu;
+        Debug.Log("NumLivePlayer は "+ NumLivePlayer);
     }
 
 
@@ -351,6 +370,35 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("StartMark2.transform.position.z : " + StartMark2.transform.position.z);
         Debug.Log("StartMark3.transform.position.z : " + StartMark3.transform.position.z);
         Debug.Log("StartMark4.transform.position.z : " + StartMark4.transform.position.z);
+
+        Text_MyPName_SelectPanel.text = MyName;  // SelectPanel にMyName をセット
+        Text_Head_MyPName.text = MyName;         // 画面上部 にMyName をセット
+        SetMyIcon_SelectPanel();                 // 私のアイコンをセレクトパネルにセットします
+    }
+
+    public void SetMyIcon_SelectPanel()  // 私のアイコンをセレクトパネルにセットします
+    {
+        if (int_conMyCharaAvatar == 1)  // うたこ
+        {
+            Img_MyIcon_SelectPanel.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+            Img_Head_MyIcon.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+        }
+        else if (int_conMyCharaAvatar == 2) // Unityちゃん
+        {
+            Img_MyIcon_SelectPanel.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+            Img_Head_MyIcon.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+        }
+        else if (int_conMyCharaAvatar == 3) // Pちゃん
+        {
+            Img_MyIcon_SelectPanel.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+            Img_Head_MyIcon.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+        }
+        else if (int_conMyCharaAvatar == 4) // モブちゃん
+        {
+            Img_MyIcon_SelectPanel.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+            Img_Head_MyIcon.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+        }
+        Debug.Log("私のアイコンをセレクトパネルにセットしました");
     }
 
     public void MoveToStartLineRandom()  // プレイヤーをスタートラインにランダムに移動(配置)させる
@@ -579,41 +627,319 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     #region// Hantei_Group  ジャンケン勝敗 判定 一連のグループ
 
-    public void Hantei_Stream()
+    public void JankenTe_Kettei()               // ジャンケン手 決定ボタン（「これでOK!」）を押した時の処理
     {
+        Debug.Log("ジャンケン手 これで決定します");
+        ShuffleCardsMSC.CloseMyJankenPanel();   // 不要なパネルを閉じる
+
+        Debug.Log("私のジャンケン手をみんなに提供（共有）します");
+        ToSharePlayerTeNum();                   // 私のジャンケン手をみんなに提供（共有）します
+
+        Debug.Log("決定ボタンを押したので、他のプレイヤーを待っています");
+        ShuffleCardsMSC.AppearWait_JankenPanel();   // 待機中パネルを表示
+
+        Debug.Log("私は待機中です");
+        int_IamNowWaiting = 1;                  // 自分のジャンケン手 決定して待機中 （0：まだ決定してない、1：決定して待機中）
+
+        Debug.Log("私が待機中ということを、全員（他のプレイヤー）に情報提供（共有）します");
+        ToCheck_NowWaiting();                   // ジャンケンで自分が待機中の旨を 情報提供（共有）する
+
+        Debug.Log("全員手が決定し、勝敗判定フェーズへ進めるか確認します");
+        // Check_Can_Hantei_Stream();           // 勝敗判定フェーズへ進めるか確認する
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(2f, () => Check_Can_Hantei_Stream());
+    }
+
+    public void ToCheck_NowWaiting()        // ジャンケンで自分が待機中の旨を 情報提供（共有）する
+    {
+        TestRoomControllerSC.PNameCheck();  // プレイヤー名が埋まっていなかったら入れる
+        MyPlayID();                         // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+        Check_NowWaiting();
+    }
+
+    public void Check_NowWaiting()          // ジャンケンで自分が待機中の旨を 情報提供（共有）する
+    {
+        Debug.Log("* ジャンケンで自分が待機中かどうかの確認をします *");
+        Debug.Log("MyName  " + MyName);
+        Debug.Log("MyID  " + MyID);
+
+        if (MyID == TestRoomControllerSC.string_PID1) // 自身がプレイヤー1 であるなら
+        {
+            Debug.Log("プレイヤー1は待機中です");
+            // int_NowWaiting_Player1 = 1;
+            photonView.RPC("Player1_NowWaiting", RpcTarget.All);
+        }
+
+        else if (MyID == TestRoomControllerSC.string_PID2) // 自身がプレイヤー2 であるなら
+        {
+            Debug.Log("プレイヤー2は待機中です");
+            photonView.RPC("Player2_NowWaiting", RpcTarget.All);
+        }
+
+        else if (MyID == TestRoomControllerSC.string_PID3) // 自身がプレイヤー3 であるなら
+        {
+            Debug.Log("プレイヤー3は待機中です");
+            photonView.RPC("Player3_NowWaiting", RpcTarget.All);
+        }
+
+        else if (MyID == TestRoomControllerSC.string_PID4) // 自身がプレイヤー4 であるなら
+        {
+            Debug.Log("プレイヤー4は待機中です");
+            photonView.RPC("Player4_NowWaiting", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    public void Player1_NowWaiting()  // Player1 が 待機中 ⇒ 全員に情報提供（共有）する
+    {
+        int_NowWaiting_Player1 = 1;
+    }
+    [PunRPC]
+    public void Player2_NowWaiting()  // Player2 が 待機中 ⇒ 全員に情報提供（共有）する
+    {
+        int_NowWaiting_Player2 = 1;
+    }
+    [PunRPC]
+    public void Player3_NowWaiting()  // Player3 が 待機中 ⇒ 全員に情報提供（共有）する
+    {
+        int_NowWaiting_Player3 = 1;
+    }
+    [PunRPC]
+    public void Player4_NowWaiting()  // Player4 が 待機中 ⇒ 全員に情報提供（共有）する
+    {
+        int_NowWaiting_Player4 = 1;
+    }
+
+    public void Check_Can_Hantei_Stream()      // 勝敗判定フェーズへ進めるか確認する
+    {
+        Debug.Log(TestRoomControllerSC.allPlayers.Length + ": allPlayers.Length");
+        Debug.Log("現在の参加人数は " + TestRoomControllerSC.int_JoinedPlayerAllNum);
+        NinzuCheck();                          // 総参加人数 と 現在待機中の総人数
+        if (int_WaitingPlayers == SankaNinzu)  // 参加している全員が待機中になっていたら
+        {
+            Debug.Log("全員手が決定しました。全員待機中です。勝敗判定に進みます！！");
+            Hantei_Stream();                   // ジャンケン勝敗判定実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
+        }
+        else
+        {
+            Debug.Log("まだ決定ボタンを 押していない人がいます");
+        }
+    }
+
+    public void NinzuCheck()  // 総参加人数 と 現在待機中の総人数
+    {
+        SankaNinzu = TestRoomControllerSC.int_JoinedPlayerAllNum;       // 総参加人数
+        int_WaitingPlayers = int_NowWaiting_Player1 + int_NowWaiting_Player2 + int_NowWaiting_Player3 + int_NowWaiting_Player4;   // 現在待機中の総人数
+        Debug.Log("SankaNinzu ： " + SankaNinzu);
+        Debug.Log("int_WaitingPlayers ： " + int_WaitingPlayers);
+    }
+
+    public void Hantei_Stream()  // ジャンケン勝敗判定実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
+    {
+        // Debug.Log("ジャンケン手 これで決定します");
+        // JankenTe_Kettei();                      // ジャンケン手決定ボタン（「これでOK!」）を押した時の処理
+
+        // Debug.Log("私のジャンケン手をみんなに提供（共有）します");
+        // ToSharePlayerTeNum();
+
         Debug.Log("ジャンケン勝敗 判定開始");
-        ResetAlivePlayer();  // 各種カウンター リセット
-        while (NumLivePlayer > 1) // ジャンケンで残留している人数が 2名以上であるならば ループ継続
+        // ResetAlivePlayer();  // 各種カウンター リセット
+
+        if (Iam_alive == 1) // 自分がジャンケン生存者である
         {
-            SetKP_counter();    // ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
-            Syohai_Hantei();    // N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定 → 人数が減る
-            CountLivePlayer();  // 残留しているプレイヤー人数をカウントする ： NumLivePlayer を取得
-            countHanteiTurn++;  // N回目 のループ を 1 進める
-            var sequence = DOTween.Sequence();
-            sequence.InsertCallback(2f, () => WaitTime_2nd());
-            LoopOver6thCheck();
+            Debug.Log("私は生きています！");
+            ShuffleCardsMSC.CloseWait_JankenPanel();       //●非表示にする
         }
+        else   // ジャンケン敗北者
+        {
+            Debug.Log("はぁ、はぁ、敗北者？");
+            ShuffleCardsMSC.AppearWait_JankenPanel();       //●表示させる
+        }
+
+        // 1回目ループ
+        if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
+        {
+            JankenBattle_OneRoop();   // ジャンケンバトルの１ループ分処理   
+        }
+
+        // 2回目ループ            
+        if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
+        {
+            JankenBattle_OneRoop();   // ジャンケンバトルの１ループ分処理   
+        }
+
+        // 3回目ループ            
+        if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
+        {
+            JankenBattle_OneRoop();   // ジャンケンバトルの１ループ分処理   
+        }
+
+        // 4回目ループ            
+        if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
+        {
+            JankenBattle_OneRoop();   // ジャンケンバトルの１ループ分処理   
+        }
+
+        // 5回目ループ            
+        if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
+        {
+            JankenBattle_OneRoop();   // ジャンケンバトルの１ループ分処理   
+        }
+
+        if (anzenPoint < 5)
+        {
+            // 生存者人数チェック： ジャンケン生存者が2人以上残っているか？ → 2人以上ならジャンケンカード再選択へ  戻る
+            if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
+            {
+                Debug.Log("ジャンケン生存者が2人以上残っている ので 1人になるまでやり直します");
+                anzenPoint++;
+                Debug.Log("anzenPoint : " + anzenPoint);
+                ToNextTurn();          // 次のターンへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
+                Hantei_Stream();       // 生存者 1人になるまでやり直し
+            }
+            else
+            {
+                Debug.Log("生存者 1名になりました");    // ここでジャンケンの勝者が 1名 になった
+            }
+        }
+        else
+        {
+            Debug.Log("anzenPoint が 5回以上になりました。 スクリプトの見直しが必要です");
+        }
+
+        if(SankaNinzu == 1)    // 参加人数が1人の時（テストプレイ時）
+        {
+            original_StepNum = 4;     // 移動ステップ数を 4 に上書き
+        }
+
         Debug.Log("ジャンケン勝敗 判定おわり");    // ここでジャンケンの勝者が 1名 決まっている
-        WhoIsWinner();          // ジャンケン勝敗の勝利者は？
-        ToCheck_Iam_Winner();        // ジャンケンで自分が勝利者かどうかの確認をする
+        WhoIsWinner();           // ジャンケン勝敗の勝利者は？
+        ToCheck_Iam_Winner();    // ジャンケンで自分が勝利者かどうかの確認をする → 勝ってたら右にジャンプ！
+
+        ToNextTurn();            // 次のターンへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
+        ResetAlivePlayer();      // 各種 生存者カウンター リセット
+        anzenPoint = 0;
+        ShuffleCardsMSC.ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
     }
 
-    public void LoopOver6thCheck() // ループが6回目突入か？ → 突入ならジャンケンカード選択へ
+
+    public void JankenBattle_OneRoop()   // ジャンケンバトルの１ループ分処理
     {
-        if (countHanteiTurn == 6)
+        Debug.Log("■countHanteiTurn : " + countHanteiTurn + " 回目のジャンケンループ ");    // N回目のジャンケンループ
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(2f* countHanteiTurn, () => JankenBattle_MainPart());  // ジャンケンバトルのメイン判定処理（2秒待機後）
+    }
+
+    public void JankenBattle_MainPart()   // ジャンケンバトルのメイン判定処理
+    {
+        SetKP_counter();    // ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
+        Syohai_Hantei();    // N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定 → 人数が減る
+        CountLivePlayer();  // 残留しているプレイヤー人数をカウントする ： NumLivePlayer を取得
+        countHanteiTurn++;  // N回目 のループ を 1 進める
+    }
+
+
+    public void ToNextTurn() // 次のターンへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
+    {
+        Debug.Log("ToNextTurn() // 次のターンへ移る準備をします");
+        ResetMyNumTe_All();      // MyNumTe 数値を -1 にリセット（int,text）
+        Reset_MyRireki_All();  // MyRireki イメージを null にリセット（Image）
+        ToCanPush_All();       // じゃんけんボタン ボタン押せるようにする(フラグのリセット）（bool）
+        ResetPlayerTeNum();    // Player1 ～ Player4 のじゃんけん手 数値を -1 にリセット（int,text）
+        ResetImg_PlayerlayerRireki_All(); // Player1 ～ Player4 のじゃんけん手 履歴イメージを null にリセット（Image）
+        ShuffleCardsMSC.Reset_All();  // じゃんけんカード 手のセット
+        ShuffleCardsMSC.Set_All();    // じゃんけんカード 手のリセット
+                                      // ResetAlivePlayer();  // 各種カウンター リセット
+        countHanteiTurn = 1;   // ループカウンター 1に戻す
+    }
+
+
+
+    public void ResetAlivePlayer()  // 各種 生存者カウンター リセット
+    {
+        alivePlayer1 = 1;           // ジャンケンで残留してれば 1 、負けたら 0
+        alivePlayer2 = 1;
+        alivePlayer3 = 1;
+        alivePlayer4 = 1;
+        Iam_alive = 1;
+        CloseImg_CoverBlack_All();  // ジャンケン手の黒カバーをリセット（非表示）
+
+        countHanteiTurn = 1;
+    }
+
+    public void ToCheck_Iam_alive()        // ジャンケンで自分が生き残っているかどうかの確認をする
+    {
+        TestRoomControllerSC.PNameCheck();  // プレイヤー名が埋まっていなかったら入れる
+        MyPlayID();                         // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+        Check_Iam_alive();
+    }
+
+    public void Check_Iam_alive()          // ジャンケンで自分が生き残っているかどうかの確認をする
+    {
+        Debug.Log("* ジャンケンで自分が生き残っているかどうかの確認をします *");
+        Debug.Log("MyName  " + MyName);
+        Debug.Log("MyID  " + MyID);
+
+        if (MyID == TestRoomControllerSC.string_PID1) // 自身がプレイヤー1 であるなら
         {
-            Debug.Log("ループが6回目突入 → ジャンケンカード選択へ");
+            if (alivePlayer1 == 1) // Player1 が生きている
+            {
+                Debug.Log("私は生きています！");
+                Iam_alive = 1;
+            }
+            else
+            {
+                Debug.Log("はぁ、はぁ、敗北者？");
+                Iam_alive = -1;
+            }
         }
-        if (countHanteiTurn >= 7)
+
+        else if (MyID == TestRoomControllerSC.string_PID2) // 自身がプレイヤー2 であるなら
         {
-            Debug.Log("！！！ ループが7回目突入 → 要スクリプト見直し ！！！");
-            NumLivePlayer = 0;
+            if (alivePlayer2 == 1) // Player2 が生きている
+            {
+                Debug.Log("私は生きています！");
+                Iam_alive = 1;
+            }
+            else
+            {
+                Debug.Log("はぁ、はぁ、敗北者？");
+                Iam_alive = -1;
+            }
+        }
+
+        else if (MyID == TestRoomControllerSC.string_PID3) // 自身がプレイヤー3 であるなら
+        {
+            if (alivePlayer3 == 1) // Player3 が生きている
+            {
+                Debug.Log("私は生きています！");
+                Iam_alive = 1;
+            }
+            else
+            {
+                Debug.Log("はぁ、はぁ、敗北者？");
+                Iam_alive = -1;
+            }
+        }
+
+        else if (MyID == TestRoomControllerSC.string_PID4) // 自身がプレイヤー4 であるなら
+        {
+            if (alivePlayer4 == 1) // Player4 が生きている
+            {
+                Debug.Log("私は生きています！");
+                Iam_alive = 1;
+            }
+            else
+            {
+                Debug.Log("はぁ、はぁ、敗北者？");
+                Iam_alive = -1;
+            }
         }
     }
 
-    public void WhoIsWinner()  // ジャンケン勝敗の勝利者は？
+    public void WhoIsWinner()              // ジャンケン勝敗の勝利者は？
     {
-        WinnerNum = -1;        // 一旦リセット
+        WinnerNum = -1;                    // 一旦リセット
         if (alivePlayer1 == 1)
         {
             Debug.Log("Player1 勝利");
@@ -640,14 +966,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
-    public void ToCheck_Iam_Winner()        // ジャンケンで自分が勝利者かどうかの確認をする
+    public void ToCheck_Iam_Winner()       // ジャンケンで自分が勝利者かどうかの確認をする
     {
         TestRoomControllerSC.PNameCheck();  // プレイヤー名が埋まっていなかったら入れる
         MyPlayID();                         // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
         Check_Iam_Winner();
     }
 
-    public void Check_Iam_Winner()          // ジャンケンで自分が勝利者かどうかの確認をする
+    public void Check_Iam_Winner()         // ジャンケンで自分が勝利者かどうかの確認をする
     {
         Debug.Log("* ジャンケンで自分が勝利者かどうかの確認をします *");
         Debug.Log("MyName  " + MyName);
@@ -695,17 +1021,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("2秒待ち");
     }
 
-    public void ResetAlivePlayer()  // 各種カウンター リセット
-    {
-        alivePlayer1 = 1; // ジャンケンで残留してれば 1 、負けたら 0
-        alivePlayer2 = 1;
-        alivePlayer3 = 1;
-        alivePlayer4 = 1;
-
-        CloseImg_CoverBlack_All(); // ジャンケン手の黒カバーをリセット（非表示）
-
-        countHanteiTurn = 1;
-    }
 
     public void CountLivePlayer()    // 残留しているプレイヤー人数をカウントする
     {
@@ -2844,6 +3159,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     #region// じゃんけんボタン 押した時の処理（フラグを処理済みにする）
 
+    public void Check_CanAppear_KetteiBtn()  // ジャンケン手決定ボタンを表示できるか確認
+    {
+        ShuffleCardsMSC.CloseKetteiBtn();
+        if (!CanPushBtn_A && !CanPushBtn_B && !CanPushBtn_C && !CanPushBtn_D && !CanPushBtn_E)  // 5つすべてのジャンケン手を押した後ならば
+        {
+            ShuffleCardsMSC.AppearKetteiBtn();
+        }
+    }
+
+
     public void Push_Btn_A() // ボタン押したよ
     {
         if (CanPushBtn_A)
@@ -2868,6 +3193,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         Btn_A.interactable = false;
         CanPushBtn_A = false;
+        Check_CanAppear_KetteiBtn();  // ジャンケン手決定ボタンを表示できるか確認
     }
 
     public void Push_Btn_B() // ボタン押したよ
@@ -2894,6 +3220,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         Btn_B.interactable = false;
         CanPushBtn_B = false;
+        Check_CanAppear_KetteiBtn();  // ジャンケン手決定ボタンを表示できるか確認
     }
 
     public void Push_Btn_C() // ボタン押したよ
@@ -2920,6 +3247,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         Btn_C.interactable = false;
         CanPushBtn_C = false;
+        Check_CanAppear_KetteiBtn();  // ジャンケン手決定ボタンを表示できるか確認
     }
 
     public void Push_Btn_D() // ボタン押したよ
@@ -2946,6 +3274,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         Btn_D.interactable = false;
         CanPushBtn_D = false;
+        Check_CanAppear_KetteiBtn();  // ジャンケン手決定ボタンを表示できるか確認
     }
 
     public void Push_Btn_E() // ボタン押したよ
@@ -2972,6 +3301,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         Btn_E.interactable = false;
         CanPushBtn_E = false;
+        Check_CanAppear_KetteiBtn();  // ジャンケン手決定ボタンを表示できるか確認
     }
 
     #endregion
@@ -3039,19 +3369,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Int_MyJanken_Te5 = -1;
     }
     #endregion
-
-    public void ToNextTurn() // 次のターンへ移る プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
-    {
-        Debug.Log("ToNextTurn() // 次のターンへ移る");
-        ResetMyNumTe_All();      // MyNumTe 数値を -1 にリセット（int,text）
-        Reset_MyRireki_All();  // MyRireki イメージを null にリセット（Image）
-        ToCanPush_All();       // じゃんけんボタン ボタン押せるようにする(フラグのリセット）（bool）
-        ResetPlayerTeNum();    // Player1 ～ Player4 のじゃんけん手 数値を -1 にリセット（int,text）
-        ResetImg_PlayerlayerRireki_All(); // Player1 ～ Player4 のじゃんけん手 履歴イメージを null にリセット（Image）
-        ResetAlivePlayer();  // 各種カウンター リセット
-    }
-
-
 
 
     public void CreatePlayerPrefab()

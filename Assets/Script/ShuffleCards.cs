@@ -35,9 +35,12 @@ namespace say
         public GameObject Button_C;
         public GameObject Button_D;
         public GameObject Button_E;
+        public GameObject KetteiBtn;  // ジャンケン手 決定ボタン
 
+
+        public GameObject JankenCards_Panel;
         public GameObject MyJankenPanel;
-
+        public GameObject Wait_JankenPanel;
 
         /*
         public Button Btn_A;
@@ -91,6 +94,7 @@ namespace say
             */
             Reset_All();
             Set_All();
+            ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
         }
 
 
@@ -272,24 +276,23 @@ namespace say
             Debug.Log(count_selected + ": count_selected");
         }
         */
+                           
+            /* public void JankenTe_Kettei()
+{
+CloseMyJankenPanel();
 
-        public void JankenTe_Kettei()
-        {
-            CloseMyJankenPanel();
-            /*
-            count_selected = 1;
-            CloseButton_A();
-            count_selected = 1;
-            CloseButton_C();
-            count_selected = 1;
-            CloseButton_B();
-            count_selected = 1;
-            CloseButton_D();
-            count_selected = 1;
-            CloseButton_E();
-            */
-        }
-
+count_selected = 1;
+CloseButton_A();
+count_selected = 1;
+CloseButton_C();
+count_selected = 1;
+CloseButton_B();
+count_selected = 1;
+CloseButton_D();
+count_selected = 1;
+CloseButton_E();
+}
+*/
 
         #region// じゃんけんカード 手のセット
 
@@ -541,6 +544,13 @@ namespace say
 
         #region// じゃんけんカードボタン 表示・非表示の設定
 
+        public void ClosePanel_To_Defalt()   // 不要なパネルを閉じて、デフォルト状態にする
+        {
+            CloseJankenCards_Panel();    //●非表示にする
+            CloseMyJankenPanel();        //●非表示にする
+            CloseWait_JankenPanel();     //●非表示にする
+        }
+
         //●表示させる
         public void AppearButton_A()
         {
@@ -601,16 +611,40 @@ namespace say
             Button_E.SetActive(false);
         }
 
-        //●表示させる
-        public void AppearMyJankenPanel()
+        public void AppearKetteiBtn()        //●表示させる
+        {
+            KetteiBtn.SetActive(true);
+        }
+        public void CloseKetteiBtn()        //●非表示にする
+        {
+            KetteiBtn.SetActive(false);
+        }
+
+        public void AppearJankenCards_Panel()   //●表示させる
+        {
+            JankenCards_Panel.SetActive(true);
+        }
+        public void CloseJankenCards_Panel()    //●非表示にする
+        {
+            JankenCards_Panel.SetActive(false);
+        }
+
+        public void AppearMyJankenPanel()       //●表示させる
         {
             MyJankenPanel.SetActive(true);
         }
-
-        //●非表示にする
-        public void CloseMyJankenPanel()
+        public void CloseMyJankenPanel()        //●非表示にする
         {
             MyJankenPanel.SetActive(false);
+        }
+
+        public void AppearWait_JankenPanel()       //●表示させる
+        {
+            Wait_JankenPanel.SetActive(true);
+        }
+        public void CloseWait_JankenPanel()        //●非表示にする
+        {
+            Wait_JankenPanel.SetActive(false);
         }
         #endregion
 

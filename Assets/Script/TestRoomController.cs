@@ -31,6 +31,8 @@ namespace BEFOOL.PhotonTest
         public string string_PlayerID_4;
         public Player[] allPlayers;
 
+        public int int_JoinedPlayerAllNum = 0;
+
         public GameObject Text_MyHeadName;
         public Text Text_PName1;
         public Text Text_PName2;
@@ -111,6 +113,7 @@ namespace BEFOOL.PhotonTest
                 string_PID1 = allPlayers[0].UserId;
                 Debug.Log(string_PID1 + ": string_PID1");
                 Debug.Log(allPlayers.Length + ": allPlayers.Length");
+                int_JoinedPlayerAllNum = 1;
 
                 if (allPlayers.Length >= 2)
                 {
@@ -118,6 +121,7 @@ namespace BEFOOL.PhotonTest
                     string_PID2 = allPlayers[1].UserId;
                     Debug.Log(string_PID2 + ": string_PID2");
                     Debug.Log(allPlayers.Length + ": allPlayers.Length");
+                    int_JoinedPlayerAllNum = 2;
                 }
 
                 if (allPlayers.Length >= 3)
@@ -126,6 +130,7 @@ namespace BEFOOL.PhotonTest
                     Debug.Log(allPlayers.Length + ": allPlayers.Length");
                     string_PID3 = allPlayers[2].UserId;
                     Debug.Log(string_PID3 + ": string_PID3");
+                    int_JoinedPlayerAllNum = 3;
                 }
 
                 if (allPlayers.Length >= 4)
@@ -134,6 +139,7 @@ namespace BEFOOL.PhotonTest
                     Debug.Log(allPlayers.Length + ": allPlayers.Length");
                     string_PID4 = allPlayers[3].UserId;
                     Debug.Log(string_PID4 + ": string_PID4");
+                    int_JoinedPlayerAllNum = 4;
                 }
 
                 //string_PName4 = allPlayers[3].NickName;
@@ -141,6 +147,9 @@ namespace BEFOOL.PhotonTest
                 Debug.Log(string_PName2 + ": string_PName2");
                 Debug.Log(string_PName3 + ": string_PName3");
                 Debug.Log(string_PName4 + ": string_PName4");
+
+                Debug.Log(allPlayers.Length + ": allPlayers.Length");
+                Debug.Log("現在の参加人数は " + int_JoinedPlayerAllNum);
             }
             else
             {
