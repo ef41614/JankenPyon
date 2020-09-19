@@ -125,6 +125,10 @@ MonoBehaviour:
   - SetIconP4_Pchan
   - SetIconP4_Unitychan
   - SetIconP4_utako
+  - Player1_NowWaiting
+  - Player2_NowWaiting
+  - Player3_NowWaiting
+  - Player4_NowWaiting
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

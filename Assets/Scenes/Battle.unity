@@ -887,7 +887,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &60982881
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6625,6 +6625,7 @@ MonoBehaviour:
   string_PlayerID_2: 
   string_PlayerID_3: 
   string_PlayerID_4: 
+  int_JoinedPlayerAllNum: 0
   Text_MyHeadName: {fileID: 0}
   Text_PName1: {fileID: 979545303}
   Text_PName2: {fileID: 2094172522}
@@ -9970,41 +9971,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1540748810}
-        m_MethodName: AppearMyJankenPanel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1540748810}
-        m_MethodName: AppearJankenCards_Panel
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1361133988}
-        m_MethodName: ResetAlivePlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1361133988}
-        m_MethodName: Check_CanAppear_KetteiBtn
+        m_MethodName: PushOpenMyJankenPanel_Button
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11310,11 +11278,6 @@ MonoBehaviour:
   PosPlayer2_obj: {fileID: 0}
   PosPlayer3_obj: {fileID: 0}
   PosPlayer4_obj: {fileID: 0}
-  int_MatchPlayerMaxNum: 4
-  int_conMyCharaAvatar: 0
-  count_a: 1
-  NumLivePlayer: 4
-  countHanteiTurn: 1
   sprite_Gu: {fileID: 21300000, guid: 3ac04f1ae881d69409e0c3616022e838, type: 3}
   sprite_Choki: {fileID: 21300000, guid: 016f22a0d78871e4c8e3ee925edf82d9, type: 3}
   sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
@@ -11415,6 +11378,11 @@ MonoBehaviour:
   KP2: -1
   KP3: -1
   KP4: -1
+  int_IamNowWaiting: 0
+  int_NowWaiting_Player1: 0
+  int_NowWaiting_Player2: 0
+  int_NowWaiting_Player3: 0
+  int_NowWaiting_Player4: 0
   Iam_alive: 1
   alivePlayer1: 1
   alivePlayer2: 1
@@ -11422,6 +11390,11 @@ MonoBehaviour:
   alivePlayer4: 1
   WinnerNum: -1
   original_StepNum: 0
+  int_MatchPlayerMaxNum: 4
+  int_conMyCharaAvatar: 0
+  count_a: 1
+  NumLivePlayer: 4
+  countHanteiTurn: 1
   NoneGu: 0
   NoneChoki: 0
   NonePa: 0
@@ -14084,7 +14057,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1681770036
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15382,7 +15355,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1871643817
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16367,11 +16340,6 @@ MonoBehaviour:
   PosPlayer2_obj: {fileID: 0}
   PosPlayer3_obj: {fileID: 0}
   PosPlayer4_obj: {fileID: 0}
-  int_MatchPlayerMaxNum: 4
-  int_conMyCharaAvatar: 0
-  count_a: 1
-  NumLivePlayer: 4
-  countHanteiTurn: 1
   sprite_Gu: {fileID: 21300000, guid: 3ac04f1ae881d69409e0c3616022e838, type: 3}
   sprite_Choki: {fileID: 21300000, guid: 016f22a0d78871e4c8e3ee925edf82d9, type: 3}
   sprite_Pa: {fileID: 21300000, guid: 82c4380ea89306b449af833efd057aaf, type: 3}
@@ -16470,6 +16438,11 @@ MonoBehaviour:
   KP2: -1
   KP3: -1
   KP4: -1
+  int_IamNowWaiting: 0
+  int_NowWaiting_Player1: 0
+  int_NowWaiting_Player2: 0
+  int_NowWaiting_Player3: 0
+  int_NowWaiting_Player4: 0
   Iam_alive: 1
   alivePlayer1: 1
   alivePlayer2: 1
@@ -16477,6 +16450,11 @@ MonoBehaviour:
   alivePlayer4: 1
   WinnerNum: -1
   original_StepNum: 0
+  int_MatchPlayerMaxNum: 4
+  int_conMyCharaAvatar: 0
+  count_a: 1
+  NumLivePlayer: 4
+  countHanteiTurn: 1
   NoneGu: 0
   NoneChoki: 0
   NonePa: 0

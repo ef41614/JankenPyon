@@ -625,41 +625,74 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #endregion
 
 
-    #region// Hantei_Group  ジャンケン勝敗 判定 一連のグループ
+    #region// 【JK-01】からの処理 右上のジャンケンボタンを押してからの、一連の処理
 
-    public void JankenTe_Kettei()               // ジャンケン手 決定ボタン（「これでOK!」）を押した時の処理
+    public void PushOpenMyJankenPanel_Button()       // 【JK-01】OpenMyJankenPanel_Button（右上のボタン） を押した時の処理
     {
-        Debug.Log("ジャンケン手 これで決定します");
+        Debug.Log("【JK-01】OpenMyJankenPanel_Button が押されました。カードを配ります");
+        ResetAlivePlayer();      // 【JK-01】各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする
+        Reset_NowWaiting();      // 【JK-01】待機中確認のパラメータ 初期化 0：待機前（初期値） にする
+        ShuffleCardsMSC.AppearJankenCards_Panel();
+        ShuffleCardsMSC.AppearMyJankenPanel();
+        //ShuffleCardsMSC.AppearWait_JankenPanel();
+        Check_CanAppear_KetteiBtn();     // 【JK-01】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたらボタンを表示する
+    }
+
+    public void After2nd_Prepare_Janken()   // ジャンケンカードを配る前の処理（2回目以降にやる処理）
+    {
+        Debug.Log("2回目以降です。ジャンケンカードを配る準備をします。");
+        // ResetAlivePlayer();      // 各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする
+        Reset_NowWaiting();      // 待機中確認のパラメータ 初期化 0：待機前（初期値） にする
+        ShuffleCardsMSC.AppearJankenCards_Panel();
+        ShuffleCardsMSC.AppearMyJankenPanel();
+        ShuffleCardsMSC.AppearWait_JankenPanel();
+        Check_CanAppear_KetteiBtn();     // まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたらボタンを表示する
+        Debug.Log("ジャンケン生存者は待機フラグを0に、敗北者は待機フラグを1にする");
+        Check_WaitingFlg_DependOn_alive();    // ジャンケン生存者は待機フラグを0に、敗北者は待機フラグを1にする
+        if (Iam_alive == 1)    // 自分がまだジャンケン生存者であるならば
+        {
+            Debug.Log("自分はまだジャンケン生存者です");
+        }
+        else
+        {
+            Debug.Log("自分はジャンケン敗北者...");
+
+        }
+    }
+
+    public void JankenTe_Kettei()               // 【JK-05】からの処理 ： ジャンケン手 決定ボタン（「これでOK!」）を押した時の処理
+    {
+        Debug.Log("【JK-05】ジャンケン手 決定ボタン（「これでOK!」）を押しました。ジャンケン手 これで決定します");
         ShuffleCardsMSC.CloseMyJankenPanel();   // 不要なパネルを閉じる
 
-        Debug.Log("私のジャンケン手をみんなに提供（共有）します");
+        Debug.Log("【JK-06】私のジャンケン手をみんなに提供（共有）します");
         ToSharePlayerTeNum();                   // 私のジャンケン手をみんなに提供（共有）します
 
-        Debug.Log("決定ボタンを押したので、他のプレイヤーを待っています");
+        Debug.Log("【JK-07】決定ボタンを押したので、他のプレイヤーを待っています");
         ShuffleCardsMSC.AppearWait_JankenPanel();   // 待機中パネルを表示
 
-        Debug.Log("私は待機中です");
+        Debug.Log("【JK-08】私は待機中です");
         int_IamNowWaiting = 1;                  // 自分のジャンケン手 決定して待機中 （0：まだ決定してない、1：決定して待機中）
 
-        Debug.Log("私が待機中ということを、全員（他のプレイヤー）に情報提供（共有）します");
+        Debug.Log("【JK-09】私が待機中ということを、全員（他のプレイヤー）に情報提供（共有）します");
         ToCheck_NowWaiting();                   // ジャンケンで自分が待機中の旨を 情報提供（共有）する
 
-        Debug.Log("全員手が決定し、勝敗判定フェーズへ進めるか確認します");
-        // Check_Can_Hantei_Stream();           // 勝敗判定フェーズへ進めるか確認する
+        Debug.Log("【JK-10】全員手が決定し、勝敗判定フェーズへ進めるか確認します");
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(2f, () => Check_Can_Hantei_Stream());
     }
 
-    public void ToCheck_NowWaiting()        // ジャンケンで自分が待機中の旨を 情報提供（共有）する
+    #region // 【JK-09】待機中フラグ関連の処理
+    public void ToCheck_NowWaiting()        // 【JK-09_1】ジャンケンで自分が待機中の旨を 情報提供（共有）する
     {
         TestRoomControllerSC.PNameCheck();  // プレイヤー名が埋まっていなかったら入れる
         MyPlayID();                         // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
         Check_NowWaiting();
     }
 
-    public void Check_NowWaiting()          // ジャンケンで自分が待機中の旨を 情報提供（共有）する
+    public void Check_NowWaiting()          // 【JK-09_2】ジャンケンで自分が待機中の旨を 情報提供（共有）する
     {
-        Debug.Log("* ジャンケンで自分が待機中かどうかの確認をします *");
+        Debug.Log("【JK-09_2】* ジャンケンで自分が待機中かどうかの確認をします *");
         Debug.Log("MyName  " + MyName);
         Debug.Log("MyID  " + MyID);
 
@@ -692,7 +725,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Player1_NowWaiting()  // Player1 が 待機中 ⇒ 全員に情報提供（共有）する
     {
-        int_NowWaiting_Player1 = 1;
+        int_NowWaiting_Player1 = 1;   // 0：待機前（初期値）、 1：待機中（決定ボタン押下後）
     }
     [PunRPC]
     public void Player2_NowWaiting()  // Player2 が 待機中 ⇒ 全員に情報提供（共有）する
@@ -710,80 +743,84 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_NowWaiting_Player4 = 1;
     }
 
-    public void Check_Can_Hantei_Stream()      // 勝敗判定フェーズへ進めるか確認する
+    public void Reset_NowWaiting()    // 【JK-01】待機中確認のパラメータ 初期化
+    {
+        Debug.Log("【JK-01】全員の待機中フラグを 0（待機まえ）にリセットします");
+        int_NowWaiting_Player1 = 0;   // 0：待機前（初期値:決定ボタン押下前）、 1：待機中（決定ボタン押下後）
+        int_NowWaiting_Player2 = 0;
+        int_NowWaiting_Player3 = 0;
+        int_NowWaiting_Player4 = 0;
+    }
+    #endregion
+
+    public void Check_Can_Hantei_Stream()      // 【JK-10】勝敗判定フェーズへ進めるか確認する
     {
         Debug.Log(TestRoomControllerSC.allPlayers.Length + ": allPlayers.Length");
         Debug.Log("現在の参加人数は " + TestRoomControllerSC.int_JoinedPlayerAllNum);
-        NinzuCheck();                          // 総参加人数 と 現在待機中の総人数
+        NinzuCheck();                          // 【JK-10】総参加人数 と 現在待機中の総人数
         if (int_WaitingPlayers == SankaNinzu)  // 参加している全員が待機中になっていたら
         {
-            Debug.Log("全員手が決定しました。全員待機中です。勝敗判定に進みます！！");
+            Debug.Log("【JK-10_1】全員手が決定しました。全員待機中です。勝敗判定に進みます！！");
             Hantei_Stream();                   // ジャンケン勝敗判定実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
         }
         else
         {
-            Debug.Log("まだ決定ボタンを 押していない人がいます");
+            Debug.Log("【JK-10_2】まだ決定ボタンを 押していない人がいます");
         }
     }
 
-    public void NinzuCheck()  // 総参加人数 と 現在待機中の総人数
+    public void NinzuCheck()  // 【JK-10】総参加人数 と 現在待機中の総人数
     {
+        Debug.Log("【JK-10】総参加人数 と 現在待機中の総人数 をチェックします");
         SankaNinzu = TestRoomControllerSC.int_JoinedPlayerAllNum;       // 総参加人数
         int_WaitingPlayers = int_NowWaiting_Player1 + int_NowWaiting_Player2 + int_NowWaiting_Player3 + int_NowWaiting_Player4;   // 現在待機中の総人数
-        Debug.Log("SankaNinzu ： " + SankaNinzu);
-        Debug.Log("int_WaitingPlayers ： " + int_WaitingPlayers);
+        Debug.Log("【JK-10】SankaNinzu ： " + SankaNinzu);
+        Debug.Log("【JK-10】int_WaitingPlayers ： " + int_WaitingPlayers);
     }
 
-    public void Hantei_Stream()  // ジャンケン勝敗判定実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
+    public void Hantei_Stream()  // 【JK-11】ジャンケン勝敗判定実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
     {
-        // Debug.Log("ジャンケン手 これで決定します");
-        // JankenTe_Kettei();                      // ジャンケン手決定ボタン（「これでOK!」）を押した時の処理
-
-        // Debug.Log("私のジャンケン手をみんなに提供（共有）します");
-        // ToSharePlayerTeNum();
-
-        Debug.Log("ジャンケン勝敗 判定開始");
-        // ResetAlivePlayer();  // 各種カウンター リセット
+        Debug.Log("【JK-11】ジャンケン勝敗 判定開始");
 
         if (Iam_alive == 1) // 自分がジャンケン生存者である
         {
-            Debug.Log("私は生きています！");
+            Debug.Log("【JK-11_1】私は生きています！");
             ShuffleCardsMSC.CloseWait_JankenPanel();       //●非表示にする
         }
         else   // ジャンケン敗北者
         {
-            Debug.Log("はぁ、はぁ、敗北者？");
+            Debug.Log("【JK-11_2】はぁ、はぁ、敗北者？");
             ShuffleCardsMSC.AppearWait_JankenPanel();       //●表示させる
         }
 
         // 1回目ループ
         if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
         {
-            JankenBattle_OneRoop();   // ジャンケンバトルの１ループ分処理   
+            JankenBattle_OneRoop();   // 【JK-11_3】ジャンケンバトルの１ループ分処理   
         }
 
         // 2回目ループ            
         if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
         {
-            JankenBattle_OneRoop();   // ジャンケンバトルの１ループ分処理   
+            JankenBattle_OneRoop();   // 【JK-11_3】ジャンケンバトルの１ループ分処理   
         }
 
         // 3回目ループ            
         if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
         {
-            JankenBattle_OneRoop();   // ジャンケンバトルの１ループ分処理   
+            JankenBattle_OneRoop();   // 【JK-11_3】ジャンケンバトルの１ループ分処理   
         }
 
         // 4回目ループ            
         if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
         {
-            JankenBattle_OneRoop();   // ジャンケンバトルの１ループ分処理   
+            JankenBattle_OneRoop();   // 【JK-11_3】ジャンケンバトルの１ループ分処理   
         }
 
         // 5回目ループ            
         if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
         {
-            JankenBattle_OneRoop();   // ジャンケンバトルの１ループ分処理   
+            JankenBattle_OneRoop();   // 【JK-11_3】ジャンケンバトルの１ループ分処理   
         }
 
         if (anzenPoint < 5)
@@ -791,7 +828,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             // 生存者人数チェック： ジャンケン生存者が2人以上残っているか？ → 2人以上ならジャンケンカード再選択へ  戻る
             if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
             {
-                Debug.Log("ジャンケン生存者が2人以上残っている ので 1人になるまでやり直します");
+                Debug.Log("【JK-12_1】ジャンケン生存者が2人以上残っている ので 1人になるまでやり直します");
                 anzenPoint++;
                 Debug.Log("anzenPoint : " + anzenPoint);
                 ToNextTurn();          // 次のターンへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
@@ -799,12 +836,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             }
             else
             {
-                Debug.Log("生存者 1名になりました");    // ここでジャンケンの勝者が 1名 になった
+                Debug.Log("【JK-12_2】生存者 1名になりました");    // ここでジャンケンの勝者が 1名 になった
             }
         }
         else
         {
-            Debug.Log("anzenPoint が 5回以上になりました。 スクリプトの見直しが必要です");
+            Debug.Log("【JK-12_3】anzenPoint が 5回以上になりました。 スクリプトの見直しが必要です");
         }
 
         if(SankaNinzu == 1)    // 参加人数が1人の時（テストプレイ時）
@@ -812,7 +849,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             original_StepNum = 4;     // 移動ステップ数を 4 に上書き
         }
 
-        Debug.Log("ジャンケン勝敗 判定おわり");    // ここでジャンケンの勝者が 1名 決まっている
+        Debug.Log("【JK-13】ジャンケン勝敗 判定おわり");    // ここでジャンケンの勝者が 1名 決まっている
         WhoIsWinner();           // ジャンケン勝敗の勝利者は？
         ToCheck_Iam_Winner();    // ジャンケンで自分が勝利者かどうかの確認をする → 勝ってたら右にジャンプ！
 
@@ -820,21 +857,22 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ResetAlivePlayer();      // 各種 生存者カウンター リセット
         anzenPoint = 0;
         ShuffleCardsMSC.ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
+        Reset_NowWaiting();      // 待機中確認のパラメータ 初期化
     }
 
 
-    public void JankenBattle_OneRoop()   // ジャンケンバトルの１ループ分処理
+    public void JankenBattle_OneRoop()    // 【JK-11_3】ジャンケンバトルの１ループ分処理
     {
-        Debug.Log("■countHanteiTurn : " + countHanteiTurn + " 回目のジャンケンループ ");    // N回目のジャンケンループ
+        Debug.Log("【JK-11_3】■countHanteiTurn : " + countHanteiTurn + " 回目のジャンケンループ ");    // N回目のジャンケンループ
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(2f* countHanteiTurn, () => JankenBattle_MainPart());  // ジャンケンバトルのメイン判定処理（2秒待機後）
     }
 
-    public void JankenBattle_MainPart()   // ジャンケンバトルのメイン判定処理
+    public void JankenBattle_MainPart()   // 【JK-11_4】ジャンケンバトルのメイン判定処理
     {
-        SetKP_counter();    // ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
-        Syohai_Hantei();    // N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定 → 人数が減る
-        CountLivePlayer();  // 残留しているプレイヤー人数をカウントする ： NumLivePlayer を取得
+        SetKP_counter();    // 【JK-11_5】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
+        Syohai_Hantei();    // 【JK-11_6】N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定 → 人数が減る
+        CountLivePlayer();  // 【JK-11_7】残留しているプレイヤー人数をカウントする ： NumLivePlayer を取得
         countHanteiTurn++;  // N回目 のループ を 1 進める
     }
 
@@ -853,10 +891,52 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         countHanteiTurn = 1;   // ループカウンター 1に戻す
     }
 
-
-
-    public void ResetAlivePlayer()  // 各種 生存者カウンター リセット
+    public void Check_WaitingFlg_DependOn_alive()  // ジャンケン生存者（aliveフラグが 1 の人）は待機フラグを0に、敗北者は待機フラグを1にする && 黒カバー表示
     {
+        if(alivePlayer1 == 1)            // プレイヤーが生存者であれば
+        {
+            int_NowWaiting_Player1 = 0;  // 待機フラグを 0 ：待機前（初期値:決定ボタン押下前）   にする
+        }
+        else
+        {
+            int_NowWaiting_Player1 = 1;  // 待機フラグを 1 ：待機中 にする
+            AppearImg_CoverBlack_P1();   // 黒カバー表示
+        }
+
+        if (alivePlayer2 == 1)            // プレイヤーが生存者であれば
+        {
+            int_NowWaiting_Player2 = 0;  // 待機フラグを 0 ：待機前（初期値:決定ボタン押下前）   にする
+        }
+        else
+        {
+            int_NowWaiting_Player2 = 1;  // 待機フラグを 1 ：待機中 にする
+            AppearImg_CoverBlack_P2();   // 黒カバー表示
+        }
+
+        if (alivePlayer4 == 1)            // プレイヤーが生存者であれば
+        {
+            int_NowWaiting_Player3 = 0;  // 待機フラグを 0 ：待機前（初期値:決定ボタン押下前）   にする
+        }
+        else
+        {
+            int_NowWaiting_Player3 = 1;  // 待機フラグを 1 ：待機中 にする
+            AppearImg_CoverBlack_P3();   // 黒カバー表示
+        }
+
+        if (alivePlayer4 == 1)            // プレイヤーが生存者であれば
+        {
+            int_NowWaiting_Player4 = 0;  // 待機フラグを 0 ：待機前（初期値:決定ボタン押下前）   にする
+        }
+        else
+        {
+            int_NowWaiting_Player4 = 1;  // 待機フラグを 1 ：待機中 にする
+            AppearImg_CoverBlack_P4();   // 黒カバー表示
+        }
+    }
+
+    public void ResetAlivePlayer()         // 【JK-01】各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする）
+    {
+        Debug.Log("【JK-01】全員の aliveフラグ を 1 にします（全員生存）");
         alivePlayer1 = 1;           // ジャンケンで残留してれば 1 、負けたら 0
         alivePlayer2 = 1;
         alivePlayer3 = 1;
@@ -1022,15 +1102,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
 
 
-    public void CountLivePlayer()    // 残留しているプレイヤー人数をカウントする
+    public void CountLivePlayer()     // 【JK-11_7】残留しているプレイヤー人数をカウントする
     {
         NumLivePlayer = alivePlayer1 + alivePlayer2 + alivePlayer3 + alivePlayer4;
-        Debug.Log("NumLivePlayer 残留プレイヤー数 ： " + NumLivePlayer);
+        Debug.Log("【JK-11_7】NumLivePlayer 残留プレイヤー数 ： " + NumLivePlayer);
     }
 
-    public void SetKP_counter() // ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
+    public void SetKP_counter()      // 【JK-11_5】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
     {
-        Debug.Log("countHanteiTurn" + countHanteiTurn);
+        Debug.Log("【JK-11_5】countHanteiTurn" + countHanteiTurn);
         if (countHanteiTurn == 1)
         {
             KP1 = int_Player1_Te1;
@@ -1332,9 +1412,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("NonePaP4 ： " + NonePaP4);
     }
 
-    public void Syohai_Hantei()  // N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定 → 人数が減る
+    public void Syohai_Hantei()  // 【JK-11_6】N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定（負けた人のaliveフラグ を 0 にする） → 人数が減る
     {
-        Debug.Log("Syohai_Hantei スタート");
+        Debug.Log("【JK-11_6】Syohai_Hantei スタート");
         Check_Gu_Existence();     // N回目の すべてのプレイヤーの手 の中に グー(0)   があるか ： NoneGu を取得
         Check_Choki_Existence();  // N回目の すべてのプレイヤーの手 の中に チョキ(1) があるか ： NoneChoki を取得
         Check_Pa_Existence();     // N回目の すべてのプレイヤーの手 の中に パー(2)   があるか ： NonePa を取得
@@ -1408,7 +1488,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         original_StepNum = 6;     // 移動ステップ数を 6 に上書き
     }
 
-    public void Lose_Gu()   // ぐー の人のみ 脱落
+    public void Lose_Gu()     // ぐー の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
         if (KP1 == 0)
         {
@@ -1432,7 +1512,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
-    public void Lose_Choki()  // ちょき の人のみ 脱落
+    public void Lose_Choki()  // ちょき の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
         if (KP1 == 1)
         {
@@ -1456,7 +1536,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
-    public void Lose_Pa()  // ぱー の人のみ 脱落
+    public void Lose_Pa()     // ぱー の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
         if (KP1 == 2)
         {
@@ -1480,7 +1560,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
-
+    #region // 黒カバーの表示・非表示
     public void AppearImg_CoverBlack_P1() // 黒カバー 表示させる
     {
         Img_CoverBlack_P1.enabled = true;
@@ -1501,8 +1581,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_CoverBlack_P4.enabled = true;
     }
 
-
-    public void CloseImg_CoverBlack_All()
+    public void CloseImg_CoverBlack_All()  // すべての黒カバーを閉じる（消す）
     {
         CloseImg_CoverBlack_P1();
         CloseImg_CoverBlack_P2();
@@ -1529,6 +1608,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Img_CoverBlack_P4.enabled = false;
     }
+    #endregion
 
     #endregion
 
@@ -1581,9 +1661,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
 
     //[PunRPC]
-    public void SharePlayerTeNum()  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
+    public void SharePlayerTeNum()  // 【JK-06】現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
     {
-        Debug.Log("************ データ共有 SharePlayerTeNum **********");
+        Debug.Log("【JK-06_1】************ データ共有 SharePlayerTeNum **********");
         Debug.Log(TestRoomControllerSC.string_PID1 + ": TestRoomControllerSC.string_PID1");
         Debug.Log(TestRoomControllerSC.string_PID2 + ": TestRoomControllerSC.string_PID2");
         Debug.Log(TestRoomControllerSC.string_PID3 + ": TestRoomControllerSC.string_PID3");
@@ -1624,7 +1704,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             SharePlayerTeNum_Player4();
         }
 
-        Debug.Log("************ データ共有 SharePlayerTeNum おわり **********");
+        Debug.Log("【JK-06_2】************ データ共有 SharePlayerTeNum おわり **********");
     }
 
 
@@ -2988,7 +3068,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         */
     }
 
-    public void SelectGu()
+    public void SelectGu()     // 【JK-03】手をグーにセット
     {
         Debug.Log(count_a + ": count_a");
 
@@ -3021,17 +3101,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Debug.Log("count_a 6以上");
         }
-        //PlayerTeNumSet(0); //手をグーにセット
-        Debug.Log("手をグーにセット");
-        //photonView.RPC("PlayerTeNumSet", RpcTarget.All, 0);
+        Debug.Log("【JK-03】手をグーにセット");
         PlayerTeNumSet(0);
-        Debug.Log("手をグーにセットend");
+        Debug.Log("【JK-04】手をグーにセットend");
 
         count_a++;
         Debug.Log(count_a + ": count_a");
     }
 
-    public void SelectChoki()
+    public void SelectChoki()  // 【JK-03】手をチョキにセット
     {
         Debug.Log(count_a + ": count_a");
 
@@ -3065,16 +3143,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("count_a 6以上");
         }
         //PlayerTeNumSet(1); //手をチョキにセット
-        Debug.Log("手をチョキにセット");
+        Debug.Log("【JK-03】手をチョキにセット");
         //photonView.RPC("PlayerTeNumSet", RpcTarget.All, 1);
         PlayerTeNumSet(1);
-        Debug.Log("手をチョキにセットend");
+        Debug.Log("【JK-04】手をチョキにセットend");
 
         count_a++;
         Debug.Log(count_a + ": count_a");
     }
 
-    public void SelectPa()
+    public void SelectPa()     // 【JK-03】手をパーにセット
     {
         Debug.Log(count_a + ": count_a");
 
@@ -3108,72 +3186,74 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("count_a 6以上");
         }
         //PlayerTeNumSet(2); //手をパーにセット
-        Debug.Log("手をパーにセット");
+        Debug.Log("【JK-03】手をパーにセット");
         //photonView.RPC("PlayerTeNumSet", RpcTarget.All,2);
         PlayerTeNumSet(2);
-        Debug.Log("手をパーにセットend");
+        Debug.Log("【JK-04】手をパーにセットend");
 
         count_a++;
         Debug.Log(count_a + ": count_a");
     }
 
-    public void PlayerTeNumSet(int PTN)  //現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
+    public void PlayerTeNumSet(int PTN)  // 【JK-04】私のジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）です。それをセットします。
     {
-        Debug.Log("************ ********** *********** **********");
+        Debug.Log("【JK-04】************ ********** *********** **********");
         Debug.Log(PTN + ": PTN");
 
-        Debug.Log("現在プレイヤー1がボタン押したよ");
+        Debug.Log("【JK-04】現在自分がボタン押したよ");
         if (Int_MyJanken_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
-            Debug.Log("Int_MyJanken_Te1 代入前" + Int_MyJanken_Te1);
+            Debug.Log("【JK-04】Int_MyJanken_Te1 代入前" + Int_MyJanken_Te1);
             Int_MyJanken_Te1 = PTN;
-            Debug.Log("Int_MyJanken_Te1 代入後" + Int_MyJanken_Te1);
-            Debug.Log("プレイヤー1_1 手のセットOK");
+            Debug.Log("【JK-04】Int_MyJanken_Te1 代入後" + Int_MyJanken_Te1);
+            Debug.Log("【JK-04】自分_1 手のセットOK");
         }
         else if (Int_MyJanken_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
             Int_MyJanken_Te2 = PTN;
-            Debug.Log("プレイヤー1_2 手のセットOK");
+            Debug.Log("【JK-04】自分_2 手のセットOK");
         }
         else if (Int_MyJanken_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
             Int_MyJanken_Te3 = PTN;
-            Debug.Log("プレイヤー1_3 手のセットOK");
+            Debug.Log("【JK-04】自分_3 手のセットOK");
         }
         else if (Int_MyJanken_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
             Int_MyJanken_Te4 = PTN;
-            Debug.Log("プレイヤー1_4 手のセットOK");
+            Debug.Log("【JK-04】自分_4 手のセットOK");
         }
         else if (Int_MyJanken_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
             Int_MyJanken_Te5 = PTN;
-            Debug.Log("プレイヤー1_5 手のセットOK");
+            Debug.Log("【JK-04】自分_5 手のセットOK");
         }
         else
         {
-            Debug.Log("現在プレイヤー1の 5こすべて手が決まったよ");
+            Debug.Log("【JK-04】現在自分の 5こすべて手が決まったよ");
         }
     }
 
 
     #region// じゃんけんボタン 押した時の処理（フラグを処理済みにする）
 
-    public void Check_CanAppear_KetteiBtn()  // ジャンケン手決定ボタンを表示できるか確認
+    public void Check_CanAppear_KetteiBtn()       // 【JK-01】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたらボタンを表示する
     {
-        ShuffleCardsMSC.CloseKetteiBtn();
+        Debug.Log("【JK-01】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたら「決定ボタン」を表示する");
+        ShuffleCardsMSC.CloseKetteiBtn();         // ボタンを閉じる（消す）
         if (!CanPushBtn_A && !CanPushBtn_B && !CanPushBtn_C && !CanPushBtn_D && !CanPushBtn_E)  // 5つすべてのジャンケン手を押した後ならば
         {
-            ShuffleCardsMSC.AppearKetteiBtn();
+            ShuffleCardsMSC.AppearKetteiBtn();    // ボタンを表示する
         }
     }
 
 
-    public void Push_Btn_A() // ボタン押したよ
+    public void Push_Btn_A() // 【JK-02】ボタン押したよ
     {
+        Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
         if (CanPushBtn_A)
         {
-            Debug.Log("RndCreateCard_A ： " + ShuffleCardsMSC.RndCreateCard_A);
+            Debug.Log("【JK-02】RndCreateCard_A ： " + ShuffleCardsMSC.RndCreateCard_A);
             if (ShuffleCardsMSC.RndCreateCard_A == 0) //グー
             {
                 SelectGu();
@@ -3196,11 +3276,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Check_CanAppear_KetteiBtn();  // ジャンケン手決定ボタンを表示できるか確認
     }
 
-    public void Push_Btn_B() // ボタン押したよ
+    public void Push_Btn_B() // 【JK-02】ボタン押したよ
     {
+        Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
         if (CanPushBtn_B)
         {
-            Debug.Log("RndCreateCard_B ： " + ShuffleCardsMSC.RndCreateCard_B);
+            Debug.Log("【JK-02】RndCreateCard_B ： " + ShuffleCardsMSC.RndCreateCard_B);
             if (ShuffleCardsMSC.RndCreateCard_B == 0) //グー
             {
                 SelectGu();
@@ -3223,11 +3304,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Check_CanAppear_KetteiBtn();  // ジャンケン手決定ボタンを表示できるか確認
     }
 
-    public void Push_Btn_C() // ボタン押したよ
+    public void Push_Btn_C() // 【JK-02】ボタン押したよ
     {
+        Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
         if (CanPushBtn_C)
         {
-            Debug.Log("RndCreateCard_C ： " + ShuffleCardsMSC.RndCreateCard_C);
+            Debug.Log("【JK-02】RndCreateCard_C ： " + ShuffleCardsMSC.RndCreateCard_C);
             if (ShuffleCardsMSC.RndCreateCard_C == 0) //グー
             {
                 SelectGu();
@@ -3250,11 +3332,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Check_CanAppear_KetteiBtn();  // ジャンケン手決定ボタンを表示できるか確認
     }
 
-    public void Push_Btn_D() // ボタン押したよ
+    public void Push_Btn_D() // 【JK-02】ボタン押したよ
     {
+        Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
         if (CanPushBtn_D)
         {
-            Debug.Log("RndCreateCard_D ： " + ShuffleCardsMSC.RndCreateCard_D);
+            Debug.Log("【JK-02】RndCreateCard_D ： " + ShuffleCardsMSC.RndCreateCard_D);
             if (ShuffleCardsMSC.RndCreateCard_D == 0) //グー
             {
                 SelectGu();
@@ -3277,11 +3360,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Check_CanAppear_KetteiBtn();  // ジャンケン手決定ボタンを表示できるか確認
     }
 
-    public void Push_Btn_E() // ボタン押したよ
+    public void Push_Btn_E() // 【JK-02】ボタン押したよ
     {
+        Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
         if (CanPushBtn_E)
         {
-            Debug.Log("RndCreateCard_E ： " + ShuffleCardsMSC.RndCreateCard_E);
+            Debug.Log("【JK-02】RndCreateCard_E ： " + ShuffleCardsMSC.RndCreateCard_E);
             if (ShuffleCardsMSC.RndCreateCard_E == 0) //グー
             {
                 SelectGu();
@@ -3367,6 +3451,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Int_MyJanken_Te3 = -1;
         Int_MyJanken_Te4 = -1;
         Int_MyJanken_Te5 = -1;
+
+        Debug.Log("【JK-04】自分のジャンケン手をリセットしました");
     }
     #endregion
 
