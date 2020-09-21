@@ -141,7 +141,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Text Text_JankenPlayer4_Te4;
     public Text Text_JankenPlayer4_Te5;
 
-
     public int Int_MyJanken_Te1 = -1;
     public int Int_MyJanken_Te2 = -1;
     public int Int_MyJanken_Te3 = -1;
@@ -177,8 +176,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public int KP3 = -1;
     public int KP4 = -1;
 
-    public int int_IamNowWaiting = 0;        // 自分のジャンケン手 決定して待機中 （0：まだ決定してない、1：決定して待機中）
-    public int int_NowWaiting_Player1 = 0;   // ジャンケン手 決定して待機中 （0：まだ決定してない、1：決定して待機中）
+    public int int_IamNowWaiting = 0;        // 待機中フラグ 「0：まだ決定してない（待機まえ）」、「1：決定済み（待機中）」
+    public int int_NowWaiting_Player1 = 0;   // ジャンケン手 決定して待機中かどうか （0：まだ決定してない、1：決定して待機中）
     public int int_NowWaiting_Player2 = 0;
     public int int_NowWaiting_Player3 = 0;
     public int int_NowWaiting_Player4 = 0;
@@ -264,6 +263,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public bool CanPushBtn_D = true;
     public bool CanPushBtn_E = true;
 
+    public GameObject Text_Wait_Me; // test
+    public GameObject Text_Wait_P1;
+    public GameObject Text_Wait_P2;
+    public GameObject Text_Wait_P3;
+    public GameObject Text_Wait_P4;
+    public float span = 5f;
+    private float currentTime = 0f; // test
+
     #endregion
 
     #region // 【START】初期設定の処理一覧
@@ -316,6 +323,61 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         NinzuCheck();                 // 【START-10】総参加人数 と 現在待機中の総人数
         NumLivePlayer = SankaNinzu;
         Debug.Log("【START-11】NumLivePlayer（総参加人数＝生存者数） は " + NumLivePlayer);
+    }
+
+    void Update()
+    {
+        // test
+        currentTime += Time.deltaTime;
+
+        if (currentTime > span)
+        {
+            Debug.LogFormat("{0}秒経過", span);
+            Text_Wait_Me.GetComponent<Text>().text = int_NowWaiting_Player1 + "";
+            Text_Wait_P1.GetComponent<Text>().text = int_NowWaiting_Player1 + "";
+            Text_Wait_P2.GetComponent<Text>().text = int_NowWaiting_Player2 + "";
+            Text_Wait_P3.GetComponent<Text>().text = int_NowWaiting_Player3 + "";
+            Text_Wait_P4.GetComponent<Text>().text = int_NowWaiting_Player4 + "";
+            currentTime = 0f;
+        }
+    }
+
+    public void CreatePlayerPrefab()    //【START-04】Photonに接続していれば自プレイヤーを生成
+    {
+        Debug.Log("【START-04】Photonに接続したので 自プレイヤーを生成");
+
+        //GameObject MyPlayer = PhotonNetwork.Instantiate(this.MyPlayerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+        //GameObject MyPlayer = PhotonNetwork.Instantiate(this.MyPlayerPrefab.name);
+        //GameObject Player1 = PhotonNetwork.Instantiate(this.playerPrefab.name);
+
+        if (int_conMyCharaAvatar == 1)  // うたこ
+        {
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_utako.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            utakoClone = GameObject.FindWithTag("MyPlayer");
+            Debug.Log("utakoClone の名前は: " + utakoClone.name);
+            PlayerSC = utakoClone.GetComponent<PlayerScript>();
+        }
+        else if (int_conMyCharaAvatar == 2) // Unityちゃん
+        {
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_unitychan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            unitychanClone = GameObject.FindWithTag("MyPlayer");
+            Debug.Log("unitychanClone の名前は: " + unitychanClone.name);
+            PlayerSC = unitychanClone.GetComponent<PlayerScript>();
+        }
+        else if (int_conMyCharaAvatar == 3) // Pちゃん
+        {
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_pchan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            pchanClone = GameObject.FindWithTag("MyPlayer");
+            Debug.Log("pchanClone の名前は: " + pchanClone.name);
+            PlayerSC = pchanClone.GetComponent<PlayerScript>();
+        }
+        else if (int_conMyCharaAvatar == 4) // モブちゃん
+        {
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_mobuchan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            mobuchanClone = GameObject.FindWithTag("MyPlayer");
+            Debug.Log("mobuchanClone の名前は: " + mobuchanClone.name);
+            PlayerSC = mobuchanClone.GetComponent<PlayerScript>();
+        }
     }
 
 
@@ -428,6 +490,36 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         myPlayer.transform.position = new Vector3(StartCorn_HeadTransform.position.x + Rnd_PosX, StartCorn_HeadTransform.position.y + Rnd_PosY, StartCorn_HeadTransform.position.z);
         Debug.Log("【START-05】プレイヤーをスタートラインにランダムに移動(配置)させました");
     }
+
+    public void MyPlayID() // 【START-07】【JK-11_1】現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+    {
+        // TestRoomControllerSC.PNameCheck();
+        photonView.RPC("PlayerIDCheck", RpcTarget.All);
+    }
+
+    /// <summary>
+    /// 【START-07】【JK-11_1】現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+    /// </summary>
+    /// <param name="mi">現プレイヤー名とプレイヤーID 取得、共有</param>
+    [PunRPC]
+    public void PlayerIDCheck(PhotonMessageInfo mi)  // 【START-07】【JK-11_1】
+    {
+        Debug.Log("【START-07】【JK-11_1】[PunRPC] PlayerIDCheck");
+        //string senderName = "anonymous";
+        //string senderID = "2434";
+        if (mi.Sender != null)
+        {
+            senderName = mi.Sender.NickName;
+            senderID = mi.Sender.UserId;
+            MyName = senderName;
+            MyID = senderID;
+        }
+        Debug.Log("senderName  " + senderName);  // 今ボタン押した人
+        Debug.Log("senderID  " + senderID);  // 今ボタン押した人
+        Debug.Log("MyName  " + MyName);  // 今ボタン押した人
+        Debug.Log("MyID  " + MyID);  // 今ボタン押した人
+    }
+
 
     public void MoveToStartMark1()                    //【START-07】スタートマーク1 の位置へ移動する
     {
@@ -632,38 +724,54 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     #endregion
 
-    #region// 【JK-01】からの処理 右上のジャンケン「開始ボタン」を押してからの、一連の処理
+    #region// 【JK-01】からの処理 右上のジャンケン セット「開始ボタン」を押してからの、一連の処理
 
-    public void PushOpenMyJankenPanel_Button()       // 【JK-01】OpenMyJankenPanel_Button（右上の開始ボタン） を押した時の処理
+    public void PushOpenMyJankenPanel_Button()       // 【JK-01】OpenMyJankenPanel_Button（右上のセット開始ボタン） を押した時の処理
     {
-        Debug.Log("【JK-01】OpenMyJankenPanel_Button が押されました。カードを配ります");
+        Debug.Log("【JK-01】******************************************************************");
+        Debug.Log("【JK-01】OpenMyJankenPanel_Button が押されました。セットを開始します。カードを配ります");
+        Debug.Log("【JK-01】******************************************************************");
         ResetAlivePlayer();      // 【JK-01】各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする
         Reset_NowWaiting();      // 【JK-01】待機中確認のパラメータ 初期化 0：待機前（初期値） にする
+        Debug.Log("【JK-01】共通ジャンケン パネル（ベース）を表示します");
         ShuffleCardsMSC.AppearJankenCards_Panel();
+        Debug.Log("【JK-01】自分のジャンケン パネル（カード選択画面）を表示します");
         ShuffleCardsMSC.AppearMyJankenPanel();
         //ShuffleCardsMSC.AppearWait_JankenPanel();
+        Debug.Log("【JK-01】セット開始したばかりなので、ジャンケン手「決定ボタン」を非表示にします");
         Check_CanAppear_KetteiBtn();     // 【JK-01】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたら決定ボタンを表示する
     }
 
-    public void After2nd_Prepare_Janken()   // ジャンケンカードを配る前の処理（2回目以降にやる処理）
+    public void Janken_ExtraInning()     //【JK-37】ジャンケンカードを配る前の処理（延長戦突入時）
     {
-        Debug.Log("2回目以降です。ジャンケンカードを配る準備をします。");
-        // ResetAlivePlayer();      // 各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする
-        Reset_NowWaiting();      // 待機中確認のパラメータ 初期化 0：待機前（初期値） にする
+        Debug.Log("【JK-38】（延長戦）決着がつかなかったので延長戦に突入します！ジャンケンカードを配る準備をします。");
+        Debug.Log("【JK-38】（延長戦）各プレイヤーの生存フラグは そのままです（リセットしません）");
+        // ResetAlivePlayer();      
+        Debug.Log("【JK-39】（延長戦）待機中フラグを全員一律 初期化 0：待機前（初期値） にします");
+        Reset_NowWaiting();                    //【JK-39】 待機中フラグを全員一律 初期化 0：待機前（初期値） にする
+        Debug.Log("【JK-40】（延長戦）共通ジャンケン パネル（ベース）を表示します");
         ShuffleCardsMSC.AppearJankenCards_Panel();
+        Debug.Log("【JK-41】（延長戦）自分のジャンケン パネル（カード選択画面）を表示します");
         ShuffleCardsMSC.AppearMyJankenPanel();
+        Debug.Log("【JK-42】（延長戦）フラグに関わらず、全員一律「待機中」画面 を表示します");
         ShuffleCardsMSC.AppearWait_JankenPanel();
-        Check_CanAppear_KetteiBtn();     // まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたら決定ボタンを表示する
-        Debug.Log("ジャンケン生存者は待機フラグを0に、敗北者は待機フラグを1にする");
-        Check_WaitingFlg_DependOn_alive();    // ジャンケン生存者は待機フラグを0に、敗北者は待機フラグを1にする
+        Debug.Log("【JK-43】（延長戦）延長戦 開始したばかりなので、ジャンケン手「決定ボタン」を非表示にします");
+        Check_CanAppear_KetteiBtn();          //【JK-43】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたら決定ボタンを表示する
+        Debug.Log("【JK-44】（延長戦）ジャンケン生存者は待機フラグを0（待機まえ）に、敗北者は待機フラグを1（待機中）にし、黒カバーします");
+        Check_WaitingFlg_DependOn_alive();    //【JK-44】ジャンケン生存者は待機フラグを0（待機まえ）に、敗北者は待機フラグを1（待機中）にする&& 黒カバー表示【JK-45】
+        Debug.Log("【JK-45】（延長戦）待機中フラグのプレイヤー間での共有が終わりました。");
         if (Iam_alive == 1)    // 自分がまだジャンケン生存者であるならば
         {
-            Debug.Log("自分はまだジャンケン生存者です");
+            Debug.Log("【JK-46】（延長戦）自分はまだジャンケン生存者です。私の待機フラグは0（待機まえ）です。黒カバーしません。");
+            Debug.Log("【JK-46】（延長戦）カードを選んで、延長戦を闘います！");
+            Debug.Log("【JK-47】（延長戦）「待機中」画面 を非表示にします （→ カード選べるようになる）");
+            ShuffleCardsMSC.CloseWait_JankenPanel();        //【JK-47】「待機中」画面 を非表示にする
         }
-        else
+        else                   // 自分がジャンケン敗北者であるならば
         {
-            Debug.Log("自分はジャンケン敗北者...");
-
+            Debug.Log("【JK-46】（延長戦）自分はジャンケン敗北者...。私の待機フラグは1（待機中）です。黒カバーします。");
+            Debug.Log("【JK-46】（延長戦）もうカードを選ぶこともできません。見守るだけです。");
+            Debug.Log("【JK-47】（延長戦）私は待機中。「待機中」画面 は表示しておきます。（カードは選べない）");
         }
     }
 
@@ -684,7 +792,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region //【JK-05】ジャンケン手 決定ボタン（「これでOK!」）を押した時の処理以降
     public void JankenTe_Kettei()               // 【JK-05】からの処理 ： ジャンケン手 決定ボタン（「これでOK!」）を押した時の処理
     {
+        Debug.Log("【JK-05】******************************************************************");
         Debug.Log("【JK-05】ジャンケン手 決定ボタン（「これでOK!」）を押しました。ジャンケン手 これで決定します");
+        Debug.Log("【JK-05】******************************************************************");
         ShuffleCardsMSC.CloseMyJankenPanel();   // 不要なパネルを閉じる
 
         Debug.Log("【JK-06】私のジャンケン手をみんなに提供（共有）します");
@@ -747,6 +857,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Player1_NowWaiting()  // 【JK-11_3】Player1 が 待機中 ⇒ 全員に情報提供（共有）する
     {
+        Debug.Log("[PunRPC] 【JK-11_3】Player1 が 待機中 ⇒ 全員に情報提供（共有）する");
         int_NowWaiting_Player1 = 1;   // 0：待機前（初期値）、 1：待機中（決定ボタン押下後）
     }
     [PunRPC]
@@ -765,9 +876,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_NowWaiting_Player4 = 1;
     }
 
-    public void Reset_NowWaiting()    // 【JK-01】待機中確認のパラメータ 初期化
+    public void Reset_NowWaiting()    // 【JK-01】【JK-38】待機中確認のパラメータ 初期化
     {
-        Debug.Log("【JK-01】全員の待機中フラグを 0（待機まえ）にリセットします");
+        Debug.Log("【JK-01】【JK-38】全員の待機中フラグを 0（待機まえ）にリセットします");
         int_NowWaiting_Player1 = 0;   // 0：待機前（初期値:決定ボタン押下前）、 1：待機中（決定ボタン押下後）
         int_NowWaiting_Player2 = 0;
         int_NowWaiting_Player3 = 0;
@@ -784,15 +895,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (int_WaitingPlayers == SankaNinzu)  // 参加している全員が待機中になっていたら
         {
             Debug.Log("【JK-12_1】全員手が決定しました。全員待機中です。勝敗判定に進みます！！");
-            Hantei_Stream();                   // 【JK-21】ジャンケン勝敗判定実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
+            //Hantei_Stream();                   // 【JK-21】ジャンケン勝敗判定実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
+            photonView.RPC("Hantei_Stream", RpcTarget.All);
         }
         else
         {
             Debug.Log("【JK-12_2】まだ決定ボタンを 押していない人がいます");
         }
     }
-    
 
+    [PunRPC]
     public void Hantei_Stream()  // 【JK-21】ジャンケン勝敗判定（ラウンドループ）実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
     {
         Debug.Log("【JK-21】ジャンケン勝敗判定 開始");
@@ -841,36 +953,51 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (anzenPoint < 5)
         {
-            // 【JK-27】生存者人数チェック： ジャンケン生存者が2人以上残っているか？ → 2人以上ならジャンケンカード再選択へ  戻る
-            if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
+            // 【JK-27】生存者人数チェック： ジャンケン生存者が2人以上残っているか？ → 2人以上ならジャンケンカード再選択（延長戦）へ
+            Debug.Log("【JK-27】5ラウンド終わり、ジャンケン生存者が2人以上残っているか、確認します");
+
+            if (NumLivePlayer > 1)        //【JK-27_2】ジャンケン生存者が2人以上残っている場合
             {
-                Debug.Log("【JK-27】5ラウンド終わりましたが、ジャンケン生存者が2人以上残っている ので 1人になるまでやり直します");
+                Debug.Log("【JK-27_2】5ラウンド終わりましたが、ジャンケン生存者が2人以上残っている ので 1人になるまでやり直します");
                 anzenPoint++;
                 Debug.Log("anzenPoint : " + anzenPoint);
-                PrepareToNextSet();      // 【JK-28】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット【JK-36】
-                Hantei_Stream();         // 生存者 1人になるまでやり直し
+                PrepareToNextSet();       //【JK-28】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット【JK-36】
+                Debug.Log("【JK-37】（延長戦）延長戦に突入します");
+                Janken_ExtraInning();     //【JK-37】（延長戦）ジャンケンカードを配る前の処理（延長戦突入時）
+                //Hantei_Stream();        // 生存者 1人になるまでやり直し
             }
-            else
+            else                          //【JK-27_2】ジャンケン生存者が1人のみの場合
             {
-                Debug.Log("【JK-2*】生存者 1名になりました");    // ここでジャンケンの勝者が 1名 になった
+                Debug.Log("【JK-27_2】生存者 1名になりました");    // ここでジャンケンの勝者が 1名 になった
             }
         }
         else
         {
-            Debug.Log("【JK-2*】anzenPoint が 5回以上になりました。 スクリプトの見直しが必要です");
+            Debug.LogError("【JK-2*】anzenPoint が 5回以上になりました。 スクリプトの見直しが必要です");
         }
 
-        if (SankaNinzu == 1)    // 参加人数が1人の時（テストプレイ時）
+        Debug.Log("【JK-100】この時点で ジャンケン生存者は 1名です。これから勝者の前進ジャンプ処理に移ります。");
+
+        if (SankaNinzu == 1)          //【JK-101】参加人数が1人の時（テストプレイ時）
         {
+            Debug.Log("【JK-101】参加人数が1人なので（テストプレイ時）、移動ステップ数を 4 に上書きします");
             original_StepNum = 4;     // 移動ステップ数を 4 に上書き
         }
 
-        Debug.Log("【JK-2*】ジャンケン勝敗 判定おわり");    // ここでジャンケンの勝者が 1名 決まっている
-        WhoIsWinner();           // ジャンケン勝敗の勝利者は？
-        ToCheck_Iam_Winner();    // ジャンケンで自分が勝利者かどうかの確認をする → 勝ってたら右にジャンプ！
+        Debug.Log("【JK-102】ジャンケン勝敗 判定おわり");    // 【JK-102】ここでジャンケンの勝者が 1名 決まっている
 
-        PrepareToNextSet();            // 次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
-        ResetAlivePlayer();      // 各種 生存者カウンター リセット
+        Debug.Log("【JK-103】ジャンケン勝敗の勝利者は？");
+        WhoIsWinner();                //【JK-103】ジャンケン勝敗の勝利者は？
+
+        Debug.Log("【JK-104】ジャンケンで自分が勝利者かどうかの確認をします");
+        ToCheck_Iam_Winner();         //【JK-104】ジャンケンで自分が勝利者かどうかの確認をする → 勝ってたら右にジャンプ！【JK-106】
+
+        Debug.Log("【JK-107】PrepareToNextSet 次のセットへ移る準備 をします");
+        PrepareToNextSet();           //【JK-107】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
+        Debug.Log("【JK-108】PrepareToNextSet 次のセットへ移る準備 終わりました");
+
+        Debug.Log("【JK-109】全員の aliveフラグ を 1 にします（全員生存）");
+        ResetAlivePlayer();           //【JK-109】各種 生存者カウンター リセット
         anzenPoint = 0;
         ShuffleCardsMSC.ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
         Reset_NowWaiting();      // 待機中確認のパラメータ 初期化
@@ -909,7 +1036,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         count_RoundRoop = 1;              // 【JK-36】ラウンドループカウンター 1に戻す
     }
 
-    public void Check_WaitingFlg_DependOn_alive()  // ジャンケン生存者（aliveフラグが 1 の人）は待機フラグを0に、敗北者は待機フラグを1にする && 黒カバー表示
+    public void Check_WaitingFlg_DependOn_alive()  //【JK-44】（延長戦）ジャンケン生存者（aliveフラグが 1 の人）は待機フラグを0に、敗北者は待機フラグを1にする && 黒カバー表示
     {
         if (alivePlayer1 == 1)            // プレイヤーが生存者であれば
         {
@@ -917,7 +1044,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            int_NowWaiting_Player1 = 1;  // 待機フラグを 1 ：待機中 にする
+            //int_NowWaiting_Player1 = 1;  // 待機フラグを 1 ：待機中 にする
+            photonView.RPC("Player1_NowWaiting", RpcTarget.All);
             AppearImg_CoverBlack_P1();   // 黒カバー表示
         }
 
@@ -927,7 +1055,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            int_NowWaiting_Player2 = 1;  // 待機フラグを 1 ：待機中 にする
+            //int_NowWaiting_Player2 = 1;  // 待機フラグを 1 ：待機中 にする
+            photonView.RPC("Player2_NowWaiting", RpcTarget.All);
             AppearImg_CoverBlack_P2();   // 黒カバー表示
         }
 
@@ -937,7 +1066,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            int_NowWaiting_Player3 = 1;  // 待機フラグを 1 ：待機中 にする
+            //int_NowWaiting_Player3 = 1;  // 待機フラグを 1 ：待機中 にする
+            photonView.RPC("Player3_NowWaiting", RpcTarget.All);
             AppearImg_CoverBlack_P3();   // 黒カバー表示
         }
 
@@ -947,9 +1077,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            int_NowWaiting_Player4 = 1;  // 待機フラグを 1 ：待機中 にする
+            //int_NowWaiting_Player4 = 1;  // 待機フラグを 1 ：待機中 にする
+            photonView.RPC("Player4_NowWaiting", RpcTarget.All);
             AppearImg_CoverBlack_P4();   // 黒カバー表示
         }
+        Debug.Log("【JK-45】（延長戦）生き残っている者のみが「待機まえ」になりました。敗北者は待機中（見守り中）です。");
     }
 
     public void ResetAlivePlayer()         // 【JK-01】各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする）
@@ -1035,54 +1167,54 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
-    public void WhoIsWinner()              // ジャンケン勝敗の勝利者は？
+    public void WhoIsWinner()              //【JK-103】ジャンケン勝敗の勝利者は？
     {
         WinnerNum = -1;                    // 一旦リセット
         if (alivePlayer1 == 1)
         {
-            Debug.Log("Player1 勝利");
+            Debug.Log("【JK-103】Player1 勝利");
             WinnerNum = 1;
         }
         else if (alivePlayer2 == 1)
         {
-            Debug.Log("Player2 勝利");
+            Debug.Log("【JK-103】Player2 勝利");
             WinnerNum = 2;
         }
         else if (alivePlayer3 == 1)
         {
-            Debug.Log("Player3 勝利");
+            Debug.Log("【JK-103】Player3 勝利");
             WinnerNum = 3;
         }
         else if (alivePlayer4 == 1)
         {
-            Debug.Log("Player4 勝利");
+            Debug.Log("【JK-103】Player4 勝利");
             WinnerNum = 4;
         }
         else
         {
-            Debug.Log("勝利いない？");
+            Debug.LogError("【JK-103】勝利いない？");
         }
     }
 
-    public void ToCheck_Iam_Winner()       // ジャンケンで自分が勝利者かどうかの確認をする
+    public void ToCheck_Iam_Winner()       //【JK-104】ジャンケンで自分が勝利者かどうかの確認をするための準備【JK-106】
     {
         TestRoomControllerSC.PNameCheck();  // プレイヤー名が埋まっていなかったら入れる
         MyPlayID();                         // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
         Check_Iam_Winner();
     }
 
-    public void Check_Iam_Winner()         // ジャンケンで自分が勝利者かどうかの確認をする
+    public void Check_Iam_Winner()         //【JK-105】ジャンケンで自分が勝利者かどうかの確認をする
     {
-        Debug.Log("* ジャンケンで自分が勝利者かどうかの確認をします *");
-        Debug.Log("MyName  " + MyName);
-        Debug.Log("MyID  " + MyID);
+        Debug.Log("【JK-105】ジャンケンで自分が勝利者かどうかの確認をします。自分が勝ってたらジャンプします。");
+        Debug.Log("【JK-105】MyName  " + MyName);
+        Debug.Log("【JK-105】MyID  " + MyID);
 
         if (MyID == TestRoomControllerSC.string_PID1) // 自身がプレイヤー1 であるなら
         {
             if (WinnerNum == 1)          // プレイヤー1 が勝利者
             {
-                Debug.Log("自分の勝利！！ 前に進みます！");
-                FromWin_ToJump();     // ジャンケンに勝ったのでジャンプで移動する その一連の処理
+                Debug.Log("【JK-106】P1 自分の勝利！！ 前に進みます！");
+                FromWin_ToJump();       //【JK-106】ジャンケンに勝ったのでジャンプで移動する その一連の処理
             }
         }
 
@@ -1090,8 +1222,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (WinnerNum == 2)          // プレイヤー2 が勝利者
             {
-                Debug.Log("自分の勝利！！ 前に進みます！");
-                FromWin_ToJump();     // ジャンケンに勝ったのでジャンプで移動する その一連の処理
+                Debug.Log("【JK-106】P2 自分の勝利！！ 前に進みます！");
+                FromWin_ToJump();       //【JK-106】ジャンケンに勝ったのでジャンプで移動する その一連の処理
             }
         }
 
@@ -1099,8 +1231,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (WinnerNum == 3)          // プレイヤー3 が勝利者
             {
-                Debug.Log("自分の勝利！！ 前に進みます！");
-                FromWin_ToJump();     // ジャンケンに勝ったのでジャンプで移動する その一連の処理
+                Debug.Log("【JK-106】P3 自分の勝利！！ 前に進みます！");
+                FromWin_ToJump();       //【JK-106】ジャンケンに勝ったのでジャンプで移動する その一連の処理
             }
         }
 
@@ -1108,8 +1240,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (WinnerNum == 4)          // プレイヤー4 が勝利者
             {
-                Debug.Log("自分の勝利！！ 前に進みます！");
-                FromWin_ToJump();     // ジャンケンに勝ったのでジャンプで移動する その一連の処理
+                Debug.Log("【JK-106】P4 自分の勝利！！ 前に進みます！");
+                FromWin_ToJump();       //【JK-106】ジャンケンに勝ったのでジャンプで移動する その一連の処理
             }
         }
     }
@@ -1631,37 +1763,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #endregion
 
 
-
-
-    public void MyPlayID() // 【START-07】【JK-11_1】現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
-    {
-        // TestRoomControllerSC.PNameCheck();
-        photonView.RPC("PlayerIDCheck", RpcTarget.All);
-    }
-
-    /// <summary>
-    /// 【START-07】【JK-11_1】現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
-    /// </summary>
-    /// <param name="mi">現プレイヤー名とプレイヤーID 取得、共有</param>
-    [PunRPC]
-    public void PlayerIDCheck(PhotonMessageInfo mi)  // 【START-07】【JK-11_1】
-    {
-        Debug.Log("【START-07】【JK-11_1】[PunRPC] PlayerIDCheck");
-        //string senderName = "anonymous";
-        //string senderID = "2434";
-        if (mi.Sender != null)
-        {
-            senderName = mi.Sender.NickName;
-            senderID = mi.Sender.UserId;
-            MyName = senderName;
-            MyID = senderID;
-        }
-        Debug.Log("senderName  " + senderName);  // 今ボタン押した人
-        Debug.Log("senderID  " + senderID);  // 今ボタン押した人
-        Debug.Log("MyName  " + MyName);  // 今ボタン押した人
-        Debug.Log("MyID  " + MyID);  // 今ボタン押した人
-    }
-
     public void ToSharePlayerTeNum()  // 【JK-06】私のジャンケン手をみんなに提供（共有）します
     {
         TestRoomControllerSC.PNameCheck(); // プレイヤー名が埋まっていなかったら入れる
@@ -1684,29 +1785,25 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (senderID == TestRoomControllerSC.string_PID1)
         {
-            Debug.Log("【JK-07】現在プレイヤー1がボタン押したよ");
-            Debug.Log("MyName  " + MyName);  // 今ボタン押した人
+            Debug.Log("【JK-07】今からプレイヤー1＝私（" + MyName + "）のジャンケン手をみんなに提供（共有）します");
             SharePlayerTeNum_Player1();
         }
 
         if (senderID == TestRoomControllerSC.string_PID2)
         {
-            Debug.Log("【JK-07】現在プレイヤー2がボタン押したよ");
-            Debug.Log("MyName  " + MyName);  // 今ボタン押した人
+            Debug.Log("【JK-07】今からプレイヤー2＝私（" + MyName + "）のジャンケン手をみんなに提供（共有）します");
             SharePlayerTeNum_Player2();
         }
 
         if (senderID == TestRoomControllerSC.string_PID3)
         {
-            Debug.Log("【JK-07】現在プレイヤー3がボタン押したよ");
-            Debug.Log("MyName  " + MyName);  // 今ボタン押した人
+            Debug.Log("【JK-07】今からプレイヤー3＝私（" + MyName + "）のジャンケン手をみんなに提供（共有）します");
             SharePlayerTeNum_Player3();
         }
 
         if (senderID == TestRoomControllerSC.string_PID4)
         {
-            Debug.Log("【JK-07】現在プレイヤー4がボタン押したよ");
-            Debug.Log("MyName  " + MyName);  // 今ボタン押した人
+            Debug.Log("【JK-07】今からプレイヤー4＝私（" + MyName + "）のジャンケン手をみんなに提供（共有）します");
             SharePlayerTeNum_Player4();
         }
 
@@ -1810,7 +1907,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player1_1
     public void ToSharePlayerTeNum_Player1_1_is_Gu()  //【JK-07】
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_1_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_1_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_1_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（0：グー）
@@ -1827,7 +1924,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player1_1_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_1_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_1_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_1_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -1844,7 +1941,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player1_1_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_1_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_1_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_1_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（2：パー）
@@ -1863,7 +1960,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player1_2
     public void ToSharePlayerTeNum_Player1_2_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_2_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_2_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_2_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（0：グー）
@@ -1875,7 +1972,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player1_2_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_2_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_2_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_2_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -1887,7 +1984,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player1_2_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_2_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_2_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_2_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（2：パー）
@@ -1901,7 +1998,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player1_3
     public void ToSharePlayerTeNum_Player1_3_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_3_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_3_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_3_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（0：グー）
@@ -1913,7 +2010,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player1_3_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_3_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_3_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_3_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -1925,7 +2022,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player1_3_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_3_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_3_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_3_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（2：パー）
@@ -1939,7 +2036,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player1_4
     public void ToSharePlayerTeNum_Player1_4_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_4_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_4_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_4_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（0：グー）
@@ -1951,7 +2048,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player1_4_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_4_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_4_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_4_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -1963,7 +2060,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player1_4_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_4_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_4_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_4_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（2：パー）
@@ -1977,7 +2074,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player1_5
     public void ToSharePlayerTeNum_Player1_5_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_5_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_5_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_5_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（0：グー）
@@ -1989,7 +2086,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player1_5_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_5_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_5_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_5_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2001,7 +2098,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player1_5_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player1_5_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player1_5_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player1_5_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2017,7 +2114,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player2_1
     public void ToSharePlayerTeNum_Player2_1_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_1_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_1_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_1_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2034,7 +2131,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player2_1_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_1_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_1_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_1_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2051,7 +2148,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player2_1_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_1_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_1_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_1_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2070,7 +2167,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// PlayerTeNum_Player2_2
     public void ToSharePlayerTeNum_Player2_2_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_2_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_2_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_2_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2082,7 +2179,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player2_2_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_2_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_2_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_2_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2094,7 +2191,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player2_2_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_2_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_2_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_2_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2108,7 +2205,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// PlayerTeNum_Player2_3
     public void ToSharePlayerTeNum_Player2_3_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_3_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_3_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_3_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2120,7 +2217,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player2_3_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_3_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_3_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_3_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2132,7 +2229,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player2_3_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_3_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_3_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_3_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2146,7 +2243,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// PlayerTeNum_Player2_4
     public void ToSharePlayerTeNum_Player2_4_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_4_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_4_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_4_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2158,7 +2255,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player2_4_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_4_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_4_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_4_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2170,7 +2267,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player2_4_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_4_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_4_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_4_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2184,7 +2281,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// PlayerTeNum_Player2_5
     public void ToSharePlayerTeNum_Player2_5_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_5_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_5_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_5_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2196,7 +2293,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player2_5_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_5_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_5_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_5_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2208,7 +2305,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player2_5_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player2_5_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player2_5_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player2_5_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー2」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2224,7 +2321,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player3_1
     public void ToSharePlayerTeNum_Player3_1_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_1_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_1_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_1_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2241,7 +2338,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player3_1_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_1_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_1_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_1_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2258,7 +2355,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player3_1_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_1_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_1_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_1_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2277,7 +2374,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player3_2
     public void ToSharePlayerTeNum_Player3_2_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_2_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_2_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_2_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2289,7 +2386,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player3_2_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_2_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_2_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_2_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2301,7 +2398,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player3_2_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_2_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_2_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_2_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2315,7 +2412,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player3_3
     public void ToSharePlayerTeNum_Player3_3_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_3_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_3_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_3_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2327,7 +2424,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player3_3_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_3_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_3_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_3_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2339,7 +2436,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player3_3_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_3_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_3_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_3_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2353,7 +2450,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player3_4
     public void ToSharePlayerTeNum_Player3_4_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_4_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_4_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_4_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2365,7 +2462,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player3_4_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_4_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_4_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_4_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2377,7 +2474,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player3_4_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_4_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_4_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_4_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2391,7 +2488,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player3_5
     public void ToSharePlayerTeNum_Player3_5_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_5_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_5_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_5_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2403,7 +2500,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player3_5_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_5_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_5_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_5_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2415,7 +2512,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player3_5_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player3_5_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player3_5_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player3_5_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー3」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2431,7 +2528,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player4_1
     public void ToSharePlayerTeNum_Player4_1_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_1_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_1_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_1_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2448,7 +2545,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player4_1_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_1_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_1_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_1_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2465,7 +2562,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player4_1_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_1_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_1_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_1_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2484,7 +2581,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player4_2
     public void ToSharePlayerTeNum_Player4_2_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_2_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_2_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_2_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2496,7 +2593,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player4_2_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_2_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_2_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_2_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2508,7 +2605,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player4_2_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_2_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_2_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_2_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2522,7 +2619,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player4_3
     public void ToSharePlayerTeNum_Player4_3_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_3_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_3_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_3_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2534,7 +2631,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player4_3_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_3_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_3_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_3_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2546,7 +2643,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player4_3_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_3_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_3_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_3_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2560,7 +2657,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-07】PlayerTeNum_Player4_4
     public void ToSharePlayerTeNum_Player4_4_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_4_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_4_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_4_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2572,7 +2669,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player4_4_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_4_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_4_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_4_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2584,7 +2681,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player4_4_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_4_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_4_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_4_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（2：パー）
@@ -2598,7 +2695,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// PlayerTeNum_Player4_5
     public void ToSharePlayerTeNum_Player4_5_is_Gu()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_5_is_Gu", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_5_is_Gu", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_5_is_Gu()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（0：グー）
@@ -2610,7 +2707,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player4_5_is_Choki()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_5_is_Choki", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_5_is_Choki", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_5_is_Choki()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（1:チョキ）
@@ -2622,7 +2719,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToSharePlayerTeNum_Player4_5_is_Pa()
     {
-        photonView.RPC("【JK-07】SharePlayerTeNum_Player4_5_is_Pa", RpcTarget.All);
+        photonView.RPC("SharePlayerTeNum_Player4_5_is_Pa", RpcTarget.All);
     }
     [PunRPC]
     public void SharePlayerTeNum_Player4_5_is_Pa()  //【JK-07】現在プレイしているのが「プレイヤー4」 + そのジャンケンの手は「PTN」（2：パー）
@@ -3367,62 +3464,27 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #endregion
 
 
-    public void CreatePlayerPrefab()    //【START-04】Photonに接続していれば自プレイヤーを生成
+
+
+
+    public void FromWin_ToJump()     //【JK-106】ジャンケンに勝ったのでジャンプで移動する その一連の処理
     {
-        Debug.Log("【START-04】Photonに接続したので 自プレイヤーを生成");
-
-        //GameObject MyPlayer = PhotonNetwork.Instantiate(this.MyPlayerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-        //GameObject MyPlayer = PhotonNetwork.Instantiate(this.MyPlayerPrefab.name);
-        //GameObject Player1 = PhotonNetwork.Instantiate(this.playerPrefab.name);
-
-        if (int_conMyCharaAvatar == 1)  // うたこ
-        {
-            myPlayer = PhotonNetwork.Instantiate(playerPrefab_utako.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-            utakoClone = GameObject.FindWithTag("MyPlayer");
-            Debug.Log("utakoClone の名前は: " + utakoClone.name);
-            PlayerSC = utakoClone.GetComponent<PlayerScript>();
-        }
-        else if (int_conMyCharaAvatar == 2) // Unityちゃん
-        {
-            myPlayer = PhotonNetwork.Instantiate(playerPrefab_unitychan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-            unitychanClone = GameObject.FindWithTag("MyPlayer");
-            Debug.Log("unitychanClone の名前は: " + unitychanClone.name);
-            PlayerSC = unitychanClone.GetComponent<PlayerScript>();
-        }
-        else if (int_conMyCharaAvatar == 3) // Pちゃん
-        {
-            myPlayer = PhotonNetwork.Instantiate(playerPrefab_pchan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-            pchanClone = GameObject.FindWithTag("MyPlayer");
-            Debug.Log("pchanClone の名前は: " + pchanClone.name);
-            PlayerSC = pchanClone.GetComponent<PlayerScript>();
-        }
-        else if (int_conMyCharaAvatar == 4) // モブちゃん
-        {
-            myPlayer = PhotonNetwork.Instantiate(playerPrefab_mobuchan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-            mobuchanClone = GameObject.FindWithTag("MyPlayer");
-            Debug.Log("mobuchanClone の名前は: " + mobuchanClone.name);
-            PlayerSC = mobuchanClone.GetComponent<PlayerScript>();
-        }
+        Debug.Log("【JK-107】FromWin_ToJump （ジャンプ移動）処理に入ります");
+        Set_StepNum();               //【JK-108】ジャンプする回数を設定する（変数上書き） 
+        bridge_JumpToRight();        //【JK-109】右方向へ 指定された回数 ぴょん と跳ねながら移動する
     }
 
-
-    public void FromWin_ToJump()     // ジャンケンに勝ったのでジャンプで移動する その一連の処理
+    public void Set_StepNum()        //【JK-108】ジャンプする回数を設定する（変数上書き） 
     {
-        Debug.Log("FromWin_ToJump を実行します");
-        Set_StepNum();               // ジャンプする回数を設定する（変数上書き） 
-        bridge_JumpToRight();        // 右方向へ 指定された回数 ぴょん と跳ねながら移動する
-    }
-
-    public void Set_StepNum()        // ジャンプする回数を設定する（変数上書き） 
-    {
-        Debug.Log("ジャンプする回数を設定（変数上書き）します");
+        Debug.Log("【JK-108】ジャンプする回数を設定（変数上書き）します");
         PlayerSC.MoveForward_StepNum = original_StepNum;   // ジャンプして移動するステップ数（の元となる変数）に上書きする
     }
 
-    public void bridge_JumpToRight()  // 右方向へ 指定された回数 ぴょん と跳ねながら移動する
+    public void bridge_JumpToRight()  //【JK-109】右方向へ 指定された回数 ぴょん と跳ねながら移動する
     {
-        Debug.Log("bridge_JumpToRight を実行します");
+        Debug.Log("【JK-109】bridge_JumpToRight（ジャンプ移動） を実行します");
         PlayerSC.JumpRight();
+        Debug.Log("【JK-110】ぴょーん！ ぴょーん！ ぴょーん！");
     }
 
     public void bridge_GetDamage()
@@ -3500,28 +3562,24 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void CheckPlayerTeNum()
     {
         Debug.Log("************ CheckPlayerTeNum *********** **********");
-
         Debug.Log("***  Player1  ***********");
         Debug.Log("int_Player1_Te1 " + int_Player1_Te1);
         Debug.Log("int_Player1_Te2 " + int_Player1_Te2);
         Debug.Log("int_Player1_Te3 " + int_Player1_Te3);
         Debug.Log("int_Player1_Te4 " + int_Player1_Te4);
         Debug.Log("int_Player1_Te5 " + int_Player1_Te5);
-
         Debug.Log("***  Player2  ***********");
         Debug.Log("int_Player2_Te1 " + int_Player2_Te1);
         Debug.Log("int_Player2_Te2 " + int_Player2_Te2);
         Debug.Log("int_Player2_Te3 " + int_Player2_Te3);
         Debug.Log("int_Player2_Te4 " + int_Player2_Te4);
         Debug.Log("int_Player2_Te5 " + int_Player2_Te5);
-
         Debug.Log("***  Player3  ***********");
         Debug.Log("int_Player3_Te1 " + int_Player3_Te1);
         Debug.Log("int_Player3_Te2 " + int_Player3_Te2);
         Debug.Log("int_Player3_Te3 " + int_Player3_Te3);
         Debug.Log("int_Player3_Te4 " + int_Player3_Te4);
         Debug.Log("int_Player3_Te5 " + int_Player3_Te5);
-
         Debug.Log("***  Player4  ***********");
         Debug.Log("int_Player4_Te1 " + int_Player4_Te1);
         Debug.Log("int_Player4_Te2 " + int_Player4_Te2);
@@ -3529,12 +3587,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("int_Player4_Te4 " + int_Player4_Te4);
         Debug.Log("int_Player4_Te5 " + int_Player4_Te5);
     }
-
     public void OnMouseDown()
     {
         // photonView.RPC("SelectJankenCard", RpcTarget.All);
     }
-
     public void MyNameIs(Player player)
     {
         Debug.Log("私の名前は 「" + player.NickName + " 」でござる");

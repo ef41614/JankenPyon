@@ -129,6 +129,7 @@ MonoBehaviour:
   - Player2_NowWaiting
   - Player3_NowWaiting
   - Player4_NowWaiting
+  - Hantei_Stream
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
