@@ -14,21 +14,21 @@ namespace BEFOOL.PhotonTest
         [SerializeField]
         Text joinedMembersText = null;
 
-        string string_MyName;
-        string string_PName1;
-        string string_PName2;
-        string string_PName3;
-        string string_PName4;
+        public string string_MyName;
+        public string string_PName1;
+        public string string_PName2;
+        public string string_PName3;
+        public string string_PName4;
 
-        public string string_PID1 = "1";
-        public string string_PID2 = "2";
-        public string string_PID3 = "3";
-        public string string_PID4 = "4";
+        public string string_PID1 = "";
+        public string string_PID2 = "";
+        public string string_PID3 = "";
+        public string string_PID4 = "";
 
-        public string string_PlayerID_1;
-        public string string_PlayerID_2;
-        public string string_PlayerID_3;
-        public string string_PlayerID_4;
+        //public string string_PlayerID_1;
+        //public string string_PlayerID_2;
+        //public string string_PlayerID_3;
+        //public string string_PlayerID_4;
         public Player[] allPlayers;
 
         public int int_JoinedPlayerAllNum = 0;
@@ -39,7 +39,9 @@ namespace BEFOOL.PhotonTest
         public Text Text_PName3;
         public Text Text_PName4;
 
-        public SelectJanken SelectJankenMSC; //スクリプト名 + このページ上でのニックネーム
+        public GameObject SelectJankenManager; //ヒエラルキー上のオブジェクト名
+        SelectJanken SelectJankenMSC;//スクリプト名 + このページ上でのニックネーム
+        //public SelectJanken SelectJankenMSC; //スクリプト名 + このページ上でのニックネーム
 
         void Start()
         {
@@ -47,7 +49,7 @@ namespace BEFOOL.PhotonTest
             Debug.Log("TestRoomController 出席確認");
             allPlayers = PhotonNetwork.PlayerList; // プレイヤーの配列（自身を含む）
             Debug.Log(allPlayers.Length + ": allPlayers.Length");
-
+            SelectJankenMSC = SelectJankenManager.GetComponent<SelectJanken>();
             /*
             Text_PName1 = Text_PName1.GetComponent<Text>();
             Text_PName2 = Text_PName2.GetComponent<Text>();
@@ -59,7 +61,7 @@ namespace BEFOOL.PhotonTest
             Debug.Log(string_PName1 + ": string_PName1");
             string_PID1 = allPlayers[0].UserId;
             Debug.Log(string_PID1 + ": string_PID1");
-            SelectJankenMSC.MyPlayID();
+            SelectJankenMSC.Share_AcutivePlayerID();
             EntryCheck();
             PNameCheck();
             Set_PNameTextAll();
@@ -104,52 +106,53 @@ namespace BEFOOL.PhotonTest
             Set_PNameTextAll();
         }
 
-        public void PNameCheck() // プレイヤー名が埋まっていなかったら入れる
+        public void PNameCheck() // 現時点の参加人数を更新する（プレイヤー名が埋まっていなかったら入れる）
         {
+            Debug.Log("「PNameCheck」現時点の参加人数を更新します（プレイヤー名が埋まっていなかったら入れる）");
             if (string_PID4 != "5")
             {
-                Debug.Log("string_PID4 まだ埋まっていない");
+                //Debug.Log("string_PID4 まだ埋まっていない");
                 string_PName1 = allPlayers[0].NickName;
                 string_PID1 = allPlayers[0].UserId;
-                Debug.Log(string_PID1 + ": string_PID1");
-                Debug.Log(allPlayers.Length + ": allPlayers.Length");
+                //Debug.Log(string_PID1 + ": string_PID1");
+                //Debug.Log(allPlayers.Length + ": allPlayers.Length");
                 int_JoinedPlayerAllNum = 1;
 
                 if (allPlayers.Length >= 2)
                 {
                     string_PName2 = allPlayers[1].NickName;
                     string_PID2 = allPlayers[1].UserId;
-                    Debug.Log(string_PID2 + ": string_PID2");
-                    Debug.Log(allPlayers.Length + ": allPlayers.Length");
+                    //Debug.Log(string_PID2 + ": string_PID2");
+                    //Debug.Log(allPlayers.Length + ": allPlayers.Length");
                     int_JoinedPlayerAllNum = 2;
                 }
 
                 if (allPlayers.Length >= 3)
                 {
                     string_PName3 = allPlayers[2].NickName;
-                    Debug.Log(allPlayers.Length + ": allPlayers.Length");
+                    //Debug.Log(allPlayers.Length + ": allPlayers.Length");
                     string_PID3 = allPlayers[2].UserId;
-                    Debug.Log(string_PID3 + ": string_PID3");
+                    //Debug.Log(string_PID3 + ": string_PID3");
                     int_JoinedPlayerAllNum = 3;
                 }
 
                 if (allPlayers.Length >= 4)
                 {
                     string_PName4 = allPlayers[3].NickName;
-                    Debug.Log(allPlayers.Length + ": allPlayers.Length");
+                    //Debug.Log(allPlayers.Length + ": allPlayers.Length");
                     string_PID4 = allPlayers[3].UserId;
-                    Debug.Log(string_PID4 + ": string_PID4");
+                    //Debug.Log(string_PID4 + ": string_PID4");
                     int_JoinedPlayerAllNum = 4;
                 }
 
                 //string_PName4 = allPlayers[3].NickName;
-                Debug.Log(string_PName1 + ": string_PName1");
-                Debug.Log(string_PName2 + ": string_PName2");
-                Debug.Log(string_PName3 + ": string_PName3");
-                Debug.Log(string_PName4 + ": string_PName4");
+                //Debug.Log(string_PName1 + ": string_PName1");
+                //Debug.Log(string_PName2 + ": string_PName2");
+                //Debug.Log(string_PName3 + ": string_PName3");
+                //Debug.Log(string_PName4 + ": string_PName4");
 
-                Debug.Log(allPlayers.Length + ": allPlayers.Length");
-                Debug.Log("現在の参加人数は " + int_JoinedPlayerAllNum);
+                //Debug.Log(allPlayers.Length + ": allPlayers.Length");
+                //Debug.Log("現在の参加人数は " + int_JoinedPlayerAllNum);
             }
             else
             {
@@ -161,8 +164,9 @@ namespace BEFOOL.PhotonTest
         public void EntryCheck()
         {
             Debug.Log(" ＝＝＝ EntryCheck スタート！ ＝＝＝ ");
-            SelectJankenMSC.MyPlayID();
+            SelectJankenMSC.Share_AcutivePlayerID();
 
+            /*
             if (string_PlayerID_1 == "")
             {
                 string_PlayerID_1 = SelectJankenMSC.senderID;
@@ -183,6 +187,7 @@ namespace BEFOOL.PhotonTest
             {
                 Debug.Log(" EntryCheck 不要です");
             }
+            */
 
             PresentMemberCheck();
             Debug.Log(" ＝＝＝ EntryCheck 終わり！ ＝＝＝ ");
@@ -190,28 +195,28 @@ namespace BEFOOL.PhotonTest
 
         public void PresentMemberCheck()
         {
-
+            /*
             Debug.Log(string_PlayerID_1 + ": string_PlayerID_1");
             Debug.Log(string_PlayerID_2 + ": string_PlayerID_2");
             Debug.Log(string_PlayerID_3 + ": string_PlayerID_3");
             Debug.Log(string_PlayerID_4 + ": string_PlayerID_4");
-
+            */
             Debug.Log("allPlayers[0].NickName" + allPlayers[0].NickName);
-            Debug.Log("allPlayers[0].UserId" + allPlayers[0].UserId);
+            //Debug.Log("allPlayers[0].UserId" + allPlayers[0].UserId);
             if (allPlayers.Length >= 2)
             {
                 Debug.Log("allPlayers[1].NickName" + allPlayers[1].NickName);
-                Debug.Log("allPlayers[1].UserId" + allPlayers[1].UserId);
+                //Debug.Log("allPlayers[1].UserId" + allPlayers[1].UserId);
             }
             if (allPlayers.Length >= 3)
             {
                 Debug.Log("allPlayers[2].NickName" + allPlayers[2].NickName);
-                Debug.Log("allPlayers[2].UserId" + allPlayers[2].UserId);
+                //Debug.Log("allPlayers[2].UserId" + allPlayers[2].UserId);
             }
             if (allPlayers.Length >= 4)
             {
                 Debug.Log("allPlayers[3].NickName" + allPlayers[3].NickName);
-                Debug.Log("allPlayers[3].UserId" + allPlayers[3].UserId);
+                //Debug.Log("allPlayers[3].UserId" + allPlayers[3].UserId);
             }
             Set_PNameTextAll(); // プレイヤー名1～4 をセット
         }

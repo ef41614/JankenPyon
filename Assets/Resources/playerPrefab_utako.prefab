@@ -509,6 +509,8 @@ MonoBehaviour:
   MoveForward_StepNum: 3
   MySprite: {fileID: 5031798997125652555}
   int_MySpriteOrder: 0
+  SelectJankenManager: {fileID: 0}
+  Text_StepNum: {fileID: 0}
 --- !u!114 &3100160585106732520
 MonoBehaviour:
   m_ObjectHideFlags: 0

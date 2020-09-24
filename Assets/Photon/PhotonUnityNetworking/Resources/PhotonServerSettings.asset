@@ -130,6 +130,9 @@ MonoBehaviour:
   - Player3_NowWaiting
   - Player4_NowWaiting
   - Hantei_Stream
+  - Share_Push_KetteiBtn
+  - CanDo_Hantei_Stream_OFF
+  - CanDo_Hantei_Stream_ON
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
