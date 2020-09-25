@@ -12015,6 +12015,7 @@ MonoBehaviour:
   Text_Wait_P4: {fileID: 189872794}
   Text_NickName: {fileID: 126452437}
   Text_AcutivePlayerName: {fileID: 2123841852}
+  JumpMaeTaiki: 2
 --- !u!4 &1361133989
 Transform:
   m_ObjectHideFlags: 0

@@ -42,7 +42,7 @@ public class PlayerScript : MonoBehaviour
             //Debug.Log("original_StepNum ：" + SelectJankenMSC.original_StepNum);
             //Debug.Log("進む（ジャンプする）回数 (MoveForward_StepNum) : " + MoveForward_StepNum);
 
-            Text_StepNum.GetComponent<Text>().text = MoveForward_StepNum + "";
+            Text_StepNum.GetComponent<Text>().text = SelectJankenMSC.original_StepNum + "：歩数";
             currentTime = 0f;
         }
     }
@@ -59,15 +59,18 @@ public class PlayerScript : MonoBehaviour
         MoveForward_StepNum = SelectJankenMSC.original_StepNum;
         Debug.Log("進む（ジャンプする）回数 (MoveForward_StepNum) : " + MoveForward_StepNum);
         anim.SetBool("run", true);
+        Debug.Log("Take Off！！");
+        Debug.Log("ぴょーん！ ぴょーん！ ぴょーん！");
         //////////////////////////// 移動終了地点   // ジャンプする力  // ジャンプする回数   // アニメーション時間
         transform
-           // .DOJump(new Vector3(MoveForward_StepNum * 1.0f, 0f), 0.5f, MoveForward_StepNum, MoveForward_StepNum * 1.0f)
+            // .DOJump(new Vector3(MoveForward_StepNum * 1.0f, 0f), 0.5f, MoveForward_StepNum, MoveForward_StepNum * 1.0f)
             .DOJump(new Vector3(SelectJankenMSC.original_StepNum * 1.0f, 0f), 0.5f, SelectJankenMSC.original_StepNum, SelectJankenMSC.original_StepNum * 1.0f)
             .SetRelative()
             .SetEase(Ease.Linear)
             .SetRelative()
             .OnComplete(() => {                  // ジャンプが終了したら、以下の操作をする
                 anim.SetBool("run", false);      // アニメーションを run → stand に遷移させる
+                Debug.Log("スタッ！！（着地音）");
                 Debug.Log("ジャンプ 今終わりました！");
                 SelectJankenMSC.AfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理
             });

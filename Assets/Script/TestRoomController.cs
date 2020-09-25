@@ -84,6 +84,8 @@ namespace BEFOOL.PhotonTest
 
         public void LoginCheck(Player player)
         {
+            Debug.Log("LoginCheck（ログイン時チェック）を実施します");
+
             UpdateMemberList();
             Debug.Log(allPlayers.Length + ": allPlayers.Length");
             Debug.Log(player.NickName + "が参加しました");
@@ -103,8 +105,58 @@ namespace BEFOOL.PhotonTest
             Text_PName3.text = string_PName3;
             Text_PName4.text = string_PName4;
             */
+            Debug.Log("プレイヤー名テキストをセットします");
             Set_PNameTextAll();
+            Debug.Log("プレイヤー名テキストをセットしました");
+
+            Debug.Log(" allPlayers.Length は "+ allPlayers.Length + " です");
+
+            Debug.Log(" allPlayers.Length チェック 2");
+            if (allPlayers.Length >= 2)  // 参加人数 2名 は居る
+            {
+                Debug.Log(" allPlayers.Length は 2以上です");
+                SelectJankenMSC.ToShareNinzu_2();
+            }
+
+            Debug.Log(" allPlayers.Length チェック 3");
+            if (allPlayers.Length >= 3)  // 参加人数 3名 は居る
+            {
+                Debug.Log(" allPlayers.Length は 3以上です");
+                SelectJankenMSC.ToShareNinzu_3();
+            }
+
+            Debug.Log(" allPlayers.Length チェック 4");
+            if (allPlayers.Length >= 4)  // 参加人数 4名 は居る
+            {
+                Debug.Log(" allPlayers.Length は 4以上です");
+                SelectJankenMSC.ToShareNinzu_4();
+            }
         }
+        /*
+        [PunRPC]
+        public void ShareNinzu_2()   // // 参加人数 2名 は居る → 全員に共有
+        {
+            Debug.Log("参加人数 2名 は居る");
+            SelectJankenMSC.NumLivePlayer = 2;
+            SelectJankenMSC.SankaNinzu = 2;
+        }
+
+        [PunRPC]
+        public void ShareNinzu_3()   // // 参加人数 3名 は居る → 全員に共有
+        {
+            Debug.Log("参加人数 3名 は居る");
+            SelectJankenMSC.NumLivePlayer = 3;
+            SelectJankenMSC.SankaNinzu = 3;
+        }
+
+        [PunRPC]
+        public void ShareNinzu_4()   // // 参加人数 4名 は居る → 全員に共有
+        {
+            Debug.Log("参加人数 4名 は居る");
+            SelectJankenMSC.NumLivePlayer = 4;
+            SelectJankenMSC.SankaNinzu = 4;
+        }
+        */
 
         public void PNameCheck() // 現時点の参加人数を更新する（プレイヤー名が埋まっていなかったら入れる）
         {
@@ -203,17 +255,17 @@ namespace BEFOOL.PhotonTest
             */
             Debug.Log("allPlayers[0].NickName" + allPlayers[0].NickName);
             //Debug.Log("allPlayers[0].UserId" + allPlayers[0].UserId);
-            if (allPlayers.Length >= 2)
+            if (allPlayers.Length >= 2)  // 参加人数 2名 は居る
             {
                 Debug.Log("allPlayers[1].NickName" + allPlayers[1].NickName);
                 //Debug.Log("allPlayers[1].UserId" + allPlayers[1].UserId);
             }
-            if (allPlayers.Length >= 3)
+            if (allPlayers.Length >= 3)  // 参加人数 3名 は居る
             {
                 Debug.Log("allPlayers[2].NickName" + allPlayers[2].NickName);
                 //Debug.Log("allPlayers[2].UserId" + allPlayers[2].UserId);
             }
-            if (allPlayers.Length >= 4)
+            if (allPlayers.Length >= 4)  // 参加人数 4名 は居る
             {
                 Debug.Log("allPlayers[3].NickName" + allPlayers[3].NickName);
                 //Debug.Log("allPlayers[3].UserId" + allPlayers[3].UserId);

@@ -133,6 +133,18 @@ MonoBehaviour:
   - Share_Push_KetteiBtn
   - CanDo_Hantei_Stream_OFF
   - CanDo_Hantei_Stream_ON
+  - ShareStepNum_1
+  - ShareStepNum_3
+  - ShareStepNum_4
+  - ShareStepNum_6
+  - ShareStepNum_8
+  - ShareInfo_Aiko
+  - ShareInfo_Win_Choki
+  - ShareInfo_Win_Gu
+  - ShareInfo_Win_Pa
+  - ShareNinzu_2
+  - ShareNinzu_3
+  - ShareNinzu_4
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

@@ -273,6 +273,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject Text_NickName;
     public GameObject Text_AcutivePlayerName;
 
+    public float JumpMaeTaiki = 2.0f;
     float span = 1f;
     private float currentTime = 0f; // test
 
@@ -543,7 +544,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         WhoAreYou();     // 私の名前（真名）を表示
         //Debug.Log("senderName  " + senderName);  // 今ボタン押した人
         //Debug.Log("senderID  " + senderID);  // 今ボタン押した人
-        //Debug.Log("AcutivePlayerName  " + AcutivePlayerName);  // 今ボタン押した人
+        Debug.Log("AcutivePlayerName  " + AcutivePlayerName);  // 今ボタン押した人
         //Debug.Log("AcutivePlayerID  " + AcutivePlayerID);  // 今ボタン押した人
     }
 
@@ -754,6 +755,49 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Debug.Log("強制的に全員の待機フラグを 1 （待機中）にします");
         int_WaitingPlayers_All = SankaNinzu;
+    }
+
+
+    public void ToShareNinzu_2()   // 参加人数 2名 は居る → 全員に共有
+    {
+        Debug.Log("ToShare 参加人数 2名 は居る");
+        photonView.RPC("ShareNinzu_2", RpcTarget.All);
+    }
+
+    public void ToShareNinzu_3()   // 参加人数 3名 は居る → 全員に共有
+    {
+        Debug.Log("ToShare 参加人数 3名 は居る");
+        photonView.RPC("ShareNinzu_3", RpcTarget.All);
+    }
+
+    public void ToShareNinzu_4()   // 参加人数 4名 は居る → 全員に共有
+    {
+        Debug.Log("ToShare 参加人数 4名 は居る");
+        photonView.RPC("ShareNinzu_4", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void ShareNinzu_2()   // 参加人数 2名 は居る → 全員に共有
+    {
+        Debug.Log("参加人数 2名 は居る → 全員に共有");
+        NumLivePlayer = 2;
+        SankaNinzu = 2;
+    }
+
+    [PunRPC]
+    public void ShareNinzu_3()   // 参加人数 3名 は居る → 全員に共有
+    {
+        Debug.Log("参加人数 3名 は居る → 全員に共有");
+        NumLivePlayer = 3;
+        SankaNinzu = 3;
+    }
+
+    [PunRPC]
+    public void ShareNinzu_4()   // 参加人数 4名 は居る → 全員に共有
+    {
+        Debug.Log("参加人数 4名 は居る → 全員に共有");
+        NumLivePlayer = 4;
+        SankaNinzu = 4;
     }
     #endregion
 
@@ -1315,6 +1359,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             alivePlayer4 = 0;
         }
+        Debug.Log("alivePlayer1 ： " + alivePlayer1);
+        Debug.Log("alivePlayer2 ： " + alivePlayer2);
+        Debug.Log("alivePlayer3 ： " + alivePlayer3);
+        Debug.Log("alivePlayer4 ： " + alivePlayer4);
     }
 
     public void ToCheck_Iam_alive()            // ジャンケンで自分が生き残っているかどうかの確認をする
@@ -1477,15 +1525,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
 
 
-    public void CountLivePlayer()     // 【JK-26】残留しているプレイヤー人数をカウントする
+    public void CountLivePlayer()       //【JK-26】残留しているプレイヤー人数をカウントする
     {
         CheckAlivePlayer_DependOn_Absent();  // 生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）
         NumLivePlayer = alivePlayer1 + alivePlayer2 + alivePlayer3 + alivePlayer4;
         Debug.Log("【JK-26】NumLivePlayer 残留プレイヤー数 ： " + NumLivePlayer);
     }
 
-    public void SetKP_counter()      // 【JK-24】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
+    public void SetKP_counter()         //【JK-24】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
     {
+        Debug.Log("【JK-24】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する SetKP_counter()");    // N回目のラウンドループ
         Debug.Log("【JK-24】count_RoundRoop" + count_RoundRoop + " 回目（ラウンド）のジャンケンループ ");    // N回目のラウンドループ
 
         if (count_RoundRoop == 1)
@@ -1534,7 +1583,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("KP4 ： " + KP4);
     }
 
-    public void Check_Gu_Existence() // NoneGu の判定を返す
+    public void Check_Gu_Existence()    //【JK-25】NoneGu の判定を返す
     {
         bool NoneGuP1 = true;
         bool NoneGuP2 = true;
@@ -1619,7 +1668,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("NoneGuP4 ： " + NoneGuP4);
     }
 
-    public void Check_Choki_Existence() // NoneChoki の判定を返す
+    public void Check_Choki_Existence() //【JK-25】NoneChoki の判定を返す
     {
         bool NoneChokiP1 = true;
         bool NoneChokiP2 = true;
@@ -1704,7 +1753,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("NoneChokiP4 ： " + NoneChokiP4);
     }
 
-    public void Check_Pa_Existence() // NonePa の判定を返す
+    public void Check_Pa_Existence()    //【JK-25】NonePa の判定を返す
     {
         bool NonePaP1 = true;
         bool NonePaP2 = true;
@@ -1789,93 +1838,146 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("NonePaP4 ： " + NonePaP4);
     }
 
-    public void Syohai_Hantei()  // 【JK-25】N回目 のループ における 残留プレイヤー同士の じゃんけん手の勝ち負けを判定（負けた人のaliveフラグ を 0 にする） → 人数が減る
+    public void Syohai_Hantei()         //【JK-25】生存者同士の 勝ち負けを判定（負けた人のaliveフラグ を 0 にする） → 人数が減る ＆＆ 移動ステップ数を 勝った手に応じて上書き
     {
         Debug.Log("");
         Debug.Log("");
         Debug.Log("【JK-25】Syohai_Hantei スタート");
         Debug.Log("");
         Debug.Log("");
-        CheckAlivePlayer_DependOn_Absent();  // 生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）
-        Check_Gu_Existence();                // N回目の すべてのプレイヤーの手 の中に グー(0)   があるか ： NoneGu を取得
-        Check_Choki_Existence();             // N回目の すべてのプレイヤーの手 の中に チョキ(1) があるか ： NoneChoki を取得
-        Check_Pa_Existence();                // N回目の すべてのプレイヤーの手 の中に パー(2)   があるか ： NonePa を取得
+        CheckAlivePlayer_DependOn_Absent();  //【JK-25】生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）
+        Check_Gu_Existence();                //【JK-25】 N回目の すべてのプレイヤーの手 の中に グー(0)   があるか ： NoneGu を取得
+        Check_Choki_Existence();             //【JK-25】 N回目の すべてのプレイヤーの手 の中に チョキ(1) があるか ： NoneChoki を取得
+        Check_Pa_Existence();                //【JK-25】 N回目の すべてのプレイヤーの手 の中に パー(2)   があるか ： NonePa を取得
 
-        if (NoneGu) // 全員 Gu 無し (ちょき か ぱー)
+        if (NoneGu)           //【JK-25】（全員 Gu 無し）ちょき か ぱー
         {
-            Debug.Log("(NoneGu) です");
-            if (NoneChoki) // 全員 Choki 無し (ぱー のみ)
+            Debug.Log("【JK-25】(NoneGu) （全員 Gu 無し）ちょき か ぱー です");
+            if (NoneChoki)    //（全員 Choki 無し）ぱー のみ
             {
-                Aiko(); // ぱー のみ
+                Debug.Log("【JK-25】(NoneGu) ⇒ ぱー のみ あいこ");
+                Aiko();       //    ⇒ ぱー のみ
             }
-            else // ちょき か ぱー
+            else if (NonePa)  // (全員 Pa 無し) ちょき のみ
             {
+                Debug.Log("【JK-25】(NoneGu) ⇒ ちょき のみ あいこ");
+                Aiko();       //    ⇒ ちょき のみ
+            }
+            else              // ちょき と ぱー
+            {
+                Debug.Log("【JK-25】(NoneGu) ちょき と ぱー");
                 Win_Choki();
-                Lose_Pa();    // ぱー の人のみ 脱落
+                Lose_Pa();    //    ⇒  ぱー の人のみ 脱落
             }
         }
-        else if (NoneChoki) //(全員 Choki 無し) ぐー か ぱー （↓これ以降、ぐー は必ずある）
+        else if (NoneChoki)   //【JK-25】(全員 Choki 無し) ぐー か ぱー （↓これ以降、ぐー は必ずある）
         {
-            Debug.Log("(NoneChoki) です");
-            if (NonePa) //(全員 Pa 無し) ぐー のみ
+            Debug.Log("【JK-25】(NoneChoki) (全員 Choki 無し) ぐー か ぱー です");
+            if (NoneGu)       // (全員 Gu 無し) ぱー のみ
             {
-                Aiko(); // ぐー のみ
+                Debug.Log("【JK-25】(NoneChoki) ⇒  ぱー のみ あいこ");
+                Aiko();       //    ⇒  ぱー のみ
             }
-            else // ぐー か ぱー
+            else if (NonePa)  // (全員 Pa 無し) ぐー のみ
             {
+                Debug.Log("【JK-25】(NoneChoki) ⇒  ぐー のみ あいこ");
+                Aiko();       //    ⇒  ぐー のみ
+            }
+            else              // ぐー と ぱー
+            {
+                Debug.Log("【JK-25】(NoneChoki) ぐー と ぱー");
                 Win_Pa();
-                Lose_Gu();  // ぐー の人のみ 脱落
+                Lose_Gu();    //    ⇒  ぐー の人のみ 脱落
             }
         }
-        else if (NonePa) //(全員 Pa 無し)  ぐー か ちょき （↓これ以降、ぐー と ちょき は必ずある）
+        else if (NonePa)      //【JK-25】(全員 Pa 無し)  ぐー か ちょき （↓これ以降、ぐー と ちょき は必ずある）
         {
-            Debug.Log("(NonePa) です");
-            if (NoneGu) //(全員 Gu 無し) ちょき のみ
+            Debug.Log("【JK-25】(NonePa) (全員 Pa 無し)  ぐー か ちょき です");
+            if (NoneGu)          // (全員 Gu 無し) ちょき のみ
             {
-                Aiko(); // ちょき のみ
+                Debug.Log("【JK-25】(NonePa) ⇒  ちょき のみ あいこ");
+                Aiko();          //    ⇒  ちょき のみ
             }
-            else // ぐー か ちょき
+            else if (NoneChoki)  //（全員 Choki 無し）ぐー のみ
             {
+                Debug.Log("【JK-25】(NonePa) ⇒  ぐー のみ あいこ");
+                Aiko();          //    ⇒  ぐー のみ
+            }
+            else                 // ぐー と ちょき
+            {
+                Debug.Log("【JK-25】(NonePa) ぐー と ちょき");
                 Win_Gu();
-                Lose_Choki();  // ちょき の人のみ 脱落
+                Lose_Choki();    //    ⇒  ちょき の人のみ 脱落
             }
         }
-        else // ぐー か ちょき か ぱー（↓これ以降、ぐー と ちょき と ぱー は必ずある）
+        else                     //【JK-25】 ぐー か ちょき か ぱー（↓これ以降、ぐー と ちょき と ぱー は必ずある）
         {
-            Aiko(); // ぐー ちょき ぱー 全部
+            Debug.Log("【JK-25】ぐー ちょき ぱー 全部 で あいこ");
+            Aiko();              // ぐー ちょき ぱー 全部
         }
     }
 
-    public void Aiko()
+    public void Aiko()              //【JK-25】残っている人、全員残留
     {
         // 残っている人、全員残留
-        Debug.Log("あいこ です");
+        Debug.Log("【JK-25】あいこ です");
+        photonView.RPC("ShareInfo_Aiko", RpcTarget.All);  
+    }
+    [PunRPC]
+    public void ShareInfo_Aiko()    //【JK-25】あいこを 全員に共有
+    {
+        Debug.Log("【JK-25】あいこ です");
+        Share_AcutivePlayerID();    // 現在操作している人のプレイヤー名取得
     }
 
-    public void Win_Gu()
+    public void Win_Gu()            //【JK-25】ぐー の人のみ 残留（移動ステップ数を 3 に上書き）
     {
         // ぐー の人のみ 残留
-        Debug.Log("ぐー の人のみ 残留");
-        original_StepNum = 3;     // 移動ステップ数を 3 に上書き
+        Debug.Log("【JK-25】ぐー の人のみ 残留");
+        photonView.RPC("ShareInfo_Win_Gu", RpcTarget.All);    //【JK-25】 ぐー の人のみ 残留（Win_Gu）を 全員に共有
+        original_StepNum = 3;       // 移動ステップ数を 3 に上書き
+        photonView.RPC("ShareStepNum_3", RpcTarget.All);    // 移動ステップ数を 3 に上書き → 全員に共有
+    }
+    [PunRPC]
+    public void ShareInfo_Win_Gu()  //【JK-25】 ぐー の人のみ 残留（Win_Gu）を 全員に共有
+    {
+        Debug.Log("【JK-25】ぐー の人のみ 残留（Win_Gu）");
+        Share_AcutivePlayerID();    // 現在操作している人のプレイヤー名取得
     }
 
-    public void Win_Choki()
+    public void Win_Choki()         //【JK-25】ちょき の人のみ 残留（移動ステップ数を 6 に上書き）
     {
         // ちょき の人のみ 残留
-        Debug.Log("ちょき の人のみ 残留");
-        original_StepNum = 6;     // 移動ステップ数を 6 に上書き
+        Debug.Log("【JK-25】ちょき の人のみ 残留");
+        photonView.RPC("ShareInfo_Win_Choki", RpcTarget.All);    //【JK-25】 ちょき の人のみ 残留（Win_Choki）を 全員に共有
+        original_StepNum = 6;      // 移動ステップ数を 6 に上書き
+        photonView.RPC("ShareStepNum_6", RpcTarget.All);    // 移動ステップ数を 6 に上書き → 全員に共有
+    }
+    [PunRPC]
+    public void ShareInfo_Win_Choki()   //【JK-25】 ちょき の人のみ 残留（Win_Choki）を 全員に共有
+    {
+        Debug.Log("【JK-25】ちょき の人のみ 残留");
+        Share_AcutivePlayerID();       // 現在操作している人のプレイヤー名取得
     }
 
-    public void Win_Pa()
+    public void Win_Pa()               //【JK-25】ぱー の人のみ 残留（移動ステップ数を 6 に上書き）
     {
         // ぱー の人のみ 残留
-        Debug.Log("ぱー の人のみ 残留");
+        Debug.Log("【JK-25】ぱー の人のみ 残留");
+        photonView.RPC("ShareInfo_Win_Pa", RpcTarget.All);    //【JK-25】 ぱー の人のみ 残留（Win_Pa）を 全員に共有
         original_StepNum = 6;     // 移動ステップ数を 6 に上書き
+        photonView.RPC("ShareStepNum_6", RpcTarget.All);    // 移動ステップ数を 6 に上書き → 全員に共有
+    }
+    [PunRPC]
+    public void ShareInfo_Win_Pa()   //【JK-25】 ぱー の人のみ 残留（Win_Pa）を 全員に共有
+    {
+        Debug.Log("【JK-25】ぱー の人のみ 残留");
+        Share_AcutivePlayerID();     // 現在操作している人のプレイヤー名取得
     }
 
-    public void Lose_Gu()     // ぐー の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
+    public void Lose_Gu()     //【JK-25】ぐー の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
-        Debug.Log("ぐー（0） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        Debug.Log("【JK-25】ぐー（0） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
         if (KP1 == 0)
         {
             alivePlayer1 = 0;
@@ -1898,9 +2000,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
-    public void Lose_Choki()  // ちょき の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
+    public void Lose_Choki()  //【JK-25】ちょき の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
-        Debug.Log("ちょき（1） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        Debug.Log("【JK-25】ちょき（1） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
         if (KP1 == 1)
         {
             alivePlayer1 = 0;
@@ -1923,9 +2025,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
-    public void Lose_Pa()     // ぱー の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
+    public void Lose_Pa()     //【JK-25】ぱー の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
-        Debug.Log("ぱー（2） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        Debug.Log("【JK-25】ぱー（2） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
         if (KP1 == 2)
         {
             alivePlayer1 = 0;
@@ -1947,6 +2049,49 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             AppearImg_CoverBlack_P4();
         }
     }
+
+    #region                   //【JK-25】 移動ステップ数 の共有
+    [PunRPC]
+    public void ShareStepNum_1()   //【JK-25】 移動ステップ数を 1 に上書き → 全員に共有
+    {
+        WhoAreYou();
+        original_StepNum = 1;     // 移動ステップ数を 1 に上書き
+        Debug.Log("移動ステップ数（original_StepNum）を 1 に上書きしました");
+    }
+
+    [PunRPC]
+    public void ShareStepNum_3()   //【JK-25】 移動ステップ数を 3 に上書き → 全員に共有
+    {
+        WhoAreYou();
+        original_StepNum = 3;     // 移動ステップ数を 3 に上書き
+        Debug.Log("移動ステップ数（original_StepNum）を 3 に上書きしました");
+    }
+
+    [PunRPC]
+    public void ShareStepNum_4()   //【JK-25】 移動ステップ数を 4 に上書き → 全員に共有
+    {
+        WhoAreYou();
+        original_StepNum = 4;     // 移動ステップ数を 4 に上書き
+        Debug.Log("移動ステップ数（original_StepNum）を 4 に上書きしました");
+    }
+
+    [PunRPC]
+    public void ShareStepNum_6()   //【JK-25】 移動ステップ数を 6 に上書き → 全員に共有
+    {
+        WhoAreYou();
+        original_StepNum = 6;     // 移動ステップ数を 6 に上書き
+        Debug.Log("移動ステップ数（original_StepNum）を 6 に上書きしました");
+    }
+
+    [PunRPC]
+    public void ShareStepNum_8()   //【JK-25】 移動ステップ数を 8 に上書き → 全員に共有
+    {
+        WhoAreYou();
+        original_StepNum = 8;     // 移動ステップ数を 8 に上書き
+        Debug.Log("移動ステップ数（original_StepNum）を 8 に上書きしました");
+    }
+    #endregion
+
 
     #region // 黒カバーの表示・非表示
     public void AppearImg_CoverBlack_P1() // 黒カバー 表示させる
@@ -3726,8 +3871,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void bridge_JumpToRight()  //【JK-109】右方向へ 指定された回数 ぴょん と跳ねながら移動する
     {
         Debug.Log("【JK-109】bridge_JumpToRight（ジャンプ移動） を実行します");
-        PlayerSC.JumpRight();
-        Debug.Log("【JK-110】ぴょーん！ ぴょーん！ ぴょーん！");
+        Debug.Log("【JK-109】処理前に " + JumpMaeTaiki + "秒 待機します");
+        Debug.Log("【JK-109】JumpMaeTaiki : " + JumpMaeTaiki);
+
+        //PlayerSC.JumpRight();
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(JumpMaeTaiki, () => PlayerSC.JumpRight());
+        //Debug.Log("【JK-110】ぴょーん！ ぴょーん！ ぴょーん！");
     }
 
     public void bridge_GetDamage()
