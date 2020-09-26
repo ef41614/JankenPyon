@@ -190,7 +190,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public int alivePlayer4 = 1;
 
     public int SankaNinzu = 0;              // 総参加人数
-    int anzenPoint = 0;
+    //int anzenPoint = 0;
     public int WinnerNum = -1;              // 勝ったプレイヤーの番号
 
     public int original_StepNum;            // ジャンプして移動するステップ数（の元となる変数）
@@ -330,6 +330,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         NinzuCheck();                 // 【START-10】総参加人数 と 現在待機中の総人数
         NumLivePlayer = SankaNinzu;
         Debug.Log("【START-11】NumLivePlayer（総参加人数＝生存者数） は " + NumLivePlayer);
+
+        Debug.Log("【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する");
+        ShareAfterJump();   //【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する
     }
 
     void Update()
@@ -349,6 +352,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Text_Wait_P3.GetComponent<Text>().text = int_NowWaiting_Player3 + "";
             Text_Wait_P4.GetComponent<Text>().text = int_NowWaiting_Player4 + "";
             */
+            Debug.Log("alivePlayer1 ： " + alivePlayer1);
+            Debug.Log("alivePlayer2 ： " + alivePlayer2);
+            Debug.Log("alivePlayer3 ： " + alivePlayer3);
+            Debug.Log("alivePlayer4 ： " + alivePlayer4);
+
             Text_NickName.GetComponent<Text>().text = PhotonNetwork.NickName + "";
             Text_AcutivePlayerName.GetComponent<Text>().text = AcutivePlayerName + "";
 
@@ -807,6 +815,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void PushOpenMyJankenPanel_Button()    // 【JK-01】OpenMyJankenPanel_Button（右上のセット開始ボタン） を押した時の処理
     {
+        //AfterJump();   // 右にジャンプ（ぴょーん！）が完了してからの処理（右上の開始ボタンを押せるように各値をリセット）
         Debug.Log("【JK-01】******************************************************************");
         Debug.Log("【JK-01】■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
         Debug.Log("【JK-01】OpenMyJankenPanel_Button（右上のセット開始ボタン） が押されました。セットを開始します。カードを配ります");
@@ -845,6 +854,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【JK-44】（延長戦）ジャンケン生存者は待機フラグを0（待機まえ）に、敗北者は待機フラグを1（待機中）にし、黒カバーします");
         Check_WaitingFlg_DependOn_alive();    //【JK-44】ジャンケン生存者は待機フラグを0（待機まえ）に、敗北者は待機フラグを1（待機中）にする&& 黒カバー表示【JK-45】
         Debug.Log("【JK-45】（延長戦）待機中フラグのプレイヤー間での共有が終わりました。");
+
+        ToCheck_Iam_alive();            // ジャンケンで自分が生き残っているかどうかの確認をする
         if (Iam_alive == 1)    // 自分がまだジャンケン生存者であるならば
         {
             Debug.Log("【JK-46】（延長戦）自分はまだジャンケン生存者です。私の待機フラグは0（待機まえ）です。黒カバーしません。");
@@ -1014,7 +1025,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("ローカルの CanDoフラグ を OFF にします");
         CanDo_Hantei_Stream_OFF();             // 勝敗判定（Hantei_Stream） を実行できるかのフラグ（CanDoフラグ OFF）
         Debug.Log("ローカルの CanDoフラグ を OFF にしました");
-        Debug.Log("【JK-12】Check_Can_Hantei_Stream()スタート： 勝敗判定（Hantei_Stream）フェーズへ進めるか確認します");    
+        Debug.Log("【JK-12】Check_Can_Hantei_Stream()スタート： 勝敗判定（Hantei_Stream）フェーズへ進めるか確認します");
         Debug.Log("【JK-12】全員待機中であれば、勝敗判定（Hantei_Stream）に進む。/ 一人でも待機まえであれば、何もしない（処理せず全員揃うまで待つ）");
         Debug.Log("【JK-12】■count_RoundRoop : " + count_RoundRoop + " ラウンド");    // N回目のジャンケンループ
         if (count_RoundRoop == 1)  // 1ラウンド目
@@ -1050,144 +1061,52 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             //photonView.RPC("Hantei_Stream", RpcTarget.All);
             //Debug.Log("！！！！！ Hantei_Stream() はローカルの Update で各自実行してもらいます ！！！！！");
             Debug.Log("自動的に 勝敗判定（Hantei_Stream）に進みます。ローカル実行してください。");
-            Hantei_Stream();      // 【JK-21】ジャンケン勝敗判定（Hantei_Stream）（ラウンドループ）実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
+            Hantei_Stream();      //【JK-21】ジャンケン勝敗判定 実施 ⇒ ジャンケン勝者を1名に絞り込む（2名以上なら Check_Can_Hantei_Stream() に戻る）
         }
     }
 
-    //[PunRPC]
-    public void Hantei_Stream()  // 【JK-21】ジャンケン勝敗判定（Hantei_Stream）（ラウンドループ）実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
+    public void Hantei_Stream()  //【JK-21】ジャンケン勝敗判定 実施 ⇒ ジャンケン勝者を1名に絞り込む（2名以上なら Check_Can_Hantei_Stream() に戻る）
     {
         CanDo_Hantei_Stream_OFF();             // 勝敗判定（Hantei_Stream） を実行できるかのフラグ（CanDoフラグ OFF）
-        Debug.Log("【JK-21】■count_RoundRoop : " + count_RoundRoop + "回目の 勝敗判定（Hantei_Stream） 開始");
+        Debug.Log("【JK-21】勝敗判定（Hantei_Stream） 開始");
 
-        if (Iam_alive == 1) // 自分がジャンケン生存者である
+        ToCheck_Iam_alive();            // ジャンケンで自分が生き残っているかどうかの確認をする
+
+        Debug.Log("【JK-21】黒カバー表示確認");
+        if (Iam_alive == 1) // 自分がジャンケン生存者であるなら
         {
             Debug.Log("【JK-22】私は生きています！");
-            ShuffleCardsMSC.CloseWait_JankenPanel();        //●非表示にする
+            ShuffleCardsMSC.CloseWait_JankenPanel();        // 「待機中」を非表示にする
         }
-        else   // ジャンケン敗北者
+        else                // 自分がジャンケン敗北者なら
         {
             Debug.Log("【JK-22】はぁ、はぁ、敗北者？");
-            ShuffleCardsMSC.AppearWait_JankenPanel();       //●表示させる
+            ShuffleCardsMSC.AppearWait_JankenPanel();       // 「待機中」を表示させる（画面を隠す）
         }
 
         Debug.Log("【JK-23】ジャンケン ラウンドループ を 開始します");
+        CountLivePlayer();            //【JK-26】残留しているプレイヤー人数をカウントする ： NumLivePlayer を取得
         Debug.Log("NumLivePlayer（ジャンケン生存者）" + NumLivePlayer);
 
-        // 1回目ループ
-        if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
+        if (NumLivePlayer >= 2)  // ジャンケン生存者が2人以上残っている場合
         {
-            if (count_RoundRoop == 1)
+            Debug.Log("今、" + count_RoundRoop + "回目 のラウンドループです。まだ生存者2人以上です。");
+            if (count_RoundRoop <= 5)     // 1～5回目 ラウンドループ
             {
-                Debug.Log("1回目 ラウンドループ");
-                JankenBattle_OneRoop();   // 【JK-23】ジャンケンバトルの１ループ分処理：じゃんけん手の勝ち負けを判定 → 生存人数（NumLivePlayer）が減る
+                JankenBattle_OneRoop();   //【JK-23】じゃんけん手の勝ち負けを判定 → 生存人数（NumLivePlayer）が減る（⇒その後、Check_Can_Hantei_Stream() に戻る）
+            }
+            else                          // 6回目以降 ラウンドループ
+            {
+                Debug.Log("ラウンドループを5回繰り返しましたが決着つきませんでした。残り1人になるまでやり直します");
+                PrepareToNextSet();       //【JK-28】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット ＆ count_RoundRoop 1に戻す【JK-36】
+                Debug.Log("【JK-37】（延長戦）延長戦に突入します");
+                Janken_ExtraInning();     //【JK-37】（延長戦）ジャンケンカードを配る前の処理（延長戦突入時） ⇒ 生存者 1人になるまでやり直し（右上の開始ボタン押下時とほぼ同じ）
             }
         }
-        else                    // 生存者が1名のみ なら ラウンドループ +1
+        else                   //【JK-27_3】ジャンケン生存者が1人のみの場合
         {
-            //Debug.Log("ラウンドループ カウント を1プラスします");
-            count_RoundRoop++;  // ラウンドループ を 1 進める
-        }
-
-        Debug.Log("NumLivePlayer（ジャンケン生存者）" + NumLivePlayer);
-
-        // 2回目ループ            
-        if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
-        {
-            if (count_RoundRoop == 2)
-            {
-                Debug.Log("2回目 ラウンドループ");
-                JankenBattle_OneRoop();   // 【JK-23】ジャンケンバトルの１ループ分処理：じゃんけん手の勝ち負けを判定 → 生存人数（NumLivePlayer）が減る
-            }
-        }
-        else                    // 生存者が1名のみ なら ラウンドループ +1
-        {
-            //Debug.Log("ラウンドループ カウント を1プラスします");
-            count_RoundRoop++;  // ラウンドループ を 1 進める
-        }
-
-        Debug.Log("NumLivePlayer（ジャンケン生存者）" + NumLivePlayer);
-
-        // 3回目ループ            
-        if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
-        {
-            if (count_RoundRoop == 3)
-            {
-                Debug.Log("3回目 ラウンドループ");
-                JankenBattle_OneRoop();   // 【JK-23】ジャンケンバトルの１ループ分処理：じゃんけん手の勝ち負けを判定 → 生存人数（NumLivePlayer）が減る
-            }
-        }
-        else                    // 生存者が1名のみ なら ラウンドループ +1
-        {
-            //Debug.Log("ラウンドループ カウント を1プラスします");
-            count_RoundRoop++;  // ラウンドループ を 1 進める
-        }
-
-        Debug.Log("NumLivePlayer（ジャンケン生存者）" + NumLivePlayer);
-
-        // 4回目ループ            
-        if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
-        {
-            if (count_RoundRoop == 4)
-            {
-                Debug.Log("4回目 ラウンドループ");
-                JankenBattle_OneRoop();   // 【JK-23】ジャンケンバトルの１ループ分処理：じゃんけん手の勝ち負けを判定 → 生存人数（NumLivePlayer）が減る
-            }
-        }
-        else                    // 生存者が1名のみ なら ラウンドループ +1
-        {
-            //Debug.Log("ラウンドループ カウント を1プラスします");
-            count_RoundRoop++;  // ラウンドループ を 1 進める
-        }
-
-        Debug.Log("NumLivePlayer（ジャンケン生存者）" + NumLivePlayer);
-
-        // 5回目ループ            
-        if (NumLivePlayer > 1)  // ジャンケン生存者が2人以上残っている場合
-        {
-            if (count_RoundRoop == 5)
-            {
-                Debug.Log("5回目 ラウンドループ");
-                JankenBattle_OneRoop();   // 【JK-23】ジャンケンバトルの１ループ分処理：じゃんけん手の勝ち負けを判定 → 生存人数（NumLivePlayer）が減る
-            }
-        }
-        else                    // 生存者が1名のみ なら ラウンドループ +1
-        {
-            //Debug.Log("ラウンドループ カウント を1プラスします");
-            count_RoundRoop++;  // ラウンドループ を 1 進める
-        }
-
-        if (anzenPoint < 30)
-        {
-            if (count_RoundRoop >= 6)
-            {
-                Debug.Log("ラウンドループ（count_RoundRoop）が 6回 以上になりました");
-                // 【JK-27】生存者人数チェック： ジャンケン生存者が2人以上残っているか？ → 2人以上ならジャンケンカード再選択（延長戦）へ
-                Debug.Log("【JK-27】5ラウンド終わり、ジャンケン生存者が2人以上残っているか、確認します");
-
-                if (NumLivePlayer > 1)        //【JK-27_2】ジャンケン生存者が2人以上残っている場合
-                {
-                    Debug.Log("【JK-27_2】5ラウンド終わりましたが、ジャンケン生存者が2人以上残っている ので 1人になるまでやり直します");
-                    anzenPoint++;
-                    Debug.Log("anzenPoint : " + anzenPoint);
-                    PrepareToNextSet();       //【JK-28】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット ＆ラウンドループカウンター 1に戻す【JK-36】
-                    Debug.Log("【JK-37】（延長戦）延長戦に突入します");
-                    Janken_ExtraInning();     //【JK-37】（延長戦）ジャンケンカードを配る前の処理（延長戦突入時） ⇒ 生存者 1人になるまでやり直し
-                }
-                else                          //【JK-27_3】ジャンケン生存者が1人のみの場合
-                {
-                    Debug.Log("【JK-27_3】ラウンド勝者決定！ 生存者 1名になりました");    // ここでジャンケンの勝者が 1名 になった
-                    AfterWinnerDecision();    //【JK-100】この時点で ジャンケン生存者は 1名です。これから勝者の前進ジャンプ処理に移ります。
-                }
-            }
-            else
-            {
-                Debug.Log("ラウンドループ（count_RoundRoop）が 6回 未満です");
-            }
-        }
-        else
-        {
-            Debug.LogError("【JK-2*】anzenPoint が 30回以上になりました。 スクリプトの見直しが必要です");
+            Debug.Log("【JK-27_3】決着！ 生存者 1名になりました");    // ここでジャンケンの勝者が 1名 になった
+            AfterWinnerDecision();    //【JK-100】この時点で ジャンケン生存者は 1名です。これから勝者の前進ジャンプ処理に移ります。
         }
     }
 
@@ -1314,7 +1233,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【JK-45】（延長戦）生き残っている者のみが「待機まえ」になりました。敗北者は待機中（見守り中）です。");
     }
 
-    public void AfterJump()   // 右にジャンプ（ぴょーん！）が完了してからの処理
+    public void ShareAfterJump()   // 右にジャンプ（ぴょーん！）が完了してからの処理（右上の開始ボタンを押せるように各値をリセット） ⇒ 全員に共有する
+    {
+        photonView.RPC("AfterJump", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void AfterJump()   // 右にジャンプ（ぴょーん！）が完了してからの処理（右上の開始ボタンを押せるように各値をリセット）
     {
         Debug.Log("【JK-201】PrepareToNextSet 次のセットへ移る準備 をします");
         PrepareToNextSet();           //【JK-201】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
@@ -1322,7 +1247,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         Debug.Log("【JK-203】全員の aliveフラグ を 1 にします（全員生存）");
         ResetAlivePlayer();           //【JK-203】各種 生存者カウンター リセット
-        anzenPoint = 0;
+        //anzenPoint = 0;
 
         Debug.Log("【JK-204】待機中フラグ（確認用パラメータ） を 初期化（0にする）");
         Reset_NowWaiting();      // 待機中フラグ（確認用パラメータ） を 初期化（0にする）
@@ -1344,6 +1269,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void CheckAlivePlayer_DependOn_Absent()         // 生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）
     {
+        Debug.Log("生存カウンターのチェック前");
+        Debug.Log("alivePlayer1 ： " + alivePlayer1);
+        Debug.Log("alivePlayer2 ： " + alivePlayer2);
+        Debug.Log("alivePlayer3 ： " + alivePlayer3);
+        Debug.Log("alivePlayer4 ： " + alivePlayer4);
+
         Debug.Log("生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）");
         if (TestRoomControllerSC.string_PID2 == "")
         {
@@ -1363,6 +1294,27 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("alivePlayer2 ： " + alivePlayer2);
         Debug.Log("alivePlayer3 ： " + alivePlayer3);
         Debug.Log("alivePlayer4 ： " + alivePlayer4);
+        /*
+        Debug.Log("KP値に応じて生存カウンターのチェック");
+        if (KP1 != -1)
+        {
+            alivePlayer2 = 1;
+        }
+
+        if (TestRoomControllerSC.string_PID3 == "")
+        {
+            alivePlayer3 = 0;
+        }
+
+        if (TestRoomControllerSC.string_PID4 == "")
+        {
+            alivePlayer4 = 0;
+        }
+        Debug.Log("alivePlayer1 ： " + alivePlayer1);
+        Debug.Log("alivePlayer2 ： " + alivePlayer2);
+        Debug.Log("alivePlayer3 ： " + alivePlayer3);
+        Debug.Log("alivePlayer4 ： " + alivePlayer4);
+        */
     }
 
     public void ToCheck_Iam_alive()            // ジャンケンで自分が生き残っているかどうかの確認をする
@@ -1921,7 +1873,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         // 残っている人、全員残留
         Debug.Log("【JK-25】あいこ です");
-        photonView.RPC("ShareInfo_Aiko", RpcTarget.All);  
+        photonView.RPC("ShareInfo_Aiko", RpcTarget.All);
     }
     [PunRPC]
     public void ShareInfo_Aiko()    //【JK-25】あいこを 全員に共有

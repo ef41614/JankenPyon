@@ -72,7 +72,7 @@ public class PlayerScript : MonoBehaviour
                 anim.SetBool("run", false);      // アニメーションを run → stand に遷移させる
                 Debug.Log("スタッ！！（着地音）");
                 Debug.Log("ジャンプ 今終わりました！");
-                SelectJankenMSC.AfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理
+                SelectJankenMSC.ShareAfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理 ⇒ 全員に共有する
             });
     }
 
