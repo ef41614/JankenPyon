@@ -35,6 +35,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject PosPlayer3_obj;
     public GameObject PosPlayer4_obj;
 
+    Transform MyKage_Trans;  // かげの位置情報 (Transform)
     Transform StartCorn_HeadTransform;  // スタートラインの位置情報 (Transform)
     Transform StartCorn_FootTransform;  // スタートラインの位置情報 (Transform)
     Transform StartTrans1;  // スタートラインの位置情報 (Transform)
@@ -46,6 +47,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     Transform transformPlayer3;
     Transform transformPlayer4;
 
+    float KageDistance;      // かげとMyPlayerとの距離情報 (Vector3)
+    Vector3 PosMyKage;         // かげの位置情報 (Vector3)
     Vector3 PosStartCorn_Head;     // スタートラインの位置情報 (Vector3)
     Vector3 PosStartCorn_Foot;     // スタートラインの位置情報 (Vector3)
     Vector3 PosStartMark1;     // スタートラインの位置情報 (Vector3)
@@ -3830,6 +3833,21 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(JumpMaeTaiki, () => PlayerSC.JumpRight());
         //Debug.Log("【JK-110】ぴょーん！ ぴょーん！ ぴょーん！");
+    }
+
+    public void Check_KageDistance()               //  MyKage と MyPlayer の距離を求める（Y軸の初期位置）
+    {
+        KageDistance = myPlayer.transform.position.y - MyKage.transform.position.y;
+    }
+
+    public void MoveTo_MyKagePos()                 //  MyKage の位置へ移動する（Y軸位置微調整）
+    {
+        /*
+        MyKage_Trans = MyKage.transform;           // transformを取得
+        PosMyKage = MyKage_Trans.position;         // MyKage の座標を取得
+        myPlayer.transform.position = PosMyKage;   // プレイヤー位置を MyKage に移動
+        */
+        myPlayer.transform.position = new Vector3(myPlayer.transform.position.x, MyKage.transform.position.y + KageDistance, myPlayer.transform.position.z);
     }
 
     public void bridge_GetDamage()

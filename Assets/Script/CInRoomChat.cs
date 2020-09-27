@@ -61,7 +61,7 @@ public class CInRoomChat : MonoBehaviourPunCallbacks
     public void Update()
     {
         //ChatUIの位置を調整
-        this.GuiRect.y = Screen.height - this.GuiRect.height;
+        this.GuiRect.y = Screen.height - this.GuiRect.height*1.0f;
         //ChatUIの大きさ調整
         GuiRect.width = Screen.width / 3;
         GuiRect.height = Screen.height / 3;

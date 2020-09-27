@@ -54,26 +54,38 @@ public class PlayerScript : MonoBehaviour
 
     public void JumpRight()       // 右方向へ 指定された回数 ぴょん と跳ねながら移動する
     {
+        SelectJankenMSC.Check_KageDistance();               //  MyKage と MyPlayer の距離を求める（Y軸の初期位置）
         Debug.Log("進む（ジャンプする）回数 (MoveForward_StepNum) を 上書きします");
         Debug.Log("original_StepNum ：" + SelectJankenMSC.original_StepNum);
         MoveForward_StepNum = SelectJankenMSC.original_StepNum;
         Debug.Log("進む（ジャンプする）回数 (MoveForward_StepNum) : " + MoveForward_StepNum);
-        anim.SetBool("run", true);
-        Debug.Log("Take Off！！");
-        Debug.Log("ぴょーん！ ぴょーん！ ぴょーん！");
-        //////////////////////////// 移動終了地点   // ジャンプする力  // ジャンプする回数   // アニメーション時間
-        transform
-            // .DOJump(new Vector3(MoveForward_StepNum * 1.0f, 0f), 0.5f, MoveForward_StepNum, MoveForward_StepNum * 1.0f)
-            .DOJump(new Vector3(SelectJankenMSC.original_StepNum * 1.0f, 0f), 0.5f, SelectJankenMSC.original_StepNum, SelectJankenMSC.original_StepNum * 1.0f)
-            .SetRelative()
-            .SetEase(Ease.Linear)
-            .SetRelative()
-            .OnComplete(() => {                  // ジャンプが終了したら、以下の操作をする
-                anim.SetBool("run", false);      // アニメーションを run → stand に遷移させる
-                Debug.Log("スタッ！！（着地音）");
-                Debug.Log("ジャンプ 今終わりました！");
-                SelectJankenMSC.ShareAfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理 ⇒ 全員に共有する
-            });
+        if (MoveForward_StepNum > 0)
+        {
+            anim.SetBool("run", true);
+            Debug.Log("Take Off！！");
+            Debug.Log("ぴょーん！ ぴょーん！ ぴょーん！");
+            //////////////////////////// 移動終了地点   // ジャンプする力  // ジャンプする回数   // アニメーション時間
+            transform
+                // .DOJump(new Vector3(MoveForward_StepNum * 1.0f, 0f), 0.5f, MoveForward_StepNum, MoveForward_StepNum * 1.0f)
+                .DOJump(new Vector3(SelectJankenMSC.original_StepNum * 1.0f, 0f), 0.5f, SelectJankenMSC.original_StepNum, SelectJankenMSC.original_StepNum * 1.0f)
+                .SetRelative()
+                .SetEase(Ease.Linear)
+                .SetRelative()
+                .OnComplete(() =>
+                {                  // ジャンプが終了したら、以下の操作をする
+                    anim.SetBool("run", false);      // アニメーションを run → stand に遷移させる
+                    Debug.Log("スタッ！！（着地音）");
+                    Debug.Log("ジャンプ 今終わりました！");
+                    SelectJankenMSC.MoveTo_MyKagePos();   // MyKage の位置へ移動する（Y軸位置微調整）
+                    SelectJankenMSC.ShareAfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理 ⇒ 全員に共有する
+                });
+        }
+        else
+        {
+            Debug.LogError("進む（ジャンプする）回数 (MoveForward_StepNum) が 0 です");
+            SelectJankenMSC.MoveTo_MyKagePos();   // MyKage の位置へ移動する（Y軸位置微調整）
+            SelectJankenMSC.ShareAfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理 ⇒ 全員に共有する
+        }
     }
 
     public void receivedDammage() // ダメージを受ける
