@@ -37,7 +37,6 @@ namespace say
         public GameObject Button_E;
         public GameObject KetteiBtn;  // ジャンケン手 決定ボタン
 
-
         public GameObject JankenCards_Panel;
         public GameObject MyJankenPanel;
         public GameObject Wait_JankenPanel;

@@ -42,7 +42,7 @@ public class PlayerScript : MonoBehaviour
             //Debug.Log("original_StepNum ：" + SelectJankenMSC.original_StepNum);
             //Debug.Log("進む（ジャンプする）回数 (MoveForward_StepNum) : " + MoveForward_StepNum);
 
-            Text_StepNum.GetComponent<Text>().text = SelectJankenMSC.original_StepNum + "：歩数";
+            //Text_StepNum.GetComponent<Text>().text = SelectJankenMSC.original_StepNum + "：歩数";
             currentTime = 0f;
         }
     }
@@ -77,6 +77,7 @@ public class PlayerScript : MonoBehaviour
                     Debug.Log("スタッ！！（着地音）");
                     Debug.Log("ジャンプ 今終わりました！");
                     SelectJankenMSC.MoveTo_MyKagePos();   // MyKage の位置へ移動する（Y軸位置微調整）
+                    SelectJankenMSC.Judge_GOAL();         // ゴールラインに到達したか判定する
                     SelectJankenMSC.ShareAfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理 ⇒ 全員に共有する
                 });
         }

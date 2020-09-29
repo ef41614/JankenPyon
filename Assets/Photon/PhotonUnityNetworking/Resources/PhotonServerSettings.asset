@@ -146,6 +146,11 @@ MonoBehaviour:
   - ShareNinzu_3
   - ShareNinzu_4
   - AfterJump
+  - ShareGameSet
+  - AppearWinner_avator_1
+  - AppearWinner_avator_2
+  - AppearWinner_avator_3
+  - AppearWinner_avator_4
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

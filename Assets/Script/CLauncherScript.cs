@@ -21,6 +21,12 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     public GameObject Mobuchan_Button;
 
     public GameObject PlayStartButton;
+
+    public GameObject BGM_SE_Manager;
+    BGM_SE_Manager BGM_SE_MSC;
+
+    public GameObject Volume_Panel;
+
     #endregion
 
     #region Private変数
@@ -35,7 +41,7 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
 
         firstPush = false; //初期化
-        if (PhotonNetwork.IsConnected)
+        if (PhotonNetwork.IsConnected)  // 2週目以降で既にルームに入室していたら
         {
             Debug.Log("ルームに入っていたので、一旦退出します");
             PhotonNetwork.Disconnect();
@@ -48,10 +54,15 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         }
         Debug.Log(" firstPush ： " + firstPush);
         Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
+        BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
     }
 
     void Start()
     {
+        BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
+        BGM_SE_MSC.Dadadadau_BGM();
+        BGM_SE_MSC.find_Vol_Panel();
+        BGM_SE_MSC.CloseVolume_Panel();
         firstPush = false; //初期化
         Reset_AvatarAll();
         ClosePlayStartButton();
@@ -73,19 +84,24 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
             {
                 Debug.Log("名前が空欄です");
             }
-            else
+            else    //名前が正常に入力されていたら
             {
-                if (!PhotonNetwork.IsConnected)
+                BGM_SE_MSC.Stop_BGM();
+                SceneManager.LoadScene("Mike");
+                /*
+                if (!PhotonNetwork.IsConnected)             //Photonに接続できていなければ
                 {
                     Debug.Log("Photonに接続をします");
-                    //Photonに接続できていなければ
                     PhotonNetwork.ConnectUsingSettings();   //Photonに接続する
                     Debug.Log("Photonに接続しました。");
+                    Debug.Log("ロビーに移動します。");
+                    SceneManager.LoadScene("Mike");
                 }
                 else
                 {
-                    Debug.Log("Photonに接続できませんで した。");
+                    Debug.Log("エラーのようです");
                 }
+                */
             }
             firstPush = true; //ボタン押下済みフラグ
         }
@@ -126,7 +142,7 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     public void Select_Utako_Avatar()
     {
         Reset_AvatarAll();
-        Utako_Button.GetComponent< Image > ().color = Color.green;
+        Utako_Button.GetComponent<Image>().color = Color.green;
     }
 
     public void Select_Unitychan_Avatar()
@@ -170,32 +186,76 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
 
     #endregion
 
-    #region Photonコールバック
-    //ルームに入室前に呼び出される
-    public override void OnConnectedToMaster()
+    void OnGUI()
     {
-        if (firstPush)
-        {
-            RoomOptions options = new RoomOptions();
-            Debug.Log("OnConnectedToMasterが呼ばれました");
-            options.PublishUserId = true; // ★お互いにユーザＩＤが見えるようにする。
-            options.MaxPlayers = 4; // ★最大人数もきちんと定義しておく。
-                                    // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
-            PhotonNetwork.JoinOrCreateRoom("room", options, TypedLobby.Default);
-        }
-        else
-        {
-            Debug.Log("まだスタートボタンを押していません");
-        }
+        //ログインの状態を画面上に出力
+        GUILayout.Label(PhotonNetwork.NetworkClientState.ToString());
     }
 
-    //ルームに入った時に呼ばれる
-    public override void OnJoinedRoom()
+    /*
+        #region Photonコールバック
+        //ルームに入室前に呼び出される
+        public override void OnConnectedToMaster()
+        {
+            if (firstPush)
+            {
+                RoomOptions options = new RoomOptions();
+                Debug.Log("OnConnectedToMasterが呼ばれました");
+                options.PublishUserId = true; // ★お互いにユーザＩＤが見えるようにする。
+                options.MaxPlayers = 4; // ★最大人数もきちんと定義しておく。
+                                        // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
+                PhotonNetwork.JoinOrCreateRoom("room", options, TypedLobby.Default);
+            }
+            else
+            {
+                Debug.Log("まだスタートボタンを押していません");
+            }
+        }
+
+        //ルームに入った時に呼ばれる
+        public override void OnJoinedRoom()
+        {
+            Debug.Log("ルームに入りました。");
+            //battleシーンをロード
+            PhotonNetwork.LoadLevel("Battle");
+        }
+
+        #endregion
+    */
+
+    public void Vol_Set_0()
     {
-        Debug.Log("ルームに入りました。");
-        //battleシーンをロード
-        PhotonNetwork.LoadLevel("Battle");
+        BGM_SE_MSC.Vol_Set_0();
     }
 
-    #endregion
+    public void Vol_Set_1()
+    {
+        BGM_SE_MSC.Vol_Set_1();
+    }
+
+    public void Vol_Set_2()
+    {
+        BGM_SE_MSC.Vol_Set_2();
+    }
+
+    public void Vol_Set_3()
+    {
+        BGM_SE_MSC.Vol_Set_3();
+    }
+
+    public void Vol_Set_4()
+    {
+        BGM_SE_MSC.Vol_Set_4();
+    }
+
+    public void AppearVolume_Panel()
+    {
+        BGM_SE_MSC.AppearVolume_Panel();
+    }
+
+    public void CloseVolume_Panel()
+    {
+        BGM_SE_MSC.Volume_Panel.SetActive(false);
+    }
+
 }

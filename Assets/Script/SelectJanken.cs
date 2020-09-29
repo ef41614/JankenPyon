@@ -35,6 +35,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject PosPlayer3_obj;
     public GameObject PosPlayer4_obj;
 
+    public GameObject Panel_Intro;
+
+    public GameObject GoalCorn_Head;  // ゴールラインのコーン
+    public GameObject GameSet_LOGO;
+    public GameObject OpenMyJankenPanel_Button;   // 右上の開始ボタン
+    public GameObject Debug_Buttons;  // デバッグ用のボタン
+    public GameObject WinPanel;       // 優勝者決定後のパネル
+
+    public GameObject Winner_avator_1;
+    public GameObject Winner_avator_2;
+    public GameObject Winner_avator_3;
+    public GameObject Winner_avator_4;
+
     Transform MyKage_Trans;  // かげの位置情報 (Transform)
     Transform StartCorn_HeadTransform;  // スタートラインの位置情報 (Transform)
     Transform StartCorn_FootTransform;  // スタートラインの位置情報 (Transform)
@@ -113,6 +126,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Text Text_Head_MyPName;
     public Image Img_MyIcon_SelectPanel;
     public Text Text_MyPName_SelectPanel;
+    public Text Text_RoomName;
+    public Text Text_WinnerName;
 
     public Text MyNumTeText_1;
     public Text MyNumTeText_2;
@@ -280,12 +295,24 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     float span = 1f;
     private float currentTime = 0f; // test
 
+    public GameObject BGM_SE_Manager;
+    BGM_SE_Manager BGM_SE_MSC;
+
+    //private AudioSource audioSource = null;
+
+    //public AudioClip FunAndLight;   // Battle シーンBGM
+    //public AudioClip whistle;
+    //public AudioClip Fanfare_solo;
+    //public AudioClip Fanfare_Roop;
+    //public UnityEngine.UI.Slider volSlider;
     #endregion
 
     #region // 【START】初期設定の処理一覧
 
     void Awake()
     {
+        BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
+
         this.photonView = GetComponent<PhotonView>();
         Debug.Log("【START-01】SelectJanken void Awake() 出席確認1");
         Debug.Log("【START-01】キャラ アバター 誰を選んだかを（ログイン前画面から）コンバートします");
@@ -297,6 +324,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         MyCameraControllerMSC = MainCamera.GetComponent<MyCameraController>();
+        BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
+        CloseWinPanel();
+        CloseDebug_Buttons();
+        AppearPanel_Intro();
+        
+        //audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -336,6 +369,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         Debug.Log("【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する");
         ShareAfterJump();   //【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する
+
+        BGM_SE_MSC.FunAndLight_BGM();            // Battle シーンBGM
     }
 
     void Update()
@@ -354,7 +389,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Text_Wait_P2.GetComponent<Text>().text = int_NowWaiting_Player2 + "";
             Text_Wait_P3.GetComponent<Text>().text = int_NowWaiting_Player3 + "";
             Text_Wait_P4.GetComponent<Text>().text = int_NowWaiting_Player4 + "";
-            */
+            
             Debug.Log("alivePlayer1 ： " + alivePlayer1);
             Debug.Log("alivePlayer2 ： " + alivePlayer2);
             Debug.Log("alivePlayer3 ： " + alivePlayer3);
@@ -362,6 +397,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             Text_NickName.GetComponent<Text>().text = PhotonNetwork.NickName + "";
             Text_AcutivePlayerName.GetComponent<Text>().text = AcutivePlayerName + "";
+            */
+            //Debug.Log("PhotonNetwork.CurrentRoom.Name ： " + PhotonNetwork.CurrentRoom.Name);
 
             if (bool_CanDo_Hantei_Stream)       // 勝敗判定（Hantei_Stream） を実行できるかのフラグ（CanDoフラグ ON）
             {
@@ -484,6 +521,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Text_MyPName_SelectPanel.text = AcutivePlayerName;  // SelectPanel にAcutivePlayerName をセット
         Text_Head_MyPName.text = AcutivePlayerName;         // 画面上部 にAcutivePlayerName をセット
         SetMyIcon_SelectPanel();                 //【START-07】私のアイコンをセレクトパネルにセットします
+        Text_RoomName.text = PhotonNetwork.CurrentRoom.Name;         // 画面上部 に Text_RoomName をセット
     }
 
     public void SetMyIcon_SelectPanel()  // 【START-07】私のアイコンをセレクトパネルにセットします
@@ -1400,21 +1438,25 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Debug.Log("【JK-103】Player1 勝利");
             WinnerNum = 1;
+            Text_WinnerName.text = TestRoomControllerSC.string_PName1;
         }
         else if (alivePlayer2 == 1)
         {
             Debug.Log("【JK-103】Player2 勝利");
             WinnerNum = 2;
+            Text_WinnerName.text = TestRoomControllerSC.string_PName2;
         }
         else if (alivePlayer3 == 1)
         {
             Debug.Log("【JK-103】Player3 勝利");
             WinnerNum = 3;
+            Text_WinnerName.text = TestRoomControllerSC.string_PName3;
         }
         else if (alivePlayer4 == 1)
         {
             Debug.Log("【JK-103】Player4 勝利");
             WinnerNum = 4;
+            Text_WinnerName.text = TestRoomControllerSC.string_PName4;
         }
         else
         {
@@ -3966,6 +4008,192 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("PhotonNetwork.NickName ランチャー：" + PhotonNetwork.NickName);
     }
 
+    public void Judge_GOAL()   // ゴールラインに到達したか判定する
+    {
+        if(myPlayer.transform.position.x >= GoalCorn_Head.transform.position.x)
+        {
+            Debug.Log("GOOOOOALLL！！！！");
+            Check_Champ_Avator();
+            photonView.RPC("ShareGameSet", RpcTarget.All);    
+        }
+    }
+
+    public void Check_Champ_Avator()
+    {
+        Debug.Log("チャンピョンのアバターをセットします。");
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            if (WinnerNum == 1)          // プレイヤー1 が勝利者
+            {
+                Debug.Log("P1 私がチャンプだ！！！！");
+            }
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            if (WinnerNum == 2)          // プレイヤー2 が勝利者
+            {
+                Debug.Log("P2 私がチャンプだ！！！！");
+            }
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            if (WinnerNum == 3)          // プレイヤー3 が勝利者
+            {
+                Debug.Log("P3 私がチャンプだ！！！！");
+            }
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            if (WinnerNum == 4)          // プレイヤー4 が勝利者
+            {
+                Debug.Log("P4 私がチャンプだ！！！！");
+            }
+        }
+        SetMyAvator_ForChamp();  // チャンプ のアバターを ゴールパネル（表彰台）にセットします。
+    }
+
+    public void SetMyAvator_ForChamp()  // チャンプ のアバターを ゴールパネル（表彰台）にセットします。
+    {
+        if (int_conMyCharaAvatar == 1)  // うたこ
+        {
+            photonView.RPC("AppearWinner_avator_1", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 2) // Unityちゃん
+        {
+            photonView.RPC("AppearWinner_avator_2", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 3) // Pちゃん
+        {
+            photonView.RPC("AppearWinner_avator_3", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 4) // モブちゃん
+        {
+            photonView.RPC("AppearWinner_avator_4", RpcTarget.All);
+        }
+        Debug.Log("チャンプ のアバターを ゴールパネル（表彰台）にセットしました。");
+    }
+
+    [PunRPC]
+    public void ShareGameSet()   // GOAL して GameSet した旨を全員に共有する
+    {
+        Debug.Log("GOOOOOALLL！！！！");
+        AppearGameSet_LOGO();
+        CloseOpenMyJankenPanel_Button();
+        CloseDebug_Buttons();
+        BGM_SE_MSC.Stop_BGM();
+        BGM_SE_MSC.whistle_SE();
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(3f, () => AfterGameSet());
+    }
+
+    public void AfterGameSet()
+    {
+        AppearWinPanel();
+        BGM_SE_MSC.Fanfare_solo_SE();
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(5f, () => BGM_SE_MSC.Fanfare_Roop_BGM());
+    }
+
+    public void AppearGameSet_LOGO()
+    {
+        GameSet_LOGO.SetActive(true);
+    }
+
+    public void CloseGameSet_LOGO()
+    {
+        GameSet_LOGO.SetActive(false);
+    }
+
+    public void AppearOpenMyJankenPanel_Button()
+    {
+        OpenMyJankenPanel_Button.SetActive(true);
+    }
+
+    public void CloseOpenMyJankenPanel_Button()
+    {
+        OpenMyJankenPanel_Button.SetActive(false);
+    }
+
+    public void AppearDebug_Buttons()
+    {
+        Debug_Buttons.SetActive(true);
+    }
+
+    public void CloseDebug_Buttons()
+    {
+        Debug_Buttons.SetActive(false);
+    }
+
+    public void AppearWinPanel()
+    {
+        WinPanel.SetActive(true);
+    }
+
+    public void CloseWinPanel()
+    {
+        WinPanel.SetActive(false);
+    }
+
+    [PunRPC]
+    public void AppearWinner_avator_1()
+    {
+        Winner_avator_1.SetActive(true);
+
+    }
+
+    public void CloseWinner_avator_1()
+    {
+        Winner_avator_1.SetActive(false);
+    }
+
+    [PunRPC]
+    public void AppearWinner_avator_2()
+    {
+        Winner_avator_2.SetActive(true);
+
+    }
+
+    public void CloseWinner_avator_2()
+    {
+        Winner_avator_2.SetActive(false);
+    }
+
+    [PunRPC]
+    public void AppearWinner_avator_3()
+    {
+        Winner_avator_3.SetActive(true);
+
+    }
+
+    public void CloseWinner_avator_3()
+    {
+        Winner_avator_3.SetActive(false);
+    }
+
+    [PunRPC]
+    public void AppearWinner_avator_4()
+    {
+        Winner_avator_4.SetActive(true);
+
+    }
+
+    public void CloseWinner_avator_4()
+    {
+        Winner_avator_4.SetActive(false);
+    }
+
+    public void AppearPanel_Intro()
+    {
+        Panel_Intro.SetActive(true);
+    }
+       
+    public void ClosePanel_Intro()
+    {
+        Panel_Intro.SetActive(false);
+    }
     // End
 
 }
