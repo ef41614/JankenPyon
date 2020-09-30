@@ -26,6 +26,8 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     BGM_SE_Manager BGM_SE_MSC;
 
     public GameObject Volume_Panel;
+    public GameObject Credit_Panel;
+
 
     #endregion
 
@@ -55,6 +57,8 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         Debug.Log(" firstPush ： " + firstPush);
         Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
         BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
+        Volume_Panel = GameObject.Find("Volume_Panel");
+        Credit_Panel = GameObject.Find("Credit_Panel");
     }
 
     void Start()
@@ -62,10 +66,17 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
         BGM_SE_MSC.Dadadadau_BGM();
         BGM_SE_MSC.find_Vol_Panel();
-        BGM_SE_MSC.CloseVolume_Panel();
+        CloseVolume_Panel();
+        if (BGM_SE_MSC.firstMatch == 0)
+        {
+            AppearVolume_Panel();
+        }
+        BGM_SE_MSC.firstMatch++;
+        //BGM_SE_MSC.CloseVolume_Panel();
         firstPush = false; //初期化
         Reset_AvatarAll();
         ClosePlayStartButton();
+        CloseCredit_Panel();
     }
 
 
@@ -250,12 +261,24 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
 
     public void AppearVolume_Panel()
     {
-        BGM_SE_MSC.AppearVolume_Panel();
+        //BGM_SE_MSC.AppearVolume_Panel();
+        Volume_Panel.SetActive(true);
     }
 
     public void CloseVolume_Panel()
     {
-        BGM_SE_MSC.Volume_Panel.SetActive(false);
+        //BGM_SE_MSC.Volume_Panel.SetActive(false);
+        Volume_Panel.SetActive(false);
+    }
+
+    public void AppearCredit_Panel()
+    {
+        Credit_Panel.SetActive(true);
+    }
+
+    public void CloseCredit_Panel()
+    {
+        Credit_Panel.SetActive(false);
     }
 
 }

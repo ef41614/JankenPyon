@@ -7,11 +7,13 @@ using UnityEngine.UI;
 public class BGM_SE_Manager : MonoBehaviour
 {
     public static BGM_SE_Manager instance = null;
+    public int firstMatch = 0;
 
     private AudioSource audioSource = null;
     AudioSource loopAudioSource;
 
     public GameObject Volume_Panel;
+    public GameObject Credit_Panel;
 
     // BGM
     public AudioClip Dadadadau;             // Launcher シーンBGM
@@ -190,5 +192,15 @@ public class BGM_SE_Manager : MonoBehaviour
     public void CloseVolume_Panel()
     {
         Volume_Panel.SetActive(false);
+    }
+
+    public void AppearCredit_Panel()
+    {
+        Credit_Panel.SetActive(true);
+    }
+
+    public void CloseCredit_Panel()
+    {
+        Credit_Panel.SetActive(false);
     }
 }

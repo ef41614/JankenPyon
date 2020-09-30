@@ -327,8 +327,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
         CloseWinPanel();
         CloseDebug_Buttons();
-        AppearPanel_Intro();
-        
+        ClosePanel_Intro();
+        if (BGM_SE_MSC.firstMatch == 0)
+        {
+            AppearPanel_Intro();
+        }
+
         //audioSource = GetComponent<AudioSource>();
     }
 
@@ -399,6 +403,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Text_AcutivePlayerName.GetComponent<Text>().text = AcutivePlayerName + "";
             */
             //Debug.Log("PhotonNetwork.CurrentRoom.Name ： " + PhotonNetwork.CurrentRoom.Name);
+
+            Debug.Log("このルームに入れるかどうか："+ PhotonNetwork.CurrentRoom.IsOpen);
+
 
             if (bool_CanDo_Hantei_Stream)       // 勝敗判定（Hantei_Stream） を実行できるかのフラグ（CanDoフラグ ON）
             {

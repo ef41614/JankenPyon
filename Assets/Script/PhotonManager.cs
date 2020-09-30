@@ -45,6 +45,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         SetOnline_ToStart();
         BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
         BGM_SE_MSC.SasazukaHighwayPark_BGM();
+        //RandomMatching();
     }
 
     void Update()
@@ -69,8 +70,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log("dispRoomName をランダム生成します" + dispRoomName);
         //dispRoomName = "";
         dispMessage = "";
-        dispStatus = Status.OFFLINE.ToString();
-        roomDispList = new List<RoomInfo>();
+        //dispStatus = Status.OFFLINE.ToString();
+        //roomDispList = new List<RoomInfo>();
     }
 
     private void SetOnline_ToStart()
@@ -81,6 +82,18 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         ConnectPhoton(false);
     }
 
+    public void RandomMatching() //既に作成されているルームの中の一つにランダムで参加する。条件に該当しないルームは、ランダムマッチングの対象から除外される。
+    {
+        Debug.Log("既に作成されているルームの中の一つにランダムで参加する。条件に該当しないルームは、ランダムマッチングの対象から除外される。");
+        PhotonNetwork.JoinRandomRoom();
+    }
+    
+    // ランダムマッチングが失敗した時に呼ばれるコールバック
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        Debug.Log("ランダムに参加できるルームが存在しないため、新しいルームを作成します。");
+        CreateRoom(dispRoomName);      // ランダムに参加できるルームが存在しないなら、新しいルームを作成する
+    }
 
     public void RudCreate_Chimei()  //変数「 Rnd_Chimei 」の値を元に、 全10パターンの間で場合分けをする
     {
@@ -209,9 +222,11 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             return;
         }
         // Photonサーバに接続する
+        Debug.Log("Photonサーバに接続する");
         mode = Status.ONLINE.ToString();
         PhotonNetwork.OfflineMode = false;
         PhotonNetwork.ConnectUsingSettings();
+        Debug.Log("ConnectUsingSettings を実施しました");
     }
 
     // Photonサーバ切断処理
@@ -230,8 +245,12 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         {
             dispStatus = Status.ONLINE.ToString();
             dispMessage = "サーバに接続しました。";
+            Debug.Log("サーバに接続しました");
+
             // ロビーに接続
+            Debug.Log("ロビーに接続 JoinLobby 実行前");
             PhotonNetwork.JoinLobby();
+            Debug.Log("ロビーに接続 JoinLobby 実行しました");
         }
     }
 
@@ -240,19 +259,23 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         base.OnDisconnected(cause);
         dispMessage = "サーバから切断しました。";
+        Debug.Log("サーバから切断しました");
         dispStatus = Status.OFFLINE.ToString();
     }
 
     // コールバック：ロビー入室完了
     public override void OnJoinedLobby()
     {
+        Debug.Log("ロビー入室完了");
         base.OnJoinedLobby();
+        RandomMatching(); // ★入室したらランダムマッチ実施する
     }
 
     // ルーム一覧更新処理
     // (ロビーに入室した時、他のプレイヤーが更新した時のみ)
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        Debug.Log("ルーム一覧更新処理");
         base.OnRoomListUpdate(roomList);
         // ルーム一覧更新
         foreach (var info in roomList)
@@ -304,6 +327,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     // ルーム作成処理
     public void CreateRoom(string roomName)
     {
+        Debug.Log("ルーム作成処理 CreateRoom を実行します");
         // ルームオプションの基本設定
         roomOptions = new RoomOptions
         {
@@ -311,6 +335,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             MaxPlayers = MaxPlayers_inRoom,
         };
         PhotonNetwork.CreateRoom(roomName, roomOptions);
+        Debug.Log("ルーム作成処理 CreateRoom を実行しました");
     }
 
     // ルーム入室処理
