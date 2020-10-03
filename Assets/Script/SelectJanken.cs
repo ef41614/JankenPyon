@@ -298,6 +298,29 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject BGM_SE_Manager;
     BGM_SE_Manager BGM_SE_MSC;
 
+    public Text text_Game_kaishi_MAE;
+    public Text text_Game_kaishi_CHU;
+    public Text text_Room_shimekiri;
+    public bool Shiai_Kaishi = false; // 初期設定は 試合開始できない（試合前）
+
+    public int int_Ikemasu_All = 0;       // 現在「試合開始、いけます！」な人の総人数
+    public int int_Iam_Ikemasu = 0;        // 「試合開始、いけます！」の表明フラグ 「0：まだいけない」、「1：いけます！」
+    public int int_Ikemasu_Player1 = 0;
+    public int int_Ikemasu_Player2 = 0;
+    public int int_Ikemasu_Player3 = 0;
+    public int int_Ikemasu_Player4 = 0;
+
+    public GameObject Panel_Ikemasu;
+    public GameObject StartLogo;
+
+    public GameObject Aisatsu_Panel;
+    public Text text_AisatsuP1;           // P1のあいさつ文
+    public Text text_AisatsuP2;           // P2のあいさつ文
+    public Text text_AisatsuP3;           // P3のあいさつ文
+    public Text text_AisatsuP4;           // P4のあいさつ文
+
+    public string str_AisatsuBun = "";           // あいさつ文の中身
+
     //private AudioSource audioSource = null;
 
     //public AudioClip FunAndLight;   // Battle シーンBGM
@@ -332,7 +355,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             AppearPanel_Intro();
         }
-
+        text_Game_kaishi_MAE.text = "しあい かいし まえ";
+        text_Game_kaishi_CHU.text = "";
         //audioSource = GetComponent<AudioSource>();
     }
 
@@ -374,7 +398,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する");
         ShareAfterJump();   //【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する
 
-        BGM_SE_MSC.FunAndLight_BGM();            // Battle シーンBGM
+        BGM_SE_MSC.FunAndLight_BGM();      // Battle シーンBGM
+        CloseStartLogo();
+        CloseAisatsu_Panel();
+        Reset_AllAisatsu();
+        AppearPanel_Ikemasu();
+        //ClosePanel_Ikemasu();
+        CheckStart_GameMatch();                 // 試合開始できるか確認する処理
+        //var sequence = DOTween.Sequence();
+        //sequence.InsertCallback(5f, () => AppearPanel_Ikemasu());
     }
 
     void Update()
@@ -405,7 +437,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             //Debug.Log("PhotonNetwork.CurrentRoom.Name ： " + PhotonNetwork.CurrentRoom.Name);
 
             Debug.Log("このルームに入れるかどうか："+ PhotonNetwork.CurrentRoom.IsOpen);
-
+            if(Shiai_Kaishi)
+            {
+                text_Room_shimekiri.text = "試合開始したので、ルームへの入室をしめきりました";
+            }
 
             if (bool_CanDo_Hantei_Stream)       // 勝敗判定（Hantei_Stream） を実行できるかのフラグ（CanDoフラグ ON）
             {
@@ -931,6 +966,438 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
     #endregion
 
+    #region // マッチング（ルーム入室）後、4人そろってから（あるいは一定数以上が「はじめる」を押したら）試合開始する処理
+    public void Push_Ikemasu_Button()  // Ikemasu ボタンを押した時
+    {
+        Share_Iam_Ikemasu();           // 私「試合開始、いけます！」を全員に向け共有する
+        Debug.Log("全員の Ikemasu を合計します");
+        photonView.RPC("Gokei_Ikemasu_PlayersAll", RpcTarget.All);
+        //Gokei_Ikemasu_PlayersAll();  // Ikemasu を合計する
+        CheckStart_GameMatch();        // 試合開始できるか確認する処理
+        ClosePanel_Ikemasu();
+    }
+
+    public void CheckStart_GameMatch()  // 試合開始できるか確認する処理
+    {
+        if (Shiai_Kaishi == false)  // 試合開始まえであれば、判定処理を実施する（試合中は判定する必要なし）
+        {
+            Gokei_Ikemasu_PlayersAll();  // Ikemasu を合計する
+            if (SankaNinzu == 4)
+            {
+                Debug.Log("4人そろったので、試合を開始します");
+                photonView.RPC("Start_GameMatch", RpcTarget.All);
+                //Start_GameMatch();     // 試合開始する処理
+            }
+            else if (SankaNinzu == 3)
+            {
+                if(int_Ikemasu_All >= 3)
+                {
+                    Debug.Log("3人いけます！ので、試合を開始します");
+                    photonView.RPC("Start_GameMatch", RpcTarget.All);
+                    //Start_GameMatch();     // 試合開始する処理
+                }
+            }
+            else if (SankaNinzu == 2)
+            {
+                if (int_Ikemasu_All >= 2)
+                {
+                    Debug.Log("2人いけます！ので、試合を開始します");
+                    photonView.RPC("Start_GameMatch", RpcTarget.All);
+                    //Start_GameMatch();     // 試合開始する処理
+                }
+            }
+            else
+            {
+                Debug.Log("まだ一人なので、他の参加者を待ちます");
+            }
+        }
+    }
+
+    [PunRPC]
+    public void Start_GameMatch()  // 試合開始する処理
+    {
+        Shiai_Kaishi = true;
+        text_Game_kaishi_MAE.text = "";
+        text_Game_kaishi_CHU.text = "しあい中";
+        if (PhotonNetwork.CurrentRoom.IsOpen)          // まだ入室許可が出ていたら
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;  // これ以上、入室できないようにする
+        }
+        CloseDebug_Buttons();
+        ClosePanel_Ikemasu();
+        ClosePanel_Intro();
+        CloseAisatsu_Panel();
+        Reset_AllAisatsu();
+        AppearStartLogo();
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(3f, () => CloseStartLogo());
+        BGM_SE_MSC.StartRappa_SE();  // ★ 開始のラッパを鳴らす！
+    }
+
+    public void Share_Iam_Ikemasu()    // 私「試合開始、いけます！」を全員に向け共有する
+    {
+        int_Iam_Ikemasu = 1;  // 私は いけます！
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            Debug.Log("プレイヤー1はいけます！");
+            // int_Ikemasu_Player1 = 1;
+            photonView.RPC("Player1_Ikemasu", RpcTarget.All);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            Debug.Log("プレイヤー2はいけます！");
+            photonView.RPC("Player2_Ikemasu", RpcTarget.All);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            Debug.Log("プレイヤー3はいけます！");
+            photonView.RPC("Player3_Ikemasu", RpcTarget.All);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            Debug.Log("プレイヤー4はいけます！");
+            photonView.RPC("Player4_Ikemasu", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    public void Player1_Ikemasu()  // Player1 が いけます！⇒ 全員に情報提供（共有）する
+    {
+        Debug.Log("[PunRPC] Player1（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
+        int_Ikemasu_Player1 = 1;
+    }
+    [PunRPC]
+    public void Player2_Ikemasu()  // Player2 が いけます！⇒ 全員に情報提供（共有）する
+    {
+        Debug.Log("[PunRPC] Player2（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
+        int_Ikemasu_Player2 = 1;
+    }
+    [PunRPC]
+    public void Player3_Ikemasu()  // Player3 が いけます！⇒ 全員に情報提供（共有）する
+    {
+        Debug.Log("[PunRPC] Player3（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
+        int_Ikemasu_Player3 = 1;
+    }
+    [PunRPC]
+    public void Player4_Ikemasu()  // Player4 が いけます！⇒ 全員に情報提供（共有）する
+    {
+        Debug.Log("[PunRPC] Player4（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
+        int_Ikemasu_Player4 = 1;
+    }
+
+    [PunRPC]
+    public void Gokei_Ikemasu_PlayersAll()  // Ikemasu を合計する
+    {
+        int_Ikemasu_All = int_Ikemasu_Player1 + int_Ikemasu_Player2 + int_Ikemasu_Player3 + int_Ikemasu_Player4;    // 現在「試合開始、いけます！」な人の総人数 を更新
+        Debug.Log("「試合開始、いけます！」の総人数（int_Ikemasu_All） ： " + int_Ikemasu_All);
+    }
+
+    public void AppearPanel_Ikemasu()
+    {
+        Panel_Ikemasu.SetActive(true);
+    }
+
+    public void ClosePanel_Ikemasu()
+    {
+        Panel_Ikemasu.SetActive(false);
+    }
+
+    public void AppearStartLogo()
+    {
+        StartLogo.SetActive(true);
+    }
+
+    public void CloseStartLogo()
+    {
+        StartLogo.SetActive(false);
+    }
+    #endregion
+
+    #region // あいさつボタンを押した時の処理 一連
+    public void Aisatsu_Who_Say()     // 誰があいさつしたの？ →それによってセリフの表示位置が変わる
+    {
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            photonView.RPC("Aisatsu_P1", RpcTarget.All);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            photonView.RPC("Aisatsu_P2", RpcTarget.All);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            photonView.RPC("Aisatsu_P3", RpcTarget.All);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            photonView.RPC("Aisatsu_P4", RpcTarget.All);
+        }
+    }
+
+
+    public void Share_Overwrite_Konchiwa()  // こんにちは
+    {
+        photonView.RPC("Overwrite_Konchiwa", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Konchiwa()
+    {
+        str_AisatsuBun = "こんにちは";
+    }
+
+
+    public void Share_Overwrite_Yoroshiku()  // よろしく
+    {
+        photonView.RPC("Overwrite_Yoroshiku", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Yoroshiku()
+    {
+        str_AisatsuBun = "よろしく";
+    }
+
+
+    public void Share_Overwrite_Arigato()  // ありがとう
+    {
+        photonView.RPC("Overwrite_Arigato", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Arigato()
+    {
+        str_AisatsuBun = "ありがとう";
+    }
+
+
+    public void Share_Overwrite_Sayonara()  // さようなら
+    {
+        photonView.RPC("Overwrite_Sayonara", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Sayonara()
+    {
+        str_AisatsuBun = "さようなら";
+    }
+
+
+    public void Share_Overwrite_Baybay()  // バイバーイ
+    {
+        photonView.RPC("Overwrite_Baybay", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Baybay()
+    {
+        str_AisatsuBun = "バイバーイ";
+    }
+
+
+    public void Share_Overwrite_Otsukare()  // おつかれさま
+    {
+        photonView.RPC("Overwrite_Otsukare", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Otsukare()
+    {
+        str_AisatsuBun = "おつかれさま";
+    }
+
+    public void Share_Overwrite_Omedeto()  // おめでとう
+    {
+        photonView.RPC("Overwrite_Omedeto", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Omedeto()
+    {
+        str_AisatsuBun = "おめでとう";
+    }
+
+
+    public void Share_Overwrite_Kuu()  // くぅー！！
+    {
+        photonView.RPC("Overwrite_Kuu", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Kuu()
+    {
+        str_AisatsuBun = "くぅー！！";
+    }
+
+
+    public void Share_Overwrite_Shimatta()  // しまった！
+    {
+        photonView.RPC("Overwrite_Shimatta", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Shimatta()
+    {
+        str_AisatsuBun = "しまった！";
+    }
+
+
+    public void Share_Overwrite_Maji()  // マジッ！？
+    {
+        photonView.RPC("Overwrite_Maji", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Maji()
+    {
+        str_AisatsuBun = "マジッ！？";
+    }
+
+
+    public void Share_Overwrite_Yatta()  // やったね！
+    {
+        photonView.RPC("Overwrite_Yatta", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Yatta()
+    {
+        str_AisatsuBun = "やったね！";
+    }
+
+
+    public void Share_Overwrite_Yoshi()  // よしっ！
+    {
+        photonView.RPC("Overwrite_Yoshi", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Yoshi()
+    {
+        str_AisatsuBun = "よしっ！";
+    }
+
+
+    public void Share_Overwrite_ChottoMatte()  // ちょっとまって
+    {
+        photonView.RPC("Overwrite_ChottoMatte", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_ChottoMatte()
+    {
+        str_AisatsuBun = "ちょっとまって";
+    }
+
+
+    public void Share_Overwrite_Hajimeru()  // はじめる？
+    {
+        photonView.RPC("Overwrite_Hajimeru", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Hajimeru()
+    {
+        str_AisatsuBun = "はじめる？";
+    }
+
+
+    public void Share_Overwrite_Yaro()  // やろう！
+    {
+        photonView.RPC("Overwrite_Yaro", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Overwrite_Yaro()
+    {
+        str_AisatsuBun = "やろう！";
+    }
+
+
+    // ●P1
+    [PunRPC]
+    public void Aisatsu_P1()
+    {
+        text_AisatsuP1.text = str_AisatsuBun;
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(2.5f, () => Erase_AisatsuP1());
+    }
+
+    public void Erase_AisatsuP1()  // あいさつ文を空欄にする（消しゴムで消すかのように）
+    {
+        text_AisatsuP1.text = "";
+    }
+
+
+    // ●P2
+    [PunRPC]
+    public void Aisatsu_P2()
+    {
+        text_AisatsuP2.text = str_AisatsuBun;
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(2.5f, () => Erase_AisatsuP2());
+    }
+
+    public void Erase_AisatsuP2()  // あいさつ文を空欄にする（消しゴムで消すかのように）
+    {
+        text_AisatsuP2.text = "";
+    }
+
+
+    // ●P3
+    [PunRPC]
+    public void Aisatsu_P3()
+    {
+        text_AisatsuP3.text = str_AisatsuBun;
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(2.5f, () => Erase_AisatsuP3());
+    }
+
+    public void Erase_AisatsuP3()  // あいさつ文を空欄にする（消しゴムで消すかのように）
+    {
+        text_AisatsuP3.text = "";
+    }
+
+
+    // ●P4
+    [PunRPC]
+    public void Aisatsu_P4()
+    {
+        text_AisatsuP4.text = str_AisatsuBun;
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(2.5f, () => Erase_AisatsuP4());
+    }
+
+    public void Erase_AisatsuP4()  // あいさつ文を空欄にする（消しゴムで消すかのように）
+    {
+        text_AisatsuP4.text = "";
+    }
+
+
+    public void Reset_AllAisatsu()
+    {
+        text_AisatsuP1.text = "";
+        text_AisatsuP2.text = "";
+        text_AisatsuP3.text = "";
+        text_AisatsuP4.text = "";
+    }
+
+    public void AppearAisatsu_Panel()
+    {
+        Aisatsu_Panel.SetActive(true);
+    }
+
+    public void CloseAisatsu_Panel()
+    {
+        Aisatsu_Panel.SetActive(false);
+    }
+    #endregion
 
 
     #region //【JK-05】ジャンケン手 決定ボタン（「これでOK!」）を押した時の処理以降

@@ -12,7 +12,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Photon.Chat;
-
+using Photon.Realtime;
+using AuthenticationValues = Photon.Chat.AuthenticationValues;
 #if PHOTON_UNITY_NETWORKING
 using Photon.Pun;
 #endif
@@ -26,7 +27,7 @@ using Photon.Pun;
 /// some friends are already set in the Chat demo "DemoChat-Scene", 'Joe', 'Jane' and 'Bob', simply log with them so that you can see the status changes in the Interface
 ///
 /// Workflow:
-/// Create ChatClient, Connect to a server with your ApPID, Authenticate the user (apply a unique name,)
+/// Create ChatClient, Connect to a server with your AppID, Authenticate the user (apply a unique name,)
 /// and subscribe to some channels.
 /// Subscribe a channel before you publish to that channel!
 ///
@@ -55,7 +56,7 @@ public class ChatGui : MonoBehaviour, IChatClientListener
     protected internal ChatAppSettings chatAppSettings;
 
 
-    public GameObject missingApPIDErrorPanel;
+    public GameObject missingAppIdErrorPanel;
 	public GameObject ConnectingLabel;
 
 	public RectTransform ChatPanel;     // set in inspector (to enable/disable panel)
@@ -131,12 +132,12 @@ public class ChatGui : MonoBehaviour, IChatClientListener
         this.chatAppSettings = PhotonNetwork.PhotonServerSettings.AppSettings.GetChatSettings();
         #endif
 
-        bool appIDPresent = !string.IsNullOrEmpty(this.chatAppSettings.AppId);
+        bool appIdPresent = !string.IsNullOrEmpty(this.chatAppSettings.AppId);
 
-	    this.missingApPIDErrorPanel.SetActive(!appIDPresent);
-		this.UserIdFormPanel.gameObject.SetActive(appIDPresent);
+	    this.missingAppIdErrorPanel.SetActive(!appIdPresent);
+		this.UserIdFormPanel.gameObject.SetActive(appIdPresent);
 
-		if (!appIDPresent)
+		if (!appIdPresent)
 		{
 			Debug.LogError("You need to set the chat app ID in the PhotonServerSettings file in order to continue.");
 		}
@@ -451,7 +452,13 @@ public class ChatGui : MonoBehaviour, IChatClientListener
 	    this.ShowChannel(channels[0]);
 	}
 
-	private void InstantiateChannelButton(string channelName)
+    /// <inheritdoc />
+    public void OnSubscribed(string channel, string[] users, Dictionary<object, object> properties)
+    {
+        Debug.LogFormat("OnSubscribed: {0}, users.Count: {1} Channel-props: {2}.", channel, users.Length, properties.ToStringFull());
+    }
+
+    private void InstantiateChannelButton(string channelName)
 	{
 		if (this.channelToggles.ContainsKey(channelName))
 		{
@@ -566,6 +573,23 @@ public class ChatGui : MonoBehaviour, IChatClientListener
     public void OnUserUnsubscribed(string channel, string user)
     {
         Debug.LogFormat("OnUserUnsubscribed: channel=\"{0}\" userId=\"{1}\"", channel, user);
+    }
+
+    /// <inheritdoc />
+    public void OnChannelPropertiesChanged(string channel, string userId, Dictionary<object, object> properties)
+    {
+        Debug.LogFormat("OnChannelPropertiesChanged: {0} by {1}. Props: {2}.", channel, userId, Extensions.ToStringFull(properties));
+    }
+
+    public void OnUserPropertiesChanged(string channel, string targetUserId, string senderUserId, Dictionary<object, object> properties)
+    {
+        Debug.LogFormat("OnUserPropertiesChanged: (channel:{0} user:{1}) by {2}. Props: {3}.", channel, targetUserId, senderUserId, Extensions.ToStringFull(properties));
+    }
+
+    /// <inheritdoc />
+    public void OnErrorInfo(string channel, string error, object data)
+    {
+        Debug.LogFormat("OnErrorInfo for channel {0}. Error: {1} Data: {2}", channel, error, data);
     }
 
     public void AddMessageToSelectedChannel(string msg)

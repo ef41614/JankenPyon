@@ -151,6 +151,31 @@ MonoBehaviour:
   - AppearWinner_avator_2
   - AppearWinner_avator_3
   - AppearWinner_avator_4
+  - Player1_Ikemasu
+  - Player2_Ikemasu
+  - Player3_Ikemasu
+  - Player4_Ikemasu
+  - Gokei_Ikemasu_PlayersAll
+  - Start_GameMatch
+  - Aisatsu_P1
+  - Aisatsu_P2
+  - Aisatsu_P3
+  - Aisatsu_P4
+  - Overwrite_Arigato
+  - Overwrite_Baybay
+  - Overwrite_ChottoMatte
+  - Overwrite_Hajimeru
+  - Overwrite_Konchiwa
+  - Overwrite_Kuu
+  - Overwrite_Maji
+  - Overwrite_Omedeto
+  - Overwrite_Otsukare
+  - Overwrite_Sayonara
+  - Overwrite_Shimatta
+  - Overwrite_Yaro
+  - Overwrite_Yatta
+  - Overwrite_Yoroshiku
+  - Overwrite_Yoshi
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

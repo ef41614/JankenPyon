@@ -24,7 +24,7 @@ public class BGM_SE_Manager : MonoBehaviour
     // SE
     public AudioClip whistle;
     public AudioClip Fanfare_solo;
-
+    public AudioClip StartRappa;
 
     private void Awake()
     {
@@ -93,6 +93,11 @@ public class BGM_SE_Manager : MonoBehaviour
     public void Fanfare_solo_SE()
     {
         audioSource.PlayOneShot(Fanfare_solo);
+    }
+
+    public void StartRappa_SE()
+    {
+        audioSource.PlayOneShot(StartRappa);
     }
     #endregion
 

@@ -93,12 +93,14 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
             Debug.Log("PhotonNetwork.NickName Play：" + PhotonNetwork.NickName);
             if (string.IsNullOrWhiteSpace(PhotonNetwork.NickName))
             {
-                Debug.Log("名前が空欄です");
+                Debug.Log("名前が空欄なので、名前をランダムに決めて入力します");
+                int RndPName = UnityEngine.Random.Range(1, 10000);
+                PhotonNetwork.NickName = "JKP_" + RndPName;     //今回ゲームで利用するプレイヤーの名前を設定
+                Debug.Log("PhotonNetwork.NickName ランチャー：" + PhotonNetwork.NickName);
             }
             else    //名前が正常に入力されていたら
             {
-                BGM_SE_MSC.Stop_BGM();
-                SceneManager.LoadScene("Mike");
+
                 /*
                 if (!PhotonNetwork.IsConnected)             //Photonに接続できていなければ
                 {
@@ -114,6 +116,8 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
                 }
                 */
             }
+            BGM_SE_MSC.Stop_BGM();
+            SceneManager.LoadScene("Mike");
             firstPush = true; //ボタン押下済みフラグ
         }
         else
