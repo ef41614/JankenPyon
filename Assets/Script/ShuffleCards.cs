@@ -54,11 +54,17 @@ namespace say
         public bool isSet_D = false;
         public bool isSet_E = false;
 
+        private void Awake()
+        {
+            Debug.Log("ShuffleCards Awake 出席確認");
+            ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
+        }
+
         //☆################☆################  Start  ################☆################☆
 
         void Start()
         {
-            Debug.Log("ShuffleCards 出席確認");
+            Debug.Log("ShuffleCards Start 出席確認");
             AppearButton_A();
             AppearButton_B();
             AppearButton_C();

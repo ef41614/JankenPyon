@@ -8,6 +8,8 @@ public class BGM_SE_Manager : MonoBehaviour
 {
     public static BGM_SE_Manager instance = null;
     public int firstMatch = 0;
+    public int firstRead_Selectjanken = 0;         // Selectjanken.cs が 2回呼ばれるのを防ぐためのフラグ
+    public int firstRead_TestRoomController = 0;   // TestRoomController.cs が 2回呼ばれるのを防ぐためのフラグ
 
     private AudioSource audioSource = null;
     AudioSource loopAudioSource;
@@ -25,6 +27,9 @@ public class BGM_SE_Manager : MonoBehaviour
     public AudioClip whistle;
     public AudioClip Fanfare_solo;
     public AudioClip StartRappa;
+    public AudioClip bottonwo_oshitene;
+    public AudioClip korede_iikana;
+
 
     private void Awake()
     {
@@ -98,6 +103,16 @@ public class BGM_SE_Manager : MonoBehaviour
     public void StartRappa_SE()
     {
         audioSource.PlayOneShot(StartRappa);
+    }
+
+    public void bottonwo_oshitene_SE()
+    {
+        audioSource.PlayOneShot(bottonwo_oshitene);
+    }
+
+    public void korede_iikana_SE()
+    {
+        audioSource.PlayOneShot(korede_iikana);
     }
     #endregion
 

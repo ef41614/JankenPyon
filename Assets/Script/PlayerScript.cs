@@ -78,6 +78,7 @@ public class PlayerScript : MonoBehaviour
                     Debug.Log("ジャンプ 今終わりました！");
                     SelectJankenMSC.MoveTo_MyKagePos();   // MyKage の位置へ移動する（Y軸位置微調整）
                     SelectJankenMSC.Judge_GOAL();         // ゴールラインに到達したか判定する
+                    SelectJankenMSC.Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
                     SelectJankenMSC.ShareAfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理 ⇒ 全員に共有する
                 });
         }

@@ -23,6 +23,6 @@ public class CGameManagerScript : MonoBehaviourPunCallbacks
     void OnGUI()
     {
         //ログインの状態を画面上に出力
-        GUILayout.Label(PhotonNetwork.NetworkClientState.ToString());
+        //GUILayout.Label(PhotonNetwork.NetworkClientState.ToString());
     }
 }

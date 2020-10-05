@@ -24,6 +24,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject playerPrefab_mobuchan;
     [SerializeField] SortingGroup MysortingGroup;
 
+    bool CreatePlayerPrefab_Flg = true;
+
     public GameObject StartCorn_Head;  // スタートラインのコーン
     public GameObject StartCorn_Foot;  // スタートラインのコーン
     public GameObject StartMark1;  // スタートラインのオブジェクト
@@ -275,12 +277,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Button Btn_C;
     public Button Btn_D;
     public Button Btn_E;
+    public Button Btn_Omakase;
 
     public bool CanPushBtn_A = true;
     public bool CanPushBtn_B = true;
     public bool CanPushBtn_C = true;
     public bool CanPushBtn_D = true;
     public bool CanPushBtn_E = true;
+    public bool CanPushBtn_Omakase = true;
 
     public GameObject Text_WaitingPlayers_All;
     public GameObject Text_Wait_Me; // test
@@ -319,6 +323,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Text text_AisatsuP3;           // P3のあいさつ文
     public Text text_AisatsuP4;           // P4のあいさつ文
 
+    public Text Text_Announcement;        // アナウンス文
+    public bool Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+    public bool Countdown_Push_JankenTe_KetteiButton_Flg = false;
+       
+    public bool GameSet_Flg = false;      // ゲームセットしたかのフラグ
     public string str_AisatsuBun = "";           // あいさつ文の中身
 
     //private AudioSource audioSource = null;
@@ -335,6 +344,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     void Awake()
     {
         BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
+        BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
 
         this.photonView = GetComponent<PhotonView>();
         Debug.Log("【START-01】SelectJanken void Awake() 出席確認1");
@@ -347,11 +357,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
         TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         MyCameraControllerMSC = MainCamera.GetComponent<MyCameraController>();
-        BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
         CloseWinPanel();
         CloseDebug_Buttons();
         ClosePanel_Intro();
-        if (BGM_SE_MSC.firstMatch == 0)
+        if (BGM_SE_MSC.firstMatch <= 3)
         {
             AppearPanel_Intro();
         }
@@ -359,6 +368,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         text_Game_kaishi_CHU.text = "";
         //audioSource = GetComponent<AudioSource>();
     }
+
 
     void Start()
     {
@@ -373,7 +383,32 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ResetAlivePlayer();            //【START-03】 各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする
 
         Debug.Log("【START-04】自プレイヤーを生成します");
+        //CreatePlayerPrefab();          //【START-04】Photonに接続していれば自プレイヤーを生成
+        Debug.Log("CreatePlayerPrefab_Flg ： " + CreatePlayerPrefab_Flg);
+
+        /*
+        if (BGM_SE_MSC.firstRead_Selectjanken == 0)
+        {
+            Debug.Log("firstRead_Selectjanken  0 です");
+            Debug.Log("myPlayer が 存在していなかったのでキャラ作成します！！！");
+            //Debug.Log("フラグON だったのでキャラ作成します！！！");
+            CreatePlayerPrefab();          //【START-04】Photonに接続していれば自プレイヤーを生成
+            CreatePlayerPrefab_Flg = false;
+            BGM_SE_MSC.firstRead_Selectjanken = 1;
+        }
+        else
+        {
+            Debug.Log("firstRead_Selectjanken  1 です。CreatePlayerPrefab 処理はしません");
+        }
+        */
+
+        Debug.Log("myPlayer が 存在していなかったのでキャラ作成します！！！");
+        //Debug.Log("フラグON だったのでキャラ作成します！！！");
         CreatePlayerPrefab();          //【START-04】Photonに接続していれば自プレイヤーを生成
+        CreatePlayerPrefab_Flg = false;
+        BGM_SE_MSC.firstRead_Selectjanken = 1;
+
+        myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
 
         Debug.Log("【START-05】スタートラインにランダムに移動させます");
         MoveToStartLineRandom();       //【START-05】スタートラインにランダムに移動させる
@@ -402,12 +437,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         CloseStartLogo();
         CloseAisatsu_Panel();
         Reset_AllAisatsu();
+        //Erase_Text_Announcement();
         AppearPanel_Ikemasu();
         //ClosePanel_Ikemasu();
         CheckStart_GameMatch();                 // 試合開始できるか確認する処理
-        //var sequence = DOTween.Sequence();
-        //sequence.InsertCallback(5f, () => AppearPanel_Ikemasu());
+                                                //var sequence = DOTween.Sequence();
+                                                //sequence.InsertCallback(5f, () => AppearPanel_Ikemasu());
     }
+
 
     void Update()
     {
@@ -436,7 +473,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             */
             //Debug.Log("PhotonNetwork.CurrentRoom.Name ： " + PhotonNetwork.CurrentRoom.Name);
 
-            Debug.Log("このルームに入れるかどうか："+ PhotonNetwork.CurrentRoom.IsOpen);
+            // Debug.Log("このルームに入れるかどうか："+ PhotonNetwork.CurrentRoom.IsOpen);
             if(Shiai_Kaishi)
             {
                 text_Room_shimekiri.text = "試合開始したので、ルームへの入室をしめきりました";
@@ -460,37 +497,41 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Debug.Log("【START-04】Photonに接続したので 自プレイヤーを生成");
 
-        //GameObject MyPlayer = PhotonNetwork.Instantiate(this.MyPlayerPrefab.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+        //GameObject MyPlayer = PhotonNetwork.Instantiate(this.MyPlayerPrefab.name, new Vector3(-15f, 0f, 0f), Quaternion.identity, 0);
         //GameObject MyPlayer = PhotonNetwork.Instantiate(this.MyPlayerPrefab.name);
         //GameObject Player1 = PhotonNetwork.Instantiate(this.playerPrefab.name);
 
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
-            myPlayer = PhotonNetwork.Instantiate(playerPrefab_utako.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_utako.name, new Vector3(-15f, 0f, 0f), Quaternion.identity, 0);
             utakoClone = GameObject.FindWithTag("MyPlayer");
             Debug.Log("utakoClone の名前は: " + utakoClone.name);
             PlayerSC = utakoClone.GetComponent<PlayerScript>();
         }
         else if (int_conMyCharaAvatar == 2) // Unityちゃん
         {
-            myPlayer = PhotonNetwork.Instantiate(playerPrefab_unitychan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_unitychan.name, new Vector3(-15f, 0f, 0f), Quaternion.identity, 0);
             unitychanClone = GameObject.FindWithTag("MyPlayer");
             Debug.Log("unitychanClone の名前は: " + unitychanClone.name);
             PlayerSC = unitychanClone.GetComponent<PlayerScript>();
         }
         else if (int_conMyCharaAvatar == 3) // Pちゃん
         {
-            myPlayer = PhotonNetwork.Instantiate(playerPrefab_pchan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_pchan.name, new Vector3(-15f, 0f, 0f), Quaternion.identity, 0);
             pchanClone = GameObject.FindWithTag("MyPlayer");
             Debug.Log("pchanClone の名前は: " + pchanClone.name);
             PlayerSC = pchanClone.GetComponent<PlayerScript>();
         }
         else if (int_conMyCharaAvatar == 4) // モブちゃん
         {
-            myPlayer = PhotonNetwork.Instantiate(playerPrefab_mobuchan.name, new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+            myPlayer = PhotonNetwork.Instantiate(playerPrefab_mobuchan.name, new Vector3(-15f, 0f, 0f), Quaternion.identity, 0);
             mobuchanClone = GameObject.FindWithTag("MyPlayer");
             Debug.Log("mobuchanClone の名前は: " + mobuchanClone.name);
             PlayerSC = mobuchanClone.GetComponent<PlayerScript>();
+        }
+        else
+        {
+            Debug.Log("【START-04】自プレイヤーを生成 できませんでした");
         }
     }
 
@@ -894,10 +935,182 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     #endregion
 
+    #region // 右上の「開始ボタン」を自動で押す処理
+
+    public void Countdown_Until_Push_OpenMyJankenPanel_Button()   // ジャンケンパネルが開かれていないならば、カウントダウン開始
+    {
+        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
+        {
+            Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+            Erase_Text_Announcement();
+        }
+        Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていない（アクティブでない）ならば、カウントダウン開始");
+        if (Countdown_Push_OpenMyJankenPanel_Button_Flg && GameSet_Flg == false)
+        {
+            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、ボタンを おしてね Text");
+            Text_Announcement.text = "ボタンを おしてね";  // テキスト表示
+            
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(5f, () => Button_wo_Oshitene_SE());
+
+            var sequenc3 = DOTween.Sequence();
+            sequenc3.InsertCallback(20f, () => Button_wo_Oshitene_SE());
+            
+            var sequence2 = DOTween.Sequence();
+            sequence2.InsertCallback(30f, () => Auto_Push_OpenMyJankenPanel_Button());
+        }
+        else
+        {
+            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれているようです・・・");
+        }
+    }
+
+    public void Button_wo_Oshitene_SE()
+    {
+        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
+        {
+            Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+            Erase_Text_Announcement();
+        }
+        if (Countdown_Push_OpenMyJankenPanel_Button_Flg && GameSet_Flg == false)
+        {
+            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、ボタンを おしてね SE");
+            BGM_SE_MSC.bottonwo_oshitene_SE();         // ボタンを おしてね のSEを流す
+        }
+        else
+        {
+            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれているようです・・・");
+        }
+    }
+
+    public void Auto_Push_OpenMyJankenPanel_Button()   // ジャンケンパネルが開かれていないならば、右上の開始ボタンを自動で押す
+    {
+        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
+        {
+            Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+            Erase_Text_Announcement();
+        }
+        if (Countdown_Push_OpenMyJankenPanel_Button_Flg && GameSet_Flg == false)
+        {
+            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、ボタンを おします Auto");
+            PushOpenMyJankenPanel_Button();            // 右上の開始ボタンを自動で押す
+        }
+        else
+        {
+            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれているようです・・・");
+        }
+    }
+
+    public void Erase_Text_Announcement()
+    {
+        Text_Announcement.text = "";                   // アナウンス テキスト文をリセットする
+    }
+
+    #endregion
+
+
+    #region // ジャンケン手「決定ボタン」を自動で押す処理
+
+    public void Countdown_Until_Push_JankenTe_KetteiButton()   // ジャンケンパネルが開かれていて、決定ボタンか押されていならば、カウントダウン開始
+    {
+        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
+        {
+            Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+            Erase_Text_Announcement();
+        }
+        Debug.Log("ジャンケンパネルが開かれていて、決定ボタンか押されていないならば、カウントダウン開始");
+        if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
+        {
+            Debug.Log("カードを選んでね");
+
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(30f, () => Auto_Push_Omakase_Button());
+
+            //var sequenc3 = DOTween.Sequence();
+            //sequenc3.InsertCallback(35f, () => korede_iikana_SE());
+
+            //var sequence2 = DOTween.Sequence();
+            //sequence2.InsertCallback(45f, () => Auto_Push_JankenTe_KetteiButton());
+        }
+        else
+        {
+            Debug.Log("「決定ボタン」を自動で押す:ジャンケンパネル閉じているようです・・・");
+        }
+    }
+
+    public void Auto_Push_Omakase_Button()           // おまかせボタンを押す
+    {
+        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
+        {
+            Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+            Erase_Text_Announcement();
+        }
+        if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
+        {
+            Debug.Log("決定ボタンか押されていないので、おまかせボタンを自動で押す Auto");
+            PushBtn_Omakase();                      // おまかせボタンを自動で押す
+
+            var sequenc3 = DOTween.Sequence();
+            sequenc3.InsertCallback(5f, () => korede_iikana_SE());
+        }
+        else
+        {
+            Debug.Log("「決定ボタン」を自動で押す:ジャンケンパネル閉じているようです・・・");
+        }
+    }
+
+    public void korede_iikana_SE()   // これでいいかな？ SE
+    {
+        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
+        {
+            Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+            Erase_Text_Announcement();
+        }
+        if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
+        {
+            Debug.Log("決定ボタンか押されていないので、これでいいかな？ SEを流す");
+            BGM_SE_MSC.korede_iikana_SE();         // これでいいかな？ SEを流す
+
+            var sequence2 = DOTween.Sequence();
+            sequence2.InsertCallback(10f, () => Auto_Push_JankenTe_KetteiButton());
+        }
+        else
+        {
+            Debug.Log("「決定ボタン」を自動で押す:ジャンケンパネル閉じているようです・・・");
+        }
+    }
+
+
+    public void Auto_Push_JankenTe_KetteiButton()   // ジャンケンパネルが開かれていて、決定ボタンか押されていないならば、決定ボタンを自動で押す
+    {
+        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
+        {
+            Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+            Erase_Text_Announcement();
+        }
+        if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
+        {
+            Debug.Log("決定ボタンか押されていないので、決定ボタンを自動で押す Auto");
+            JankenTe_Kettei();                     // 決定ボタンを自動で押す
+        }
+        else
+        {
+            Debug.Log("「決定ボタン」を自動で押す:ジャンケンパネル閉じているようです・・・");
+        }
+    }
+
+    #endregion
+
+
     #region// 【JK-01】からの処理 右上のジャンケン セット「開始ボタン」を押してからの、一連の処理
 
     public void PushOpenMyJankenPanel_Button()    // 【JK-01】OpenMyJankenPanel_Button（右上のセット開始ボタン） を押した時の処理
     {
+        Countdown_Push_JankenTe_KetteiButton_Flg = true;
+        Erase_Text_Announcement();                // アナウンス テキスト文をリセットする
+        Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+        Countdown_Until_Push_JankenTe_KetteiButton();
+
         //AfterJump();   // 右にジャンプ（ぴょーん！）が完了してからの処理（右上の開始ボタンを押せるように各値をリセット）
         Debug.Log("【JK-01】******************************************************************");
         Debug.Log("【JK-01】■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
@@ -1032,6 +1245,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(3f, () => CloseStartLogo());
         BGM_SE_MSC.StartRappa_SE();  // ★ 開始のラッパを鳴らす！
+
+        Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
+        var sequence2 = DOTween.Sequence();
+        sequence2.InsertCallback(3f, () => Countdown_Until_Push_OpenMyJankenPanel_Button());
     }
 
     public void Share_Iam_Ikemasu()    // 私「試合開始、いけます！」を全員に向け共有する
@@ -1177,15 +1394,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
 
 
-    public void Share_Overwrite_Sayonara()  // さようなら
+    public void Share_Overwrite_Matane()  // またね
     {
-        photonView.RPC("Overwrite_Sayonara", RpcTarget.All);
+        photonView.RPC("Overwrite_Matane", RpcTarget.All);
     }
 
     [PunRPC]
-    public void Overwrite_Sayonara()
+    public void Overwrite_Matane()
     {
-        str_AisatsuBun = "さようなら";
+        str_AisatsuBun = "またねー";
     }
 
 
@@ -1403,6 +1620,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region //【JK-05】ジャンケン手 決定ボタン（「これでOK!」）を押した時の処理以降
     public void JankenTe_Kettei()               // 【JK-05】からの処理 ： ジャンケン手 決定ボタン（「これでOK!」）を押した時の処理
     {
+        Countdown_Push_JankenTe_KetteiButton_Flg = false;
         CheckAlivePlayer_DependOn_Absent();     // 生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）
 
         photonView.RPC("Share_Push_KetteiBtn", RpcTarget.All);
@@ -1766,6 +1984,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         Debug.Log("【JK-204】待機中フラグ（確認用パラメータ） を 初期化（0にする）");
         Reset_NowWaiting();      // 待機中フラグ（確認用パラメータ） を 初期化（0にする）
+
+        //Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
+        Countdown_Until_Push_OpenMyJankenPanel_Button();   // ジャンケンパネルが開かれていないならば、ボタンを押すようにアナウンスする
     }
 
     public void ResetAlivePlayer()         //【START-03】【JK-203】各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする）
@@ -4109,7 +4330,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     #region// 【JK-02】ジャンケンカードボタン 押した時の処理（フラグを処理済みにする）
 
-
     public void Push_Btn_A() // 【JK-02】ジャンケンカードボタン押したよ
     {
         Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
@@ -4250,6 +4470,22 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Check_CanAppear_KetteiBtn();  // ジャンケン手決定ボタンを表示できるか確認
     }
 
+    public void PushBtn_Omakase() // 【JK-02】おまかせボタン押したよ
+    {
+        Debug.Log("【JK-02】おまかせボタン押したよ");
+        if (CanPushBtn_Omakase)
+        {
+            Push_Btn_A();
+            Push_Btn_B();
+            Push_Btn_C();
+            Push_Btn_D();
+            Push_Btn_E();
+        }
+        Btn_Omakase.interactable = false;
+        CanPushBtn_Omakase = false;
+        Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
+    }
+
     #endregion
 
 
@@ -4263,6 +4499,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ToCanPush_C();
         ToCanPush_D();
         ToCanPush_E();
+        ToCanPush_Omakase();
     }
 
     public void ToCanPush_A() // 【JK-02】ジャンケンカードボタン押せるようにするよ
@@ -4293,6 +4530,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Btn_E.interactable = true;
         CanPushBtn_E = true;
+    }
+
+    public void ToCanPush_Omakase() // 【JK-02】おまかせボタン押せるようにするよ
+    {
+        Btn_Omakase.interactable = true;
+        CanPushBtn_Omakase = true;
     }
 
     #endregion
@@ -4425,6 +4668,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void BackTo_TitleScene() // タイトル画面へ戻ります
     {
+        BGM_SE_MSC.firstRead_Selectjanken = 0;
+        BGM_SE_MSC.firstRead_TestRoomController = 0;
         PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene("Launcher");
     }
@@ -4554,6 +4799,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void ShareGameSet()   // GOAL して GameSet した旨を全員に共有する
     {
         Debug.Log("GOOOOOALLL！！！！");
+        Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+        GameSet_Flg = true;
+        Erase_Text_Announcement();
         AppearGameSet_LOGO();
         CloseOpenMyJankenPanel_Button();
         CloseDebug_Buttons();
@@ -4565,6 +4813,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void AfterGameSet()
     {
+        Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+        GameSet_Flg = true;
+        Erase_Text_Announcement();
         AppearWinPanel();
         BGM_SE_MSC.Fanfare_solo_SE();
         var sequence = DOTween.Sequence();

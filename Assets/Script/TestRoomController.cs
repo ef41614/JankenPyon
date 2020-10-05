@@ -41,10 +41,16 @@ namespace BEFOOL.PhotonTest
 
         public GameObject SelectJankenManager; //ヒエラルキー上のオブジェクト名
         SelectJanken SelectJankenMSC;//スクリプト名 + このページ上でのニックネーム
-        //public SelectJanken SelectJankenMSC; //スクリプト名 + このページ上でのニックネーム
+                                     //public SelectJanken SelectJankenMSC; //スクリプト名 + このページ上でのニックネーム
+
+        public GameObject BGM_SE_Manager;
+        BGM_SE_Manager BGM_SE_MSC;
 
         void Start()
         {
+            BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
+            BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
+
             //EntryCheck();
             Debug.Log("TestRoomController 出席確認");
             allPlayers = PhotonNetwork.PlayerList; // プレイヤーの配列（自身を含む）
