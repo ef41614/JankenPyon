@@ -326,7 +326,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Text Text_Announcement;        // アナウンス文
     public bool Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
     public bool Countdown_Push_JankenTe_KetteiButton_Flg = false;
-       
+    public bool Push_JankenTe_KetteiButton_Flg = false;
+
+    int Countdown_timer_PanelOpen = 1;
+
+    int Countdown_timer_Kettei = 1;
     public bool GameSet_Flg = false;      // ゲームセットしたかのフラグ
     public string str_AisatsuBun = "";           // あいさつ文の中身
 
@@ -337,6 +341,22 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     //public AudioClip Fanfare_solo;
     //public AudioClip Fanfare_Roop;
     //public UnityEngine.UI.Slider volSlider;
+
+    public GameObject Panel_SubCamera;
+    public float PosX_Winner;
+    public float Kari_PosX_Winner;
+    public GameObject SubCamera;
+    Transform SubCamera_Trans;    // SubCamera の位置情報 (Transform)
+    Vector3 PosSubCamera;         // SubCamera の位置情報 (Vector3)
+        
+    public GameObject cafe_kanban_035;
+    public GameObject cafe_kanban_025;
+    public GameObject cafe_kanban_015;
+    public GameObject cafe_kanban_005;
+    public GameObject cafe_kanban_0_5;
+    Transform cafe_kanban_0_5_Trans;    // 位置情報 (Transform)
+    Vector3 Poscafe_kanban_0_5;         // 位置情報 (Vector3)
+
     #endregion
 
     #region // 【START】初期設定の処理一覧
@@ -443,6 +463,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         CheckStart_GameMatch();                 // 試合開始できるか確認する処理
                                                 //var sequence = DOTween.Sequence();
                                                 //sequence.InsertCallback(5f, () => AppearPanel_Ikemasu());
+                                                //MoveTo_cafe_kanban_0_5();   // SubCamera を -5 の位置に移動する
+        ClosePanel_SubCamera();
     }
 
 
@@ -939,33 +961,90 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Countdown_Until_Push_OpenMyJankenPanel_Button()   // ジャンケンパネルが開かれていないならば、カウントダウン開始
     {
-        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
+        Debug.Log("Countdown_timer_PanelOpen : " + Countdown_timer_PanelOpen);
+        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)  // ジャンケンパネルが既に表示されていたら
         {
-            Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+            Countdown_Push_OpenMyJankenPanel_Button_Flg = false;  // ボタンフラグをOFFにする
             Erase_Text_Announcement();
         }
         Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていない（アクティブでない）ならば、カウントダウン開始");
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg && GameSet_Flg == false)
         {
             Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、ボタンを おしてね Text");
-            Text_Announcement.text = "ボタンを おしてね";  // テキスト表示
-            
-            var sequence = DOTween.Sequence();
-            sequence.InsertCallback(5f, () => Button_wo_Oshitene_SE());
+            Text_Announcement.text = "ボタンを おしてね";   // テキスト表示
 
-            var sequenc3 = DOTween.Sequence();
-            sequenc3.InsertCallback(20f, () => Button_wo_Oshitene_SE());
-            
-            var sequence2 = DOTween.Sequence();
-            sequence2.InsertCallback(30f, () => Auto_Push_OpenMyJankenPanel_Button());
+            if (Countdown_timer_PanelOpen == 1)             // ボタンを おしてね のSEを流す
+            {
+                var sequence5 = DOTween.Sequence();
+                sequence5.InsertCallback(5f, () => Checking_PanelOpen(5));
+            }
+            else if (Countdown_timer_PanelOpen == 2)
+            {
+                var sequence10 = DOTween.Sequence();
+                sequence10.InsertCallback(5f, () => Checking_PanelOpen(10));
+            }
+            else if (Countdown_timer_PanelOpen == 3)
+            {
+                var sequence15 = DOTween.Sequence();
+                sequence15.InsertCallback(5f, () => Checking_PanelOpen(15));
+            }
+            else if (Countdown_timer_PanelOpen == 4)       // ボタンを おしてね のSEを流す
+            {
+                var sequence20 = DOTween.Sequence();
+                sequence20.InsertCallback(5f, () => Checking_PanelOpen(20));
+            }
+            else if (Countdown_timer_PanelOpen == 5)
+            {
+                var sequence25 = DOTween.Sequence();
+                sequence25.InsertCallback(5f, () => Checking_PanelOpen(25));
+            }
+            else if (Countdown_timer_PanelOpen == 6)
+            {
+                var sequence30 = DOTween.Sequence();
+                sequence30.InsertCallback(5f, () => Auto_Push_OpenMyJankenPanel_Button());
+            }
+            else
+            {
+                Debug.Log("右上「開始ボタン」の Countdown_timer_PanelOpen が 1～6 以外です");
+                ResetCountdown_timer_PanelOpen_1();
+            }
         }
         else
         {
-            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれているようです・・・");
+            Debug.Log("右上「開始ボタン」を自動で押す:既にジャンケンパネルが開かれているようです・・・");
         }
     }
 
-    public void Button_wo_Oshitene_SE()
+    public void ResetCountdown_timer_PanelOpen_1()
+    {
+        Countdown_timer_PanelOpen = 1;
+    }
+
+    public void Checking_PanelOpen(int timeHyoji)
+    {
+        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
+        {
+            Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+            Erase_Text_Announcement();
+        }
+        Debug.Log("右上「開始ボタン」のカウントダウン：" + timeHyoji);
+        if (Countdown_Push_OpenMyJankenPanel_Button_Flg && GameSet_Flg == false)
+        {
+            if(timeHyoji == 5 || timeHyoji == 20)
+            {
+                bottonwo_oshitene_SE();   // ボタンを おしてね のSEを流す
+            }
+            Countdown_timer_PanelOpen++;
+            Countdown_Until_Push_OpenMyJankenPanel_Button();
+        }
+        else
+        {
+            Debug.Log("右上「開始ボタン」のカウントダウン、ここで中断です・・");
+            ResetCountdown_timer_PanelOpen_1();
+        }
+    }
+
+    public void bottonwo_oshitene_SE()
     {
         if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
         {
@@ -974,12 +1053,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg && GameSet_Flg == false)
         {
-            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、ボタンを おしてね SE");
+            Debug.Log("右上「開始ボタン」を自動で押す: ボタンを おしてね SE を流します");
             BGM_SE_MSC.bottonwo_oshitene_SE();         // ボタンを おしてね のSEを流す
         }
         else
         {
-            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれているようです・・・");
+            Debug.Log("右上「開始ボタン」を自動で押す → ボタンを おしてね SE を流す条件を満たしていません・・・");
         }
     }
 
@@ -992,13 +1071,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg && GameSet_Flg == false)
         {
-            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、ボタンを おします Auto");
+            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、開始ボタンを おします Auto");
             PushOpenMyJankenPanel_Button();            // 右上の開始ボタンを自動で押す
         }
         else
         {
-            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれているようです・・・");
+            Debug.Log("右上の「開始ボタン」を自動で押す → 開始ボタンを押す 条件を満たしていません・・・");
         }
+        ResetCountdown_timer_PanelOpen_1();
     }
 
     public void Erase_Text_Announcement()
@@ -1013,19 +1093,58 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Countdown_Until_Push_JankenTe_KetteiButton()   // ジャンケンパネルが開かれていて、決定ボタンか押されていならば、カウントダウン開始
     {
+        Debug.Log("Countdown_timer_Kettei : " + Countdown_timer_Kettei);
+
         if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
         {
             Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
             Erase_Text_Announcement();
         }
-        Debug.Log("ジャンケンパネルが開かれていて、決定ボタンか押されていないならば、カウントダウン開始");
+        else
+        {
+            Countdown_Push_JankenTe_KetteiButton_Flg = false;
+        }
+        Debug.Log("ジャンケンパネルが開かれていて、決定ボタンか押されていないならば、カウントダウン開始します");
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
         {
+            Debug.Log("ジャンケンパネルが開かれていて、決定ボタンか押されていないので、カウントダウン開始しました");
             Debug.Log("カードを選んでね");
 
-            var sequence = DOTween.Sequence();
-            sequence.InsertCallback(30f, () => Auto_Push_Omakase_Button());
-
+            if (Countdown_timer_Kettei == 1)
+            {
+                var sequence5 = DOTween.Sequence();
+                sequence5.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(5));
+            }
+            else if (Countdown_timer_Kettei == 2)
+            {
+                var sequence10 = DOTween.Sequence();
+                sequence10.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(10));
+            }
+            else if (Countdown_timer_Kettei == 3)
+            {
+                var sequence15 = DOTween.Sequence();
+                sequence15.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(15));
+            }
+            else if (Countdown_timer_Kettei == 4)
+            {
+                var sequence20 = DOTween.Sequence();
+                sequence20.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(20));
+            }
+            else if (Countdown_timer_Kettei == 5)
+            {
+                var sequence25 = DOTween.Sequence();
+                sequence25.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(25));
+            }
+            else if (Countdown_timer_Kettei == 6)
+            {
+                var sequence = DOTween.Sequence();
+                sequence.InsertCallback(5f, () => Auto_Push_Omakase_Button());
+            }
+            else
+            {
+                Debug.Log("「決定ボタン」の Countdown_timer_Kettei が 1～6 以外です");
+                ResetCountdown_timer_Kettei_1();
+            }
             //var sequenc3 = DOTween.Sequence();
             //sequenc3.InsertCallback(35f, () => korede_iikana_SE());
 
@@ -1038,12 +1157,45 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
+    public void ResetCountdown_timer_Kettei_1()
+    {
+        Countdown_timer_Kettei = 1;
+    }
+
+    public void Countdown_KetteiButton_Hyoji(int timeHyoji)   // ジャンケンパネルが開かれていて、決定ボタンか押されていならば、カウントダウン開始
+    {
+        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
+        {
+            Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+            Erase_Text_Announcement();
+        }
+        else
+        {
+            Countdown_Push_JankenTe_KetteiButton_Flg = false;
+        }
+        Debug.Log("決定ボタンのカウントダウン：" + timeHyoji);
+        if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
+        {
+            Countdown_timer_Kettei++;
+            Countdown_Until_Push_JankenTe_KetteiButton();
+        }
+        else
+        {
+            Debug.Log("「決定ボタン」のカウントダウン、ここで中断です・・");
+            ResetCountdown_timer_Kettei_1();
+        }
+    }
+
     public void Auto_Push_Omakase_Button()           // おまかせボタンを押す
     {
         if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
         {
             Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
             Erase_Text_Announcement();
+        }
+        else
+        {
+            Countdown_Push_JankenTe_KetteiButton_Flg = false;
         }
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
         {
@@ -1055,8 +1207,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            Debug.Log("「決定ボタン」を自動で押す:ジャンケンパネル閉じているようです・・・");
+            Debug.Log("「決定ボタン」を自動で押す → おまかせボタンを自動で押す 条件を満たしていません・・・");
         }
+        ResetCountdown_timer_Kettei_1();
     }
 
     public void korede_iikana_SE()   // これでいいかな？ SE
@@ -1066,7 +1219,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
             Erase_Text_Announcement();
         }
-        if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
+        else
+        {
+            Countdown_Push_JankenTe_KetteiButton_Flg = false;
+        }
+        if (ShuffleCardsMSC.KetteiBtn.activeSelf)
+        {
+            Push_JankenTe_KetteiButton_Flg = true;
+        }
+        else
+        {
+            Push_JankenTe_KetteiButton_Flg = false;
+        }
+        if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg && Push_JankenTe_KetteiButton_Flg)
         {
             Debug.Log("決定ボタンか押されていないので、これでいいかな？ SEを流す");
             BGM_SE_MSC.korede_iikana_SE();         // これでいいかな？ SEを流す
@@ -1076,8 +1241,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            Debug.Log("「決定ボタン」を自動で押す:ジャンケンパネル閉じているようです・・・");
+            Debug.Log("「決定ボタン」を自動で押す → これでいいかな？ SEを流す 条件を満たしていません・・・");
         }
+        ResetCountdown_timer_Kettei_1();
     }
 
 
@@ -1088,15 +1254,28 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
             Erase_Text_Announcement();
         }
-        if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
+        else
+        {
+            Countdown_Push_JankenTe_KetteiButton_Flg = false;
+        }
+        if (ShuffleCardsMSC.KetteiBtn.activeSelf)
+        {
+            Push_JankenTe_KetteiButton_Flg = true;
+        }
+        else
+        {
+            Push_JankenTe_KetteiButton_Flg = false;
+        }
+        if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg && Push_JankenTe_KetteiButton_Flg)
         {
             Debug.Log("決定ボタンか押されていないので、決定ボタンを自動で押す Auto");
             JankenTe_Kettei();                     // 決定ボタンを自動で押す
         }
         else
         {
-            Debug.Log("「決定ボタン」を自動で押す:ジャンケンパネル閉じているようです・・・");
+            Debug.Log("「決定ボタン」を自動で押す → 押す条件を満たしていません・・・");
         }
+        ResetCountdown_timer_Kettei_1();
     }
 
     #endregion
@@ -1106,10 +1285,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void PushOpenMyJankenPanel_Button()    // 【JK-01】OpenMyJankenPanel_Button（右上のセット開始ボタン） を押した時の処理
     {
+        ResetCountdown_timer_Kettei_1();
         Countdown_Push_JankenTe_KetteiButton_Flg = true;
         Erase_Text_Announcement();                // アナウンス テキスト文をリセットする
         Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
-        Countdown_Until_Push_JankenTe_KetteiButton();
 
         //AfterJump();   // 右にジャンプ（ぴょーん！）が完了してからの処理（右上の開始ボタンを押せるように各値をリセット）
         Debug.Log("【JK-01】******************************************************************");
@@ -1128,6 +1307,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         //ShuffleCardsMSC.AppearWait_JankenPanel();
         Debug.Log("【JK-01】セット開始したばかりなので、ジャンケン手「決定ボタン」を非表示にします");
         Check_CanAppear_KetteiBtn();     // 【JK-01】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたら決定ボタンを表示する
+        Countdown_Until_Push_JankenTe_KetteiButton();     // ジャンケンパネルが開かれていて、決定ボタンか押されていならば、カウントダウン開始
     }
 
     public void Janken_ExtraInning()              //【JK-37】ジャンケンカードを配る前の処理（延長戦突入時）
@@ -1974,6 +2154,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void AfterJump()   // 右にジャンプ（ぴょーん！）が完了してからの処理（右上の開始ボタンを押せるように各値をリセット）
     {
+        ClosePanel_SubCamera();      // ジャンプ終わったら サブカメラ非表示
         Debug.Log("【JK-201】PrepareToNextSet 次のセットへ移る準備 をします");
         PrepareToNextSet();           //【JK-201】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
         Debug.Log("【JK-202】PrepareToNextSet 次のセットへ移る準備 終わりました");
@@ -1985,9 +2166,22 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【JK-204】待機中フラグ（確認用パラメータ） を 初期化（0にする）");
         Reset_NowWaiting();      // 待機中フラグ（確認用パラメータ） を 初期化（0にする）
 
+        ResetCountdown_timer_PanelOpen_1();
         //Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
         Countdown_Until_Push_OpenMyJankenPanel_Button();   // ジャンケンパネルが開かれていないならば、ボタンを押すようにアナウンスする
     }
+
+    public void Share_MyJankenPanel_Button_Flg_ON()   // ジャンケン開始ボタン フラグ をON
+    {
+        photonView.RPC("MyJankenPanel_Button_Flg_ON", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void MyJankenPanel_Button_Flg_ON()         // ジャンケン開始ボタン フラグ をON
+    {
+        Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
+    }
+
 
     public void ResetAlivePlayer()         //【START-03】【JK-203】各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする）
     {
@@ -4564,10 +4758,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
 
 
-
+    
 
     public void FromWin_ToJump()     //【JK-106】ジャンケンに勝ったのでジャンプで移動する その一連の処理
     {
+        Debug.Log("ジャンケン勝者の位置に応じて、SubCamera を移動します");
+        SetPosX_SubCamera_AccordingTo_Winner();  // ジャンケン勝者の位置に応じて、SubCamera を移動する
+
         Debug.Log("【JK-107】FromWin_ToJump （ジャンプ移動）処理に入ります");
         Set_StepNum();               //【JK-108】ジャンプする回数を設定する（変数上書き） 
         bridge_JumpToRight();        //【JK-109】右方向へ 指定された回数 ぴょん と跳ねながら移動する
@@ -4613,9 +4810,93 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Debug.Log("bridge_GetDamage を実行します");
         PlayerSC.receivedDammage();
+        BGM_SE_MSC.korede_iikana_SE();         // これでいいかな？ SEを流す
+
     }
 
+    #region // サブカメラの処理一連
+    public void SetPosX_SubCamera_AccordingTo_Winner()  // ジャンケン勝者の位置に応じて、SubCamera を移動する
+    {
+        Debug.Log("PosX_Winner : " + PosX_Winner);
+        PosX_Winner = MyKage.transform.position.x;
+        Debug.Log("PosX_Winner : " + PosX_Winner);
+        share_SubCamera_Moving();  // サブカメラ を移動
+        AppearPanel_SubCamera();   // サブカメラ を表示
+    }
 
+    public void share_SubCamera_Moving()              // ジャンケン勝者近くの cafe_kanban の位置に SubCamera を移動する
+    {
+        if (PosX_Winner >= cafe_kanban_035.transform.position.x)
+        {
+            photonView.RPC("MoveTo_cafe_kanban_025", RpcTarget.All);
+
+        }
+        if (PosX_Winner >= cafe_kanban_025.transform.position.x)
+        {
+            photonView.RPC("MoveTo_cafe_kanban_015", RpcTarget.All);
+
+        }
+        if (PosX_Winner >= cafe_kanban_015.transform.position.x)
+        {
+            photonView.RPC("MoveTo_cafe_kanban_005", RpcTarget.All);
+
+        }
+        if (PosX_Winner >= cafe_kanban_005.transform.position.x)
+        {
+            photonView.RPC("MoveTo_cafe_kanban_0_5", RpcTarget.All);
+        }
+    }
+
+    /*
+    public void Move_SubCamera_ToWinner()
+    {
+        SubCamera.transform.position = new Vector3(PosX_Winner, SubCamera.transform.position.y, SubCamera.transform.position.z);
+    }
+    */
+
+    [PunRPC]
+    public void MoveTo_cafe_kanban_035()   // SubCamera を 035 の位置に移動する  -28.4
+    {
+        SubCamera.transform.position = new Vector3(cafe_kanban_035.transform.position.x, SubCamera.transform.position.y, SubCamera.transform.position.z);
+    }
+
+    [PunRPC]
+    public void MoveTo_cafe_kanban_025()   // SubCamera を 025 の位置に移動する
+    {
+        SubCamera.transform.position = new Vector3(cafe_kanban_025.transform.position.x, SubCamera.transform.position.y, SubCamera.transform.position.z);
+    }
+
+    [PunRPC]
+    public void MoveTo_cafe_kanban_015()   // SubCamera を 015 の位置に移動する  -8.4
+    {
+        SubCamera.transform.position = new Vector3(cafe_kanban_015.transform.position.x, SubCamera.transform.position.y, SubCamera.transform.position.z);
+    }
+
+    [PunRPC]
+    public void MoveTo_cafe_kanban_005()   // SubCamera を 005 の位置に移動する  1.43
+    {
+        SubCamera.transform.position = new Vector3(cafe_kanban_005.transform.position.x, SubCamera.transform.position.y, SubCamera.transform.position.z);
+    }
+
+    [PunRPC]
+    public void MoveTo_cafe_kanban_0_5()   // SubCamera を -5 の位置に移動する   10.5
+    {
+        SubCamera.transform.position = new Vector3(cafe_kanban_0_5.transform.position.x, SubCamera.transform.position.y, SubCamera.transform.position.z);
+    }
+
+    public void AppearPanel_SubCamera()
+    {
+        Debug.Log("SubCamera サブカメラ 表示します");
+        Panel_SubCamera.SetActive(true);
+    }
+        
+    public void ClosePanel_SubCamera()
+    {
+        Debug.Log("SubCamera サブカメラ 非表示");
+        Panel_SubCamera.SetActive(false);
+    }
+
+    #endregion
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

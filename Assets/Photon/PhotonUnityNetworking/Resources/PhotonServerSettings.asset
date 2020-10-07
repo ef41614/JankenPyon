@@ -179,6 +179,12 @@ MonoBehaviour:
   - Overwrite_Yoroshiku
   - Overwrite_Yoshi
   - Overwrite_Matane
+  - MyJankenPanel_Button_Flg_ON
+  - MoveTo_cafe_kanban_0_5
+  - MoveTo_cafe_kanban_005
+  - MoveTo_cafe_kanban_015
+  - MoveTo_cafe_kanban_025
+  - MoveTo_cafe_kanban_035
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
