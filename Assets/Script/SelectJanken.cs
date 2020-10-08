@@ -342,13 +342,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     //public AudioClip Fanfare_Roop;
     //public UnityEngine.UI.Slider volSlider;
 
-    public GameObject Panel_SubCamera;
+    public GameObject SubCamera_Group;
     public float PosX_Winner;
     public float Kari_PosX_Winner;
     public GameObject SubCamera;
     Transform SubCamera_Trans;    // SubCamera の位置情報 (Transform)
     Vector3 PosSubCamera;         // SubCamera の位置情報 (Vector3)
-        
+
+    bool ToRight_SubCamera = false;    //  右ボタンを押しているかの真偽値
+    bool ToLeft_SubCamera = false;     //  左ボタンを押しているかの真偽値
+
     public GameObject cafe_kanban_035;
     public GameObject cafe_kanban_025;
     public GameObject cafe_kanban_015;
@@ -464,7 +467,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                                                 //var sequence = DOTween.Sequence();
                                                 //sequence.InsertCallback(5f, () => AppearPanel_Ikemasu());
                                                 //MoveTo_cafe_kanban_0_5();   // SubCamera を -5 の位置に移動する
-        ClosePanel_SubCamera();
+        CloseSubCamera_Group();
     }
 
 
@@ -511,6 +514,21 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                 Hantei_Stream();      // 【JK-21】ジャンケン勝敗判定（Hantei_Stream）（ラウンドループ）ローカル実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
             }
             currentTime = 0f;
+        }
+
+        if (ToRight_SubCamera)
+        {
+            SubCamera_GoRight();            // 右に動かすためのメソッドを呼び出す
+        }
+        else if (ToLeft_SubCamera)
+        {
+            SubCamera_GoLeft();            // 左に動かすためのメソッドを呼び出す
+        }
+        else
+        {
+            //          ボタンを押していない時
+            // SubCamera.transform.rotation = Quaternion.Euler(0, 0, 0);
+            //          プレイヤーを元の角度に戻す
         }
         // Debug.LogFormat("待機中合計：" + int_WaitingPlayers_All + "人");
     }
@@ -2154,7 +2172,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void AfterJump()   // 右にジャンプ（ぴょーん！）が完了してからの処理（右上の開始ボタンを押せるように各値をリセット）
     {
-        ClosePanel_SubCamera();      // ジャンプ終わったら サブカメラ非表示
+        //CloseSubCamera_Group();      // ジャンプ終わったら サブカメラ非表示
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(1.5f, () => CloseSubCamera_Group());
+
         Debug.Log("【JK-201】PrepareToNextSet 次のセットへ移る準備 をします");
         PrepareToNextSet();           //【JK-201】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
         Debug.Log("【JK-202】PrepareToNextSet 次のセットへ移る準備 終わりました");
@@ -4821,7 +4842,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         PosX_Winner = MyKage.transform.position.x;
         Debug.Log("PosX_Winner : " + PosX_Winner);
         share_SubCamera_Moving();  // サブカメラ を移動
-        AppearPanel_SubCamera();   // サブカメラ を表示
+        AppearSubCamera_Group();   // サブカメラ を表示
     }
 
     public void share_SubCamera_Moving()              // ジャンケン勝者近くの cafe_kanban の位置に SubCamera を移動する
@@ -4884,16 +4905,53 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         SubCamera.transform.position = new Vector3(cafe_kanban_0_5.transform.position.x, SubCamera.transform.position.y, SubCamera.transform.position.z);
     }
 
-    public void AppearPanel_SubCamera()
+    public void AppearSubCamera_Group()
     {
         Debug.Log("SubCamera サブカメラ 表示します");
-        Panel_SubCamera.SetActive(true);
+        SubCamera_Group.SetActive(true);
     }
         
-    public void ClosePanel_SubCamera()
+    public void CloseSubCamera_Group()
     {
         Debug.Log("SubCamera サブカメラ 非表示");
-        Panel_SubCamera.SetActive(false);
+        SubCamera_Group.SetActive(false);
+    }
+
+    public void Right_PushDown()          //      右ボタンを押している間
+    {
+        ToRight_SubCamera = true;
+    }
+
+    public void Right_PushUp()            //      右ボタンを押すのをやめた時
+    {
+        ToRight_SubCamera = false;
+    }
+
+    public void Left_PushDown()         //      左ボタンを押している間
+
+    {
+        ToLeft_SubCamera = true;
+    }
+
+    public void Left_PushUp()          //      左ボタンを押すのをやめた時
+    {        
+        ToLeft_SubCamera = false;
+    }
+
+    public void SubCamera_GoRight()
+    {
+        if (SubCamera.transform.position.x <= GoalCorn_Head.transform.position.x)  // ゴールコーンより右に行かない限り
+        {
+            SubCamera.transform.position += new Vector3(5.0f * Time.deltaTime, 0, 0);        // SubCameraをx軸方向に秒速5.0fで動かす
+        }
+    }
+
+    public void SubCamera_GoLeft()
+    {
+        if (SubCamera.transform.position.x >= StartCorn_Head.transform.position.x)  // スタートコーンより左に行かない限り
+        { 
+            SubCamera.transform.position += new Vector3(-5.0f * Time.deltaTime, 0, 0);      // SubCameraをx軸方向に秒速-5.0fで動かす
+        }
     }
 
     #endregion

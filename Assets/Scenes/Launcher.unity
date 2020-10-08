@@ -345,8 +345,7 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: "****** \u30AF\u30EC\u30B8\u30C3\u30C8\uFF08\u656C\u79F0\u7565\uFF09******\r\n\n\u3010BGM\u30FBSE\u3011\r\n\u30FBMusMus\r\n\u30FByuki\uFF08dova-s.jp\uFF09\r\n\r\n\u3010\u30A4\u30E9\u30B9\u30C8\u3011\r\n\u30FB\u8449\u98A8\u305D\u3089\r\n\u30FB\u5408\u540C\u4F1A\u793E
-    \u30D7\u30ED\u751F\r\n\u30FBUnity Technologies Japan/UCL\r\n\u30FBsilhouette-illust\r\n\u30FBIWOZON\r\n\r\n\u3010\u305D\u306E\u4ED6\u3011\r\n\u30FBNoto
-    Sans JP\r\n\r\n\u5236\u4F5C\u8005\uFF1A\u3042\u3063\u3061\u3087"
+    \u30D7\u30ED\u751F\r\n\u30FBUnity Technologies Japan/UCL\r\n\u30FBsilhouette-illust\r\n\u30FBIWOZON\r\n\r\n\u3010\u305D\u306E\u4ED6\u3011\r\n\u30FB\u3084\u3055\u3057\u3055\u30B4\u30B7\u30C3\u30AF\n\r\n\u5236\u4F5C\u8005\uFF1A\u3042\u3063\u3061\u3087"
 --- !u!222 &48659585
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5060,7 +5059,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Ver.0.162
+  m_Text: Ver.0.163
 --- !u!222 &1606959343
 CanvasRenderer:
   m_ObjectHideFlags: 0
