@@ -185,6 +185,7 @@ MonoBehaviour:
   - MoveTo_cafe_kanban_015
   - MoveTo_cafe_kanban_025
   - MoveTo_cafe_kanban_035
+  - AppearSubCamera_Group
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

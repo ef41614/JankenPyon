@@ -296,7 +296,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject Text_AcutivePlayerName;
 
     public float JumpMaeTaiki = 2.0f;
-    float span = 1f;
+    float span = 0.5f;
     private float currentTime = 0f; // test
 
     public GameObject BGM_SE_Manager;
@@ -360,6 +360,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     Transform cafe_kanban_0_5_Trans;    // 位置情報 (Transform)
     Vector3 Poscafe_kanban_0_5;         // 位置情報 (Vector3)
 
+    public GameObject Taiki_OK_P1;
+    public GameObject Taiki_OK_P2;
+    public GameObject Taiki_OK_P3;
+    public GameObject Taiki_OK_P4;
     #endregion
 
     #region // 【START】初期設定の処理一覧
@@ -513,6 +517,84 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                 //Check_Can_Hantei_Stream();      //【JK-12】勝敗判定（Hantei_Stream）フェーズへ進めるか確認する
                 Hantei_Stream();      // 【JK-21】ジャンケン勝敗判定（Hantei_Stream）（ラウンドループ）ローカル実施 ⇒ 勝ったプレイヤー1名のみジャンプで前進する
             }
+
+            if (Shiai_Kaishi == false)  // 試合開始まえであれば、判定処理を実施する（試合中は判定する必要なし）
+            {
+                if (int_Ikemasu_Player1 == 0)  // 待機まえ
+                {
+                    CloseTaiki_OK_P1();
+                }
+                else                          // 待機中（いけます！）
+                {
+                    AppearTaiki_OK_P1();
+                }
+
+                if (int_Ikemasu_Player2 == 0)  // 待機まえ
+                {
+                    CloseTaiki_OK_P2();
+                }
+                else                          // 待機中
+                {
+                    AppearTaiki_OK_P2();
+                }
+
+                if (int_Ikemasu_Player3 == 0)  // 待機まえ
+                {
+                    CloseTaiki_OK_P3();
+                }
+                else                          // 待機中
+                {
+                    AppearTaiki_OK_P3();
+                }
+
+                if (int_Ikemasu_Player4 == 0)  // 待機まえ
+                {
+                    CloseTaiki_OK_P4();
+                }
+                else                          // 待機中
+                {
+                    AppearTaiki_OK_P4();
+                }
+            }
+            else  // 試合開始後（試合中）
+            {
+                if (int_NowWaiting_Player1 == 0)  // 待機まえ
+                {
+                    CloseTaiki_OK_P1();
+                }
+                else                              // 待機中（決定ボタン押下済み）
+                {
+                    AppearTaiki_OK_P1();
+                }
+
+                if (int_NowWaiting_Player2 == 0)  // 待機まえ
+                {
+                    CloseTaiki_OK_P2();
+                }
+                else                              // 待機中（決定ボタン押下済み）
+                {
+                    AppearTaiki_OK_P2();
+                }
+
+                if (int_NowWaiting_Player3 == 0)  // 待機まえ
+                {
+                    CloseTaiki_OK_P3();
+                }
+                else                              // 待機中（決定ボタン押下済み）
+                {
+                    AppearTaiki_OK_P3();
+                }
+
+                if (int_NowWaiting_Player4 == 0)  // 待機まえ
+                {
+                    CloseTaiki_OK_P4();
+                }
+                else                              // 待機中（決定ボタン押下済み）
+                {
+                    AppearTaiki_OK_P4();
+                }
+            }
+
             currentTime = 0f;
         }
 
@@ -1298,6 +1380,56 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     #endregion
 
+    #region // 待機OKマーカーの処理一連
+
+    public void CloseTaiki_OK_All()
+    {
+        CloseTaiki_OK_P1();
+        CloseTaiki_OK_P2();
+        CloseTaiki_OK_P3();
+        CloseTaiki_OK_P4();
+    }
+
+    public void AppearTaiki_OK_P1()
+    {
+        Taiki_OK_P1.SetActive(true);
+    }
+    
+    public void CloseTaiki_OK_P1()
+    {
+        Taiki_OK_P1.SetActive(false);
+    }
+
+    public void AppearTaiki_OK_P2()
+    {
+        Taiki_OK_P2.SetActive(true);
+    }
+
+    public void CloseTaiki_OK_P2()
+    {
+        Taiki_OK_P2.SetActive(false);
+    }
+
+    public void AppearTaiki_OK_P3()
+    {
+        Taiki_OK_P3.SetActive(true);
+    }
+
+    public void CloseTaiki_OK_P3()
+    {
+        Taiki_OK_P3.SetActive(false);
+    }
+
+    public void AppearTaiki_OK_P4()
+    {
+        Taiki_OK_P4.SetActive(true);
+    }
+
+    public void CloseTaiki_OK_P4()
+    {
+        Taiki_OK_P4.SetActive(false);
+    }
+    #endregion
 
     #region// 【JK-01】からの処理 右上のジャンケン セット「開始ボタン」を押してからの、一連の処理
 
@@ -1392,7 +1524,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         if (Shiai_Kaishi == false)  // 試合開始まえであれば、判定処理を実施する（試合中は判定する必要なし）
         {
+            Debug.Log("現在の参加人数をチェック NinzuCheck");
+            NinzuCheck();
+            Debug.Log("Ikemasu を合計します");
             Gokei_Ikemasu_PlayersAll();  // Ikemasu を合計する
+            Debug.Log("試合開始まえなので、試合開始できるか 判定処理を実施します");
             if (SankaNinzu == 4)
             {
                 Debug.Log("4人そろったので、試合を開始します");
@@ -1434,6 +1570,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;  // これ以上、入室できないようにする
         }
+        CloseTaiki_OK_All();
         CloseDebug_Buttons();
         ClosePanel_Ikemasu();
         ClosePanel_Intro();
@@ -4841,8 +4978,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("PosX_Winner : " + PosX_Winner);
         PosX_Winner = MyKage.transform.position.x;
         Debug.Log("PosX_Winner : " + PosX_Winner);
-        share_SubCamera_Moving();  // サブカメラ を移動
-        AppearSubCamera_Group();   // サブカメラ を表示
+        share_SubCamera_Moving();    // サブカメラ を移動 ⇒ 全員に共有
+        //AppearSubCamera_Group();   // サブカメラ を表示
+        photonView.RPC("AppearSubCamera_Group", RpcTarget.All);  // 全員にサブカメラを一斉に開かせる
     }
 
     public void share_SubCamera_Moving()              // ジャンケン勝者近くの cafe_kanban の位置に SubCamera を移動する
@@ -4905,6 +5043,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         SubCamera.transform.position = new Vector3(cafe_kanban_0_5.transform.position.x, SubCamera.transform.position.y, SubCamera.transform.position.z);
     }
 
+    [PunRPC]
     public void AppearSubCamera_Group()
     {
         Debug.Log("SubCamera サブカメラ 表示します");
