@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using say;　// 対象のスクリプトの情報を取得
+
 
 public class PlayerScript : MonoBehaviour
 {
@@ -14,6 +16,8 @@ public class PlayerScript : MonoBehaviour
     public int int_MySpriteOrder = 0;  // order in layer の順番調整に使用する整数
     public GameObject SelectJankenManager; //ヒエラルキー上のオブジェクト名
     SelectJanken SelectJankenMSC;//スクリプト名 + このページ上でのニックネーム
+    public GameObject ShuffleCardsManager;  //ヒエラルキー上のオブジェクト名
+    ShuffleCards ShuffleCardsMSC; //スクリプト名 + このページ上でのニックネーム
     public GameObject Text_StepNum;
     float span = 0.1f;
     private float currentTime = 0f; // test
@@ -27,8 +31,11 @@ public class PlayerScript : MonoBehaviour
         Debug.Log("進む（ジャンプする）回数 (MoveForward_StepNum) : " + MoveForward_StepNum);
 
         SelectJankenManager = GameObject.Find("SelectJankenManager");
-        //SelectJankenManager = GameObject.FindWithTag("SelectJankenManager");
         SelectJankenMSC = SelectJankenManager.GetComponent<SelectJanken>();
+
+        ShuffleCardsManager = GameObject.Find("ShuffleCardsManager");
+        ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
+
         Text_StepNum = GameObject.Find("Text_StepNum");
     }
 
@@ -55,6 +62,7 @@ public class PlayerScript : MonoBehaviour
     public void JumpRight()       // 右方向へ 指定された回数 ぴょん と跳ねながら移動する
     {
         SelectJankenMSC.Check_KageDistance();               //  MyKage と MyPlayer の距離を求める（Y軸の初期位置）
+        SelectJankenMSC.Share_Reset_FirstChancePush_Flg();  // 王さま-どれい-セットチャンス リセットして 1→0 にする [ 共有する ]
         Debug.Log("進む（ジャンプする）回数 (MoveForward_StepNum) を 上書きします");
         Debug.Log("original_StepNum ：" + SelectJankenMSC.original_StepNum);
         MoveForward_StepNum = SelectJankenMSC.original_StepNum;

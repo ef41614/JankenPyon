@@ -6,6 +6,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Linq;
 using System;
+using BEFOOL.PhotonTest;
 using Random = UnityEngine.Random;
 
 namespace say
@@ -18,6 +19,8 @@ namespace say
         public Sprite sprite_Gu;
         public Sprite sprite_Choki;
         public Sprite sprite_Pa;
+        public Sprite sprite_King;
+        public Sprite sprite_Dorei;
 
         public Image Te_A;
         public Image Te_B;
@@ -41,23 +44,31 @@ namespace say
         public GameObject MyJankenPanel;
         public GameObject Wait_JankenPanel;
 
-        /*
-        public Button Btn_A;
-        public Button Btn_B;
-        public Button Btn_C;
-        public Button Btn_D;
-        public Button Btn_E;
-        */
         public bool isSet_A = false;
         public bool isSet_B = false;
         public bool isSet_C = false;
         public bool isSet_D = false;
         public bool isSet_E = false;
 
+        public GameObject SelectJankenManager; //ヒエラルキー上のオブジェクト名
+        SelectJanken SelectJankenMSC;//スクリプト名 + このページ上でのニックネーム
+
+        public GameObject TestRoomController;  //ヒエラルキー上のオブジェクト名
+        TestRoomController TestRoomControllerSC;
+
+        public int FirstChancePush_Flg = 0;  // 最初に押した人に判定させるフラグ ：0ならばまだ判定前なのでできる
+        int KingDorei_SetChance = 0;         // 0～3  ローカル   王さま-どれい-セットチャンス
+        public int KingChancePlayer = 0;     // 0～4  パブリック 王さまチャンス → どのプレイヤーがカードをセットするか
+        public int DoreiChancePlayer = 0;    // 0～4  パブリック どれいチャンス → どのプレイヤーがカードをセットするか
+        int RndSet_CardPos_King;             // A～E どの位置にカードをセットするか
+        int RndSet_CardPos_Dorei;            // A～E どの位置にカードをセットするか
+
         private void Awake()
         {
             Debug.Log("ShuffleCards Awake 出席確認");
             ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
+            SelectJankenMSC = SelectJankenManager.GetComponent<SelectJanken>();
+            TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
         }
 
         //☆################☆################  Start  ################☆################☆
@@ -70,33 +81,9 @@ namespace say
             AppearButton_C();
             AppearButton_D();
             AppearButton_E();
-            /*
-            Btn_A.interactable = true;
-            Btn_B.interactable = true;
-            Btn_C.interactable = true;
-            Btn_D.interactable = true;
-            Btn_E.interactable = true;
 
-            Btn_A = GetComponent<Button>();
-            Btn_B = GetComponent<Button>();
-            Btn_C = GetComponent<Button>();
-            Btn_D = GetComponent<Button>();
-            Btn_E = GetComponent<Button>();
-            */
             count_selected = 1;
-            /*
-            CreateCard_A();
-            CreateCard_B();
-            CreateCard_C();
-            CreateCard_D();
-            CreateCard_E();
-            
-            A_Set();
-            B_Set();
-            C_Set();
-            D_Set();
-            E_Set();
-            */
+
             Reset_All();
             Set_All();
             ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
@@ -113,201 +100,216 @@ namespace say
 
         //####################################  other  ####################################
 
-        //じゃんけんカードを一枚ランダムで生成する
-        /*
-        public void CreateCard_A()
-        {
-            RndCreateCard_A = Random.Range(0, 3);
-            AppearButton_A();
-
-            if (RndCreateCard_A == 0)  //グー
-            {
-                SetGu();
-            }
-            else if (RndCreateCard_A == 1)  //チョキ
-            {
-                SetChoki();
-            }
-            else if (RndCreateCard_A == 2) //パー
-            {
-                SetPa();
-            }
-            else
-            {
-                Debug.Log("ジャンケン ERROR");
-            }
-        }
-
-        public void CreateCard_B()
-        {
-            RndCreateCard_B = Random.Range(0, 3);
-            AppearButton_B();
-
-            if (RndCreateCard_B == 0)  //グー
-            {
-                SetGu();
-            }
-            else if (RndCreateCard_B == 1)  //チョキ
-            {
-                SetChoki();
-            }
-            else if (RndCreateCard_B == 2) //パー
-            {
-                SetPa();
-            }
-            else
-            {
-                Debug.Log("ジャンケン ERROR");
-            }
-        }
-
-
-        public void CreateCard_C()
-        {
-            RndCreateCard_C = Random.Range(0, 3);
-            AppearButton_C();
-
-            if (RndCreateCard_C == 0)  //グー
-            {
-                SetGu();
-            }
-            else if (RndCreateCard_C == 1)  //チョキ
-            {
-                SetChoki();
-            }
-            else if (RndCreateCard_C == 2) //パー
-            {
-                SetPa();
-            }
-            else
-            {
-                Debug.Log("ジャンケン ERROR");
-            }
-        }
-
-        public void CreateCard_D()
-        {
-            RndCreateCard_D = Random.Range(0, 3);
-            AppearButton_D();
-
-            if (RndCreateCard_D == 0)  //グー
-            {
-                SetGu();
-            }
-            else if (RndCreateCard_D == 1)  //チョキ
-            {
-                SetChoki();
-            }
-            else if (RndCreateCard_D == 2) //パー
-            {
-                SetPa();
-            }
-            else
-            {
-                Debug.Log("ジャンケン ERROR");
-            }
-        }
-
-        public void CreateCard_E()
-        {
-            RndCreateCard_E = Random.Range(0, 3);
-            AppearButton_E();
-
-            if (RndCreateCard_E == 0)  //グー
-            {
-                SetGu();
-            }
-            else if (RndCreateCard_E == 1)  //チョキ
-            {
-                SetChoki();
-            }
-            else if (RndCreateCard_E == 2) //パー
-            {
-                SetPa();
-            }
-            else
-            {
-                Debug.Log("ジャンケン ERROR");
-            }
-        }
-        */
-
-        /*
-        public void SetGu()
-        {
-            Debug.Log("今グーがセットされました" + PhotonNetwork.NickName);
-            Debug.Log(count_selected + ": count_selected");
-            if (count_selected <= 2)
-            {
-                Te_C.gameObject.GetComponent<Image>().sprite = sprite_Gu;
-            }
-            else
-            {
-                Debug.Log("count_selected 3以上");
-            }
-            count_selected++;
-            Debug.Log(count_selected + ": count_selected");
-        }
-
-        public void SetChoki()
-        {
-            Debug.Log("今チョキがセットされました" + PhotonNetwork.NickName);
-            Debug.Log(count_selected + ": count_selected");
-            if (count_selected <= 2)
-            {
-                Te_C.gameObject.GetComponent<Image>().sprite = sprite_Choki;
-            }
-            else
-            {
-                Debug.Log("count_selected 3以上");
-            }
-            count_selected++;
-            Debug.Log(count_selected + ": count_selected");
-        }
-
-        public void SetPa()
-        {
-            Debug.Log("今パーがセットされました" + PhotonNetwork.NickName);
-            Debug.Log(count_selected + ": count_selected");
-            if (count_selected <= 2)
-            {
-                Te_C.gameObject.GetComponent<Image>().sprite = sprite_Pa;
-            }
-            else
-            {
-                Debug.Log("count_selected 3以上");
-            }
-            count_selected++;
-            Debug.Log(count_selected + ": count_selected");
-        }
-        */
-                           
-            /* public void JankenTe_Kettei()
-{
-CloseMyJankenPanel();
-
-count_selected = 1;
-CloseButton_A();
-count_selected = 1;
-CloseButton_C();
-count_selected = 1;
-CloseButton_B();
-count_selected = 1;
-CloseButton_D();
-count_selected = 1;
-CloseButton_E();
-}
-*/
-
         #region// じゃんけんカード 手のセット
+        /*
+        public void Share_Done_FirstChancePush()  // 王さま-どれい-セットチャンス 判定したら 0→1 [ 共有する ]
+        {
+            photonView.RPC("Done_FirstChancePush", RpcTarget.All);
+        }
+
+        [PunRPC]
+        public void Done_FirstChancePush()  // 王さま-どれい-セットチャンス 判定したら 0→1 にする
+        {
+            FirstChancePush_Flg = 1;
+        }
+
+        public void Share_Reset_FirstChancePush_Flg()  // 王さま-どれい-セットチャンス リセットして 1→0 にする [ 共有する ]
+        {
+            photonView.RPC("Reset_FirstChancePush_Flg", RpcTarget.All);
+        }
+
+        [PunRPC]
+        public void Reset_FirstChancePush_Flg()  // 王さま-どれい-セットチャンス リセットして 1→0 にする
+        {
+            FirstChancePush_Flg = 0;
+        }
+        */
 
         public void Set_All()
         {
+            KingChancePlayer = UnityEngine.Random.Range(0, 5);          // 0～4  パブリック 王さまチャンス → どのプレイヤーがカードをセットするか
+            DoreiChancePlayer = UnityEngine.Random.Range(0, 5);
+            int safe = 0;
+            while (KingChancePlayer == DoreiChancePlayer || safe >20)   // ChancePlayer が被らないようにします
+            {
+                DoreiChancePlayer = UnityEngine.Random.Range(0, 5);
+                safe++;
+            }
+            RndSet_CardPos_King = UnityEngine.Random.Range(1, 6);       // A～E どの位置にカードをセットするか
+            RndSet_CardPos_Dorei = UnityEngine.Random.Range(1, 6);
+            if (FirstChancePush_Flg == 0)                               // 王さま-どれい-セットチャンス 判定まえ ならば
+            {
+                KingDorei_SetChance = UnityEngine.Random.Range(0, 4);   // 0～3  ローカル   王さま-どれい-セットチャンス
+                SelectJankenMSC.Share_Done_FirstChancePush();           // 王さま-どれい-セットチャンス 判定したら 0→1 [ 共有する ]
+            }
+            Debug.Log("KingChancePlayer ： "+ KingChancePlayer);
+            Debug.Log("DoreiChancePlayer ： " + DoreiChancePlayer);
+            Debug.Log("KingDorei_SetChance ： " + KingDorei_SetChance);
+            Debug.Log("RndSet_CardPos_King ： " + RndSet_CardPos_King);
+            Debug.Log("RndSet_CardPos_Dorei ： " + RndSet_CardPos_Dorei);
+
             A_Set();
             B_Set();
             C_Set();
             D_Set();
             E_Set();
+
+            Debug.Log("ここまでか 通常ジャンケン手のセット");
+            Debug.Log("ここから 王さま-どれい カードのセット処理");
+
+            if (KingDorei_SetChance == 0)     // 王さまチャンス0、どれいチャンス0： 共に 0
+            {
+                Debug.Log("0 なので何もしません");
+            }
+            if (KingDorei_SetChance == 1)     // 王さまチャンス0、どれいチャンス1： 片方 1
+            {
+                Debug.Log("1 なので どれいチャンス1");
+                Check_ChancePlayer_Dorei();   // どれいカード をセット するプレイヤーを確認します
+                // Set_DoreiCard();           // どれいカード をセットします
+            }
+            if (KingDorei_SetChance == 2)     // 王さまチャンス1、どれいチャンス0： 片方 1
+            {
+                Debug.Log("2 なので 王さまチャンス1");
+                Check_ChancePlayer_King();    // 王さまカード をセット するプレイヤーを確認します
+                // Set_KingCard();            // 王さまカード をセットします
+                /*
+                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+                {
+                    Debug.Log("プレイヤー1 にカードセットします");
+                    Set_KingCard();  // 王さまカード をセットします
+                }
+                */
+            }
+            if (KingDorei_SetChance == 3)     // 王さまチャンス1、どれいチャンス1： 両方 1（ペア成立）
+            {
+                Debug.Log("3 なので 王さまチャンス1、どれいチャンス1： 両方 1");
+                Check_ChancePlayer_Dorei();   // どれいカード をセット するプレイヤーを確認します
+                Check_ChancePlayer_King();    // 王さまカード をセット するプレイヤーを確認します
+                //Set_DoreiCard();   // どれいカード をセットします
+                //Set_KingCard();  // 王さまカード をセットします
+            }
+        }
+
+        public void Check_ChancePlayer_King()  // 王さまカード をセット するプレイヤーを確認します
+        {
+            if (KingChancePlayer == 1)
+            {
+                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+                {
+                    Debug.Log("プレイヤー1 に 王さまカードセットします");
+                    Set_KingCard();  // 王さまカード をセットします
+                }
+            }
+            if (KingChancePlayer == 2)
+            {
+                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+                {
+                    Debug.Log("プレイヤー2 に 王さまカードセットします");
+                    Set_KingCard();  // 王さまカード をセットします
+                }
+            }
+            if (KingChancePlayer == 3)
+            {
+                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+                {
+                    Debug.Log("プレイヤー3 に 王さまカードセットします");
+                    Set_KingCard();  // 王さまカード をセットします
+                }
+            }
+            if (KingChancePlayer == 4)
+            {
+                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+                {
+                    Debug.Log("プレイヤー4 に 王さまカードセットします");
+                    Set_KingCard();  // 王さまカード をセットします
+                }
+            }
+        }
+
+        public void Check_ChancePlayer_Dorei()   // どれいカード をセット するプレイヤーを確認します
+        {
+            if (DoreiChancePlayer == 1)
+            {
+                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+                {
+                    Debug.Log("プレイヤー1 に どれいカードセットします");
+                    Set_DoreiCard();  // どれいカード をセットします
+                }
+            }
+            if (DoreiChancePlayer == 2)
+            {
+                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+                {
+                    Debug.Log("プレイヤー2 に どれいカードセットします");
+                    Set_DoreiCard();  // どれいカード をセットします
+                }
+            }
+            if (DoreiChancePlayer == 3)
+            {
+                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+                {
+                    Debug.Log("プレイヤー3 に どれいカードセットします");
+                    Set_DoreiCard();  // どれいカード をセットします
+                }
+            }
+            if (DoreiChancePlayer == 4)
+            {
+                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+                {
+                    Debug.Log("プレイヤー4 に どれいカードセットします");
+                    Set_DoreiCard();  // どれいカード をセットします
+                }
+            }
+        }
+
+        public void  Set_DoreiCard()  // どれいカード をセットします
+        {
+            Debug.Log("どれいカード をセットします");
+            if (RndSet_CardPos_Dorei == 1)
+            {
+                Te_A.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+            }
+            else if (RndSet_CardPos_Dorei == 2)
+            {
+                Te_B.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+            }
+            else if (RndSet_CardPos_Dorei == 3)
+            {
+                Te_C.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+            }
+            else if (RndSet_CardPos_Dorei == 4)
+            {
+                Te_D.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+            }
+            else if (RndSet_CardPos_Dorei == 5)
+            {
+                Te_E.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+            }
+        }
+
+        public void Set_KingCard()  // 王さまカード をセットします
+        {
+            Debug.Log("王さまカード をセットします");
+            if (RndSet_CardPos_King == 1)
+            {
+                Te_A.gameObject.GetComponent<Image>().sprite = sprite_King;
+            }
+            else if (RndSet_CardPos_King == 2)
+            {
+                Te_B.gameObject.GetComponent<Image>().sprite = sprite_King;
+            }
+            else if (RndSet_CardPos_King == 3)
+            {
+                Te_C.gameObject.GetComponent<Image>().sprite = sprite_King;
+            }
+            else if (RndSet_CardPos_King == 4)
+            {
+                Te_D.gameObject.GetComponent<Image>().sprite = sprite_King;
+            }
+            else if (RndSet_CardPos_King == 5)
+            {
+                Te_E.gameObject.GetComponent<Image>().sprite = sprite_King;
+            }
         }
 
         public void A_Set()

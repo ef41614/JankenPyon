@@ -520,13 +520,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             if (Shiai_Kaishi == false)  // 試合開始まえであれば、判定処理を実施する（試合中は判定する必要なし）
             {
-                if (int_Ikemasu_Player1 == 0)  // 待機まえ
+                if (int_Ikemasu_Player1 == 0)  // 待機まえ：まだ「試合開始いけます」ボタンを押してません
                 {
-                    CloseTaiki_OK_P1();
+                    CloseTaiki_OK_P1();        // 「OK」マーカーを閉じる
                 }
-                else                          // 待機中（いけます！）
+                else                           // 待機中（いけます！）
                 {
-                    AppearTaiki_OK_P1();
+                    AppearTaiki_OK_P1();       // 「OK」マーカーを表示する
                 }
 
                 if (int_Ikemasu_Player2 == 0)  // 待機まえ
@@ -558,7 +558,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             }
             else  // 試合開始後（試合中）
             {
-                if (int_NowWaiting_Player1 == 0)  // 待機まえ
+                if (int_NowWaiting_Player1 == 0)  // 待機まえ：まだジャンケン手 決めてません
                 {
                     CloseTaiki_OK_P1();
                 }
@@ -1435,6 +1435,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void PushOpenMyJankenPanel_Button()    // 【JK-01】OpenMyJankenPanel_Button（右上のセット開始ボタン） を押した時の処理
     {
+        MoveTo_MyKagePos();  // 裏でY軸位置の調整
         ResetCountdown_timer_Kettei_1();
         Countdown_Push_JankenTe_KetteiButton_Flg = true;
         Erase_Text_Announcement();                // アナウンス テキスト文をリセットする
@@ -1488,6 +1489,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("【JK-46】（延長戦）カードを選んで、延長戦を闘います！");
             Debug.Log("【JK-47】（延長戦）「待機中」画面 を非表示にします （→ カード選べるようになる）");
             ShuffleCardsMSC.CloseWait_JankenPanel();        //【JK-47】「待機中」画面 を非表示にする
+            Countdown_Until_Push_JankenTe_KetteiButton();     // ジャンケンパネルが開かれていて、決定ボタンか押されていならば、カウントダウン開始
         }
         else                   // 自分がジャンケン敗北者であるならば
         {
@@ -1570,21 +1572,36 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;  // これ以上、入室できないようにする
         }
-        CloseTaiki_OK_All();
+        // CloseTaiki_OK_All();
+        CloseOpenMyJankenPanel_Button();
         CloseDebug_Buttons();
         ClosePanel_Ikemasu();
         ClosePanel_Intro();
         CloseAisatsu_Panel();
+        CloseWinPanel();
         Reset_AllAisatsu();
+        ShuffleCardsMSC.Reset_All();
+        //ShuffleCardsMSC.Set_All();
+        ShuffleCardsMSC.ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
         AppearStartLogo();
-        var sequence = DOTween.Sequence();
-        sequence.InsertCallback(3f, () => CloseStartLogo());
         BGM_SE_MSC.StartRappa_SE();  // ★ 開始のラッパを鳴らす！
-
         Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
-        var sequence2 = DOTween.Sequence();
-        sequence2.InsertCallback(3f, () => Countdown_Until_Push_OpenMyJankenPanel_Button());
+        //var sequence2 = DOTween.Sequence();
+        //sequence2.InsertCallback(3f, () => Countdown_Until_Push_OpenMyJankenPanel_Button());
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(3f, () => Start_GameMatch_After3());
     }
+
+    public void Start_GameMatch_After3()  // 試合開始してから 3秒後 にする処理
+    {
+        Debug.Log("試合開始してから 3秒後 にする処理をします");
+        ShuffleCardsMSC.Set_All();
+        CloseTaiki_OK_All();
+        CloseStartLogo();
+        AppearOpenMyJankenPanel_Button();
+        Countdown_Until_Push_OpenMyJankenPanel_Button();
+    }
+
 
     public void Share_Iam_Ikemasu()    // 私「試合開始、いけます！」を全員に向け共有する
     {
@@ -1665,6 +1682,30 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void CloseStartLogo()
     {
         StartLogo.SetActive(false);
+    }
+    #endregion
+
+    #region// じゃんけんカード 手のセット
+    public void Share_Done_FirstChancePush()  // 王さま-どれい-セットチャンス 判定したら 0→1 [ 共有する ]
+    {
+        photonView.RPC("Done_FirstChancePush", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Done_FirstChancePush()  // 王さま-どれい-セットチャンス 判定したら 0→1 にする
+    {
+        ShuffleCardsMSC.FirstChancePush_Flg = 1;
+    }
+
+    public void Share_Reset_FirstChancePush_Flg()  // 王さま-どれい-セットチャンス リセットして 1→0 にする [ 共有する ]
+    {
+        photonView.RPC("Reset_FirstChancePush_Flg", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void Reset_FirstChancePush_Flg()  // 王さま-どれい-セットチャンス リセットして 1→0 にする
+    {
+        ShuffleCardsMSC.FirstChancePush_Flg = 0;
     }
     #endregion
 
