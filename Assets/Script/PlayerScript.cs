@@ -61,7 +61,7 @@ public class PlayerScript : MonoBehaviour
 
     public void JumpRight()       // 右方向へ 指定された回数 ぴょん と跳ねながら移動する
     {
-        SelectJankenMSC.Check_KageDistance();               //  MyKage と MyPlayer の距離を求める（Y軸の初期位置）
+        //SelectJankenMSC.Check_KageDistance();               //  MyKage と MyPlayer の距離を求める（Y軸の初期位置）
         SelectJankenMSC.Share_Reset_FirstChancePush_Flg();  // 王さま-どれい-セットチャンス リセットして 1→0 にする [ 共有する ]
         Debug.Log("進む（ジャンプする）回数 (MoveForward_StepNum) を 上書きします");
         Debug.Log("original_StepNum ：" + SelectJankenMSC.original_StepNum);

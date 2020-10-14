@@ -78,6 +78,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Sprite sprite_Gu;
     public Sprite sprite_Choki;
     public Sprite sprite_Pa;
+    public Sprite sprite_King;
+    public Sprite sprite_Dorei;
 
     public Sprite sprite_Icon_utako;
     public Sprite sprite_Icon_Unitychan;
@@ -89,6 +91,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Image MyTeImg_3;
     public Image MyTeImg_4;
     public Image MyTeImg_5;
+
+    public float MyTeAlpha_1 = 255;   // 透明度の値
+    public float MyTeAlpha_2 = 255;
+    public float MyTeAlpha_3 = 255;
+    public float MyTeAlpha_4 = 255;
+    public float MyTeAlpha_5 = 255;
 
     public Image Img_CoverBlack_P1;
     public Image Img_CoverBlack_P2;
@@ -226,6 +234,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public bool NoneGu = false;
     public bool NoneChoki = false;
     public bool NonePa = false;
+    public bool NoneKing = false;
+    public bool NoneDorei = false;
     public bool bool_CanDo_Hantei_Stream = false;  // 勝敗判定（Hantei_Stream） を実行できるかのフラグ
 
     public string PresentPlayerID;
@@ -448,6 +458,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         Debug.Log("【START-07】スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）");
         ToShare_InitialSetting();     // 【START-07】スタート時 初期設定を全プレイヤーで共有
+        Check_KageDistance();         //  MyKage と MyPlayer の距離を求める（Y軸の初期位置）
 
         Debug.Log("【START-09】ジャンケン手「決定ボタン」を表示できるか確認します");
         Check_CanAppear_KetteiBtn();  // 【START-09】ジャンケン手「決定ボタン」を表示できるか確認
@@ -2923,6 +2934,178 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("NonePaP4 ： " + NonePaP4);
     }
 
+
+    public void Check_King_Existence()    //【JK-25】NoneKing の判定を返す
+    {
+        bool NoneKingP1 = true;
+        bool NoneKingP2 = true;
+        bool NoneKingP3 = true;
+        bool NoneKingP4 = true;
+
+        if (alivePlayer1 == 1) // Player1 が生きている
+        {
+            if (KP1 != 13) // 王さま ではない
+            {
+                NoneKingP1 = true; // 王さま 無し
+            }
+            else
+            {
+                NoneKingP1 = false; // 王さま 有り
+            }
+        }
+        else  // Player1 が脱落後
+        {
+            NoneKingP1 = true; // 王さま無しON
+        }
+
+        if (alivePlayer2 == 1) // Player2 が生きている
+        {
+            if (KP2 != 13) // 王さま ではない
+            {
+                NoneKingP2 = true; // 王さま 無し
+            }
+            else
+            {
+                NoneKingP2 = false; // 王さま 有り
+            }
+        }
+        else  // Player2 が脱落後
+        {
+            NoneKingP2 = true; // 王さま無しON
+        }
+
+        if (alivePlayer3 == 1) // Player3 が生きている
+        {
+            if (KP3 != 13) // 王さま ではない
+            {
+                NoneKingP3 = true; // 王さま 無し
+            }
+            else
+            {
+                NoneKingP3 = false; // 王さま 有り
+            }
+        }
+        else  // Player3 が脱落後
+        {
+            NoneKingP3 = true; // 王さま無しON
+        }
+
+        if (alivePlayer4 == 1) // Player4 が生きている
+        {
+            if (KP4 != 13) // 王さま ではない
+            {
+                NoneKingP4 = true; // 王さま 無し
+            }
+            else
+            {
+                NoneKingP4 = false; // 王さま 有り
+            }
+        }
+        else  // Player4 が脱落後
+        {
+            NoneKingP4 = true; // 王さま無しON
+        }
+
+        if (NoneKingP1 && NoneKingP2 && NoneKingP3 && NoneKingP4)
+        {
+            NoneKing = true; // 王さま無しON
+        }
+        else
+        {
+            NoneKing = false; // 王さま無しOFF
+        }
+        Debug.Log("NoneKingP1 ： " + NoneKingP1);
+        Debug.Log("NoneKingP2 ： " + NoneKingP2);
+        Debug.Log("NoneKingP3 ： " + NoneKingP3);
+        Debug.Log("NoneKingP4 ： " + NoneKingP4);
+    }
+
+    public void Check_Dorei_Existence()    //【JK-25】NoneDorei の判定を返す
+    {
+        bool NoneDoreiP1 = true;
+        bool NoneDoreiP2 = true;
+        bool NoneDoreiP3 = true;
+        bool NoneDoreiP4 = true;
+
+        if (alivePlayer1 == 1) // Player1 が生きている
+        {
+            if (KP1 != 23) // どれい ではない
+            {
+                NoneDoreiP1 = true; // どれい 無し
+            }
+            else
+            {
+                NoneDoreiP1 = false; // どれい 有り
+            }
+        }
+        else  // Player1 が脱落後
+        {
+            NoneDoreiP1 = true; // どれい無しON
+        }
+
+        if (alivePlayer2 == 1) // Player2 が生きている
+        {
+            if (KP2 != 23) // どれい ではない
+            {
+                NoneDoreiP2 = true; // どれい 無し
+            }
+            else
+            {
+                NoneDoreiP2 = false; // どれい 有り
+            }
+        }
+        else  // Player2 が脱落後
+        {
+            NoneDoreiP2 = true; // どれい無しON
+        }
+
+        if (alivePlayer3 == 1) // Player3 が生きている
+        {
+            if (KP3 != 23) // どれい ではない
+            {
+                NoneDoreiP3 = true; // どれい 無し
+            }
+            else
+            {
+                NoneDoreiP3 = false; // どれい 有り
+            }
+        }
+        else  // Player3 が脱落後
+        {
+            NoneDoreiP3 = true; // どれい無しON
+        }
+
+        if (alivePlayer4 == 1) // Player4 が生きている
+        {
+            if (KP4 != 23) // どれい ではない
+            {
+                NoneDoreiP4 = true; // どれい 無し
+            }
+            else
+            {
+                NoneDoreiP4 = false; // どれい 有り
+            }
+        }
+        else  // Player4 が脱落後
+        {
+            NoneDoreiP4 = true; // どれい無しON
+        }
+
+        if (NoneDoreiP1 && NoneDoreiP2 && NoneDoreiP3 && NoneDoreiP4)
+        {
+            NoneDorei = true; // どれい無しON
+        }
+        else
+        {
+            NoneDorei = false; // どれい無しOFF
+        }
+        Debug.Log("NoneDoreiP1 ： " + NoneDoreiP1);
+        Debug.Log("NoneDoreiP2 ： " + NoneDoreiP2);
+        Debug.Log("NoneDoreiP3 ： " + NoneDoreiP3);
+        Debug.Log("NoneDoreiP4 ： " + NoneDoreiP4);
+    }
+
+
     public void Syohai_Hantei()         //【JK-25】生存者同士の 勝ち負けを判定（負けた人のaliveフラグ を 0 にする） → 人数が減る ＆＆ 移動ステップ数を 勝った手に応じて上書き
     {
         Debug.Log("");
@@ -2931,10 +3114,44 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("");
         Debug.Log("");
         CheckAlivePlayer_DependOn_Absent();  //【JK-25】生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）
-        Check_Gu_Existence();                //【JK-25】 N回目の すべてのプレイヤーの手 の中に グー(0)   があるか ： NoneGu を取得
-        Check_Choki_Existence();             //【JK-25】 N回目の すべてのプレイヤーの手 の中に チョキ(1) があるか ： NoneChoki を取得
-        Check_Pa_Existence();                //【JK-25】 N回目の すべてのプレイヤーの手 の中に パー(2)   があるか ： NonePa を取得
+        Check_Gu_Existence();                //【JK-25】 N回目の すべてのプレイヤーの手 の中に グー(0)    があるか ： NoneGu    を取得
+        Check_Choki_Existence();             //【JK-25】 N回目の すべてのプレイヤーの手 の中に チョキ(1)  があるか ： NoneChoki を取得
+        Check_Pa_Existence();                //【JK-25】 N回目の すべてのプレイヤーの手 の中に パー(2)    があるか ： NonePa    を取得
+        Check_King_Existence();              //【JK-25】 N回目の すべてのプレイヤーの手 の中に 王さま(13) があるか ： NoneKing  を取得
+        Check_Dorei_Existence();             //【JK-25】 N回目の すべてのプレイヤーの手 の中に どれい(23) があるか ： NoneDorei を取得
 
+        if (!NoneKing && !NoneDorei)     // Kingあり Doreiあり → どれい 一人勝ち
+        {
+            Lose_Gu();     //    ⇒  ぐー   脱落
+            Lose_Choki();  //    ⇒  ちょき 脱落
+            Lose_Pa();     //    ⇒  ぱー   脱落
+            Lose_King();   //    ⇒  王さま 脱落
+            Win_Dorei();   //    ⇒  どれい かち
+        }
+
+        else if (!NoneKing && NoneDorei) // Kingあり Dorei無し → 王さま 一人勝ち
+        {
+            Lose_Gu();     //    ⇒  ぐー   脱落
+            Lose_Choki();  //    ⇒  ちょき 脱落
+            Lose_Pa();     //    ⇒  ぱー   脱落
+            Win_King();    //    ⇒  王さま かち
+            Lose_Dorei();  //    ⇒  どれい 脱落
+        }
+
+        else if (NoneKing && !NoneDorei) // King無し Doreiあり → どれい 一人負け → 今まで通りの判定（市民同士のみ）
+        {
+            Lose_Dorei();                      //    ⇒  どれい の人のみ 脱落
+            Shimin_Syohai_Hantei_Part();       // 市民同士のみ ノーマル勝敗判定パート
+        }
+
+        else if (NoneKing && NoneDorei)  // King無し Dorei無し → 今まで通りの判定（市民同士のみ）
+        {
+            Shimin_Syohai_Hantei_Part();       // 市民同士のみ ノーマル勝敗判定パート
+        }
+    }
+
+    public void Shimin_Syohai_Hantei_Part()    // 市民同士のみ ノーマル勝敗判定パート
+    {
         if (NoneGu)           //【JK-25】（全員 Gu 無し）ちょき か ぱー
         {
             Debug.Log("【JK-25】(NoneGu) （全員 Gu 無し）ちょき か ぱー です");
@@ -3060,6 +3277,36 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Share_AcutivePlayerID();     // 現在操作している人のプレイヤー名取得
     }
 
+    public void Win_King()               //【JK-25】王さま の人のみ 残留（移動ステップ数を 4 に上書き）
+    {
+        // 王さま の人のみ 残留
+        Debug.Log("【JK-25】王さま の人のみ 残留");
+        photonView.RPC("ShareInfo_Win_King", RpcTarget.All);    //【JK-25】 王さま の人のみ 残留（Win_King）を 全員に共有
+        original_StepNum = 4;     // 移動ステップ数を 4 に上書き
+        photonView.RPC("ShareStepNum_4", RpcTarget.All);    // 移動ステップ数を 4 に上書き → 全員に共有
+    }
+    [PunRPC]
+    public void ShareInfo_Win_King()   //【JK-25】 王さま の人のみ 残留（Win_King）を 全員に共有
+    {
+        Debug.Log("【JK-25】王さま の人のみ 残留");
+        Share_AcutivePlayerID();     // 現在操作している人のプレイヤー名取得
+    }
+
+    public void Win_Dorei()               //【JK-25】どれい の人のみ 残留（移動ステップ数を 15 に上書き）
+    {
+        // どれい の人のみ 残留
+        Debug.Log("【JK-25】どれい の人のみ 残留");
+        photonView.RPC("ShareInfo_Win_Dorei", RpcTarget.All);    //【JK-25】 どれい の人のみ 残留（Win_Dorei）を 全員に共有
+        original_StepNum = 15;     // 移動ステップ数を 15 に上書き
+        photonView.RPC("ShareStepNum_15", RpcTarget.All);    // 移動ステップ数を 15 に上書き → 全員に共有
+    }
+    [PunRPC]
+    public void ShareInfo_Win_Dorei()   //【JK-25】 どれい の人のみ 残留（Win_Dorei）を 全員に共有
+    {
+        Debug.Log("【JK-25】どれい の人のみ 残留");
+        Share_AcutivePlayerID();     // 現在操作している人のプレイヤー名取得
+    }
+
     public void Lose_Gu()     //【JK-25】ぐー の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
         Debug.Log("【JK-25】ぐー（0） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
@@ -3135,6 +3382,56 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
+    public void Lose_King()     //【JK-25】王さま の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
+    {
+        Debug.Log("【JK-25】王さま（13） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        if (KP1 == 13)
+        {
+            alivePlayer1 = 0;
+            AppearImg_CoverBlack_P1();
+        }
+        if (KP2 == 13)
+        {
+            alivePlayer2 = 0;
+            AppearImg_CoverBlack_P2();
+        }
+        if (KP3 == 13)
+        {
+            alivePlayer3 = 0;
+            AppearImg_CoverBlack_P3();
+        }
+        if (KP4 == 13)
+        {
+            alivePlayer4 = 0;
+            AppearImg_CoverBlack_P4();
+        }
+    }
+
+    public void Lose_Dorei()     //【JK-25】どれい の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
+    {
+        Debug.Log("【JK-25】どれい（23） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        if (KP1 == 23)
+        {
+            alivePlayer1 = 0;
+            AppearImg_CoverBlack_P1();
+        }
+        if (KP2 == 23)
+        {
+            alivePlayer2 = 0;
+            AppearImg_CoverBlack_P2();
+        }
+        if (KP3 == 23)
+        {
+            alivePlayer3 = 0;
+            AppearImg_CoverBlack_P3();
+        }
+        if (KP4 == 23)
+        {
+            alivePlayer4 = 0;
+            AppearImg_CoverBlack_P4();
+        }
+    }
+
     #region                   //【JK-25】 移動ステップ数 の共有
     [PunRPC]
     public void ShareStepNum_1()   //【JK-25】 移動ステップ数を 1 に上書き → 全員に共有
@@ -3174,6 +3471,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         WhoAreYou();
         original_StepNum = 8;     // 移動ステップ数を 8 に上書き
         Debug.Log("移動ステップ数（original_StepNum）を 8 に上書きしました");
+    }
+
+    [PunRPC]
+    public void ShareStepNum_15()   //【JK-25】 移動ステップ数を 15 に上書き → 全員に共有
+    {
+        WhoAreYou();
+        original_StepNum = 15;     // 移動ステップ数を 15 に上書き
+        Debug.Log("移動ステップ数（original_StepNum）を 15 に上書きしました");
     }
     #endregion
 
@@ -3342,6 +3647,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         MyTeImg_3.gameObject.GetComponent<Image>().sprite = null;
         MyTeImg_4.gameObject.GetComponent<Image>().sprite = null;
         MyTeImg_5.gameObject.GetComponent<Image>().sprite = null;
+
+        MyTeImg_1.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
+        MyTeImg_2.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
+        MyTeImg_3.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
+        MyTeImg_4.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
+        MyTeImg_5.GetComponent<Image>().color = new Color(255f, 255f, 255f, 0f);
     }
 
     public void ResetImg_PlayerlayerRireki_All()  // 【JK-33】Player1 ～ Player4 のじゃんけん手 履歴イメージを null にリセット（Image）
@@ -3425,6 +3736,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         // Text の反映
         Text_JankenPlayer1_Te1.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player1_1_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player1_1_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player1_1_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player1_Te1 = 13;
+
+        // Image の反映
+        Img_Player1_Te1.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer1_Te1.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player1_1_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player1_1_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player1_1_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player1_Te1 = 23;
+
+        // Image の反映
+        Img_Player1_Te1.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer1_Te1.text = "23";
+    }
     #endregion
 
     #region// 【JK-07】PlayerTeNum_Player1_2
@@ -3462,6 +3807,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Player1_Te2 = 2;
         Img_Player1_Te2.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer1_Te2.text = "2";
+    }
+
+    public void ToSharePlayerTeNum_Player1_2_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player1_2_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player1_2_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player1_Te2 = 13;
+
+        // Image の反映
+        Img_Player1_Te2.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer1_Te2.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player1_2_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player1_2_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player1_2_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player1_Te2 = 23;
+
+        // Image の反映
+        Img_Player1_Te2.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer1_Te2.text = "23";
     }
     #endregion
 
@@ -3501,6 +3880,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player1_Te3.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer1_Te3.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player1_3_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player1_3_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player1_3_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player1_Te3 = 13;
+
+        // Image の反映
+        Img_Player1_Te3.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer1_Te3.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player1_3_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player1_3_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player1_3_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player1_Te3 = 23;
+
+        // Image の反映
+        Img_Player1_Te3.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer1_Te3.text = "23";
+    }
     #endregion
 
     #region// 【JK-07】PlayerTeNum_Player1_4
@@ -3539,6 +3952,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player1_Te4.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer1_Te4.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player1_4_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player1_4_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player1_4_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player1_Te4 = 13;
+
+        // Image の反映
+        Img_Player1_Te4.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer1_Te4.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player1_4_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player1_4_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player1_4_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player1_Te4 = 23;
+
+        // Image の反映
+        Img_Player1_Te4.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer1_Te4.text = "23";
+    }
     #endregion
 
     #region// 【JK-07】PlayerTeNum_Player1_5
@@ -3576,6 +4023,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Player1_Te5 = 2;
         Img_Player1_Te5.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer1_Te5.text = "2";
+    }
+
+    public void ToSharePlayerTeNum_Player1_5_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player1_5_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player1_5_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player1_Te5 = 13;
+
+        // Image の反映
+        Img_Player1_Te5.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer1_Te5.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player1_5_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player1_5_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player1_5_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player1_Te5 = 23;
+
+        // Image の反映
+        Img_Player1_Te5.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer1_Te5.text = "23";
     }
     #endregion
     #endregion
@@ -3632,6 +4113,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         // Text の反映
         Text_JankenPlayer2_Te1.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player2_1_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player2_1_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player2_1_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player2_Te1 = 13;
+
+        // Image の反映
+        Img_Player2_Te1.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer2_Te1.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player2_1_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player2_1_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player2_1_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player2_Te1 = 23;
+
+        // Image の反映
+        Img_Player2_Te1.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer2_Te1.text = "23";
+    }
     #endregion
 
     #region// PlayerTeNum_Player2_2
@@ -3669,6 +4184,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Player2_Te2 = 2;
         Img_Player2_Te2.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer2_Te2.text = "2";
+    }
+
+    public void ToSharePlayerTeNum_Player2_2_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player2_2_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player2_2_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player2_Te2 = 13;
+
+        // Image の反映
+        Img_Player2_Te2.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer2_Te2.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player2_2_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player2_2_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player2_2_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player2_Te2 = 23;
+
+        // Image の反映
+        Img_Player2_Te2.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer2_Te2.text = "23";
     }
     #endregion
 
@@ -3708,6 +4257,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player2_Te3.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer2_Te3.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player2_3_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player2_3_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player2_3_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player2_Te3 = 13;
+
+        // Image の反映
+        Img_Player2_Te3.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer2_Te3.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player2_3_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player2_3_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player2_3_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player2_Te3 = 23;
+
+        // Image の反映
+        Img_Player2_Te3.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer2_Te3.text = "23";
+    }
     #endregion
 
     #region// PlayerTeNum_Player2_4
@@ -3746,6 +4329,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player2_Te4.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer2_Te4.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player2_4_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player2_4_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player2_4_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player2_Te4 = 13;
+
+        // Image の反映
+        Img_Player2_Te4.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer2_Te4.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player2_4_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player2_4_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player2_4_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player2_Te4 = 23;
+
+        // Image の反映
+        Img_Player2_Te4.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer2_Te4.text = "23";
+    }
     #endregion
 
     #region// PlayerTeNum_Player2_5
@@ -3783,6 +4400,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Player2_Te5 = 2;
         Img_Player2_Te5.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer2_Te5.text = "2";
+    }
+
+    public void ToSharePlayerTeNum_Player2_5_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player2_5_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player2_5_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player2_Te5 = 13;
+
+        // Image の反映
+        Img_Player2_Te5.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer2_Te5.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player2_5_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player2_5_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player2_5_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player2_Te5 = 23;
+
+        // Image の反映
+        Img_Player2_Te5.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer2_Te5.text = "23";
     }
     #endregion
     #endregion
@@ -3839,6 +4490,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         // Text の反映
         Text_JankenPlayer3_Te1.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player3_1_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player3_1_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player3_1_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player3_Te1 = 13;
+
+        // Image の反映
+        Img_Player3_Te1.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer3_Te1.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player3_1_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player3_1_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player3_1_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player3_Te1 = 23;
+
+        // Image の反映
+        Img_Player3_Te1.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer3_Te1.text = "23";
+    }
     #endregion
 
     #region// 【JK-07】PlayerTeNum_Player3_2
@@ -3876,6 +4561,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Player3_Te2 = 2;
         Img_Player3_Te2.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer3_Te2.text = "2";
+    }
+
+    public void ToSharePlayerTeNum_Player3_2_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player3_2_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player3_2_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player3_Te2 = 13;
+
+        // Image の反映
+        Img_Player3_Te2.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer3_Te2.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player3_2_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player3_2_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player3_2_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player3_Te2 = 23;
+
+        // Image の反映
+        Img_Player3_Te2.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer3_Te2.text = "23";
     }
     #endregion
 
@@ -3915,6 +4634,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player3_Te3.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer3_Te3.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player3_3_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player3_3_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player3_3_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player3_Te3 = 13;
+
+        // Image の反映
+        Img_Player3_Te3.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer3_Te3.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player3_3_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player3_3_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player3_3_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player3_Te3 = 23;
+
+        // Image の反映
+        Img_Player3_Te3.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer3_Te3.text = "23";
+    }
     #endregion
 
     #region// 【JK-07】PlayerTeNum_Player3_4
@@ -3953,6 +4706,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player3_Te4.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer3_Te4.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player3_4_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player3_4_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player3_4_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player3_Te4 = 13;
+
+        // Image の反映
+        Img_Player3_Te4.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer3_Te4.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player3_4_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player3_4_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player3_4_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player3_Te4 = 23;
+
+        // Image の反映
+        Img_Player3_Te4.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer3_Te4.text = "23";
+    }
     #endregion
 
     #region// 【JK-07】PlayerTeNum_Player3_5
@@ -3990,6 +4777,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Player3_Te5 = 2;
         Img_Player3_Te5.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer3_Te5.text = "2";
+    }
+
+    public void ToSharePlayerTeNum_Player3_5_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player3_5_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player3_5_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player3_Te5 = 13;
+
+        // Image の反映
+        Img_Player3_Te5.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer3_Te5.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player3_5_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player3_5_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player3_5_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player3_Te5 = 23;
+
+        // Image の反映
+        Img_Player3_Te5.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer3_Te5.text = "23";
     }
     #endregion
     #endregion
@@ -4046,6 +4867,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         // Text の反映
         Text_JankenPlayer4_Te1.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player4_1_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player4_1_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player4_1_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player4_Te1 = 13;
+
+        // Image の反映
+        Img_Player4_Te1.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer4_Te1.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player4_1_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player4_1_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player4_1_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player4_Te1 = 23;
+
+        // Image の反映
+        Img_Player4_Te1.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer4_Te1.text = "23";
+    }
     #endregion
 
     #region// 【JK-07】PlayerTeNum_Player4_2
@@ -4083,6 +4938,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Player4_Te2 = 2;
         Img_Player4_Te2.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer4_Te2.text = "2";
+    }
+
+    public void ToSharePlayerTeNum_Player4_2_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player4_2_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player4_2_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player4_Te2 = 13;
+
+        // Image の反映
+        Img_Player4_Te2.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer4_Te2.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player4_2_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player4_2_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player4_2_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player4_Te2 = 23;
+
+        // Image の反映
+        Img_Player4_Te2.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer4_Te2.text = "23";
     }
     #endregion
 
@@ -4122,6 +5011,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player4_Te3.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer4_Te3.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player4_3_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player4_3_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player4_3_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player4_Te3 = 13;
+
+        // Image の反映
+        Img_Player4_Te3.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer4_Te3.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player4_3_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player4_3_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player4_3_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player4_Te3 = 23;
+
+        // Image の反映
+        Img_Player4_Te3.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer4_Te3.text = "23";
+    }
     #endregion
 
     #region// 【JK-07】PlayerTeNum_Player4_4
@@ -4160,9 +5083,43 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player4_Te4.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer4_Te4.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player4_4_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player4_4_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player4_4_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player4_Te4 = 13;
+
+        // Image の反映
+        Img_Player4_Te4.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer4_Te4.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player4_4_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player4_4_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player4_4_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player4_Te4 = 23;
+
+        // Image の反映
+        Img_Player4_Te4.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer4_Te4.text = "23";
+    }
     #endregion
 
-    #region// PlayerTeNum_Player4_5
+    #region// 【JK-07】PlayerTeNum_Player4_5
     public void ToSharePlayerTeNum_Player4_5_is_Gu()
     {
         photonView.RPC("SharePlayerTeNum_Player4_5_is_Gu", RpcTarget.All);
@@ -4198,6 +5155,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player4_Te5.gameObject.GetComponent<Image>().sprite = sprite_Pa;
         Text_JankenPlayer4_Te5.text = "2";
     }
+
+    public void ToSharePlayerTeNum_Player4_5_is_King()
+    {
+        photonView.RPC("SharePlayerTeNum_Player4_5_is_King", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player4_5_is_King()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（13：王さま）
+    {
+        // int の反映
+        int_Player4_Te5 = 13;
+
+        // Image の反映
+        Img_Player4_Te5.gameObject.GetComponent<Image>().sprite = sprite_King;
+
+        // Text の反映
+        Text_JankenPlayer4_Te5.text = "13";
+    }
+
+    public void ToSharePlayerTeNum_Player4_5_is_Dorei()
+    {
+        photonView.RPC("SharePlayerTeNum_Player4_5_is_Dorei", RpcTarget.All);
+    }
+    [PunRPC]
+    public void SharePlayerTeNum_Player4_5_is_Dorei()  //【JK-07】現在プレイしているのが「プレイヤー1」 + そのジャンケンの手は「PTN」（23：どれい）
+    {
+        // int の反映
+        int_Player4_Te5 = 23;
+
+        // Image の反映
+        Img_Player4_Te5.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+
+        // Text の反映
+        Text_JankenPlayer4_Te5.text = "23";
+    }
     #endregion
     #endregion
 
@@ -4216,6 +5207,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player1_1_is_Pa();
         }
+        else if (Int_MyJanken_Te1 == 13)
+        {
+            ToSharePlayerTeNum_Player1_1_is_King();
+        }
+        else if (Int_MyJanken_Te1 == 23)
+        {
+            ToSharePlayerTeNum_Player1_1_is_Dorei();
+        }
 
         if (Int_MyJanken_Te2 == 0)
         {
@@ -4228,6 +5227,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         else if (Int_MyJanken_Te2 == 2)
         {
             ToSharePlayerTeNum_Player1_2_is_Pa();
+        }
+        else if (Int_MyJanken_Te2 == 13)
+        {
+            ToSharePlayerTeNum_Player1_2_is_King();
+        }
+        else if (Int_MyJanken_Te2 == 23)
+        {
+            ToSharePlayerTeNum_Player1_2_is_Dorei();
         }
 
         if (Int_MyJanken_Te3 == 0)
@@ -4242,6 +5249,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player1_3_is_Pa();
         }
+        else if (Int_MyJanken_Te3 == 13)
+        {
+            ToSharePlayerTeNum_Player1_3_is_King();
+        }
+        else if (Int_MyJanken_Te3 == 23)
+        {
+            ToSharePlayerTeNum_Player1_3_is_Dorei();
+        }
 
         if (Int_MyJanken_Te4 == 0)
         {
@@ -4254,6 +5269,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         else if (Int_MyJanken_Te4 == 2)
         {
             ToSharePlayerTeNum_Player1_4_is_Pa();
+        }
+        else if (Int_MyJanken_Te4 == 13)
+        {
+            ToSharePlayerTeNum_Player1_4_is_King();
+        }
+        else if (Int_MyJanken_Te4 == 23)
+        {
+            ToSharePlayerTeNum_Player1_4_is_Dorei();
         }
 
         if (Int_MyJanken_Te5 == 0)
@@ -4268,6 +5291,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player1_5_is_Pa();
         }
+        else if (Int_MyJanken_Te5 == 13)
+        {
+            ToSharePlayerTeNum_Player1_5_is_King();
+        }
+        else if (Int_MyJanken_Te5 == 23)
+        {
+            ToSharePlayerTeNum_Player1_5_is_Dorei();
+        }
+
         /*
         // int の反映
         int_Player1_Te1 = Int_MyJanken_Te1;
@@ -4304,6 +5336,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player2_1_is_Pa();
         }
+        else if (Int_MyJanken_Te1 == 13)
+        {
+            ToSharePlayerTeNum_Player2_1_is_King();
+        }
+        else if (Int_MyJanken_Te1 == 23)
+        {
+            ToSharePlayerTeNum_Player2_1_is_Dorei();
+        }
 
         if (Int_MyJanken_Te2 == 0)
         {
@@ -4316,6 +5356,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         else if (Int_MyJanken_Te2 == 2)
         {
             ToSharePlayerTeNum_Player2_2_is_Pa();
+        }
+        else if (Int_MyJanken_Te2 == 13)
+        {
+            ToSharePlayerTeNum_Player2_2_is_King();
+        }
+        else if (Int_MyJanken_Te2 == 23)
+        {
+            ToSharePlayerTeNum_Player2_2_is_Dorei();
         }
 
         if (Int_MyJanken_Te3 == 0)
@@ -4330,6 +5378,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player2_3_is_Pa();
         }
+        else if (Int_MyJanken_Te3 == 13)
+        {
+            ToSharePlayerTeNum_Player2_3_is_King();
+        }
+        else if (Int_MyJanken_Te3 == 23)
+        {
+            ToSharePlayerTeNum_Player2_3_is_Dorei();
+        }
 
         if (Int_MyJanken_Te4 == 0)
         {
@@ -4342,6 +5398,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         else if (Int_MyJanken_Te4 == 2)
         {
             ToSharePlayerTeNum_Player2_4_is_Pa();
+        }
+        else if (Int_MyJanken_Te4 == 13)
+        {
+            ToSharePlayerTeNum_Player2_4_is_King();
+        }
+        else if (Int_MyJanken_Te4 == 23)
+        {
+            ToSharePlayerTeNum_Player2_4_is_Dorei();
         }
 
         if (Int_MyJanken_Te5 == 0)
@@ -4356,26 +5420,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player2_5_is_Pa();
         }
-        /*
-        // int の反映
-        int_Player2_Te1 = Int_MyJanken_Te1;
-        int_Player2_Te2 = Int_MyJanken_Te2;
-        int_Player2_Te3 = Int_MyJanken_Te3;
-        int_Player2_Te4 = Int_MyJanken_Te4;
-        int_Player2_Te5 = Int_MyJanken_Te5;
-        // Image の反映
-        Img_Player2_Te1.sprite = MyTeImg_1.sprite;
-        Img_Player2_Te2.sprite = MyTeImg_2.sprite;
-        Img_Player2_Te3.sprite = MyTeImg_3.sprite;
-        Img_Player2_Te4.sprite = MyTeImg_4.sprite;
-        Img_Player2_Te5.sprite = MyTeImg_5.sprite;
-        // Text の反映
-        Text_JankenPlayer2_Te1.text = Int_MyJanken_Te1.ToString();
-        Text_JankenPlayer2_Te2.text = Int_MyJanken_Te2.ToString();
-        Text_JankenPlayer2_Te3.text = Int_MyJanken_Te3.ToString();
-        Text_JankenPlayer2_Te4.text = Int_MyJanken_Te4.ToString();
-        Text_JankenPlayer2_Te5.text = Int_MyJanken_Te5.ToString();
-        */
+        else if (Int_MyJanken_Te5 == 13)
+        {
+            ToSharePlayerTeNum_Player2_5_is_King();
+        }
+        else if (Int_MyJanken_Te5 == 23)
+        {
+            ToSharePlayerTeNum_Player2_5_is_Dorei();
+        }
+
     }
 
     public void SharePlayerTeNum_Player3()  //【JK-07】現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
@@ -4392,6 +5445,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player3_1_is_Pa();
         }
+        else if (Int_MyJanken_Te1 == 13)
+        {
+            ToSharePlayerTeNum_Player3_1_is_King();
+        }
+        else if (Int_MyJanken_Te1 == 23)
+        {
+            ToSharePlayerTeNum_Player3_1_is_Dorei();
+        }
 
         if (Int_MyJanken_Te2 == 0)
         {
@@ -4404,6 +5465,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         else if (Int_MyJanken_Te2 == 2)
         {
             ToSharePlayerTeNum_Player3_2_is_Pa();
+        }
+        else if (Int_MyJanken_Te2 == 13)
+        {
+            ToSharePlayerTeNum_Player3_2_is_King();
+        }
+        else if (Int_MyJanken_Te2 == 23)
+        {
+            ToSharePlayerTeNum_Player3_2_is_Dorei();
         }
 
         if (Int_MyJanken_Te3 == 0)
@@ -4418,6 +5487,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player3_3_is_Pa();
         }
+        else if (Int_MyJanken_Te3 == 13)
+        {
+            ToSharePlayerTeNum_Player3_3_is_King();
+        }
+        else if (Int_MyJanken_Te3 == 23)
+        {
+            ToSharePlayerTeNum_Player3_3_is_Dorei();
+        }
 
         if (Int_MyJanken_Te4 == 0)
         {
@@ -4430,6 +5507,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         else if (Int_MyJanken_Te4 == 2)
         {
             ToSharePlayerTeNum_Player3_4_is_Pa();
+        }
+        else if (Int_MyJanken_Te4 == 13)
+        {
+            ToSharePlayerTeNum_Player3_4_is_King();
+        }
+        else if (Int_MyJanken_Te4 == 23)
+        {
+            ToSharePlayerTeNum_Player3_4_is_Dorei();
         }
 
         if (Int_MyJanken_Te5 == 0)
@@ -4444,26 +5529,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player3_5_is_Pa();
         }
-        /*
-        // int の反映
-        int_Player3_Te1 = Int_MyJanken_Te1;
-        int_Player3_Te2 = Int_MyJanken_Te2;
-        int_Player3_Te3 = Int_MyJanken_Te3;
-        int_Player3_Te4 = Int_MyJanken_Te4;
-        int_Player3_Te5 = Int_MyJanken_Te5;
-        // Image の反映
-        Img_Player3_Te1.sprite = MyTeImg_1.sprite;
-        Img_Player3_Te2.sprite = MyTeImg_2.sprite;
-        Img_Player3_Te3.sprite = MyTeImg_3.sprite;
-        Img_Player3_Te4.sprite = MyTeImg_4.sprite;
-        Img_Player3_Te5.sprite = MyTeImg_5.sprite;
-        // Text の反映
-        Text_JankenPlayer3_Te1.text = Int_MyJanken_Te1.ToString();
-        Text_JankenPlayer3_Te2.text = Int_MyJanken_Te2.ToString();
-        Text_JankenPlayer3_Te3.text = Int_MyJanken_Te3.ToString();
-        Text_JankenPlayer3_Te4.text = Int_MyJanken_Te4.ToString();
-        Text_JankenPlayer3_Te5.text = Int_MyJanken_Te5.ToString();
-        */
+        else if (Int_MyJanken_Te5 == 13)
+        {
+            ToSharePlayerTeNum_Player3_5_is_King();
+        }
+        else if (Int_MyJanken_Te5 == 23)
+        {
+            ToSharePlayerTeNum_Player3_5_is_Dorei();
+        }
+
     }
 
     public void SharePlayerTeNum_Player4()  //【JK-07】現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
@@ -4480,6 +5554,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player4_1_is_Pa();
         }
+        else if (Int_MyJanken_Te1 == 13)
+        {
+            ToSharePlayerTeNum_Player4_1_is_King();
+        }
+        else if (Int_MyJanken_Te1 == 23)
+        {
+            ToSharePlayerTeNum_Player4_1_is_Dorei();
+        }
 
         if (Int_MyJanken_Te2 == 0)
         {
@@ -4492,6 +5574,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         else if (Int_MyJanken_Te2 == 2)
         {
             ToSharePlayerTeNum_Player4_2_is_Pa();
+        }
+        else if (Int_MyJanken_Te2 == 13)
+        {
+            ToSharePlayerTeNum_Player4_2_is_King();
+        }
+        else if (Int_MyJanken_Te2 == 23)
+        {
+            ToSharePlayerTeNum_Player4_2_is_Dorei();
         }
 
         if (Int_MyJanken_Te3 == 0)
@@ -4506,6 +5596,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player4_3_is_Pa();
         }
+        else if (Int_MyJanken_Te3 == 13)
+        {
+            ToSharePlayerTeNum_Player4_3_is_King();
+        }
+        else if (Int_MyJanken_Te3 == 23)
+        {
+            ToSharePlayerTeNum_Player4_3_is_Dorei();
+        }
 
         if (Int_MyJanken_Te4 == 0)
         {
@@ -4518,6 +5616,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         else if (Int_MyJanken_Te4 == 2)
         {
             ToSharePlayerTeNum_Player4_4_is_Pa();
+        }
+        else if (Int_MyJanken_Te4 == 13)
+        {
+            ToSharePlayerTeNum_Player4_4_is_King();
+        }
+        else if (Int_MyJanken_Te4 == 23)
+        {
+            ToSharePlayerTeNum_Player4_4_is_Dorei();
         }
 
         if (Int_MyJanken_Te5 == 0)
@@ -4532,26 +5638,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ToSharePlayerTeNum_Player4_5_is_Pa();
         }
-        /*
-        // int の反映
-        int_Player4_Te1 = Int_MyJanken_Te1;
-        int_Player4_Te2 = Int_MyJanken_Te2;
-        int_Player4_Te3 = Int_MyJanken_Te3;
-        int_Player4_Te4 = Int_MyJanken_Te4;
-        int_Player4_Te5 = Int_MyJanken_Te5;
-        // Image の反映
-        Img_Player4_Te1.sprite = MyTeImg_1.sprite;
-        Img_Player4_Te2.sprite = MyTeImg_2.sprite;
-        Img_Player4_Te3.sprite = MyTeImg_3.sprite;
-        Img_Player4_Te4.sprite = MyTeImg_4.sprite;
-        Img_Player4_Te5.sprite = MyTeImg_5.sprite;
-        // Text の反映
-        Text_JankenPlayer4_Te1.text = Int_MyJanken_Te1.ToString();
-        Text_JankenPlayer4_Te2.text = Int_MyJanken_Te2.ToString();
-        Text_JankenPlayer4_Te3.text = Int_MyJanken_Te3.ToString();
-        Text_JankenPlayer4_Te4.text = Int_MyJanken_Te4.ToString();
-        Text_JankenPlayer4_Te5.text = Int_MyJanken_Te5.ToString();
-        */
+        else if (Int_MyJanken_Te5 == 13)
+        {
+            ToSharePlayerTeNum_Player4_5_is_King();
+        }
+        else if (Int_MyJanken_Te5 == 23)
+        {
+            ToSharePlayerTeNum_Player4_5_is_Dorei();
+        }
+
     }
 
     public void SelectGu()     // 【JK-03】手をグーにセット
@@ -4561,26 +5656,31 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (count_a == 1)
         {
             MyTeImg_1.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyTeImg_1.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_1.text = "0";
         }
         else if (count_a == 2)
         {
             MyTeImg_2.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyTeImg_2.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_2.text = "0";
         }
         else if (count_a == 3)
         {
             MyTeImg_3.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyTeImg_3.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_3.text = "0";
         }
         else if (count_a == 4)
         {
             MyTeImg_4.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyTeImg_4.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_4.text = "0";
         }
         else if (count_a == 5)
         {
             MyTeImg_5.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+            MyTeImg_5.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_5.text = "0";
         }
         else
@@ -4602,26 +5702,31 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (count_a == 1)
         {
             MyTeImg_1.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyTeImg_1.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_1.text = "1";
         }
         else if (count_a == 2)
         {
             MyTeImg_2.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyTeImg_2.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_2.text = "1";
         }
         else if (count_a == 3)
         {
             MyTeImg_3.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyTeImg_3.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_3.text = "1";
         }
         else if (count_a == 4)
         {
             MyTeImg_4.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyTeImg_4.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_4.text = "1";
         }
         else if (count_a == 5)
         {
             MyTeImg_5.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+            MyTeImg_5.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_5.text = "1";
         }
         else
@@ -4645,26 +5750,31 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (count_a == 1)
         {
             MyTeImg_1.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyTeImg_1.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_1.text = "2";
         }
         else if (count_a == 2)
         {
             MyTeImg_2.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyTeImg_2.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_2.text = "2";
         }
         else if (count_a == 3)
         {
             MyTeImg_3.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyTeImg_3.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_3.text = "2";
         }
         else if (count_a == 4)
         {
             MyTeImg_4.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyTeImg_4.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_4.text = "2";
         }
         else if (count_a == 5)
         {
             MyTeImg_5.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+            MyTeImg_5.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
             MyNumTeText_5.text = "2";
         }
         else
@@ -4680,6 +5790,99 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         count_a++;
         Debug.Log(count_a + ": count_a");
     }
+
+    public void SelectKing()     // 【JK-03】手を王さまにセット 1,2,3,4,5
+    {
+        Debug.Log(count_a + ": count_a");
+
+        if (count_a == 1)
+        {
+            MyTeImg_1.gameObject.GetComponent<Image>().sprite = sprite_King;
+            MyTeImg_1.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+            MyNumTeText_1.text = "13";
+        }
+        else if (count_a == 2)
+        {
+            MyTeImg_2.gameObject.GetComponent<Image>().sprite = sprite_King;
+            MyTeImg_2.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+            MyNumTeText_2.text = "13";
+        }
+        else if (count_a == 3)
+        {
+            MyTeImg_3.gameObject.GetComponent<Image>().sprite = sprite_King;
+            MyTeImg_3.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+            MyNumTeText_3.text = "13";
+        }
+        else if (count_a == 4)
+        {
+            MyTeImg_4.gameObject.GetComponent<Image>().sprite = sprite_King;
+            MyTeImg_4.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+            MyNumTeText_4.text = "13";
+        }
+        else if (count_a == 5)
+        {
+            MyTeImg_5.gameObject.GetComponent<Image>().sprite = sprite_King;
+            MyTeImg_5.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+            MyNumTeText_5.text = "13";
+        }
+        else
+        {
+            Debug.Log("count_a 6以上");
+        }
+        Debug.Log("【JK-03】手を王さまにセット");
+        PlayerTeNumSet(13);
+        Debug.Log("【JK-04】手を王さまにセットend");
+
+        count_a++;
+        Debug.Log(count_a + ": count_a");
+    }
+
+    public void SelectDorei()     // 【JK-03】手をどれいにセット  1,2,3,4,5
+    {
+        Debug.Log(count_a + ": count_a");
+
+        if (count_a == 1)
+        {
+            MyTeImg_1.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+            MyTeImg_1.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+            MyNumTeText_1.text = "23";
+        }
+        else if (count_a == 2)
+        {
+            MyTeImg_2.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+            MyTeImg_2.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+            MyNumTeText_2.text = "23";
+        }
+        else if (count_a == 3)
+        {
+            MyTeImg_3.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+            MyTeImg_3.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+            MyNumTeText_3.text = "23";
+        }
+        else if (count_a == 4)
+        {
+            MyTeImg_4.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+            MyTeImg_4.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+            MyNumTeText_4.text = "23";
+        }
+        else if (count_a == 5)
+        {
+            MyTeImg_5.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+            MyTeImg_5.GetComponent<Image>().color = new Color(255f, 255f, 255f, 255f);
+            MyNumTeText_5.text = "23";
+        }
+        else
+        {
+            Debug.Log("count_a 6以上");
+        }
+        Debug.Log("【JK-03】手をどれいにセット");
+        PlayerTeNumSet(23);
+        Debug.Log("【JK-04】手をどれいにセットend");
+
+        count_a++;
+        Debug.Log(count_a + ": count_a");
+    }
+
 
     public void PlayerTeNumSet(int PTN)  // 【JK-04】私のジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）です。それをセットします。
     {
@@ -4741,6 +5944,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             {
                 SelectPa();
             }
+            else if (ShuffleCardsMSC.RndCreateCard_A == 13) //王さま
+            {
+                SelectKing();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_A == 23) //どれい
+            {
+                SelectDorei();
+            }
             else
             {
                 Debug.Log("ランダム値の見直しが必要！！");
@@ -4768,6 +5979,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             else if (ShuffleCardsMSC.RndCreateCard_B == 2) //パー
             {
                 SelectPa();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_B == 13) //王さま
+            {
+                SelectKing();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_B == 23) //どれい
+            {
+                SelectDorei();
             }
             else
             {
@@ -4797,6 +6016,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             {
                 SelectPa();
             }
+            else if (ShuffleCardsMSC.RndCreateCard_C == 13) //王さま
+            {
+                SelectKing();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_C == 23) //どれい
+            {
+                SelectDorei();
+            }
             else
             {
                 Debug.Log("ランダム値の見直しが必要！！");
@@ -4825,6 +6052,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             {
                 SelectPa();
             }
+            else if (ShuffleCardsMSC.RndCreateCard_D == 13) //王さま
+            {
+                SelectKing();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_D == 23) //どれい
+            {
+                SelectDorei();
+            }
             else
             {
                 Debug.Log("ランダム値の見直しが必要！！");
@@ -4852,6 +6087,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             else if (ShuffleCardsMSC.RndCreateCard_E == 2) //パー
             {
                 SelectPa();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_E == 13) //王さま
+            {
+                SelectKing();
+            }
+            else if (ShuffleCardsMSC.RndCreateCard_E == 23) //どれい
+            {
+                SelectDorei();
             }
             else
             {

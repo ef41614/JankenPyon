@@ -127,26 +127,24 @@ namespace say
 
         public void Set_All()
         {
-            KingChancePlayer = UnityEngine.Random.Range(0, 5);          // 0～4  パブリック 王さまチャンス → どのプレイヤーがカードをセットするか
-            DoreiChancePlayer = UnityEngine.Random.Range(0, 5);
+            KingChancePlayer = UnityEngine.Random.Range(1, 5);          // 1～4  パブリック 王さまチャンス → どのプレイヤーがカードをセットするか
+            DoreiChancePlayer = UnityEngine.Random.Range(1, 5);
             int safe = 0;
             while (KingChancePlayer == DoreiChancePlayer || safe >20)   // ChancePlayer が被らないようにします
             {
-                DoreiChancePlayer = UnityEngine.Random.Range(0, 5);
+                DoreiChancePlayer = UnityEngine.Random.Range(1, 5);
                 safe++;
             }
-            RndSet_CardPos_King = UnityEngine.Random.Range(1, 6);       // A～E どの位置にカードをセットするか
+
+            RndSet_CardPos_King = UnityEngine.Random.Range(1, 6);        // A～E どの位置にカードをセットするか
             RndSet_CardPos_Dorei = UnityEngine.Random.Range(1, 6);
-            if (FirstChancePush_Flg == 0)                               // 王さま-どれい-セットチャンス 判定まえ ならば
+
+            Debug.Log("参加人数でセットチャンス調整" + SelectJankenMSC.SankaNinzu);          
+            if (FirstChancePush_Flg == 0)                                // 王さま-どれい-セットチャンス 判定まえ ならば
             {
-                KingDorei_SetChance = UnityEngine.Random.Range(0, 4);   // 0～3  ローカル   王さま-どれい-セットチャンス
-                SelectJankenMSC.Share_Done_FirstChancePush();           // 王さま-どれい-セットチャンス 判定したら 0→1 [ 共有する ]
+                KingDorei_SetChance = UnityEngine.Random.Range(SelectJankenMSC.SankaNinzu*-1, 5);   // -3～4  ローカル   王さま-どれい-セットチャンス
+                SelectJankenMSC.Share_Done_FirstChancePush();            // 王さま-どれい-セットチャンス 判定したら FirstChancePush_Flg を 0→1 [ 共有する ]
             }
-            Debug.Log("KingChancePlayer ： "+ KingChancePlayer);
-            Debug.Log("DoreiChancePlayer ： " + DoreiChancePlayer);
-            Debug.Log("KingDorei_SetChance ： " + KingDorei_SetChance);
-            Debug.Log("RndSet_CardPos_King ： " + RndSet_CardPos_King);
-            Debug.Log("RndSet_CardPos_Dorei ： " + RndSet_CardPos_Dorei);
 
             A_Set();
             B_Set();
@@ -157,7 +155,13 @@ namespace say
             Debug.Log("ここまでか 通常ジャンケン手のセット");
             Debug.Log("ここから 王さま-どれい カードのセット処理");
 
-            if (KingDorei_SetChance == 0)     // 王さまチャンス0、どれいチャンス0： 共に 0
+            Debug.Log("KingChancePlayer ： " + KingChancePlayer);
+            Debug.Log("DoreiChancePlayer ： " + DoreiChancePlayer);
+            Debug.Log("RndSet_CardPos_King ： " + RndSet_CardPos_King);
+            Debug.Log("RndSet_CardPos_Dorei ： " + RndSet_CardPos_Dorei);
+            Debug.Log("KingDorei_SetChance ： " + KingDorei_SetChance);
+
+            if (KingDorei_SetChance <= 0)     // 王さまチャンス0、どれいチャンス0： 共に 0
             {
                 Debug.Log("0 なので何もしません");
             }
@@ -165,28 +169,17 @@ namespace say
             {
                 Debug.Log("1 なので どれいチャンス1");
                 Check_ChancePlayer_Dorei();   // どれいカード をセット するプレイヤーを確認します
-                // Set_DoreiCard();           // どれいカード をセットします
             }
             if (KingDorei_SetChance == 2)     // 王さまチャンス1、どれいチャンス0： 片方 1
             {
                 Debug.Log("2 なので 王さまチャンス1");
                 Check_ChancePlayer_King();    // 王さまカード をセット するプレイヤーを確認します
-                // Set_KingCard();            // 王さまカード をセットします
-                /*
-                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
-                {
-                    Debug.Log("プレイヤー1 にカードセットします");
-                    Set_KingCard();  // 王さまカード をセットします
-                }
-                */
             }
-            if (KingDorei_SetChance == 3)     // 王さまチャンス1、どれいチャンス1： 両方 1（ペア成立）
+            if (KingDorei_SetChance >= 3)     // 王さまチャンス1、どれいチャンス1： 両方 1（ペア成立）
             {
                 Debug.Log("3 なので 王さまチャンス1、どれいチャンス1： 両方 1");
                 Check_ChancePlayer_Dorei();   // どれいカード をセット するプレイヤーを確認します
                 Check_ChancePlayer_King();    // 王さまカード をセット するプレイヤーを確認します
-                //Set_DoreiCard();   // どれいカード をセットします
-                //Set_KingCard();  // 王さまカード をセットします
             }
         }
 
@@ -262,53 +255,63 @@ namespace say
             }
         }
 
-        public void  Set_DoreiCard()  // どれいカード をセットします
+        public void  Set_DoreiCard()  // どれいカード をセットします  A,B,C,D,E
         {
             Debug.Log("どれいカード をセットします");
             if (RndSet_CardPos_Dorei == 1)
             {
-                Te_A.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+                Button_A.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+                RndCreateCard_A = 23;  // どれいの番号をセット
             }
             else if (RndSet_CardPos_Dorei == 2)
             {
-                Te_B.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+                Button_B.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+                RndCreateCard_B = 23;  // どれいの番号をセット
             }
             else if (RndSet_CardPos_Dorei == 3)
             {
-                Te_C.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+                Button_C.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+                RndCreateCard_C = 23;  // どれいの番号をセット
             }
             else if (RndSet_CardPos_Dorei == 4)
             {
-                Te_D.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+                Button_D.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+                RndCreateCard_D = 23;  // どれいの番号をセット
             }
             else if (RndSet_CardPos_Dorei == 5)
             {
-                Te_E.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+                Button_E.gameObject.GetComponent<Image>().sprite = sprite_Dorei;
+                RndCreateCard_E = 23;  // どれいの番号をセット
             }
         }
 
-        public void Set_KingCard()  // 王さまカード をセットします
+        public void Set_KingCard()  // 王さまカード をセットします A,B,C,D,E
         {
             Debug.Log("王さまカード をセットします");
             if (RndSet_CardPos_King == 1)
             {
-                Te_A.gameObject.GetComponent<Image>().sprite = sprite_King;
+                Button_A.gameObject.GetComponent<Image>().sprite = sprite_King;
+                RndCreateCard_A = 13;  // 王さまの番号をセット
             }
             else if (RndSet_CardPos_King == 2)
             {
-                Te_B.gameObject.GetComponent<Image>().sprite = sprite_King;
+                Button_B.gameObject.GetComponent<Image>().sprite = sprite_King;
+                RndCreateCard_B = 13;  // 王さまの番号をセット
             }
             else if (RndSet_CardPos_King == 3)
             {
-                Te_C.gameObject.GetComponent<Image>().sprite = sprite_King;
+                Button_C.gameObject.GetComponent<Image>().sprite = sprite_King;
+                RndCreateCard_C = 13;  // 王さまの番号をセット
             }
             else if (RndSet_CardPos_King == 4)
             {
-                Te_D.gameObject.GetComponent<Image>().sprite = sprite_King;
+                Button_D.gameObject.GetComponent<Image>().sprite = sprite_King;
+                RndCreateCard_D = 13;  // 王さまの番号をセット
             }
             else if (RndSet_CardPos_King == 5)
             {
-                Te_E.gameObject.GetComponent<Image>().sprite = sprite_King;
+                Button_E.gameObject.GetComponent<Image>().sprite = sprite_King;
+                RndCreateCard_E = 13;  // 王さまの番号をセット
             }
         }
 
@@ -324,15 +327,15 @@ namespace say
 
                 if (RndCreateCard_A == 0)  //グー
                 {
-                    Te_A.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+                    Button_A.gameObject.GetComponent<Image>().sprite = sprite_Gu;
                 }
                 else if (RndCreateCard_A == 1)  //チョキ
                 {
-                    Te_A.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+                    Button_A.gameObject.GetComponent<Image>().sprite = sprite_Choki;
                 }
                 else if (RndCreateCard_A == 2) //パー
                 {
-                    Te_A.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+                    Button_A.gameObject.GetComponent<Image>().sprite = sprite_Pa;
                 }
                 else
                 {
@@ -360,15 +363,15 @@ namespace say
 
                 if (RndCreateCard_B == 0)  //グー
                 {
-                    Te_B.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+                    Button_B.gameObject.GetComponent<Image>().sprite = sprite_Gu;
                 }
                 else if (RndCreateCard_B == 1)  //チョキ
                 {
-                    Te_B.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+                    Button_B.gameObject.GetComponent<Image>().sprite = sprite_Choki;
                 }
                 else if (RndCreateCard_B == 2) //パー
                 {
-                    Te_B.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+                    Button_B.gameObject.GetComponent<Image>().sprite = sprite_Pa;
                 }
                 else
                 {
@@ -395,15 +398,15 @@ namespace say
 
                 if (RndCreateCard_C == 0)  //グー
                 {
-                    Te_C.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+                    Button_C.gameObject.GetComponent<Image>().sprite = sprite_Gu;
                 }
                 else if (RndCreateCard_C == 1)  //チョキ
                 {
-                    Te_C.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+                    Button_C.gameObject.GetComponent<Image>().sprite = sprite_Choki;
                 }
                 else if (RndCreateCard_C == 2) //パー
                 {
-                    Te_C.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+                    Button_C.gameObject.GetComponent<Image>().sprite = sprite_Pa;
                 }
                 else
                 {
@@ -430,15 +433,15 @@ namespace say
 
                 if (RndCreateCard_D == 0)  //グー
                 {
-                    Te_D.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+                    Button_D.gameObject.GetComponent<Image>().sprite = sprite_Gu;
                 }
                 else if (RndCreateCard_D == 1)  //チョキ
                 {
-                    Te_D.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+                    Button_D.gameObject.GetComponent<Image>().sprite = sprite_Choki;
                 }
                 else if (RndCreateCard_D == 2) //パー
                 {
-                    Te_D.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+                    Button_D.gameObject.GetComponent<Image>().sprite = sprite_Pa;
                 }
                 else
                 {
@@ -465,15 +468,15 @@ namespace say
 
                 if (RndCreateCard_E == 0)  //グー
                 {
-                    Te_E.gameObject.GetComponent<Image>().sprite = sprite_Gu;
+                    Button_E.gameObject.GetComponent<Image>().sprite = sprite_Gu;
                 }
                 else if (RndCreateCard_E == 1)  //チョキ
                 {
-                    Te_E.gameObject.GetComponent<Image>().sprite = sprite_Choki;
+                    Button_E.gameObject.GetComponent<Image>().sprite = sprite_Choki;
                 }
                 else if (RndCreateCard_E == 2) //パー
                 {
-                    Te_E.gameObject.GetComponent<Image>().sprite = sprite_Pa;
+                    Button_E.gameObject.GetComponent<Image>().sprite = sprite_Pa;
                 }
                 else
                 {
@@ -507,7 +510,7 @@ namespace say
             Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
             RndCreateCard_A = -1;
             Debug.Log(RndCreateCard_A + ": RndCreateCard_A");
-            //Te_A.gameObject.GetComponent<Image>().sprite = null;
+            //Button_A.gameObject.GetComponent<Image>().sprite = null;
             isSet_A = false;
         }
 
@@ -516,7 +519,7 @@ namespace say
             Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
             RndCreateCard_B = -1;
             Debug.Log(RndCreateCard_B + ": RndCreateCard_B");
-            //Te_B.gameObject.GetComponent<Image>().sprite = null;
+            //Button_B.gameObject.GetComponent<Image>().sprite = null;
             isSet_B = false;
         }
 
@@ -525,7 +528,7 @@ namespace say
             Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
             RndCreateCard_C = -1;
             Debug.Log(RndCreateCard_C + ": RndCreateCard_C");
-            //Te_C.gameObject.GetComponent<Image>().sprite = null;
+            //Button_C.gameObject.GetComponent<Image>().sprite = null;
             isSet_C = false;
         }
 
@@ -534,7 +537,7 @@ namespace say
             Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
             RndCreateCard_D = -1;
             Debug.Log(RndCreateCard_D + ": RndCreateCard_D");
-            //Te_D.gameObject.GetComponent<Image>().sprite = null;
+            //Button_D.gameObject.GetComponent<Image>().sprite = null;
             isSet_D = false;
         }
 
@@ -543,7 +546,7 @@ namespace say
             Debug.Log("PhotonNetwork.NickName : " + PhotonNetwork.NickName);
             RndCreateCard_E = -1;
             Debug.Log(RndCreateCard_E + ": RndCreateCard_E");
-            //Te_E.gameObject.GetComponent<Image>().sprite = null;
+            //Button_E.gameObject.GetComponent<Image>().sprite = null;
             isSet_E = false;
         }
         #endregion

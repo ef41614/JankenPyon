@@ -321,6 +321,7 @@ MonoBehaviour:
   MySprite: {fileID: 7321852487168509828}
   int_MySpriteOrder: 0
   SelectJankenManager: {fileID: 0}
+  ShuffleCardsManager: {fileID: 0}
   Text_StepNum: {fileID: 0}
 --- !u!114 &62399270358423078
 MonoBehaviour:
