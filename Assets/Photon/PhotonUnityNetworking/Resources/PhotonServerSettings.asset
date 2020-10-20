@@ -231,6 +231,31 @@ MonoBehaviour:
   - SharePlayerTeNum_Player4_5_is_Dorei
   - SharePlayerTeNum_Player4_5_is_King
   - ShareStepNum_15
+  - SetIconP1_Zunko
+  - SetIconP2_Zunko
+  - SetIconP3_Zunko
+  - SetIconP4_Zunko
+  - AppearWinner_avator_5
+  - Set_MakeP1_mobuchan
+  - Set_MakeP1_Pchan
+  - Set_MakeP1_Unitychan
+  - Set_MakeP1_utako
+  - Set_MakeP1_Zunko
+  - Set_MakeP2_mobuchan
+  - Set_MakeP2_Pchan
+  - Set_MakeP2_Unitychan
+  - Set_MakeP2_utako
+  - Set_MakeP2_Zunko
+  - Set_MakeP3_mobuchan
+  - Set_MakeP3_Pchan
+  - Set_MakeP3_Unitychan
+  - Set_MakeP3_utako
+  - Set_MakeP3_Zunko
+  - Set_MakeP4_mobuchan
+  - Set_MakeP4_Pchan
+  - Set_MakeP4_Unitychan
+  - Set_MakeP4_utako
+  - Set_MakeP4_Zunko
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

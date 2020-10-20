@@ -19,6 +19,7 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     public GameObject Unitychan_Button;
     public GameObject Pchan_Button;
     public GameObject Mobuchan_Button;
+    public GameObject Zunko_Button;
 
     public GameObject PlayStartButton;
 
@@ -149,6 +150,11 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         int_MyCharaAvatar = 4;
     }
 
+    public void Select_CharaAvatar_Zunko()
+    {
+        int_MyCharaAvatar = 5;
+    }
+
     public static int get_int_MyCharaAvatar()
     {
         return int_MyCharaAvatar;
@@ -178,12 +184,19 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         Mobuchan_Button.GetComponent<Image>().color = Color.green;
     }
 
+    public void Select_Zunko_Avatar()
+    {
+        Reset_AvatarAll();
+        Zunko_Button.GetComponent<Image>().color = Color.green;
+    }
+
     public void Reset_AvatarAll()
     {
         Utako_Button.GetComponent<Image>().color = Color.gray;
         Unitychan_Button.GetComponent<Image>().color = Color.gray;
         Pchan_Button.GetComponent<Image>().color = Color.gray;
         Mobuchan_Button.GetComponent<Image>().color = Color.gray;
+        Zunko_Button.GetComponent<Image>().color = Color.gray;
     }
 
     //●表示させる
