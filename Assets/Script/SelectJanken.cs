@@ -118,6 +118,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Image Img_CoverBlack_P3;
     public Image Img_CoverBlack_P4;
 
+    public GameObject Make_Black1;
+    public GameObject Make_Black2;
+    public GameObject Make_Black3;
+    public GameObject Make_Black4;
+
+    public GameObject Kachi_White1;
+    public GameObject Kachi_White2;
+    public GameObject Kachi_White3;
+    public GameObject Kachi_White4;
+
     public Image Img_Player1_Te1;
     public Image Img_Player1_Te2;
     public Image Img_Player1_Te3;
@@ -903,30 +913,35 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void SetIconP1_utako()                     // 【START-07】アイコンを うたこ にセット
     {
         Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_utako;
     }
     [PunRPC]
     public void SetIconP1_Unitychan()                 // 【START-07】アイコンを Unityちゃん にセット
     {
         Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Unitychan;
     }
     [PunRPC]
     public void SetIconP1_Pchan()                     // 【START-07】アイコンを Pちゃん にセット
     {
         Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Pchan;
     }
     [PunRPC]
     public void SetIconP1_mobuchan()                  // 【START-07】アイコンを モブちゃん にセット
     {
         Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_mobuchan;
     }
     [PunRPC]
     public void SetIconP1_Zunko()                     // 【START-07】アイコンを ずん子ちゃん にセット
     {
         Img_Icon_Player1.gameObject.GetComponent<Image>().sprite = sprite_Icon_Zunko;
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Zunko;
     }
 
@@ -958,30 +973,35 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void SetIconP2_utako()                     // 【START-07】アイコンを うたこ にセット
     {
         Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_utako;
     }
     [PunRPC]
     public void SetIconP2_Unitychan()                 // 【START-07】アイコンを Unityちゃん にセット
     {
         Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Unitychan;
     }
     [PunRPC]
     public void SetIconP2_Pchan()                     // 【START-07】アイコンを Pちゃん にセット
     {
         Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Pchan;
     }
     [PunRPC]
     public void SetIconP2_mobuchan()                  // 【START-07】アイコンを モブちゃん にセット
     {
         Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_mobuchan;
     }
     [PunRPC]
     public void SetIconP2_Zunko()                     // 【START-07】アイコンを ずん子ちゃん にセット
     {
         Img_Icon_Player2.gameObject.GetComponent<Image>().sprite = sprite_Icon_Zunko;
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Zunko;
     }
 
@@ -1013,30 +1033,35 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void SetIconP3_utako()                     // 【START-07】アイコンを うたこ にセット
     {
         Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_utako;
     }
     [PunRPC]
     public void SetIconP3_Unitychan()                 // 【START-07】アイコンを Unityちゃん にセット
     {
         Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Unitychan;
     }
     [PunRPC]
     public void SetIconP3_Pchan()                     // 【START-07】アイコンを Pちゃん にセット
     {
         Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Pchan;
     }
     [PunRPC]
     public void SetIconP3_mobuchan()                  // 【START-07】アイコンを モブちゃん にセット
     {
         Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_mobuchan;
     }
     [PunRPC]
     public void SetIconP3_Zunko()                     // 【START-07】アイコンを ずん子ちゃん にセット
     {
         Img_Icon_Player3.gameObject.GetComponent<Image>().sprite = sprite_Icon_Zunko;
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Zunko;
     }
 
@@ -1068,30 +1093,35 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void SetIconP4_utako()                     // 【START-07】アイコンを うたこ にセット
     {
         Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_utako;
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_utako;
     }
     [PunRPC]
     public void SetIconP4_Unitychan()                 // 【START-07】アイコンを Unityちゃん にセット
     {
         Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_Unitychan;
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Unitychan;
     }
     [PunRPC]
     public void SetIconP4_Pchan()                     // 【START-07】アイコンを Pちゃん にセット
     {
         Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_Pchan;
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Pchan;
     }
     [PunRPC]
     public void SetIconP4_mobuchan()                  // 【START-07】アイコンを モブちゃん にセット
     {
         Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_mobuchan;
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_mobuchan;
     }
     [PunRPC]
     public void SetIconP4_Zunko()                     // 【START-07】アイコンを ずん子ちゃん にセット
     {
         Img_Icon_Player4.gameObject.GetComponent<Image>().sprite = sprite_Icon_Zunko;
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Zunko;
     }
 
@@ -2490,8 +2520,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【JK-102】ジャンケン勝敗 判定おわり");    // 【JK-102】ここでジャンケンの勝者が 1名 決まっている
 
         Debug.Log("【JK-103】ジャンケン勝敗の勝利者は？");
-        WhoIsWinner();                //【JK-103】ジャンケン勝敗の勝利者は？
+        WhoIsWinner();                //【JK-103】ジャンケン勝敗の勝利者は？ → 勝った人の「かち！」ロゴを表示させる
 
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(3f, () => ClosePanel_beforeJump());
+    }
+
+    public void ClosePanel_beforeJump()  // 3秒待ってからジャンケンパネルを閉じる
+    {
         Debug.Log("【JK-104】ジャンケンで自分が勝利者かどうかの確認をします");
         ToCheck_Iam_Winner();         //【JK-104】ジャンケンで自分が勝利者かどうかの確認をする → 勝ってたら右にジャンプ（ぴょーん！）！【JK-110】
 
@@ -2597,6 +2633,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         alivePlayer3 = 1;
         alivePlayer4 = 1;
         Iam_alive = 1;
+        CloseKachi_White_All();              // すべての白カバーを閉じる（消す）
         CloseImg_CoverBlack_All();           // ジャンケン手の黒カバーをリセット（非表示）
         Share_JKAvator_StandSetting();       // ジャンケン手、下アバターをスタンド（デフォルト）にし、それを全プレイヤーで共有する
 
@@ -2902,26 +2939,31 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Set_MakeP1_utako()                     // アバターを 負け うたこ にセット
     {
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_utako;
     }
     [PunRPC]
     public void Set_MakeP1_Unitychan()                 // アバターを 負け Unityちゃん にセット
     {
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Unitychan;
     }
     [PunRPC]
     public void Set_MakeP1_Pchan()                     // アバターを 負け Pちゃん にセット
     {
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Pchan;
     }
     [PunRPC]
     public void Set_MakeP1_mobuchan()                  // アバターを 負け モブちゃん にセット
     {
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_mobuchan;
     }
     [PunRPC]
     public void Set_MakeP1_Zunko()                     // アバターを 負け ずん子ちゃん にセット
     {
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Zunko;
     }
 
@@ -2953,26 +2995,31 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Set_MakeP2_utako()                     // アバターを 負け うたこ にセット
     {
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_utako;
     }
     [PunRPC]
     public void Set_MakeP2_Unitychan()                 // アバターを 負け Unityちゃん にセット
     {
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Unitychan;
     }
     [PunRPC]
     public void Set_MakeP2_Pchan()                     // アバターを 負け Pちゃん にセット
     {
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Pchan;
     }
     [PunRPC]
     public void Set_MakeP2_mobuchan()                  // アバターを 負け モブちゃん にセット
     {
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_mobuchan;
     }
     [PunRPC]
     public void Set_MakeP2_Zunko()                     // アバターを 負け ずん子ちゃん にセット
     {
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Zunko;
     }
 
@@ -3004,26 +3051,31 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Set_MakeP3_utako()                     // アバターを 負け うたこ にセット
     {
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_utako;
     }
     [PunRPC]
     public void Set_MakeP3_Unitychan()                 // アバターを 負け Unityちゃん にセット
     {
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Unitychan;
     }
     [PunRPC]
     public void Set_MakeP3_Pchan()                     // アバターを 負け Pちゃん にセット
     {
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Pchan;
     }
     [PunRPC]
     public void Set_MakeP3_mobuchan()                  // アバターを 負け モブちゃん にセット
     {
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_mobuchan;
     }
     [PunRPC]
     public void Set_MakeP3_Zunko()                     // アバターを 負け ずん子ちゃん にセット
     {
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Zunko;
     }
 
@@ -3055,26 +3107,31 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Set_MakeP4_utako()                     // アバターを 負け うたこ にセット
     {
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_utako;
     }
     [PunRPC]
     public void Set_MakeP4_Unitychan()                 // アバターを 負け Unityちゃん にセット
     {
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Unitychan;
     }
     [PunRPC]
     public void Set_MakeP4_Pchan()                     // アバターを 負け Pちゃん にセット
     {
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Pchan;
     }
     [PunRPC]
     public void Set_MakeP4_mobuchan()                  // アバターを 負け モブちゃん にセット
     {
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_mobuchan;
     }
     [PunRPC]
     public void Set_MakeP4_Zunko()                     // アバターを 負け ずん子ちゃん にセット
     {
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Zunko;
     }
 
@@ -3952,21 +4009,25 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void AppearImg_CoverBlack_P1() // 黒カバー 表示させる
     {
         Img_CoverBlack_P1.enabled = true;
+        Make_Black1.SetActive(true);
     }
 
     public void AppearImg_CoverBlack_P2() // 黒カバー 表示させる
     {
         Img_CoverBlack_P2.enabled = true;
+        Make_Black2.SetActive(true);
     }
 
     public void AppearImg_CoverBlack_P3() // 黒カバー 表示させる
     {
         Img_CoverBlack_P3.enabled = true;
+        Make_Black3.SetActive(true);
     }
 
     public void AppearImg_CoverBlack_P4() // 黒カバー 表示させる
     {
         Img_CoverBlack_P4.enabled = true;
+        Make_Black4.SetActive(true);
     }
 
     public void CloseImg_CoverBlack_All()  // すべての黒カバーを閉じる（消す）
@@ -3980,24 +4041,78 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void CloseImg_CoverBlack_P1() // 黒カバー 非表示にする（デフォルトに戻す）
     {
         Img_CoverBlack_P1.enabled = false;
+        Make_Black1.SetActive(false);
     }
 
     public void CloseImg_CoverBlack_P2() // 黒カバー 非表示にする（デフォルトに戻す）
     {
         Img_CoverBlack_P2.enabled = false;
+        Make_Black2.SetActive(false);
     }
 
     public void CloseImg_CoverBlack_P3() // 黒カバー 非表示にする（デフォルトに戻す）
     {
         Img_CoverBlack_P3.enabled = false;
+        Make_Black3.SetActive(false);
     }
 
     public void CloseImg_CoverBlack_P4() // 黒カバー 非表示にする（デフォルトに戻す）
     {
         Img_CoverBlack_P4.enabled = false;
+        Make_Black4.SetActive(false);
     }
     #endregion
 
+
+    #region // 白カバーの表示・非表示
+    public void AppearKachi_White1()
+    {
+        Kachi_White1.SetActive(true);
+    }
+
+    public void AppearKachi_White2()
+    {
+        Kachi_White1.SetActive(true);
+    }
+
+    public void AppearKachi_White3()
+    {
+        Kachi_White1.SetActive(true);
+    }
+
+    public void AppearKachi_White4()
+    {
+        Kachi_White1.SetActive(true);
+    }
+
+    public void CloseKachi_White_All()  // すべての白カバーを閉じる（消す）
+    {
+        CloseKachi_White1();
+        CloseKachi_White2();
+        CloseKachi_White3();
+        CloseKachi_White4();
+    }
+
+    public void CloseKachi_White1()
+    {
+        Kachi_White1.SetActive(false);
+    }
+
+    public void CloseKachi_White2()
+    {
+        Kachi_White2.SetActive(false);
+    }
+
+    public void CloseKachi_White3()
+    {
+        Kachi_White3.SetActive(false);
+    }
+
+    public void CloseKachi_White4()
+    {
+        Kachi_White4.SetActive(false);
+    }
+    #endregion
     #endregion
 
 
