@@ -256,6 +256,26 @@ MonoBehaviour:
   - Set_MakeP4_Unitychan
   - Set_MakeP4_utako
   - Set_MakeP4_Zunko
+  - Set_KachiP1_mobuchan
+  - Set_KachiP1_Pchan
+  - Set_KachiP1_Unitychan
+  - Set_KachiP1_utako
+  - Set_KachiP1_Zunko
+  - Set_KachiP2_mobuchan
+  - Set_KachiP2_Pchan
+  - Set_KachiP2_Unitychan
+  - Set_KachiP2_utako
+  - Set_KachiP2_Zunko
+  - Set_KachiP3_mobuchan
+  - Set_KachiP3_Pchan
+  - Set_KachiP3_Unitychan
+  - Set_KachiP3_utako
+  - Set_KachiP3_Zunko
+  - Set_KachiP4_mobuchan
+  - Set_KachiP4_Pchan
+  - Set_KachiP4_Unitychan
+  - Set_KachiP4_utako
+  - Set_KachiP4_Zunko
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

@@ -82,6 +82,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Sprite sprite_Pa;
     public Sprite sprite_King;
     public Sprite sprite_Dorei;
+    public Sprite sprite_CardUra;
 
     public Sprite sprite_Icon_utako;
     public Sprite sprite_Icon_Unitychan;
@@ -100,6 +101,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Sprite sprite_Avator_Make_Pchan;
     public Sprite sprite_Avator_Make_mobuchan;
     public Sprite sprite_Avator_Make_Zunko;
+
+    public Sprite sprite_Avator_Kachi_utako;
+    public Sprite sprite_Avator_Kachi_Unitychan;
+    public Sprite sprite_Avator_Kachi_Pchan;
+    public Sprite sprite_Avator_Kachi_mobuchan;
+    public Sprite sprite_Avator_Kachi_Zunko;
 
     public Image MyTeImg_1;
     public Image MyTeImg_2;
@@ -2478,7 +2485,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void JankenBattle_MainPart()   // 【JK-23-】ジャンケンバトルのメイン判定処理
     {
         Debug.Log("【JK-23-】ジャンケンバトルのメイン判定処理");
-        SetKP_counter();               //【JK-24】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
+        SetKP_counter();               //【JK-24】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する & 全員のジャンケン手  1ラウンド分ずつ 非表示
+
+        var sequence2 = DOTween.Sequence();
+        sequence2.InsertCallback(2f, () => JankenBattle_MainPart_02());
+    }
+
+    public void JankenBattle_MainPart_02()   // 【JK-23-】ジャンケンバトルのメイン判定処理 その2
+    {
         Syohai_Hantei();               //【JK-25】生存者同士の 勝ち負けを判定（負けた人のaliveフラグ を 0 にする） → 人数が減る ＆＆ 移動ステップ数を 勝った手に応じて上書き ＆＆ 負けた人の黒カバー表示
         CountLivePlayer();             //【JK-26】残留しているプレイヤー人数をカウントする ： NumLivePlayer を取得
         Share_JKAvator_MakeSetting();  // 自分が負けていたらジャンケン手、自分の下アバターを負け（しゃがみモーション）にセットし、それを全プレイヤーで共有する
@@ -2489,8 +2503,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         sequence.InsertCallback(3f, () => Check_Can_Hantei_Stream());
     }
 
-
-    public void PrepareToNextSet()     // 【JK-28】【JK-201】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット【JK-36】
+        public void PrepareToNextSet()     // 【JK-28】【JK-201】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット【JK-36】
     {
         Debug.Log("【JK-28】【JK-201】PrepareToNextSet 次のセットへ移る準備をします");
         ResetMyNumTe_All();               // 【JK-29】MyNumTe 数値を -1 にリセット（int,text）
@@ -2520,7 +2533,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【JK-102】ジャンケン勝敗 判定おわり");    // 【JK-102】ここでジャンケンの勝者が 1名 決まっている
 
         Debug.Log("【JK-103】ジャンケン勝敗の勝利者は？");
-        WhoIsWinner();                //【JK-103】ジャンケン勝敗の勝利者は？ → 勝った人の「かち！」ロゴを表示させる
+        WhoIsWinner();                //【JK-103】ジャンケン勝敗の勝利者は？ ＆ 勝った人の「かち！」ロゴを表示させる
 
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(3f, () => ClosePanel_beforeJump());
@@ -2772,24 +2785,32 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("【JK-103】Player1 勝利");
             WinnerNum = 1;
             Text_WinnerName.text = TestRoomControllerSC.string_PName1;
+            AppearKachi_White1();
+            ShareJKAvator_Kachi_Player1();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
         }
         else if (alivePlayer2 == 1)
         {
             Debug.Log("【JK-103】Player2 勝利");
             WinnerNum = 2;
             Text_WinnerName.text = TestRoomControllerSC.string_PName2;
+            AppearKachi_White2();
+            ShareJKAvator_Kachi_Player2();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
         }
         else if (alivePlayer3 == 1)
         {
             Debug.Log("【JK-103】Player3 勝利");
             WinnerNum = 3;
             Text_WinnerName.text = TestRoomControllerSC.string_PName3;
+            AppearKachi_White3();
+            ShareJKAvator_Kachi_Player3();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
         }
         else if (alivePlayer4 == 1)
         {
             Debug.Log("【JK-103】Player4 勝利");
             WinnerNum = 4;
             Text_WinnerName.text = TestRoomControllerSC.string_PName4;
+            AppearKachi_White4();
+            ShareJKAvator_Kachi_Player4();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
         }
         else
         {
@@ -3133,6 +3154,265 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Make_Zunko;
+    }
+
+    #endregion
+
+
+    #region // ジャンケン手、下アバターを勝ちにセット
+    public void Share_JKAvator_KachiSetting()     // 自分が勝ちならジャンケン手、自分の下アバターを勝ち（しゃがみモーション）にセットし、それを全プレイヤーで共有する
+    {
+        ToCheck_Iam_alive();            // ジャンケンで自分が生き残っているかどうかの確認をする
+        if (Iam_alive != 1)    // 自分がまだジャンケン敗北者であるならば
+        {
+            Debug.Log("私はジャンケン敗北者です");
+        }
+        else     // 自分がジャンケン生存者ならば
+        {
+            Debug.Log("ジャンケン手、下アバターを勝ち（Happyモーション）にセットし、それを全プレイヤーで共有する");
+            if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+            {
+                ShareJKAvator_Kachi_Player1();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+            }
+
+            else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+            {
+                ShareJKAvator_Kachi_Player2();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+            }
+
+            else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+            {
+                ShareJKAvator_Kachi_Player3();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+            }
+
+            else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+            {
+                ShareJKAvator_Kachi_Player4();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+            }
+        }
+    }
+
+    public void ShareJKAvator_Kachi_Player1()          // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+    {
+        if (int_conMyCharaAvatar == 1)                // うたこ
+        {
+            photonView.RPC("Set_KachiP1_utako", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 2)           // Unityちゃん
+        {
+            photonView.RPC("Set_KachiP1_Unitychan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 3)           // Pちゃん
+        {
+            photonView.RPC("Set_KachiP1_Pchan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 4)           // モブちゃん
+        {
+            photonView.RPC("Set_KachiP1_mobuchan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 5)           // ずん子ちゃん
+        {
+            photonView.RPC("Set_KachiP1_Zunko", RpcTarget.All);
+        }
+        Debug.Log("【START-07】プレイヤー1のアイコンをセットしました");
+    }
+    [PunRPC]
+    public void Set_KachiP1_utako()                     // アバターを 勝ち うたこ にセット
+    {
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_utako;
+    }
+    [PunRPC]
+    public void Set_KachiP1_Unitychan()                 // アバターを 勝ち Unityちゃん にセット
+    {
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Unitychan;
+    }
+    [PunRPC]
+    public void Set_KachiP1_Pchan()                     // アバターを 勝ち Pちゃん にセット
+    {
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Pchan;
+    }
+    [PunRPC]
+    public void Set_KachiP1_mobuchan()                  // アバターを 勝ち モブちゃん にセット
+    {
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_mobuchan;
+    }
+    [PunRPC]
+    public void Set_KachiP1_Zunko()                     // アバターを 勝ち ずん子ちゃん にセット
+    {
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player1_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Zunko;
+    }
+
+
+    public void ShareJKAvator_Kachi_Player2()          // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+    {
+        if (int_conMyCharaAvatar == 1)                // うたこ
+        {
+            photonView.RPC("Set_KachiP2_utako", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 2)           // Unityちゃん
+        {
+            photonView.RPC("Set_KachiP2_Unitychan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 3)           // Pちゃん
+        {
+            photonView.RPC("Set_KachiP2_Pchan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 4)           // モブちゃん
+        {
+            photonView.RPC("Set_KachiP2_mobuchan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 5)           // ずん子ちゃん
+        {
+            photonView.RPC("Set_KachiP2_Zunko", RpcTarget.All);
+        }
+        Debug.Log("【START-07】プレイヤー2のアイコンをセットしました");
+    }
+    [PunRPC]
+    public void Set_KachiP2_utako()                     // アバターを 勝ち うたこ にセット
+    {
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_utako;
+    }
+    [PunRPC]
+    public void Set_KachiP2_Unitychan()                 // アバターを 勝ち Unityちゃん にセット
+    {
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Unitychan;
+    }
+    [PunRPC]
+    public void Set_KachiP2_Pchan()                     // アバターを 勝ち Pちゃん にセット
+    {
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Pchan;
+    }
+    [PunRPC]
+    public void Set_KachiP2_mobuchan()                  // アバターを 勝ち モブちゃん にセット
+    {
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_mobuchan;
+    }
+    [PunRPC]
+    public void Set_KachiP2_Zunko()                     // アバターを 勝ち ずん子ちゃん にセット
+    {
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player2_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Zunko;
+    }
+
+
+    public void ShareJKAvator_Kachi_Player3()          // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+    {
+        if (int_conMyCharaAvatar == 1)                // うたこ
+        {
+            photonView.RPC("Set_KachiP3_utako", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 2)           // Unityちゃん
+        {
+            photonView.RPC("Set_KachiP3_Unitychan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 3)           // Pちゃん
+        {
+            photonView.RPC("Set_KachiP3_Pchan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 4)           // モブちゃん
+        {
+            photonView.RPC("Set_KachiP3_mobuchan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 5)           // ずん子ちゃん
+        {
+            photonView.RPC("Set_KachiP3_Zunko", RpcTarget.All);
+        }
+        Debug.Log("【START-07】プレイヤー3のアイコンをセットしました");
+    }
+    [PunRPC]
+    public void Set_KachiP3_utako()                     // アバターを 勝ち うたこ にセット
+    {
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_utako;
+    }
+    [PunRPC]
+    public void Set_KachiP3_Unitychan()                 // アバターを 勝ち Unityちゃん にセット
+    {
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Unitychan;
+    }
+    [PunRPC]
+    public void Set_KachiP3_Pchan()                     // アバターを 勝ち Pちゃん にセット
+    {
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Pchan;
+    }
+    [PunRPC]
+    public void Set_KachiP3_mobuchan()                  // アバターを 勝ち モブちゃん にセット
+    {
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_mobuchan;
+    }
+    [PunRPC]
+    public void Set_KachiP3_Zunko()                     // アバターを 勝ち ずん子ちゃん にセット
+    {
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player3_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Zunko;
+    }
+
+
+    public void ShareJKAvator_Kachi_Player4()          // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+    {
+        if (int_conMyCharaAvatar == 1)                // うたこ
+        {
+            photonView.RPC("Set_KachiP4_utako", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 2)           // Unityちゃん
+        {
+            photonView.RPC("Set_KachiP4_Unitychan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 3)           // Pちゃん
+        {
+            photonView.RPC("Set_KachiP4_Pchan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 4)           // モブちゃん
+        {
+            photonView.RPC("Set_KachiP4_mobuchan", RpcTarget.All);
+        }
+        else if (int_conMyCharaAvatar == 5)           // ずん子ちゃん
+        {
+            photonView.RPC("Set_KachiP4_Zunko", RpcTarget.All);
+        }
+        Debug.Log("【START-07】プレイヤー4のアイコンをセットしました");
+    }
+    [PunRPC]
+    public void Set_KachiP4_utako()                     // アバターを 勝ち うたこ にセット
+    {
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_utako;
+    }
+    [PunRPC]
+    public void Set_KachiP4_Unitychan()                 // アバターを 勝ち Unityちゃん にセット
+    {
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Unitychan;
+    }
+    [PunRPC]
+    public void Set_KachiP4_Pchan()                     // アバターを 勝ち Pちゃん にセット
+    {
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Pchan;
+    }
+    [PunRPC]
+    public void Set_KachiP4_mobuchan()                  // アバターを 勝ち モブちゃん にセット
+    {
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_mobuchan;
+    }
+    [PunRPC]
+    public void Set_KachiP4_Zunko()                     // アバターを 勝ち ずん子ちゃん にセット
+    {
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = null;
+        Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Kachi_Zunko;
     }
 
     #endregion
@@ -4262,6 +4542,32 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player4_Te3.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Te4.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Te5.gameObject.GetComponent<Image>().sprite = null;
+
+        Debug.Log("【JK-33】ジャンケンカード裏 sprite_CardUra（Image）をセットします");
+
+        Img_Player1_Te1.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player1_Te2.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player1_Te3.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player1_Te4.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player1_Te5.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+
+        Img_Player2_Te1.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player2_Te2.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player2_Te3.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player2_Te4.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player2_Te5.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+
+        Img_Player3_Te1.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player3_Te2.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player3_Te3.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player3_Te4.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player3_Te5.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+
+        Img_Player4_Te1.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player4_Te2.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player4_Te3.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player4_Te4.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
+        Img_Player4_Te5.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
     }
 
     #region// ●【JK-07】Num_Player1
