@@ -21,15 +21,15 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     public GameObject Mobuchan_Button;
     public GameObject Zunko_Button;
 
-    public GameObject PlayStartButton;
+    public GameObject PlayStartButton_Panel;
 
     public GameObject BGM_SE_Manager;
     BGM_SE_Manager BGM_SE_MSC;
 
     public GameObject Volume_Panel;
     public GameObject Credit_Panel;
-
-
+    public GameObject Aikotoba_Panel;
+        
     #endregion
 
     #region Private変数
@@ -58,12 +58,13 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         Debug.Log(" firstPush ： " + firstPush);
         Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
         BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
-        Volume_Panel = GameObject.Find("Volume_Panel");
-        Credit_Panel = GameObject.Find("Credit_Panel");
+        //Volume_Panel = GameObject.Find("Volume_Panel");
+        //Credit_Panel = GameObject.Find("Credit_Panel");
     }
 
     void Start()
     {
+        AppearVolume_Panel();
         BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
         BGM_SE_MSC.Dadadadau_BGM();
         BGM_SE_MSC.find_Vol_Panel();
@@ -76,18 +77,21 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         //BGM_SE_MSC.CloseVolume_Panel();
         firstPush = false; //初期化
         Reset_AvatarAll();
-        ClosePlayStartButton();
+        ClosePlayStartButton_Panel();
         CloseCredit_Panel();
+        CloseAikotoba_Panel();
     }
 
 
     #region Public Methods
     //ログインボタンを押したときに実行される
-    public void Connect()
+    public void Connect()     // 「ランダムマッチ」ボタンを押した時の処理
     {
         Debug.Log("CLauncherScript で「Play」が押されました。");
         Debug.Log(" firstPush ： " + firstPush);
         Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
+        BGM_SE_MSC.Aikotoba = "";  // あいことばをリセットする
+
         if (!firstPush)
         {
             Debug.Log("Connect 処理中");
@@ -124,6 +128,37 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         else
         {
             Debug.Log("Connect 処理に失敗しました");
+        }
+        Debug.Log(" firstPush ： " + firstPush);
+        Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
+    }
+
+    public void Push_Aikotoba_OK()  // あいことば を入力して「OK」を押した時の処理
+    {
+        Debug.Log("Push_Aikotoba_OK()  // CLauncherScript で あいことば を入力して「OK」を押した時の処理");
+
+        Debug.Log(" firstPush ： " + firstPush);
+        Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);     
+
+        if (!firstPush)
+        {
+            Debug.Log("Push_Aikotoba_OK 処理中");
+            Debug.Log("PhotonNetwork.NickName Play：" + PhotonNetwork.NickName);
+            if (string.IsNullOrWhiteSpace(PhotonNetwork.NickName))   // プレイヤー名が入力されていなかったら（空欄だったら）
+            {
+                Debug.Log("名前が空欄なので、名前をランダムに決めて入力します");
+                int RndPName = UnityEngine.Random.Range(1, 10000);
+                PhotonNetwork.NickName = "JKP_" + RndPName;          // 今回ゲームで利用するプレイヤー名を適当に設定する
+                Debug.Log("PhotonNetwork.NickName ランチャー：" + PhotonNetwork.NickName);
+            }
+
+            BGM_SE_MSC.Stop_BGM();
+            SceneManager.LoadScene("Mike");
+            firstPush = true; //ボタン押下済みフラグ
+        }
+        else
+        {
+            Debug.Log("Push_Aikotoba_OK 処理に失敗しました");
         }
         Debug.Log(" firstPush ： " + firstPush);
         Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
@@ -200,16 +235,16 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     }
 
     //●表示させる
-    public void AppearPlayStartButton()
+    public void AppearPlayStartButton_Panel()
     {
-        PlayStartButton.SetActive(true);
+        PlayStartButton_Panel.SetActive(true);
     }
 
     //●非表示にする
-    public void ClosePlayStartButton()
+    public void ClosePlayStartButton_Panel()
     {
-        PlayStartButton.SetActive(false);
-        Debug.Log("ClosePlayStartButton");
+        PlayStartButton_Panel.SetActive(false);
+        Debug.Log("ClosePlayStartButton_Panel");
     }
 
     #endregion
@@ -298,4 +333,13 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         Credit_Panel.SetActive(false);
     }
 
+    public void AppearAikotoba_Panel()
+    {
+        Aikotoba_Panel.SetActive(true);
+    }
+
+    public void CloseAikotoba_Panel()
+    {
+        Aikotoba_Panel.SetActive(false);
+    }
 }

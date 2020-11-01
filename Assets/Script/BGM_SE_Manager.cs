@@ -29,6 +29,9 @@ public class BGM_SE_Manager : MonoBehaviour
     public AudioClip StartRappa;
     public AudioClip bottonwo_oshitene;
     public AudioClip korede_iikana;
+    public AudioClip TaihouFire;
+
+    public string Aikotoba = "";  // あいことば（ルーム名になる）
 
 
     private void Awake()
@@ -113,6 +116,11 @@ public class BGM_SE_Manager : MonoBehaviour
     public void korede_iikana_SE()
     {
         audioSource.PlayOneShot(korede_iikana);
+    }
+
+    public void TaihouFire_SE()
+    {
+        audioSource.PlayOneShot(TaihouFire);
     }
     #endregion
 

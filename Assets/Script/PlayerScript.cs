@@ -21,6 +21,9 @@ public class PlayerScript : MonoBehaviour
     public GameObject Text_StepNum;
     float span = 0.1f;
     private float currentTime = 0f; // test
+    int FlyingTime_byTaihou = 10;   // 人間大砲で飛んでいる時間
+    public ParticleSystem Taihou_Kemuri;
+    public ParticleSystem Sunabokori;
 
     // Start is called before the first frame update
     void Start()
@@ -97,6 +100,33 @@ public class PlayerScript : MonoBehaviour
             SelectJankenMSC.MoveTo_MyKagePos();   // MyKage の位置へ移動する（Y軸位置微調整）
             SelectJankenMSC.ShareAfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理 ⇒ 全員に共有する
         }
+    }
+
+    public void Fly_byTaihou()     // 大砲によってキャラが飛ぶ
+    {
+        int FlyingTime_byTaihou = UnityEngine.Random.Range(8, 15);
+        Taihou_Kemuri.Play();      // 大砲発射後の煙エフェクト
+        anim.SetBool("fly_taihou", true);         // アニメーションを stand → fly に遷移させる
+        Debug.Log("Take Off！！");
+        Debug.Log("ズドオォォォーーーーーーンン！！！！");
+        //////////////////////////// 移動終了地点   // ジャンプする力  // ジャンプする回数   // アニメーション時間
+        transform
+            // .DOJump(new Vector3(MoveForward_StepNum * 1.0f, 0f), 0.5f, MoveForward_StepNum, MoveForward_StepNum * 1.0f)
+            .DOJump(new Vector3(FlyingTime_byTaihou * 1.0f, 0f), 8f, 1, FlyingTime_byTaihou * 0.1f)
+            .SetRelative()
+            .SetEase(Ease.Linear)
+            .SetRelative()
+            .OnComplete(() =>
+            {                                         // ジャンプが終了したら、以下の操作をする
+                anim.SetBool("fly_taihou", false);         // アニメーションを fly → stand に遷移させる
+                Debug.Log("ドガッ！！（落下音）");
+                Debug.Log("人間大砲での吹っ飛び 今終わりました！");
+                //SelectJankenMSC.MoveTo_MyKagePos();   // MyKage の位置へ移動する（Y軸位置微調整）
+                //SelectJankenMSC.Judge_GOAL();         // ゴールラインに到達したか判定する
+                SelectJankenMSC.AfterFly_byTaihou();         // ゴールラインに到達したか判定する
+                Taihou_Kemuri.Stop();
+                Sunabokori.Play();                    // 砂埃エフェクト
+            });
     }
 
     public void receivedDammage() // ダメージを受ける

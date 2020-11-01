@@ -18,7 +18,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 {
     #region// 変数宣言
     //誰かがログインする度に生成するプレイヤーPrefab
-    public GameObject MyPlayerPrefab;
+    //public GameObject MyPlayerPrefab;
     public GameObject playerPrefab_utako;
     public GameObject playerPrefab_unitychan;
     public GameObject playerPrefab_pchan;
@@ -73,10 +73,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     Vector3 PosStartMark2;     // スタートラインの位置情報 (Vector3)
     Vector3 PosStartMark3;     // スタートラインの位置情報 (Vector3)
     Vector3 PosStartMark4;     // スタートラインの位置情報 (Vector3)
-    Vector3 PosPlayer1;
-    Vector3 PosPlayer2;
-    Vector3 PosPlayer3;
-    Vector3 PosPlayer4;
 
     public Sprite sprite_Gu;
     public Sprite sprite_Choki;
@@ -292,6 +288,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject ZunkoClone; //ヒエラルキー上のオブジェクト名
     PlayerScript PlayerSC;//スクリプト名 + このページ上でのニックネーム
 
+    [SerializeField] private Camera _camera;
+    [SerializeField] private Camera _subcamera;
+
     public GameObject MainCamera; //ヒエラルキー上のオブジェクト名
     MyCameraController MyCameraControllerMSC;//スクリプト名 + このページ上でのニックネーム
 
@@ -398,8 +397,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     Transform SubCamera_Trans;    // SubCamera の位置情報 (Transform)
     Vector3 PosSubCamera;         // SubCamera の位置情報 (Vector3)
 
-    bool ToRight_SubCamera = false;    //  右ボタンを押しているかの真偽値
-    bool ToLeft_SubCamera = false;     //  左ボタンを押しているかの真偽値
+    bool ToRight_SubCamera = false;    //  右ボタンを押しているかの真偽値（フラグ）
+    bool ToLeft_SubCamera = false;     //  左ボタンを押しているかの真偽値（フラグ）
 
     public GameObject cafe_kanban_035;
     public GameObject cafe_kanban_025;
@@ -414,117 +413,184 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject Taiki_OK_P3;
     public GameObject Taiki_OK_P4;
 
-    public GameObject TaiHou;
-    public ParticleSystem TaiHou_Bakuhatsu;
+    public GameObject Taihou;
+    public ParticleSystem Taihou_Bakuhatsu;
+    //public ParticleSystem Taihou_Kemuri;
+    public GameObject Panel_SyokaiTaihou;
+
+    int Flg_AwakeDone = 0;
+    int Flg_StartDone = 0;
+    int Flg_IkemasuDone = 0;
+    int Flg_StartGameMatchDone = 0;
+    int Flg_OneLoopDone = 0;
+    int Flg_AfterJumpDone = 0;
+    int Flg_FromWin_ToJumpDone = 0;
+
+    public Text Error01_Text;
+    public Text Error02_Text;
+    public Text Error03_Text;
+    public Text Error04_Text;
+    public Text Error05_Text;
+    public Text Error06_Text;
+
+    float X_dis30po = 0;
+    float X_dis_betweenTop = 0;  // 自分と首位とのX軸距離
+    float PosX_TopPlayer = 0;    // 首位のX軸距離
+    float PosX_MyPlayer = 0;     // 自分のX軸距離
+    float PosX_Player1;
+    float PosX_Player2;
+    float PosX_Player3;
+    float PosX_Player4;
+    float PosX_BottomPlayer = 0;
+    public float PosX_TaihouFlyer;      // 人間大砲で飛ぶ人のX軸距離
+    //float CanTaihou_Distance;           // 大砲ボタンを出現させるのに必要な距離
+
+    public Text text_PosX_P1;
+    public Text text_PosX_P2;
+    public Text text_PosX_P3;
+    public Text text_PosX_P4;
+    bool Flg_Update_PosX = false;
+    public bool Flg_CanUseTaihou = false;
+    public GameObject Button_TaihouFire;
+    public float flo_str = 0.1f;
+    public int int_vib= 5;
+    public float flo_ran = 30;
+    public bool Flg_Taihou_punch = false;
+
+    public GameObject Panel_ToTitle;
     #endregion
 
     #region // 【START】初期設定の処理一覧
 
     void Awake()
     {
-        BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
-        BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
-
-        this.photonView = GetComponent<PhotonView>();
-        Debug.Log("【START-01】SelectJanken void Awake() 出席確認1");
-        Debug.Log("【START-01】キャラ アバター 誰を選んだかを（ログイン前画面から）コンバートします");
-        int_conMyCharaAvatar = CLauncherScript.get_int_MyCharaAvatar(); // 【START-01】キャラ アバター 誰を選んだか（ログイン前画面からコンバートする）
-
-        Debug.Log("【START-02】int_conMyCharaAvatar（★キャラアバター） ： " + int_conMyCharaAvatar);
-
-        Debug.Log("【START-03】他スクリプトと連携できるようにします");
-        ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
-        TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
-        MyCameraControllerMSC = MainCamera.GetComponent<MyCameraController>();
-        CloseWinPanel();
-        CloseDebug_Buttons();
-        ClosePanel_Intro();
-        if (BGM_SE_MSC.firstMatch <= 3)
+        if (Flg_AwakeDone == 0)
         {
-            AppearPanel_Intro();
+            Flg_AwakeDone = 1;
+            BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
+            BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
+
+            this.photonView = GetComponent<PhotonView>();
+            Debug.Log("【START-01】SelectJanken void Awake() 出席確認1");
+            Debug.Log("【START-01】キャラ アバター 誰を選んだかを（ログイン前画面から）コンバートします");
+            int_conMyCharaAvatar = CLauncherScript.get_int_MyCharaAvatar(); // 【START-01】キャラ アバター 誰を選んだか（ログイン前画面からコンバートする）
+
+            Debug.Log("【START-02】int_conMyCharaAvatar（★キャラアバター） ： " + int_conMyCharaAvatar);
+
+            Debug.Log("【START-03】他スクリプトと連携できるようにします");
+            ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
+            TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
+            MyCameraControllerMSC = MainCamera.GetComponent<MyCameraController>();
+            CloseWinPanel();
+            CloseDebug_Buttons();
+            ClosePanel_Intro();
+            ClosePanel_ToTitle();
+            if (BGM_SE_MSC.firstMatch <= 3)
+            {
+                AppearPanel_Intro();
+            }
+            text_Game_kaishi_MAE.text = "しあい かいし まえ";
+            text_Game_kaishi_CHU.text = "";
+            //audioSource = GetComponent<AudioSource>();
         }
-        text_Game_kaishi_MAE.text = "しあい かいし まえ";
-        text_Game_kaishi_CHU.text = "";
-        //audioSource = GetComponent<AudioSource>();
+        else
+        {
+            Debug.LogError("Awake 処理 ダブってます！！！");
+            Error01_Text.text = "Awake処理ダブり";
+        }
     }
 
 
     void Start()
     {
-        //var customProperties = photonView.Owner.CustomProperties;
-        Debug.Log("【START-03】SelectJanken  void Start() 出席確認2");
-
-        myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
-
-        Debug.Log("【START-03】 各変数を 初期化（リセット）します");
-        count_a = 1;
-        Debug.Log("【START-03】 各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする");
-        ResetAlivePlayer();            //【START-03】 各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする
-
-        Debug.Log("【START-04】自プレイヤーを生成します");
-        //CreatePlayerPrefab();          //【START-04】Photonに接続していれば自プレイヤーを生成
-        Debug.Log("CreatePlayerPrefab_Flg ： " + CreatePlayerPrefab_Flg);
-
-        /*
-        if (BGM_SE_MSC.firstRead_Selectjanken == 0)
+        if (Flg_StartDone == 0)
         {
-            Debug.Log("firstRead_Selectjanken  0 です");
+            Flg_StartDone = 1;
+            //var customProperties = photonView.Owner.CustomProperties;
+            Debug.Log("【START-03】SelectJanken  void Start() 出席確認2");
+
+            myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
+
+            Debug.Log("【START-03】 各変数を 初期化（リセット）します");
+            count_a = 1;
+            Debug.Log("【START-03】 各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする");
+            ResetAlivePlayer();            //【START-03】 各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする
+
+            Debug.Log("【START-04】自プレイヤーを生成します");
+            //CreatePlayerPrefab();          //【START-04】Photonに接続していれば自プレイヤーを生成
+            Debug.Log("CreatePlayerPrefab_Flg ： " + CreatePlayerPrefab_Flg);
+
+            /*
+            if (BGM_SE_MSC.firstRead_Selectjanken == 0)
+            {
+                Debug.Log("firstRead_Selectjanken  0 です");
+                Debug.Log("myPlayer が 存在していなかったのでキャラ作成します！！！");
+                //Debug.Log("フラグON だったのでキャラ作成します！！！");
+                CreatePlayerPrefab();          //【START-04】Photonに接続していれば自プレイヤーを生成
+                CreatePlayerPrefab_Flg = false;
+                BGM_SE_MSC.firstRead_Selectjanken = 1;
+            }
+            else
+            {
+                Debug.Log("firstRead_Selectjanken  1 です。CreatePlayerPrefab 処理はしません");
+            }
+            */
+
             Debug.Log("myPlayer が 存在していなかったのでキャラ作成します！！！");
             //Debug.Log("フラグON だったのでキャラ作成します！！！");
             CreatePlayerPrefab();          //【START-04】Photonに接続していれば自プレイヤーを生成
             CreatePlayerPrefab_Flg = false;
             BGM_SE_MSC.firstRead_Selectjanken = 1;
+
+            myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
+
+            Debug.Log("【START-05】スタートラインにランダムに移動させます");
+            MoveToStartLineRandom();       //【START-05】スタートラインにランダムに移動させる
+
+            Debug.Log("【START-06】MyPlayer にカメラを追従するようにセットします");
+            MyCameraControllerMSC.SetMyCamera();  //【START-06】MyPlayer にカメラを追従するようにセット
+
+            MyKage = GameObject.FindWithTag("MyKage");
+            MyKageControllerMSC = MyKage.GetComponent<MyKageController>();
+
+            Debug.Log("【START-07】スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）");
+            ToShare_InitialSetting();     // 【START-07】スタート時 初期設定を全プレイヤーで共有
+            Check_KageDistance();         //  MyKage と MyPlayer の距離を求める（Y軸の初期位置）
+
+            Debug.Log("【START-09】ジャンケン手「決定ボタン」を表示できるか確認します");
+            Check_CanAppear_KetteiBtn();  // 【START-09】ジャンケン手「決定ボタン」を表示できるか確認
+
+            Debug.Log("【START-10】総参加人数 と 現在待機中の総人数 をチェックします");
+            NinzuCheck();                 // 【START-10】総参加人数 と 現在待機中の総人数
+            NumLivePlayer = SankaNinzu;
+            Debug.Log("【START-11】NumLivePlayer（総参加人数＝生存者数） は " + NumLivePlayer);
+
+            Debug.Log("【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する");
+            ShareAfterJump();   //【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する
+
+            BGM_SE_MSC.FunAndLight_BGM();      // Battle シーンBGM
+            CloseStartLogo();
+            CloseAisatsu_Panel();
+            Reset_AllAisatsu();
+            //Erase_Text_Announcement();
+            AppearPanel_Ikemasu();
+            //ClosePanel_Ikemasu();
+            CheckStart_GameMatch();                 // 試合開始できるか確認する処理
+                                                    //var sequence = DOTween.Sequence();
+                                                    //sequence.InsertCallback(5f, () => AppearPanel_Ikemasu());
+                                                    //MoveTo_cafe_kanban_0_5();   // SubCamera を -5 の位置に移動する
+            CloseSubCamera_Group();
+            Button_TaihouFire.SetActive(false);
+            AppearPanel_SyokaiTaihou();
+
+            X_dis30po = cafe_kanban_005.transform.position.x - cafe_kanban_035.transform.position.x;
+            Debug.Log("X_dis30po : " + X_dis30po);
         }
         else
         {
-            Debug.Log("firstRead_Selectjanken  1 です。CreatePlayerPrefab 処理はしません");
+            Debug.LogError("Start 処理 ダブってます！！！");
+            Error02_Text.text = "Start処理ダブり";
         }
-        */
-
-        Debug.Log("myPlayer が 存在していなかったのでキャラ作成します！！！");
-        //Debug.Log("フラグON だったのでキャラ作成します！！！");
-        CreatePlayerPrefab();          //【START-04】Photonに接続していれば自プレイヤーを生成
-        CreatePlayerPrefab_Flg = false;
-        BGM_SE_MSC.firstRead_Selectjanken = 1;
-
-        myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
-
-        Debug.Log("【START-05】スタートラインにランダムに移動させます");
-        MoveToStartLineRandom();       //【START-05】スタートラインにランダムに移動させる
-
-        Debug.Log("【START-06】MyPlayer にカメラを追従するようにセットします");
-        MyCameraControllerMSC.SetMyCamera();  //【START-06】MyPlayer にカメラを追従するようにセット
-
-        MyKage = GameObject.FindWithTag("MyKage");
-        MyKageControllerMSC = MyKage.GetComponent<MyKageController>();
-
-        Debug.Log("【START-07】スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）");
-        ToShare_InitialSetting();     // 【START-07】スタート時 初期設定を全プレイヤーで共有
-        Check_KageDistance();         //  MyKage と MyPlayer の距離を求める（Y軸の初期位置）
-
-        Debug.Log("【START-09】ジャンケン手「決定ボタン」を表示できるか確認します");
-        Check_CanAppear_KetteiBtn();  // 【START-09】ジャンケン手「決定ボタン」を表示できるか確認
-
-        Debug.Log("【START-10】総参加人数 と 現在待機中の総人数 をチェックします");
-        NinzuCheck();                 // 【START-10】総参加人数 と 現在待機中の総人数
-        NumLivePlayer = SankaNinzu;
-        Debug.Log("【START-11】NumLivePlayer（総参加人数＝生存者数） は " + NumLivePlayer);
-
-        Debug.Log("【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する");
-        ShareAfterJump();   //【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する
-
-        BGM_SE_MSC.FunAndLight_BGM();      // Battle シーンBGM
-        CloseStartLogo();
-        CloseAisatsu_Panel();
-        Reset_AllAisatsu();
-        //Erase_Text_Announcement();
-        AppearPanel_Ikemasu();
-        //ClosePanel_Ikemasu();
-        CheckStart_GameMatch();                 // 試合開始できるか確認する処理
-                                                //var sequence = DOTween.Sequence();
-                                                //sequence.InsertCallback(5f, () => AppearPanel_Ikemasu());
-                                                //MoveTo_cafe_kanban_0_5();   // SubCamera を -5 の位置に移動する
-        CloseSubCamera_Group();
     }
 
 
@@ -535,9 +601,27 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (currentTime > span)
         {
+            text_PosX_P1.text = PosX_Player1.ToString("f1");
+            text_PosX_P2.text = PosX_Player2.ToString("f1");
+            text_PosX_P3.text = PosX_Player3.ToString("f1");
+            text_PosX_P4.text = PosX_Player4.ToString("f1");
+
+            /*
+            if(Flg_CanUseTaihou)
+            {
+                Button_TaihouFire.SetActive(true);
+                //Taihou.SetActive(true);
+                //myPlayer.SetActive(false);
+            }
+            else
+            {
+                Button_TaihouFire.SetActive(false);
+                //Taihou.SetActive(false);
+                //myPlayer.SetActive(true);
+            }
             //Debug.LogFormat("{0}秒経過", span);
             //Debug.LogFormat("待機中合計：" + int_WaitingPlayers_All + "人");
-            /*
+            
             Text_WaitingPlayers_All.GetComponent<Text>().text = "待機中合計："+int_WaitingPlayers_All + "人";
             Text_Wait_Me.GetComponent<Text>().text = int_NowWaiting_Player1 + "";
             Text_Wait_P1.GetComponent<Text>().text = int_NowWaiting_Player1 + "";
@@ -1200,7 +1284,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     #endregion
 
-    #region // 右上の「開始ボタン」を自動で押す処理
+    #region // 右上の「開始ボタン」（ジャンケンパネル オープン）を自動で押す処理
 
     public void Countdown_Until_Push_OpenMyJankenPanel_Button()   // ジャンケンパネルが開かれていないならば、カウントダウン開始
     {
@@ -1658,12 +1742,21 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region // マッチング（ルーム入室）後、4人そろってから（あるいは一定数以上が「はじめる」を押したら）試合開始する処理
     public void Push_Ikemasu_Button()  // Ikemasu ボタンを押した時
     {
-        Share_Iam_Ikemasu();           // 私「試合開始、いけます！」を全員に向け共有する
-        Debug.Log("全員の Ikemasu を合計します");
-        photonView.RPC("Gokei_Ikemasu_PlayersAll", RpcTarget.All);
-        //Gokei_Ikemasu_PlayersAll();  // Ikemasu を合計する
-        CheckStart_GameMatch();        // 試合開始できるか確認する処理
-        ClosePanel_Ikemasu();
+        if (Flg_IkemasuDone == 0)
+        {
+            Flg_IkemasuDone = 1;
+            Share_Iam_Ikemasu();           // 私「試合開始、いけます！」を全員に向け共有する
+            Debug.Log("全員の Ikemasu を合計します");
+            photonView.RPC("Gokei_Ikemasu_PlayersAll", RpcTarget.All);
+            //Gokei_Ikemasu_PlayersAll();  // Ikemasu を合計する
+            CheckStart_GameMatch();        // 試合開始できるか確認する処理
+            ClosePanel_Ikemasu();
+        }
+        else
+        {
+            Debug.LogError("Push_Ikemasu 処理 ダブってます！！！");
+            Error03_Text.text = "Push_Ikemasu処理ダブり";
+        }
     }
 
     public void CheckStart_GameMatch()  // 試合開始できるか確認する処理
@@ -1709,31 +1802,41 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Start_GameMatch()  // 試合開始する処理
     {
-        Shiai_Kaishi = true;
-        text_Game_kaishi_MAE.text = "";
-        text_Game_kaishi_CHU.text = "しあい中";
-        if (PhotonNetwork.CurrentRoom.IsOpen)          // まだ入室許可が出ていたら
+        if (Flg_StartGameMatchDone == 0)
         {
-            PhotonNetwork.CurrentRoom.IsOpen = false;  // これ以上、入室できないようにする
+            Flg_StartGameMatchDone = 1;
+            Shiai_Kaishi = true;
+            text_Game_kaishi_MAE.text = "";
+            text_Game_kaishi_CHU.text = "しあい中";
+            if (PhotonNetwork.CurrentRoom.IsOpen)          // まだ入室許可が出ていたら
+            {
+                PhotonNetwork.CurrentRoom.IsOpen = false;  // これ以上、入室できないようにする
+            }
+            ToShare_InitialSetting();         // スタート位置まで戻ってくださーい
+            // CloseTaiki_OK_All();
+            CloseOpenMyJankenPanel_Button();
+            CloseDebug_Buttons();
+            ClosePanel_Ikemasu();
+            ClosePanel_Intro();
+            CloseAisatsu_Panel();
+            CloseWinPanel();
+            Reset_AllAisatsu();
+            ShuffleCardsMSC.Reset_All();
+            //ShuffleCardsMSC.Set_All();
+            ShuffleCardsMSC.ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
+            AppearStartLogo();
+            BGM_SE_MSC.StartRappa_SE();  // ★ 開始のラッパを鳴らす！
+            Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
+            //var sequence2 = DOTween.Sequence();
+            //sequence2.InsertCallback(3f, () => Countdown_Until_Push_OpenMyJankenPanel_Button());
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(3f, () => Start_GameMatch_After3());
         }
-        // CloseTaiki_OK_All();
-        CloseOpenMyJankenPanel_Button();
-        CloseDebug_Buttons();
-        ClosePanel_Ikemasu();
-        ClosePanel_Intro();
-        CloseAisatsu_Panel();
-        CloseWinPanel();
-        Reset_AllAisatsu();
-        ShuffleCardsMSC.Reset_All();
-        //ShuffleCardsMSC.Set_All();
-        ShuffleCardsMSC.ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
-        AppearStartLogo();
-        BGM_SE_MSC.StartRappa_SE();  // ★ 開始のラッパを鳴らす！
-        Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
-        //var sequence2 = DOTween.Sequence();
-        //sequence2.InsertCallback(3f, () => Countdown_Until_Push_OpenMyJankenPanel_Button());
-        var sequence = DOTween.Sequence();
-        sequence.InsertCallback(3f, () => Start_GameMatch_After3());
+        else
+        {
+            Debug.LogError("Start_GameMatch 処理 ダブってます！！！");
+            Error04_Text.text = "Start_GameMatch処理ダブり";
+        }
     }
 
     public void Start_GameMatch_After3()  // 試合開始してから 3秒後 にする処理
@@ -2176,6 +2279,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【JK-12】CanDoフラグ に関わらず、2 秒待機後、Check_Can_Hantei_Stream を実行します");
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(2f, () => Check_Can_Hantei_Stream());
+
+        Flg_Update_PosX = true;
+        Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
+        CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
     }
 
     [PunRPC]
@@ -2309,6 +2417,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                 // photonView.RPC("CanDo_Hantei_Stream_ON", RpcTarget.All);    // 勝敗判定（Hantei_Stream） を実行できるかのフラグ（CanDoフラグ ON）
                 Debug.Log("全員待機中です。最後にOKを出した人が、代表して勝敗判定（Hantei_Stream） を実行し、結果を都度、全員に共有します");
                 Hantei_Stream();
+                //Taihou.transform.position = new Vector3(PosX_BottomPlayer - 3, Taihou.transform.position.y, Taihou.transform.position.z);  // 大砲本体の位置調整
             }
             else                                   // 一人でも待機まえである
             {
@@ -2333,7 +2442,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         //CanDo_Hantei_Stream_OFF();             // 勝敗判定（Hantei_Stream） を実行できるかのフラグ（CanDoフラグ OFF）
         Debug.Log("【JK-21】勝敗判定（Hantei_Stream） 開始");
 
-        photonView.RPC("ShareCloseMyJankenPanel", RpcTarget.All);  // 延長戦の人がそのままになってしまうので、Myジャンケンパネルを閉じさせる
+        photonView.RPC("ShareCloseMyJankenPanel", RpcTarget.All);       // 延長戦の人がそのままになってしまうので、Myジャンケンパネルを閉じさせる
+        photonView.RPC("Share_ResetFlg_AfterJumpDone", RpcTarget.All);  // AfterJumpDone フラグを 0 にリセットする
 
         ToCheck_Iam_alive();            // ジャンケンで自分が生き残っているかどうかの確認をする
 
@@ -2385,6 +2495,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             ShuffleCardsMSC.CloseMyJankenPanel();   // 不要なパネルを閉じる
         }
+    }
+
+    [PunRPC]
+    public void Share_ResetFlg_AfterJumpDone()      // AfterJumpDone フラグを 0 にリセットする
+    {
+        Flg_AfterJumpDone = 0;
     }
 
     #region // 全員のジャンケン手  表示/非表示処理
@@ -2523,8 +2639,17 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void JankenBattle_OneRoop()          //【JK-23-】ジャンケンバトルの１ループ分処理（1ラウンド）
     {
-        Debug.Log("【JK-23-】■count_RoundRoop : " + count_RoundRoop + " 回目（ラウンド）のジャンケンループ ");    // N回目のジャンケンループ
-        StartCoroutine("Entrance_MainPart");    // メイン判定処理の前段階（2秒待機後に MainPart へ）
+        if (Flg_OneLoopDone == 0)
+        {
+            Flg_OneLoopDone = 1;
+            Debug.Log("【JK-23-】■count_RoundRoop : " + count_RoundRoop + " 回目（ラウンド）のジャンケンループ ");    // N回目のジャンケンループ
+            StartCoroutine("Entrance_MainPart");    // メイン判定処理の前段階（2秒待機後に MainPart へ）
+        }
+        else
+        {
+            Debug.LogError("OneLoopDone 処理 ダブってます！！！");
+            Error05_Text.text = "OneLoopDone処理ダブり";
+        }
     }
 
     IEnumerator Entrance_MainPart()             // メイン判定処理の前段階（2秒待機後に MainPart へ）
@@ -2541,7 +2666,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         SetKP_counter();               //【JK-24】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する & 全員のジャンケン手  1ラウンド分ずつ 非表示
 
         var sequence2 = DOTween.Sequence();
-        sequence2.InsertCallback(2f, () => JankenBattle_MainPart_02());
+        sequence2.InsertCallback(1.5f, () => JankenBattle_MainPart_02());
     }
 
     public void JankenBattle_MainPart_02()   // 【JK-23-】ジャンケンバトルのメイン判定処理 その2
@@ -2553,8 +2678,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         count_RoundRoop++;             // N回目 のループ を 1 進める
         Debug.Log("ジャンケンバトルのメイン判定処理おわり！ 3秒待って、ラウンドループのはじめに戻ります。");
         //Check_Can_Hantei_Stream();     // ラウンドループのはじめに戻ります。
+        var sequence2 = DOTween.Sequence();
+        sequence2.InsertCallback(1.4f, () => Share_ResetFlg_OneLoopDone());
         var sequence = DOTween.Sequence();
-        sequence.InsertCallback(3f, () => Check_Can_Hantei_Stream());
+        sequence.InsertCallback(1.5f, () => Check_Can_Hantei_Stream());
+    }
+
+    public void Share_ResetFlg_OneLoopDone()
+    {
+        Flg_OneLoopDone = 0;
     }
 
     [PunRPC]
@@ -2592,7 +2724,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         photonView.RPC("WhoIsWinner", RpcTarget.All);
 
         var sequence = DOTween.Sequence();
-        sequence.InsertCallback(3f, () => ClosePanel_beforeJump());
+        sequence.InsertCallback(2f, () => ClosePanel_beforeJump());
     }
 
     public void ClosePanel_beforeJump()  // 3秒待ってからジャンケンパネルを閉じる
@@ -2679,14 +2811,28 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         Debug.Log("【JK-203】全員の aliveフラグ を 1 にします（全員生存）");
         ResetAlivePlayer();           //【JK-203】各種 生存者カウンター リセット
-        //anzenPoint = 0;
+                                      //anzenPoint = 0;
 
         Debug.Log("【JK-204】待機中フラグ（確認用パラメータ） を 初期化（0にする）");
         Reset_NowWaiting();      // 待機中フラグ（確認用パラメータ） を 初期化（0にする）
 
         ResetCountdown_timer_PanelOpen_1();
-        //Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
-        Countdown_Until_Push_OpenMyJankenPanel_Button();   // ジャンケンパネルが開かれていないならば、ボタンを押すようにアナウンスする
+        if (Flg_AfterJumpDone == 0)
+        {
+            Flg_AfterJumpDone = 1;
+            //Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
+            Countdown_Until_Push_OpenMyJankenPanel_Button();   // ジャンケンパネルが開かれていないならば、ボタンを押すようにアナウンスする
+        }
+        else
+        {
+            Debug.LogError("AfterJumpDone 処理 ダブってます！！！");
+            Error06_Text.text = "AfterJumpDone処理ダブり";
+        }
+        Flg_FromWin_ToJumpDone = 0;
+        Flg_Update_PosX = true;
+        Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
+        CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
     }
 
     public void Share_MyJankenPanel_Button_Flg_ON()   // ジャンケン開始ボタン フラグ をON
@@ -6247,7 +6393,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #endregion
     #endregion
 
-
+    #region// ジャンケン手のセットに関する処理
     public void SharePlayerTeNum_Player1()  //【JK-07】現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）
     {
         if (Int_MyJanken_Te1 == 0)
@@ -6978,6 +7124,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
+    #endregion
 
     #region// 【JK-02】ジャンケンカードボタン 押した時の処理（フラグを処理済みにする）
 
@@ -7254,17 +7401,23 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #endregion
 
 
-
-
-
     public void FromWin_ToJump()     //【JK-106】ジャンケンに勝ったのでジャンプで移動する その一連の処理
     {
-        Debug.Log("ジャンケン勝者の位置に応じて、SubCamera を移動します");
-        SetPosX_SubCamera_AccordingTo_Winner();  // ジャンケン勝者の位置に応じて、SubCamera を移動する
+        if (Flg_FromWin_ToJumpDone == 0)
+        {
+            Flg_FromWin_ToJumpDone = 1;
+            Debug.Log("ジャンケン勝者の位置に応じて、SubCamera を移動します");
+            SetPosX_SubCamera_AccordingTo_Winner();  // ジャンケン勝者の位置に応じて、SubCamera を移動する
 
-        Debug.Log("【JK-107】FromWin_ToJump （ジャンプ移動）処理に入ります");
-        Set_StepNum();               //【JK-108】ジャンプする回数を設定する（変数上書き） 
-        bridge_JumpToRight();        //【JK-109】右方向へ 指定された回数 ぴょん と跳ねながら移動する
+            Debug.Log("【JK-107】FromWin_ToJump （ジャンプ移動）処理に入ります");
+            Set_StepNum();               //【JK-108】ジャンプする回数を設定する（変数上書き） 
+            bridge_JumpToRight();        //【JK-109】右方向へ 指定された回数 ぴょん と跳ねながら移動する
+        }
+        else
+        {
+            Debug.LogError("FromWin_ToJumpDone 処理 ダブってます！！！");
+            Error06_Text.text = "FromWin_ToJumpDone処理ダブり";
+        }
     }
 
     public void Set_StepNum()        //【JK-108】ジャンプする回数を設定する（変数上書き） 
@@ -7317,9 +7470,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("PosX_Winner : " + PosX_Winner);
         PosX_Winner = MyKage.transform.position.x;
         Debug.Log("PosX_Winner : " + PosX_Winner);
-        share_SubCamera_Moving();    // サブカメラ を移動 ⇒ 全員に共有
+        share_SubCamera_Position();                // サブカメラの位置を移動して共有する ＆＆ サブカメラの表示ON
+        //share_SubCamera_Moving();    // サブカメラ を移動 ⇒ 全員に共有
         //AppearSubCamera_Group();   // サブカメラ を表示
-        photonView.RPC("AppearSubCamera_Group", RpcTarget.All);  // 全員にサブカメラを一斉に開かせる
+        //photonView.RPC("AppearSubCamera_Group", RpcTarget.All);  // 全員にサブカメラを一斉に開かせる
+        if(original_StepNum >= 10)  // 奴隷などで歩数が10以上の時
+        {
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(JumpMaeTaiki, () => ShareSubCamera_GoRight_10m_slow());
+            //photonView.RPC("SubCamera_GoRight_10m_slow", RpcTarget.All);  // ゆっくり10ｍ右に移動させる
+        }
     }
 
     public void share_SubCamera_Moving()              // ジャンケン勝者近くの cafe_kanban の位置に SubCamera を移動する
@@ -7393,6 +7553,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("SubCamera サブカメラ 表示します");
         SubCamera_Group.SetActive(true);
         SubCamera.SetActive(true);
+        ToLeft_SubCamera = false;
+        ToRight_SubCamera = false;
     }
 
     public void CloseSubCamera_Group()
@@ -7400,14 +7562,17 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("SubCamera サブカメラ 非表示");
         SubCamera_Group.SetActive(false);
         SubCamera.SetActive(false);
+        ToLeft_SubCamera = false;
+        ToRight_SubCamera = false;
     }
 
     public void On_Off_SubCamera_Group()
     {
+        ToLeft_SubCamera = false;
+        ToRight_SubCamera = false;
         if (SubCamera_Group.activeSelf) // サブカメラ ON だったら
         {
             CloseSubCamera_Group();
-
         }
         else                           // サブカメラ OFF だったら
         {
@@ -7418,21 +7583,25 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Right_PushDown()          //      右ボタンを押している間
     {
         ToRight_SubCamera = true;
+        ToLeft_SubCamera = false;
     }
 
     public void Right_PushUp()            //      右ボタンを押すのをやめた時
     {
         ToRight_SubCamera = false;
+        ToLeft_SubCamera = false;
     }
 
     public void Left_PushDown()         //      左ボタンを押している間
 
     {
         ToLeft_SubCamera = true;
+        ToRight_SubCamera = false;
     }
 
     public void Left_PushUp()          //      左ボタンを押すのをやめた時
     {
+        ToRight_SubCamera = false;
         ToLeft_SubCamera = false;
     }
 
@@ -7452,44 +7621,179 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
+    [PunRPC]
+    public void SubCamera_GoRight_4m()
+    {
+        SubCamera.transform.DOMove(new Vector3(4, 0, 0), 4).SetRelative(true); //現在の位置から（4,0,0）だけ移動
+    }
+
+    [PunRPC]
+    public void SubCamera_GoRight_10m_First()
+    {
+        SubCamera.transform.DOMove(new Vector3(10, 0, 0), 2).SetRelative(true); //現在の位置から（10,0,0）だけ移動
+    }
+
+    public void ShareSubCamera_GoRight_10m_slow()
+    {
+        photonView.RPC("SubCamera_GoRight_10m_slow", RpcTarget.All);  // ゆっくり10ｍ右に移動させる
+    }
+
+    [PunRPC]
+    public void SubCamera_GoRight_10m_slow()
+    {
+        SubCamera.transform.DOMove(new Vector3(10, 0, 0), 10).SetRelative(true); //現在の位置から（10,0,0）だけ移動
+    }
+
+    public void share_SubCamera_Position()                // サブカメラの位置を移動して共有する ＆＆ サブカメラの表示ON
+    {
+        Debug.Log("サブカメラの位置を移動して共有する");
+
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            photonView.RPC("SubCamera_MoveTo_PosX_Player1", RpcTarget.All);  // サブカメラの位置を移動して共有する
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            photonView.RPC("SubCamera_MoveTo_PosX_Player2", RpcTarget.All);  // サブカメラの位置を移動して共有する
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            photonView.RPC("SubCamera_MoveTo_PosX_Player3", RpcTarget.All);  // サブカメラの位置を移動して共有する
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            photonView.RPC("SubCamera_MoveTo_PosX_Player4", RpcTarget.All);  // サブカメラの位置を移動して共有する
+        }
+
+        photonView.RPC("AppearSubCamera_Group", RpcTarget.All);  // 全員にサブカメラを一斉に開かせる
+    }
+
+
+    [PunRPC]
+    public void SubCamera_MoveTo_PosX_Player1()   // SubCamera を PosX_Player1 の位置に移動する
+    {
+        SubCamera.transform.position = new Vector3(PosX_Player1, cafe_kanban_035.transform.position.y, SubCamera.transform.position.z);
+    }
+
+    [PunRPC]
+    public void SubCamera_MoveTo_PosX_Player2()   // SubCamera を PosX_Player2 の位置に移動する
+    {
+        SubCamera.transform.position = new Vector3(PosX_Player2, cafe_kanban_035.transform.position.y, SubCamera.transform.position.z);
+    }
+
+    [PunRPC]
+    public void SubCamera_MoveTo_PosX_Player3()   // SubCamera を PosX_Player3 の位置に移動する
+    {
+        SubCamera.transform.position = new Vector3(PosX_Player3, cafe_kanban_035.transform.position.y, SubCamera.transform.position.z);
+    }
+
+    [PunRPC]
+    public void SubCamera_MoveTo_PosX_Player4()   // SubCamera を PosX_Player4 の位置に移動する
+    {
+        SubCamera.transform.position = new Vector3(PosX_Player4, cafe_kanban_035.transform.position.y, SubCamera.transform.position.z);
+    }
+
+    [PunRPC]
+    public void CloseSubCamera_Group_AfterWait1sec()
+    {
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(1.0f, () => CloseSubCamera_Group());  // サブカメラを閉じる
+    }
+
     #endregion
+
+    public void Update_PosX_Players()   // 各プレイヤーのX軸位置を同期します
+    {
+        Flg_Update_PosX = true;
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            PosX_Player1 = myPlayer.transform.position.x - StartMark1.transform.position.x;
+            PosX_MyPlayer = PosX_Player1;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            PosX_Player2 = myPlayer.transform.position.x - StartMark2.transform.position.x;
+            PosX_MyPlayer = PosX_Player2;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            PosX_Player3 = myPlayer.transform.position.x - StartMark3.transform.position.x;
+            PosX_MyPlayer = PosX_Player3;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            PosX_Player4 = myPlayer.transform.position.x - StartMark4.transform.position.x;
+            PosX_MyPlayer = PosX_Player4;
+        }
+    }
+
+    public void WhoIsTopPlayer()        // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
+    {
+        PosX_TopPlayer = Mathf.Max(PosX_Player1, PosX_Player2, PosX_Player3, PosX_Player4);
+        X_dis_betweenTop = PosX_TopPlayer - PosX_MyPlayer;
+    }
+
+    public void WhoIsBottomPlayer()     // 各プレイヤーのX軸位置を比較し、最下位の位置を特定する
+    {
+        PosX_BottomPlayer = Mathf.Min(PosX_Player1, PosX_Player2, PosX_Player3, PosX_Player4);
+    }
+
+    public void CheckCanUseTaihou()     // 人間大砲が撃てるか確認します
+    {
+        Debug.Log("CheckCanUseTaihou 人間大砲が撃てるか確認します");
+        Debug.Log("X_dis_betweenTop : " + X_dis_betweenTop);
+        Debug.Log("(X_dis30po/2)-1 : " + ((X_dis30po / 2) - 1));
+
+        if (X_dis_betweenTop >= ((X_dis30po/2)-1))      // 首位との差が 14 以上開いていたら
+        {
+            Flg_CanUseTaihou = true;
+            Button_TaihouFire.SetActive(true);
+        }
+        else
+        {
+            Flg_CanUseTaihou = false;
+            Button_TaihouFire.SetActive(false);
+        }
+    }
+
+    public void CanUse_Taihou()
+    {
+        Flg_CanUseTaihou = true;
+        Button_TaihouFire.SetActive(true);
+    }
+
+    public void CannotUse_Taihou()
+    {
+        Flg_CanUseTaihou = false;
+        Button_TaihouFire.SetActive(false);
+    }
+
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        /*
-    // オーナーの場合
-    if (stream.IsWriting)
-    {
-        stream.SendNext(int_Player1_Te1);
-        stream.SendNext(int_Player2_Te1);
-        if (TestRoomControllerSC.allPlayers.Length >= 3)
+        if (stream.IsWriting)        //データの送信
         {
-            stream.SendNext(int_Player3_Te1);
+            if (Flg_Update_PosX)
+            {
+                stream.SendNext(PosX_Player1);
+                stream.SendNext(PosX_Player2);
+                stream.SendNext(PosX_Player3);
+                stream.SendNext(PosX_Player4);
+            }
         }
-        if (TestRoomControllerSC.allPlayers.Length >= 4)
+        else                       //データの受信
         {
-            stream.SendNext(int_Player4_Te1);
+            PosX_Player1 = (float)stream.ReceiveNext();
+            PosX_Player2 = (float)stream.ReceiveNext();
+            PosX_Player3 = (float)stream.ReceiveNext();
+            PosX_Player4 = (float)stream.ReceiveNext();
         }
-    }
-    // オーナー以外の場合
-    else
-    {
-        this.receiveint_Player1_Te1 = (int)stream.ReceiveNext();
-        SelectJankenMSC.int_Player1_Te1 = receiveint_Player1_Te1;
-        this.receiveint_Player2_Te1 = (int)stream.ReceiveNext();
-        SelectJankenMSC.int_Player2_Te1 = receiveint_Player2_Te1;
-        if (TestRoomControllerSC.allPlayers.Length >= 3)
-        {
-            this.receiveint_Player3_Te1 = (int)stream.ReceiveNext();
-            SelectJankenMSC.int_Player3_Te1 = receiveint_Player3_Te1;
-        }
-        if (TestRoomControllerSC.allPlayers.Length >= 4)
-        {
-            this.receiveint_Player4_Te1 = (int)stream.ReceiveNext();
-            SelectJankenMSC.int_Player4_Te1 = receiveint_Player4_Te1;
-        }
-    }
-    */
     }
 
     private void RequestOwner()
@@ -7559,10 +7863,146 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     */
 
 
-    public void TaiHou_Bakuhatsu_Play()   // 人間大砲の爆発エフェクトを再生
+    public void ShareTaihouFireStream()
     {
-        TaiHou_Bakuhatsu.Play();
+        WhoIsTaihouFlyer();                     // 大砲で飛ぶのは誰？
+        Taihou.transform.position = myPlayer.transform.position;  // 大砲本体の位置をMyキャラの位置に移動する
+        Flg_CanUseTaihou = false;
+        Button_TaihouFire.SetActive(false);
+        myPlayer.SetActive(false);              // 自分のプレイヤーキャラを一時的に非表示にする
+        Countdown_timer_PanelOpen = -1;         // ボタンを おしてね のカウントダウンを止める
+        share_SubCamera_Position();             // サブカメラの位置を移動して共有する ＆＆ サブカメラの表示ON
+        photonView.RPC("TaihouFire", RpcTarget.All);
+
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(3f, () => bridge_Fly_byTaihou());
     }
+
+    public void bridge_Fly_byTaihou()   // 大砲によってキャラが飛ぶ
+    {
+        myPlayer.SetActive(true);       // 自分のプレイヤーキャラを再表示する
+        PlayerSC.Fly_byTaihou();        // 大砲によってキャラが飛ぶ
+    }
+
+    [PunRPC]
+    public void TaihouFire()
+    {
+        Taihou.SetActive(true);          // 大砲本体を出現させる     
+        BGM_SE_MSC.TaihouFire_SE();      // 大砲のカウントダウン開始
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(3f, () => Taihou_Bakuhatsu_Play());
+    }
+
+    public void Taihou_Bakuhatsu_Play()   // 人間大砲の爆発エフェクトを再生 ＆＆ 画面揺れ ＆＆ 爆発音
+    {
+        Taihou_Bakuhatsu.Play();  // 爆発エフェクト
+        if (Flg_Taihou_punch)
+        {
+            var vecPunch = new Vector3(0.05f, 0.05f, 0.05f);
+            _camera.transform.DOPunchScale(Vector3.one, duration: 2,  vibrato: int_vib, flo_ran);
+            SubCamera_Group.transform.DOPunchScale(vecPunch, duration: 2, vibrato: int_vib, flo_ran);
+        }
+        else
+        {
+            var vecPunch = new Vector3(0.01f, 0.02f, 0.01f);
+            _camera.DOShakePosition(duration: 2, strength: flo_str, vibrato: int_vib, randomness: flo_ran, fadeOut: true);
+            SubCamera_Group.transform.DOPunchScale(vecPunch, duration: 2, vibrato: int_vib, flo_ran);
+            //SubCamera_Group.transform.DOShakePosition(duration: 2, strength: flo_str*0.5f, vibrato: int_vib, randomness: flo_ran*0.5f, fadeOut: true);
+            //_camera.DOShakePosition(duration: 2, strength: 2, vibrato: 2, randomness: 30, fadeOut: true);
+            //_camera.transform.DOShakeScale(2f);
+        }
+        photonView.RPC("SubCamera_GoRight_10m_First", RpcTarget.All);  // 素早く10ｍ右に移動させる
+    }
+
+    public void AfterFly_byTaihou()       // 人間大砲ヲ撃って、着地した後の処理
+    {
+        MoveTo_MyKagePos();   // MyKage の位置へ移動する（Y軸位置微調整）
+        Judge_GOAL();         // ゴールラインに到達したか判定する
+        ResetCountdown_timer_PanelOpen_1();             // ボタンを おしてね のカウントダウンを再開する
+        Countdown_Until_Push_OpenMyJankenPanel_Button();   // ジャンケンパネルが開かれていないならば、カウントダウン開始
+        photonView.RPC("CloseSubCamera_Group_AfterWait1sec", RpcTarget.All);   // 全員一斉にサブカメラを閉じる
+
+        Flg_Update_PosX = true;
+        Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
+        CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
+    }
+
+
+    public void WhoIsTaihouFlyer()                // 大砲で飛んでいるのは誰？
+    {
+        Debug.Log("大砲で飛んでいるのは誰？");
+        WinnerNum = -1;                      // 一旦リセット
+
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            WinnerNum = 1;
+            photonView.RPC("ShareWinnerName_P1", RpcTarget.All);
+            //Text_WinnerName.text = TestRoomControllerSC.string_PName1;
+            ShareJKAvator_Kachi_Player1();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            WinnerNum = 2;
+            photonView.RPC("ShareWinnerName_P2", RpcTarget.All);
+            //Text_WinnerName.text = TestRoomControllerSC.string_PName2;
+            ShareJKAvator_Kachi_Player2();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            WinnerNum = 3;
+            photonView.RPC("ShareWinnerName_P3", RpcTarget.All);
+            //Text_WinnerName.text = TestRoomControllerSC.string_PName3;
+            ShareJKAvator_Kachi_Player3();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            WinnerNum = 4;
+            photonView.RPC("ShareWinnerName_P4", RpcTarget.All);
+            //Text_WinnerName.text = TestRoomControllerSC.string_PName4;
+            ShareJKAvator_Kachi_Player4();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
+        }
+
+        SetMyAvator_ForChamp();         // チャンプ のアバターを ゴールパネル（表彰台）にセットします。  
+    }
+
+    [PunRPC]
+    public void ShareWinnerName_P1()
+    {
+        Text_WinnerName.text = TestRoomControllerSC.string_PName1;
+    }
+
+    [PunRPC]
+    public void ShareWinnerName_P2()
+    {
+        Text_WinnerName.text = TestRoomControllerSC.string_PName2;
+    }
+
+    [PunRPC]
+    public void ShareWinnerName_P3()
+    {
+        Text_WinnerName.text = TestRoomControllerSC.string_PName3;
+    }
+
+    [PunRPC]
+    public void ShareWinnerName_P4()
+    {
+        Text_WinnerName.text = TestRoomControllerSC.string_PName4;
+    }
+
+    public void AppearPanel_SyokaiTaihou()
+    {
+        Panel_SyokaiTaihou.SetActive(true);
+    }
+
+    public void ClosePanel_SyokaiTaihou()
+    {
+        Panel_SyokaiTaihou.SetActive(false);
+    }
+
 
     public void WhoAreYou()    // 私の名前（真名）を表示
     {
@@ -7619,6 +8059,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void SetMyAvator_ForChamp()  // チャンプ のアバターを ゴールパネル（表彰台）にセットします。
     {
+        photonView.RPC("CloseWinner_avator_All", RpcTarget.All);
+
         Debug.Log("チャンプ のアバターを ゴールパネル（表彰台）にセットします。");
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
@@ -7770,6 +8212,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Winner_avator_5.SetActive(false);
     }
 
+    [PunRPC]
+    public void CloseWinner_avator_All()
+    {
+        CloseWinner_avator_1();
+        CloseWinner_avator_2();
+        CloseWinner_avator_3();
+        CloseWinner_avator_4();
+        CloseWinner_avator_5();
+    }
+
     public void AppearPanel_Intro()
     {
         Panel_Intro.SetActive(true);
@@ -7778,6 +8230,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void ClosePanel_Intro()
     {
         Panel_Intro.SetActive(false);
+    }
+
+    public void AppearPanel_ToTitle()
+    {
+        Panel_ToTitle.SetActive(true);
+    }
+
+    public void ClosePanel_ToTitle()
+    {
+        Panel_ToTitle.SetActive(false);
     }
     // End
 
