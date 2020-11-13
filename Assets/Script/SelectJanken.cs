@@ -458,6 +458,24 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public bool Flg_Taihou_punch = false;
 
     public GameObject Panel_ToTitle;
+
+    public GameObject Ninja_Button;
+    public GameObject Syoji_Panel;   // 忍者が相手の手札を覗く時に表示される障子穴のパネル
+
+    int Gold_MyPlayer = 30;     // 自分の所持金（ゴールド）
+    int Gold_Player1 = 30;
+    int Gold_Player2 = 30;
+    int Gold_Player3 = 30;
+    int Gold_Player4 = 30;
+
+    public Text text_Gold_P1;
+    public Text text_Gold_P2;
+    public Text text_Gold_P3;
+    public Text text_Gold_P4;
+    public Text Text_Gold_fusoku;
+
+    int int_calculation_Gold;  // 現在の所持金（ゴールド）にマイナス/プラスする数値
+
     #endregion
 
     #region // 【START】初期設定の処理一覧
@@ -508,7 +526,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Flg_StartDone = 1;
             //var customProperties = photonView.Owner.CustomProperties;
             Debug.Log("【START-03】SelectJanken  void Start() 出席確認2");
-
+            ClosePanel_Ikemasu();
             myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
 
             Debug.Log("【START-03】 各変数を 初期化（リセット）します");
@@ -561,7 +579,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Check_CanAppear_KetteiBtn();  // 【START-09】ジャンケン手「決定ボタン」を表示できるか確認
 
             Debug.Log("【START-10】総参加人数 と 現在待機中の総人数 をチェックします");
-            NinzuCheck();                 // 【START-10】総参加人数 と 現在待機中の総人数
+            NinzuCheck();                 // 【START-10】総参加人数 と 現在待機中の総人数  && 2人以上で「いけますパネル」を表示
             NumLivePlayer = SankaNinzu;
             Debug.Log("【START-11】NumLivePlayer（総参加人数＝生存者数） は " + NumLivePlayer);
 
@@ -571,9 +589,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             BGM_SE_MSC.FunAndLight_BGM();      // Battle シーンBGM
             CloseStartLogo();
             CloseAisatsu_Panel();
+            CloseSyoji_Panel();
             Reset_AllAisatsu();
             //Erase_Text_Announcement();
-            AppearPanel_Ikemasu();
+            //AppearPanel_Ikemasu();
             //ClosePanel_Ikemasu();
             CheckStart_GameMatch();                 // 試合開始できるか確認する処理
                                                     //var sequence = DOTween.Sequence();
@@ -606,6 +625,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             text_PosX_P3.text = PosX_Player3.ToString("f1");
             text_PosX_P4.text = PosX_Player4.ToString("f1");
 
+            text_Gold_P1.text = Gold_Player1.ToString();
+            text_Gold_P2.text = Gold_Player2.ToString();
+            text_Gold_P3.text = Gold_Player3.ToString();
+            text_Gold_P4.text = Gold_Player4.ToString();
             /*
             if(Flg_CanUseTaihou)
             {
@@ -1230,6 +1253,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_WaitingPlayers_All = int_NowWaiting_Player1 + int_NowWaiting_Player2 + int_NowWaiting_Player3 + int_NowWaiting_Player4;   // 現在待機中の総人数 を更新
         Debug.Log("総参加人数（SankaNinzu） ： " + SankaNinzu);
         Debug.Log("現在待機中の総人数（int_WaitingPlayers_All） ： " + int_WaitingPlayers_All);
+        if (SankaNinzu >= 2 && (Shiai_Kaishi == false))  // 試合開始まえであれば
+        {
+            //AppearPanel_Ikemasu();  // いけます ボタン(パネル) 参加人数2人以上になったら表示する
+            photonView.RPC("AppearPanel_Ikemasu", RpcTarget.All);
+        }
     }
 
     public void AllPlayerWaiting_Forcibly()
@@ -1349,7 +1377,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Checking_PanelOpen(int timeHyoji)
     {
-        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
+        if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)  // 既にジャンケンパネルが開いていたら
         {
             Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
             Erase_Text_Announcement();
@@ -1911,9 +1939,17 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("「試合開始、いけます！」の総人数（int_Ikemasu_All） ： " + int_Ikemasu_All);
     }
 
+    [PunRPC]
     public void AppearPanel_Ikemasu()
     {
-        Panel_Ikemasu.SetActive(true);
+        if (int_Iam_Ikemasu == 1)  // 既に「いけますボタン」を自分が押しているならば
+        {
+            Share_Iam_Ikemasu();   // （パネルは開かず）私「試合開始、いけます！」を全員に向け共有する（前回居なかった人もいるかも知れないので、改めて通知する）
+        }
+        else                       // 「いけますボタン」を自分がまだ押していなければ
+        {
+            Panel_Ikemasu.SetActive(true);
+        }
     }
 
     public void ClosePanel_Ikemasu()
@@ -8010,13 +8046,152 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("PhotonNetwork.NickName ランチャー：" + PhotonNetwork.NickName);
     }
 
+    #region// 所持金（ゴールド）
+    public void Update_Gold_Players()   // 各プレイヤーの所持金（ゴールド）を同期します
+    {
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            Gold_MyPlayer = Gold_Player1;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            Gold_MyPlayer = Gold_Player2;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            Gold_MyPlayer = Gold_Player3;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            Gold_MyPlayer = Gold_Player4;
+        }
+    }
+
+    public void Set_p05_calculation_Gold() // ゴールド +5
+    {
+        int_calculation_Gold = 5;
+    }
+
+    public void Set_p10_calculation_Gold()
+    {
+        int_calculation_Gold = 10;
+    }
+
+    public void Set_p20_calculation_Gold()
+    {
+        int_calculation_Gold = 20;
+    }
+
+    public void Set_m05_calculation_Gold() // ゴールド -5
+    {
+        int_calculation_Gold = -5;
+    }
+
+    public void Set_m10_calculation_Gold()  // ゴールド -10
+    {
+        int_calculation_Gold = -10;
+    }
+
+    public void Set_m20_calculation_Gold()
+    {
+        int_calculation_Gold = -20;
+    }
+
+    public void calculate_Gold_Players()   // 所持金（ゴールド）をマイナス/プラスします
+    {
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            Gold_Player1 = Gold_Player1 + int_calculation_Gold;
+            Gold_MyPlayer = Gold_Player1;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            Gold_Player2 = Gold_Player2 + int_calculation_Gold;
+            Gold_MyPlayer = Gold_Player2;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            Gold_Player3 = Gold_Player3 + int_calculation_Gold;
+            Gold_MyPlayer = Gold_Player3;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            Gold_Player4 = Gold_Player4 + int_calculation_Gold;
+            Gold_MyPlayer = Gold_Player4;
+        }
+    }
+    #endregion
+
+
+    #region// 忍者（相手の手札を見る）
+    public void PushNinjaButton()  // Myジャンケンパネルを一旦閉じて、現時点で決まっている手札を見る。5秒後、再度Myジャンケンパネルを表示させる
+    {
+        if (Gold_MyPlayer >= 10)
+        {
+            Set_m10_calculation_Gold();  // ゴールド -10
+            calculate_Gold_Players();    // 所持金（ゴールド）をマイナス/プラスします
+            AppearSyoji_Panel();
+            ResetCountdown_timer_Kettei_1();
+            bridgeCloseMyJankenPanel();
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(5f, () => bridgeAppearMyJankenPanel());
+        }
+        else  // ゴールドが足りないよ
+        {
+              // ぽわわ～ん。。。
+            BGM_SE_MSC.gold_fusoku_SE();
+            Text_Gold_fusoku.text = "ゴールドが 不足しています...";
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(3f, () => Erase_Text_Gold_fusoku());
+        }
+    }
+
+    public void Erase_Text_Gold_fusoku()
+    {
+        Text_Gold_fusoku.text = "";
+    }
+
+    public void bridgeAppearMyJankenPanel()
+    {
+        ShuffleCardsMSC.AppearMyJankenPanel();
+        CloseSyoji_Panel();
+    }
+
+    public void bridgeCloseMyJankenPanel()
+    {
+        ShuffleCardsMSC.CloseMyJankenPanel();
+    }
+
+    public void AppearSyoji_Panel()
+    {
+        Syoji_Panel.SetActive(true);
+    }
+
+    public void CloseSyoji_Panel()
+    {
+        Syoji_Panel.SetActive(false);
+    }
+
+    #endregion
+
     public void Judge_GOAL()   // ゴールラインに到達したか判定する
     {
-        if (myPlayer.transform.position.x >= GoalCorn_Head.transform.position.x)
+        if (myPlayer.transform.position.x >= GoalCorn_Head.transform.position.x)  // ゴールにたどり着いた！
         {
             Debug.Log("GOOOOOALLL！！！！");
             Check_Champ_Avator();
             photonView.RPC("ShareGameSet", RpcTarget.All);
+        }
+        else  // まだゴールまで来ていない
+        {
+            //Share_JKAvator_StandSetting();       // ジャンケン手、下アバターをスタンド（デフォルト）にし、それを全プレイヤーで共有する
+            photonView.RPC("Share_JKAvator_StandSetting", RpcTarget.All);
         }
     }
 
@@ -8240,6 +8415,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void ClosePanel_ToTitle()
     {
         Panel_ToTitle.SetActive(false);
+    }
+
+    public void AppearNinja_Button()
+    {
+        Ninja_Button.SetActive(true);
+    }
+
+    public void CloseNinja_Button()
+    {
+        Ninja_Button.SetActive(false);
     }
     // End
 
