@@ -349,8 +349,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "    ****** \u30AF\u30EC\u30B8\u30C3\u30C8\uFF08\u656C\u79F0\u7565\uFF09******\r\n\r\n\u3010BGM\u30FBSE\u3011\r\n\u30FBMusMus\r\n\u30FByuki\uFF08dova-s.jp\uFF09\r\n\r\n\u3010\u30A4\u30E9\u30B9\u30C8\u3011\r\n\u30FB\u8449\u98A8\u305D\u3089\r\n\u30FB\u5408\u540C\u4F1A\u793E
-    \u30D7\u30ED\u751F\r\n\u30FBUnity Technologies Japan/UCL\r\n\u30FBsilhouette-illust\r\n\u30FBIWOZON\r\n\u30FB\uFF08\u305A\u30FB\u03C9\u30FB\u304D\u3087\uFF09\r\n\r\n\u3010\u305D\u306E\u4ED6\u3011\r\n\u30FB\u3084\u3055\u3057\u3055\u30B4\u30B7\u30C3\u30AF\r\n\r\n\u5236\u4F5C\u8005\uFF1A\u3042\u3063\u3061\u3087"
+  m_Text: "    ****** \u30AF\u30EC\u30B8\u30C3\u30C8\uFF08\u656C\u79F0\u7565\uFF09******\r\n\r\n\u3010BGM\u30FBSE\u3011\r\nMusMus\r\nyuki\uFF08dova-s.jp\uFF09\r\nOn-Jin
+    \uFF5E\u97F3\u4EBA\uFF5E\r\n\r\n\u3010\u30A4\u30E9\u30B9\u30C8\u3011\r\n\u8449\u98A8\u305D\u3089\r\n\u5408\u540C\u4F1A\u793E
+    \u30D7\u30ED\u751F\r\nUnity Technologies Japan/UCL\r\nsilhouette-illust\r\nIWOZON\r\n\uFF08\u305A\u30FB\u03C9\u30FB\u304D\u3087\uFF09\r\n\u30D5\u30A1\u30F3\u30BF\u30B8\u30B9\u30BF\uFF08\u30B8\u30B9\u305F\u3093\uFF09\r\n\u4EF2\u5D8B\u306F\u308A\u304D\u3085\u3046\u9662\uFF08\u714C\u5FA1\u9580
+    \u78A7\u7434\uFF09\r\n\u30CF\u30E4\u30B7\u85AC\u5C40\uFF08\u304F\u3059\u308A\u5C4B\u306E\u826F\u4F73\u3055\u3093\uFF09\r\n\r\n\u3010\u305D\u306E\u4ED6\u3011\r\n\u3084\u3055\u3057\u3055\u30B4\u30B7\u30C3\u30AF\r\n\r\n\u5236\u4F5C\u8005\uFF1A\u3042\u3063\u3061\u3087\r\n\r\n\u6700\u7D42\u66F4\u65B0\uFF1A2020/11/24"
 --- !u!222 &48659585
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5426,6 +5428,7 @@ GameObject:
   - component: {fileID: 1549704932}
   - component: {fileID: 1549704933}
   - component: {fileID: 1549704934}
+  - component: {fileID: 1549704935}
   m_Layer: 0
   m_Name: BGM_SE_Manager
   m_TagString: Untagged
@@ -5571,6 +5574,7 @@ MonoBehaviour:
   korede_iikana: {fileID: 8300000, guid: c01c01420cabda64b87cf91eca34d869, type: 3}
   TaihouFire: {fileID: 8300000, guid: c5c0ba443d9359c408d0138dfb2bb100, type: 3}
   gold_fusoku: {fileID: 8300000, guid: d86e7da3647fc814abccf2f43f608606, type: 3}
+  Tarai_Guwan: {fileID: 8300000, guid: 92e96c69cb56d38459a04e46a9560ec2, type: 3}
   Aikotoba: 
 --- !u!82 &1549704925
 AudioSource:
@@ -6532,6 +6536,102 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!82 &1549704935
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549704921}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 92e96c69cb56d38459a04e46a9560ec2, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1606959340
 GameObject:
   m_ObjectHideFlags: 0
@@ -6602,7 +6702,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Ver.0.202
+  m_Text: Ver.0.203
 --- !u!222 &1606959343
 CanvasRenderer:
   m_ObjectHideFlags: 0

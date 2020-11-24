@@ -31,6 +31,7 @@ public class BGM_SE_Manager : MonoBehaviour
     public AudioClip korede_iikana;
     public AudioClip TaihouFire;
     public AudioClip gold_fusoku;
+    public AudioClip Tarai_Guwan;
 
     public string Aikotoba = "";  // あいことば（ルーム名になる）
 
@@ -127,6 +128,11 @@ public class BGM_SE_Manager : MonoBehaviour
     public void gold_fusoku_SE()
     {
         audioSource.PlayOneShot(gold_fusoku);
+    }
+
+    public void Tarai_Guwan_SE()
+    {
+        audioSource.PlayOneShot(Tarai_Guwan);
     }
     #endregion
 

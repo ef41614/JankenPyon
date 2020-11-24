@@ -326,6 +326,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0
   MoveForward_StepNum: 3
+  anim: {fileID: 0}
   MySprite: {fileID: 7321852487168509828}
   int_MySpriteOrder: 0
   SelectJankenManager: {fileID: 0}

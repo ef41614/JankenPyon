@@ -11,7 +11,7 @@ public class PlayerScript : MonoBehaviour
     public float speed;
     [Header("進む（ジャンプする）回数")]
     public int MoveForward_StepNum = 3; // 進む（ジャンプする）回数
-    private Animator anim = null;
+    public Animator anim = null;
     public SpriteRenderer MySprite;           // スプライト → order in layer の順番調整に使用する
     public int int_MySpriteOrder = 0;  // order in layer の順番調整に使用する整数
     public GameObject SelectJankenManager; //ヒエラルキー上のオブジェクト名
@@ -92,6 +92,7 @@ public class PlayerScript : MonoBehaviour
                     //SelectJankenMSC.Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
                     SelectJankenMSC.Share_MyJankenPanel_Button_Flg_ON();  // ジャンケン開始ボタン フラグ をON
                     SelectJankenMSC.ShareAfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理 ⇒ 全員に共有する
+                    SelectJankenMSC.FallTarai_stream();          // たらいを落とす
                 });
         }
         else

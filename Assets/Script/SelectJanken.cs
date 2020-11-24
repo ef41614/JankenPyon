@@ -473,8 +473,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Text text_Gold_P3;
     public Text text_Gold_P4;
     public Text Text_Gold_fusoku;
-
+    
     int int_calculation_Gold;  // 現在の所持金（ゴールド）にマイナス/プラスする数値
+
+    public GameObject Tarai;
+    public ParticleSystem Tarai_Guwan;
+    float PosY_taraiSet;
+    float PosY_GuwanSet;
+    public float flo_sky_taraiSet = 7.0f;   // 頭上何メートルにたらいをセットするか
 
     #endregion
 
@@ -590,7 +596,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             CloseStartLogo();
             CloseAisatsu_Panel();
             CloseSyoji_Panel();
+            CloseNinja_Button();
             Reset_AllAisatsu();
+            CloseTarai();
             //Erase_Text_Announcement();
             //AppearPanel_Ikemasu();
             //ClosePanel_Ikemasu();
@@ -1245,7 +1253,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player4_Avator_underJankenTe.gameObject.GetComponent<Image>().sprite = sprite_Avator_Stand_Zunko;
     }
 
-    public void NinzuCheck()                          // 【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します
+    public void NinzuCheck()                          // 【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します ＆＆ 忍者ボタンの ON/OFF
     {
         Debug.Log("【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します");
         TestRoomControllerSC.PNameCheck();            // 現在の参加人数を更新する（プレイヤー名が埋まっていなかったら入れる）
@@ -1257,6 +1265,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             //AppearPanel_Ikemasu();  // いけます ボタン(パネル) 参加人数2人以上になったら表示する
             photonView.RPC("AppearPanel_Ikemasu", RpcTarget.All);
+        }
+        if(int_WaitingPlayers_All >= 1)  // 待機人数が1人以上であれば
+        {
+            AppearNinja_Button();
+        }
+        else                             // 全員待機前ならば
+        {
+            CloseNinja_Button();
         }
     }
 
@@ -2317,7 +2333,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         sequence.InsertCallback(2f, () => Check_Can_Hantei_Stream());
 
         Flg_Update_PosX = true;
-        Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        //Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        photonView.RPC("Update_PosX_Players", RpcTarget.All);
         WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
         CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
     }
@@ -7510,12 +7527,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         //share_SubCamera_Moving();    // サブカメラ を移動 ⇒ 全員に共有
         //AppearSubCamera_Group();   // サブカメラ を表示
         //photonView.RPC("AppearSubCamera_Group", RpcTarget.All);  // 全員にサブカメラを一斉に開かせる
-        if(original_StepNum >= 10)  // 奴隷などで歩数が10以上の時
-        {
-            var sequence = DOTween.Sequence();
-            sequence.InsertCallback(JumpMaeTaiki, () => ShareSubCamera_GoRight_10m_slow());
-            //photonView.RPC("SubCamera_GoRight_10m_slow", RpcTarget.All);  // ゆっくり10ｍ右に移動させる
-        }
+
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(JumpMaeTaiki, () => ShareSubCamera_GoRight_byStepNum());
+        //ShareSubCamera_GoRight_byStepNum();  // original_StepNum の数だけ、サブカメラを右に移動させる
     }
 
     public void share_SubCamera_Moving()              // ジャンケン勝者近くの cafe_kanban の位置に SubCamera を移動する
@@ -7680,6 +7695,17 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         SubCamera.transform.DOMove(new Vector3(10, 0, 0), 10).SetRelative(true); //現在の位置から（10,0,0）だけ移動
     }
 
+    public void ShareSubCamera_GoRight_byStepNum() // original_StepNum の数だけ、サブカメラを右に移動させる
+    {
+        photonView.RPC("SubCamera_GoRight_byStepNum", RpcTarget.All);  // original_StepNum の数だけ右に移動させる
+    }
+
+    [PunRPC]
+    public void SubCamera_GoRight_byStepNum()
+    {
+        SubCamera.transform.DOMove(new Vector3(original_StepNum, 0, 0), original_StepNum).SetRelative(true); //現在の位置から original_StepNum分 だけ移動
+    }
+
     public void share_SubCamera_Position()                // サブカメラの位置を移動して共有する ＆＆ サブカメラの表示ON
     {
         Debug.Log("サブカメラの位置を移動して共有する");
@@ -7740,31 +7766,35 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
 
     #endregion
-
+    [PunRPC]
     public void Update_PosX_Players()   // 各プレイヤーのX軸位置を同期します
     {
         Flg_Update_PosX = true;
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
-            PosX_Player1 = myPlayer.transform.position.x - StartMark1.transform.position.x;
+            //PosX_Player1 = myPlayer.transform.position.x - StartMark1.transform.position.x;
+            PosX_Player1 = myPlayer.transform.position.x;
             PosX_MyPlayer = PosX_Player1;
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
         {
-            PosX_Player2 = myPlayer.transform.position.x - StartMark2.transform.position.x;
+            //PosX_Player2 = myPlayer.transform.position.x - StartMark2.transform.position.x;
+            PosX_Player2 = myPlayer.transform.position.x;
             PosX_MyPlayer = PosX_Player2;
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
         {
-            PosX_Player3 = myPlayer.transform.position.x - StartMark3.transform.position.x;
+            //PosX_Player3 = myPlayer.transform.position.x - StartMark3.transform.position.x;
+            PosX_Player3 = myPlayer.transform.position.x;
             PosX_MyPlayer = PosX_Player3;
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
         {
-            PosX_Player4 = myPlayer.transform.position.x - StartMark4.transform.position.x;
+            //PosX_Player4 = myPlayer.transform.position.x - StartMark4.transform.position.x;
+            PosX_Player4 = myPlayer.transform.position.x;
             PosX_MyPlayer = PosX_Player4;
         }
     }
@@ -7821,6 +7851,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                 stream.SendNext(PosX_Player2);
                 stream.SendNext(PosX_Player3);
                 stream.SendNext(PosX_Player4);
+                stream.SendNext(PosY_taraiSet);
+
             }
         }
         else                       //データの受信
@@ -7829,6 +7861,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             PosX_Player2 = (float)stream.ReceiveNext();
             PosX_Player3 = (float)stream.ReceiveNext();
             PosX_Player4 = (float)stream.ReceiveNext();
+            PosY_taraiSet = (float)stream.ReceiveNext();
+
         }
     }
 
@@ -7947,7 +7981,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             //_camera.DOShakePosition(duration: 2, strength: 2, vibrato: 2, randomness: 30, fadeOut: true);
             //_camera.transform.DOShakeScale(2f);
         }
-        photonView.RPC("SubCamera_GoRight_10m_First", RpcTarget.All);  // 素早く10ｍ右に移動させる
+        photonView.RPC("SubCamera_GoRight_10m_First", RpcTarget.All);  // サブカメラを素早く10ｍ右に移動させる
     }
 
     public void AfterFly_byTaihou()       // 人間大砲ヲ撃って、着地した後の処理
@@ -7959,7 +7993,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         photonView.RPC("CloseSubCamera_Group_AfterWait1sec", RpcTarget.All);   // 全員一斉にサブカメラを閉じる
 
         Flg_Update_PosX = true;
-        Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        //Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        photonView.RPC("Update_PosX_Players", RpcTarget.All);
         WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
         CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
     }
@@ -8179,6 +8214,125 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
 
     #endregion
+
+    #region// 金たらい
+    public void FallTarai_stream()
+    {
+        //photonView.RPC("Update_PosX_Players", RpcTarget.All);
+        //Update_PosX_Players();                           // 各プレイヤーのX軸位置を同期します
+        share_tarai_Position();                            // たらいの位置を移動して共有する
+        photonView.RPC("FallTarai", RpcTarget.All);        // たらいを表示、落下、非表示
+        Tarai.transform.DORotate(new Vector3(0f, 0f, 0), 0f);   // たらいを上向きにセットする
+        Tarai.transform
+            .DOMove(new Vector3(0, (flo_sky_taraiSet*-1 + 0.5f), 0),0.5f)   // 下に移動する
+            .SetRelative()     // 今いる位置を基準にする  
+            .OnComplete(() =>
+            {                  // ジャンプが終了したら、以下の操作をする
+                               //Tarai.transform.DORotate(new Vector3(0f, 0f,180), 0.5f);
+                Tarai_Guwan.Play();  // tarai当たった時のエフェクト
+                BGM_SE_MSC.Tarai_Guwan_SE();
+                PlayerSC.anim.SetBool("damage", true);
+                var sequence3 = DOTween.Sequence();
+                sequence3.InsertCallback(1.5f, () => Tarai_Fukki());
+
+                Sequence sequence = DOTween.Sequence() 
+                .OnStart(() =>
+                {
+                    Debug.Log("たらいを回転させる");
+                    Tarai.transform.DORotate(new Vector3(0f, 0f, 180), 0.3f);
+                })
+                .Join(Tarai.transform.DOJump(new Vector3(-1, -1.2f, 0), 1.5f, 1, 0.3f)
+                .SetRelative()
+                );
+                sequence.Play();
+            });
+    }
+
+    public void Tarai_Fukki()
+    {
+        PlayerSC.anim.SetBool("damage", false);
+    }
+
+    [PunRPC]
+    public void FallTarai()                                // たらいを表示、落下、非表示
+    {
+        AppearTarai();                                     // 全員にたらいを一斉に表示ONさせる
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(4f, () => CloseTarai());   // 全員にたらいを一斉に非表示ONさせる
+    }
+
+    public void share_tarai_Position()                // たらいの位置をジャンパーの位置に移動して全員に共有する
+    {
+        Debug.Log("たらいの位置を移動して共有する");
+
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            PosY_taraiSet = StartMark1.transform.position.y;
+            photonView.RPC("Tarai_MoveTo_PosX_Player1", RpcTarget.All);  // たらいの位置を移動して共有する
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            PosY_taraiSet = StartMark2.transform.position.y;
+            photonView.RPC("Tarai_MoveTo_PosX_Player2", RpcTarget.All);  // たらいの位置を移動して共有する
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            PosY_taraiSet = StartMark3.transform.position.y;
+            photonView.RPC("Tarai_MoveTo_PosX_Player3", RpcTarget.All);  // たらいの位置を移動して共有する
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            PosY_taraiSet = StartMark4.transform.position.y;
+            photonView.RPC("Tarai_MoveTo_PosX_Player4", RpcTarget.All);  // たらいの位置を移動して共有する
+        }
+
+        //photonView.RPC("Appeartarai_Group", RpcTarget.All);  // 全員にたらいを一斉に開かせる
+    }
+
+    public void AppearTarai()
+    {
+        Tarai.SetActive(true);
+    }
+    
+    public void CloseTarai()
+    {
+        Tarai.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Tarai_MoveTo_PosX_Player1()   // Tarai を PosX_Player1 の位置に移動する
+    {
+        Debug.Log("Tarai を PosX_Player1 の位置に移動する");
+        Tarai.transform.position = new Vector3(PosX_Player1, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
+        Tarai_Guwan.transform.position = new Vector3(PosX_Player1, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
+        //Tarai.transform.position = new Vector3(PosX_Player1, PosY_taraiSet, Tarai.transform.position.z);
+    }
+
+    [PunRPC]
+    public void Tarai_MoveTo_PosX_Player2()   // Tarai を PosX_Player2 の位置に移動する
+    {
+        Tarai.transform.position = new Vector3(PosX_Player2, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
+        Tarai_Guwan.transform.position = new Vector3(PosX_Player2, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
+    }
+
+    [PunRPC]
+    public void Tarai_MoveTo_PosX_Player3()   // Tarai を PosX_Player3 の位置に移動する
+    {
+        Tarai.transform.position = new Vector3(PosX_Player3, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
+        Tarai_Guwan.transform.position = new Vector3(PosX_Player3, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
+    }
+
+    [PunRPC]
+    public void Tarai_MoveTo_PosX_Player4()   // Tarai を PosX_Player4 の位置に移動する
+    {
+        Tarai.transform.position = new Vector3(PosX_Player4, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
+        Tarai_Guwan.transform.position = new Vector3(PosX_Player4, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
+    }
+    #endregion
+
 
     public void Judge_GOAL()   // ゴールラインに到達したか判定する
     {
