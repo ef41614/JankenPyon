@@ -562,7 +562,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             Debug.Log("myPlayer が 存在していなかったのでキャラ作成します！！！");
             //Debug.Log("フラグON だったのでキャラ作成します！！！");
-            CreatePlayerPrefab();          //【START-04】Photonに接続していれば自プレイヤーを生成
+            if (CreatePlayerPrefab_Flg)
+            {
+                CreatePlayerPrefab();          //【START-04】Photonに接続していれば自プレイヤーを生成
+            }
             CreatePlayerPrefab_Flg = false;
             BGM_SE_MSC.firstRead_Selectjanken = 1;
 
@@ -787,6 +790,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void CreatePlayerPrefab()    //【START-04】Photonに接続していれば自プレイヤーを生成
     {
+        CreatePlayerPrefab_Flg = false;
+
         Debug.Log("【START-04】Photonに接続したので 自プレイヤーを生成");
 
         //GameObject MyPlayer = PhotonNetwork.Instantiate(this.MyPlayerPrefab.name, new Vector3(-15f, 0f, 0f), Quaternion.identity, 0);
@@ -8218,34 +8223,38 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 金たらい
     public void FallTarai_stream()
     {
-        //photonView.RPC("Update_PosX_Players", RpcTarget.All);
-        //Update_PosX_Players();                           // 各プレイヤーのX軸位置を同期します
-        share_tarai_Position();                            // たらいの位置を移動して共有する
-        photonView.RPC("FallTarai", RpcTarget.All);        // たらいを表示、落下、非表示
-        Tarai.transform.DORotate(new Vector3(0f, 0f, 0), 0f);   // たらいを上向きにセットする
-        Tarai.transform
-            .DOMove(new Vector3(0, (flo_sky_taraiSet*-1 + 0.5f), 0),0.5f)   // 下に移動する
-            .SetRelative()     // 今いる位置を基準にする  
-            .OnComplete(() =>
-            {                  // ジャンプが終了したら、以下の操作をする
-                               //Tarai.transform.DORotate(new Vector3(0f, 0f,180), 0.5f);
+        int rndFalling = UnityEngine.Random.Range(1, 8);
+        if (rndFalling <= 2)
+        {
+            //photonView.RPC("Update_PosX_Players", RpcTarget.All);
+            //Update_PosX_Players();                           // 各プレイヤーのX軸位置を同期します
+            share_tarai_Position();                            // たらいの位置を移動して共有する
+            photonView.RPC("FallTarai", RpcTarget.All);        // たらいを表示、落下、非表示
+            Tarai.transform.DORotate(new Vector3(0f, 0f, 0), 0f);   // たらいを上向きにセットする
+            Tarai.transform
+                .DOMove(new Vector3(0, (flo_sky_taraiSet * -1 + 0.5f), 0), 0.5f)   // 下に移動する
+                .SetRelative()     // 今いる位置を基準にする  
+                .OnComplete(() =>
+                {                  // ジャンプが終了したら、以下の操作をする
+                                   //Tarai.transform.DORotate(new Vector3(0f, 0f,180), 0.5f);
                 Tarai_Guwan.Play();  // tarai当たった時のエフェクト
                 BGM_SE_MSC.Tarai_Guwan_SE();
-                PlayerSC.anim.SetBool("damage", true);
-                var sequence3 = DOTween.Sequence();
-                sequence3.InsertCallback(1.5f, () => Tarai_Fukki());
+                    PlayerSC.anim.SetBool("damage", true);
+                    var sequence3 = DOTween.Sequence();
+                    sequence3.InsertCallback(1.5f, () => Tarai_Fukki());
 
-                Sequence sequence = DOTween.Sequence() 
-                .OnStart(() =>
-                {
-                    Debug.Log("たらいを回転させる");
-                    Tarai.transform.DORotate(new Vector3(0f, 0f, 180), 0.3f);
-                })
-                .Join(Tarai.transform.DOJump(new Vector3(-1, -1.2f, 0), 1.5f, 1, 0.3f)
-                .SetRelative()
-                );
-                sequence.Play();
-            });
+                    Sequence sequence = DOTween.Sequence()
+                    .OnStart(() =>
+                    {
+                        Debug.Log("たらいを回転させる");
+                        Tarai.transform.DORotate(new Vector3(0f, 0f, 180), 0.3f);
+                    })
+                    .Join(Tarai.transform.DOJump(new Vector3(-1, -1.2f, 0), 1.5f, 1, 0.3f)
+                    .SetRelative()
+                    );
+                    sequence.Play();
+                });
+        }
     }
 
     public void Tarai_Fukki()
