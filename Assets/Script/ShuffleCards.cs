@@ -21,6 +21,9 @@ namespace say
         public Sprite sprite_Pa;
         public Sprite sprite_King;
         public Sprite sprite_Dorei;
+        public Sprite sprite_Muteki;
+        public Sprite sprite_Wall;
+        public Sprite sprite_WFlag;
 
         public Image Te_A;
         public Image Te_B;
@@ -62,6 +65,10 @@ namespace say
         public int DoreiChancePlayer = 0;    // 0～4  パブリック どれいチャンス → どのプレイヤーがカードをセットするか
         int RndSet_CardPos_King;             // A～E どの位置にカードをセットするか
         int RndSet_CardPos_Dorei;            // A～E どの位置にカードをセットするか
+        int RndSet_CardPos_Muteki;           // A～E どの位置にカードをセットするか
+        int RndSet_CardPos_Wall;             // A～E どの位置にカードをセットするか
+        int RndSet_CardPos_WFlag;            // A～E どの位置にカードをセットするか
+
 
         private void Awake()
         {
@@ -136,8 +143,12 @@ namespace say
                 safe++;
             }
 
-            RndSet_CardPos_King = UnityEngine.Random.Range(1, 6);        // A～E どの位置にカードをセットするか
-            RndSet_CardPos_Dorei = UnityEngine.Random.Range(1, 6);
+            RndSet_CardPos_King   = UnityEngine.Random.Range(1, 6);        // A～E どの位置にカードをセットするか
+            RndSet_CardPos_Dorei  = UnityEngine.Random.Range(1, 6);
+            RndSet_CardPos_Muteki = UnityEngine.Random.Range(1, 6);
+            RndSet_CardPos_Wall   = UnityEngine.Random.Range(1, 6);
+            RndSet_CardPos_WFlag  = UnityEngine.Random.Range(1, 6);
+
 
             Debug.Log("参加人数でセットチャンス調整" + SelectJankenMSC.SankaNinzu);          
             if (FirstChancePush_Flg == 0)                                // 王さま-どれい-セットチャンス 判定まえ ならば
@@ -180,6 +191,23 @@ namespace say
                 Debug.Log("3 なので 王さまチャンス1、どれいチャンス1： 両方 1");
                 Check_ChancePlayer_Dorei();   // どれいカード をセット するプレイヤーを確認します
                 Check_ChancePlayer_King();    // 王さまカード をセット するプレイヤーを確認します
+            }
+
+            int RndGo_Muteki = UnityEngine.Random.Range(1, 21);
+            int RndGo_Wall   = UnityEngine.Random.Range(1, 21);
+            int RndGo_WFlag  = UnityEngine.Random.Range(1, 21);
+
+            if (RndGo_Muteki >= 15)
+            {
+                Set_MutekiCard();            // むてきカード をセットします  A,B,C,D,E
+            }
+            if (RndGo_Wall >= 15)
+            {
+                Set_WallCard();              // 壁カード をセットします  A,B,C,D,E
+            }
+            if (RndGo_WFlag >= 15)
+            {
+                Set_WFlagCard();             // 白旗カード をセットします  A,B,C,D,E
             }
         }
 
@@ -255,7 +283,7 @@ namespace say
             }
         }
 
-        public void  Set_DoreiCard()  // どれいカード をセットします  A,B,C,D,E
+        public void Set_DoreiCard()  // どれいカード をセットします  A,B,C,D,E
         {
             Debug.Log("どれいカード をセットします");
             if (RndSet_CardPos_Dorei == 1)
@@ -313,6 +341,116 @@ namespace say
                 Button_E.gameObject.GetComponent<Image>().sprite = sprite_King;
                 RndCreateCard_E = 13;  // 王さまの番号をセット
             }
+        }
+
+        public void Set_MutekiCard()  // むてきカード をセットします  A,B,C,D,E
+        {
+            Debug.Log("むてきカード をセットします");
+            if (RndSet_CardPos_Muteki == 1)
+            {
+                Button_A.gameObject.GetComponent<Image>().sprite = sprite_Muteki;
+                RndCreateCard_A = 601;  // むてきの番号をセット
+            }
+            else if (RndSet_CardPos_Muteki == 2)
+            {
+                Button_B.gameObject.GetComponent<Image>().sprite = sprite_Muteki;
+                RndCreateCard_B = 601;  // むてきの番号をセット
+            }
+            else if (RndSet_CardPos_Muteki == 3)
+            {
+                Button_C.gameObject.GetComponent<Image>().sprite = sprite_Muteki;
+                RndCreateCard_C = 601;  // むてきの番号をセット
+            }
+            else if (RndSet_CardPos_Muteki == 4)
+            {
+                Button_D.gameObject.GetComponent<Image>().sprite = sprite_Muteki;
+                RndCreateCard_D = 601;  // むてきの番号をセット
+            }
+            else if (RndSet_CardPos_Muteki == 5)
+            {
+                Button_E.gameObject.GetComponent<Image>().sprite = sprite_Muteki;
+                RndCreateCard_E = 601;  // むてきの番号をセット
+            }
+        }
+
+        public void Set_WallCard()  // 壁カード をセットします  A,B,C,D,E
+        {
+            Debug.Log("壁カード をセットします");
+            if (RndSet_CardPos_Wall == 1)
+            {
+                Button_A.gameObject.GetComponent<Image>().sprite = sprite_Wall;
+                RndCreateCard_A = 88;  // 壁の番号をセット
+            }
+            else if (RndSet_CardPos_Wall == 2)
+            {
+                Button_B.gameObject.GetComponent<Image>().sprite = sprite_Wall;
+                RndCreateCard_B = 88;  // 壁の番号をセット
+            }
+            else if (RndSet_CardPos_Wall == 3)
+            {
+                Button_C.gameObject.GetComponent<Image>().sprite = sprite_Wall;
+                RndCreateCard_C = 88;  // 壁の番号をセット
+            }
+            else if (RndSet_CardPos_Wall == 4)
+            {
+                Button_D.gameObject.GetComponent<Image>().sprite = sprite_Wall;
+                RndCreateCard_D = 88;  // 壁の番号をセット
+            }
+            else if (RndSet_CardPos_Wall == 5)
+            {
+                Button_E.gameObject.GetComponent<Image>().sprite = sprite_Wall;
+                RndCreateCard_E = 88;  // 壁の番号をセット
+            }
+        }
+
+        public void Set_WFlagCard()  // 白旗カード をセットします  A,B,C,D,E
+        {
+            Debug.Log("白旗カード をセットします");
+            if (RndSet_CardPos_WFlag == 1)
+            {
+                Button_A.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_A = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag == 2)
+            {
+                Button_B.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_B = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag == 3)
+            {
+                Button_C.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_C = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag == 4)
+            {
+                Button_D.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_D = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag == 5)
+            {
+                Button_E.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_E = 46;  // 白旗の番号をセット
+            }
+        }
+
+        public void SetAll_WFlagCard()  // すべて白旗カード でセットします（このターンは負け確定）
+        {
+            Debug.Log("すべて白旗カード でセットします");
+
+            Button_A.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+            RndCreateCard_A = 46;  // 白旗の番号をセット
+
+            Button_B.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+            RndCreateCard_B = 46;  // 白旗の番号をセット
+
+            Button_C.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+            RndCreateCard_C = 46;  // 白旗の番号をセット
+
+            Button_D.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+            RndCreateCard_D = 46;  // 白旗の番号をセット
+
+            Button_E.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+            RndCreateCard_E = 46;  // 白旗の番号をセット
         }
 
         public void A_Set()
