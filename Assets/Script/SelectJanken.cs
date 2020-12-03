@@ -443,13 +443,18 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     float X_dis_betweenTop = 0;  // 自分と首位とのX軸距離
     float PosX_TopPlayer = 0;    // 首位のX軸距離
     float PosX_MyPlayer = 0;     // 自分のX軸距離
-    public float PosX_Player1;
-    public float PosX_Player2;
-    public float PosX_Player3;
-    public float PosX_Player4;
+     float PosX_Player1;
+     float PosX_Player2;
+     float PosX_Player3;
+     float PosX_Player4;
     float PosX_BottomPlayer = 0;
     public float PosX_TaihouFlyer;      // 人間大砲で飛ぶ人のX軸距離
-    //float CanTaihou_Distance;           // 大砲ボタンを出現させるのに必要な距離
+                                        //float CanTaihou_Distance;           // 大砲ボタンを出現させるのに必要な距離
+
+    public Text text_PosX_realP1;
+    public Text text_PosX_realP2;
+    public Text text_PosX_realP3;
+    public Text text_PosX_realP4;
 
     public Text text_PosX_P1;
     public Text text_PosX_P2;
@@ -482,7 +487,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     
     int int_calculation_Gold;  // 現在の所持金（ゴールド）にマイナス/プラスする数値
 
+    public GameObject Sara;
     public GameObject Tarai;
+    public ParticleSystem Sara_Guwan;
     public ParticleSystem Tarai_Guwan;
     float PosY_taraiSet;
     float PosY_GuwanSet;
@@ -615,6 +622,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             CloseNinja_Button();
             Reset_AllAisatsu();
             CloseTarai();
+            CloseSara();
             //Erase_Text_Announcement();
             //AppearPanel_Ikemasu();
             //ClosePanel_Ikemasu();
@@ -648,6 +656,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             text_PosX_P2.text = PosX_Player2.ToString("f1");
             text_PosX_P3.text = PosX_Player3.ToString("f1");
             text_PosX_P4.text = PosX_Player4.ToString("f1");
+
+            text_PosX_realP1.text = realPosX_Player1.ToString("f1");
+            text_PosX_realP2.text = realPosX_Player2.ToString("f1");
+            text_PosX_realP3.text = realPosX_Player3.ToString("f1");
+            text_PosX_realP4.text = realPosX_Player4.ToString("f1");
 
             text_Gold_P1.text = Gold_Player1.ToString();
             text_Gold_P2.text = Gold_Player2.ToString();
@@ -4208,7 +4221,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("NoneDoreiP4 ： " + NoneDoreiP4);
     }
 
-
     public void Check_Muteki_Existence()    //【JK-25】NoneMuteki の判定を返す
     {
         bool NoneMutekiP1 = true;
@@ -4218,7 +4230,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer1 == 1) // Player1 が生きている
         {
-            if (KP1 != 23) // むてき ではない
+            if (KP1 != 601) // むてき ではない
             {
                 NoneMutekiP1 = true; // むてき 無し
             }
@@ -4234,7 +4246,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer2 == 1) // Player2 が生きている
         {
-            if (KP2 != 23) // むてき ではない
+            if (KP2 != 601) // むてき ではない
             {
                 NoneMutekiP2 = true; // むてき 無し
             }
@@ -4250,7 +4262,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer3 == 1) // Player3 が生きている
         {
-            if (KP3 != 23) // むてき ではない
+            if (KP3 != 601) // むてき ではない
             {
                 NoneMutekiP3 = true; // むてき 無し
             }
@@ -4266,7 +4278,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer4 == 1) // Player4 が生きている
         {
-            if (KP4 != 23) // むてき ではない
+            if (KP4 != 601) // むてき ではない
             {
                 NoneMutekiP4 = true; // むてき 無し
             }
@@ -4303,7 +4315,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer1 == 1) // Player1 が生きている
         {
-            if (KP1 != 23) // 壁 ではない
+            if (KP1 != 88) // 壁 ではない
             {
                 NoneWallP1 = true; // 壁 無し
             }
@@ -4319,7 +4331,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer2 == 1) // Player2 が生きている
         {
-            if (KP2 != 23) // 壁 ではない
+            if (KP2 != 88) // 壁 ではない
             {
                 NoneWallP2 = true; // 壁 無し
             }
@@ -4335,7 +4347,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer3 == 1) // Player3 が生きている
         {
-            if (KP3 != 23) // 壁 ではない
+            if (KP3 != 88) // 壁 ではない
             {
                 NoneWallP3 = true; // 壁 無し
             }
@@ -4351,7 +4363,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer4 == 1) // Player4 が生きている
         {
-            if (KP4 != 23) // 壁 ではない
+            if (KP4 != 88) // 壁 ではない
             {
                 NoneWallP4 = true; // 壁 無し
             }
@@ -4388,7 +4400,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer1 == 1) // Player1 が生きている
         {
-            if (KP1 != 23) // 白旗 ではない
+            if (KP1 != 46) // 白旗 ではない
             {
                 NoneWFlagP1 = true; // 白旗 無し
             }
@@ -4404,7 +4416,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer2 == 1) // Player2 が生きている
         {
-            if (KP2 != 23) // 白旗 ではない
+            if (KP2 != 46) // 白旗 ではない
             {
                 NoneWFlagP2 = true; // 白旗 無し
             }
@@ -4420,7 +4432,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer3 == 1) // Player3 が生きている
         {
-            if (KP3 != 23) // 白旗 ではない
+            if (KP3 != 46) // 白旗 ではない
             {
                 NoneWFlagP3 = true; // 白旗 無し
             }
@@ -4436,7 +4448,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (alivePlayer4 == 1) // Player4 が生きている
         {
-            if (KP4 != 23) // 白旗 ではない
+            if (KP4 != 46) // 白旗 ではない
             {
                 NoneWFlagP4 = true; // 白旗 無し
             }
@@ -10022,6 +10034,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                 stream.SendNext(PosX_Player3);
                 stream.SendNext(PosX_Player4);
                 stream.SendNext(PosY_taraiSet);
+                stream.SendNext(realPosX_Player1);
+                stream.SendNext(realPosX_Player2);
+                stream.SendNext(realPosX_Player3);
+                stream.SendNext(realPosX_Player4);
                 Debug.Log("◎◎データの送信◎◎ true");
 
             }
@@ -10033,6 +10049,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             PosX_Player3 = (float)stream.ReceiveNext();
             PosX_Player4 = (float)stream.ReceiveNext();
             PosY_taraiSet = (float)stream.ReceiveNext();
+            realPosX_Player1 = (float)stream.ReceiveNext();
+            realPosX_Player2 = (float)stream.ReceiveNext();
+            realPosX_Player3 = (float)stream.ReceiveNext();
+            realPosX_Player4 = (float)stream.ReceiveNext();
 
         }
     }
@@ -10390,7 +10410,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void FallTarai_stream()
     {
         int rndFalling = UnityEngine.Random.Range(1, 8);
-        if (rndFalling <= 2)
+        if (rndFalling <= 4)
         {
             //photonView.RPC("Update_PosX_Players", RpcTarget.All);
             //Update_PosX_Players();                           // 各プレイヤーのX軸位置を同期します
@@ -10421,6 +10441,35 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                     sequence.Play();
                 });
         }
+        else
+        {
+            share_tarai_Position();                            // たらいの位置を移動して共有する
+            photonView.RPC("FallSara", RpcTarget.All);        // たらいを表示、落下、非表示
+            Sara.transform.DORotate(new Vector3(0f, 0f, 0), 0f);   // たらいを上向きにセットする
+            Sara.transform
+                .DOMove(new Vector3(0, (flo_sky_taraiSet * -1 + 0.5f), 0), 0.5f)   // 下に移動する
+                .SetRelative()     // 今いる位置を基準にする  
+                .OnComplete(() =>
+                {                  // ジャンプが終了したら、以下の操作をする
+                                   //Tarai.transform.DORotate(new Vector3(0f, 0f,180), 0.5f);
+                    Sara_Guwan.Play();  // tarai当たった時のエフェクト
+                    BGM_SE_MSC.Tarai_Guwan_SE();
+                    PlayerSC.anim.SetBool("damage", true);
+                    var sequence3 = DOTween.Sequence();
+                    sequence3.InsertCallback(1.5f, () => Tarai_Fukki());
+
+                    Sequence sequence = DOTween.Sequence()
+                    .OnStart(() =>
+                    {
+                        Debug.Log("たらいを回転させる");
+                        Sara.transform.DORotate(new Vector3(0f, 0f, 180), 0.3f);
+                    })
+                    .Join(Sara.transform.DOJump(new Vector3(-1, -1.2f, 0), 1.5f, 1, 0.3f)
+                    .SetRelative()
+                    );
+                    sequence.Play();
+                });
+        }
     }
 
     public void Tarai_Fukki()
@@ -10434,6 +10483,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         AppearTarai();                                     // 全員にたらいを一斉に表示ONさせる
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(4f, () => CloseTarai());   // 全員にたらいを一斉に非表示ONさせる
+    }
+
+    [PunRPC]
+    public void FallSara()                                // たらいを表示、落下、非表示
+    {
+        AppearSara();                                     // 全員にたらいを一斉に表示ONさせる
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(4f, () => CloseSara());   // 全員にたらいを一斉に非表示ONさせる
     }
 
     public void share_tarai_Position()                // たらいの位置をジャンパーの位置に移動して全員に共有する
@@ -10471,10 +10528,20 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Tarai.SetActive(true);
     }
-    
+
     public void CloseTarai()
     {
         Tarai.SetActive(false);
+    }
+
+    public void AppearSara()
+    {
+        Sara.SetActive(true);
+    }
+
+    public void CloseSara()
+    {
+        Sara.SetActive(false);
     }
 
     [PunRPC]
@@ -10484,6 +10551,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Tarai.transform.position = new Vector3(realPosX_Player1, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
         Tarai_Guwan.transform.position = new Vector3(realPosX_Player1, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
         //Tarai.transform.position = new Vector3(realPosX_Player1, PosY_taraiSet, Tarai.transform.position.z);
+        Sara.transform.position = new Vector3(PosX_Player1, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
+        Sara_Guwan.transform.position = new Vector3(PosX_Player1, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
     }
 
     [PunRPC]
@@ -10491,6 +10560,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Tarai.transform.position = new Vector3(realPosX_Player2, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
         Tarai_Guwan.transform.position = new Vector3(realPosX_Player2, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
+        Sara.transform.position = new Vector3(PosX_Player2, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
+        Sara_Guwan.transform.position = new Vector3(PosX_Player2, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
     }
 
     [PunRPC]
@@ -10498,6 +10569,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Tarai.transform.position = new Vector3(realPosX_Player3, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
         Tarai_Guwan.transform.position = new Vector3(realPosX_Player3, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
+        Sara.transform.position = new Vector3(PosX_Player3, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
+        Sara_Guwan.transform.position = new Vector3(PosX_Player3, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
     }
 
     [PunRPC]
@@ -10505,6 +10578,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Tarai.transform.position = new Vector3(realPosX_Player4, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
         Tarai_Guwan.transform.position = new Vector3(realPosX_Player4, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
+        Sara.transform.position = new Vector3(PosX_Player4, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
+        Sara_Guwan.transform.position = new Vector3(PosX_Player4, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
     }
     #endregion
 
