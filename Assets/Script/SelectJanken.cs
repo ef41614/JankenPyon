@@ -439,6 +439,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Text Error05_Text;
     public Text Error06_Text;
 
+    public Text Pos_Hasshin_Text;
+
     float X_dis30po = 0;
     float X_dis_betweenTop = 0;  // 自分と首位とのX軸距離
     float PosX_TopPlayer = 0;    // 首位のX軸距離
@@ -448,8 +450,25 @@ public class SelectJanken : MonoBehaviour, IPunObservable
      float PosX_Player3;
      float PosX_Player4;
     float PosX_BottomPlayer = 0;
+
+    //int Shutoku_Keta = 0;
+    int PosX_Koshin_PlayerNum = 0;      // 誰のX軸座標を更新するの？
+    int PosX_Koshin_Atai = 0;         // 数値はいくつ？
+    int PosX_Koshin_Atai_10keta = 0;
+    int PosX_Koshin_Atai_1keta = 0;
     public float PosX_TaihouFlyer;      // 人間大砲で飛ぶ人のX軸距離
                                         //float CanTaihou_Distance;           // 大砲ボタンを出現させるのに必要な距離
+    float receivePosX_Player1;
+    float receivePosX_Player2;
+    float receivePosX_Player3;
+    float receivePosX_Player4;
+
+    public SelectJanken SelectJankenMSC;
+    //public SelectJanken SelectJankenManager;
+    //public SelectJankenManager SelectJankenMSC;
+    //public SelectJankenManager SelectJanken;
+    //public GameObject SelectJankenManager; //ヒエラルキー上のオブジェクト名
+    //SelectJanken SelectJankenMSC;//スクリプト名 + このページ上でのニックネーム
 
     public Text text_PosX_realP1;
     public Text text_PosX_realP2;
@@ -636,6 +655,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             X_dis30po = cafe_kanban_005.transform.position.x - cafe_kanban_035.transform.position.x;
             Debug.Log("X_dis30po : " + X_dis30po);
+
+            SelectJankenMSC = myPlayer.GetComponent<SelectJanken>();
+            Pos_Hasshin_Text.text = "";
         }
         else
         {
@@ -1745,6 +1767,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Countdown_Push_JankenTe_KetteiButton_Flg = true;
         Erase_Text_Announcement();                // アナウンス テキスト文をリセットする
         Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
+        Pos_Hasshin_Text.text = "";
 
         //AfterJump();   // 右にジャンプ（ぴょーん！）が完了してからの処理（右上の開始ボタンを押せるように各値をリセット）
         Debug.Log("【JK-01】******************************************************************");
@@ -1914,6 +1937,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Debug.LogError("Start_GameMatch 処理 ダブってます！！！");
             Error04_Text.text = "Start_GameMatch処理ダブり";
+            ClosePanel_Ikemasu();
         }
     }
 
@@ -1923,6 +1947,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ShuffleCardsMSC.Set_All();
         CloseTaiki_OK_All();
         CloseStartLogo();
+        ClosePanel_Ikemasu();
         AppearOpenMyJankenPanel_Button();
         Countdown_Until_Push_OpenMyJankenPanel_Button();
     }
@@ -2367,8 +2392,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         sequence.InsertCallback(2f, () => Check_Can_Hantei_Stream());
 
         Flg_Update_PosX = true;
-        //Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
-        photonView.RPC("Update_PosX_Players", RpcTarget.All);
+        Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        //photonView.RPC("Update_PosX_Players", RpcTarget.All);
         WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
         CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
     }
@@ -9947,12 +9972,53 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
 
     #endregion
+
+    #region // PosXの同期
+
+    public float PosX_P1
+    {
+        get { return PosX_Player1; }
+        set { PosX_Player1 = value; RequestOwner(); }
+    }
+
+    public float PosX_P2
+    {
+        get { return PosX_Player2; }
+        set { PosX_Player2 = value; RequestOwner(); }
+    }
+
+    public float PosX_P3
+    {
+        get { return PosX_Player3; }
+        set { PosX_Player3 = value; RequestOwner(); }
+    }
+
+    public float PosX_P4
+    {
+        get { return PosX_Player4; }
+        set { PosX_Player4 = value; RequestOwner(); }
+    }
+
+
+    private void RequestOwner()
+    {
+        if (this.photonView.IsMine == false)
+        {
+            if (this.photonView.OwnershipTransfer != OwnershipOption.Request)
+                Debug.LogError("OwnershipTransferをRequestに変更してください。");
+            else
+                this.photonView.RequestOwnership();
+        }
+    }
+
     [PunRPC]
     public void Update_PosX_Players()   // 各プレイヤーのX軸位置を同期します
     {
         Flg_Update_PosX = true;
+        //if (!photonView.IsMine) return;//自分以外なら処理中止.
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
+            photonView.RPC("PosX_Koshin_Player1", RpcTarget.All);
             PosX_Player1 = myPlayer.transform.position.x - StartMark1.transform.position.x;
             realPosX_Player1 = myPlayer.transform.position.x;
             PosX_MyPlayer = PosX_Player1;
@@ -9960,6 +10026,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
         {
+            photonView.RPC("PosX_Koshin_Player2", RpcTarget.All);
             PosX_Player2 = myPlayer.transform.position.x - StartMark2.transform.position.x;
             realPosX_Player2 = myPlayer.transform.position.x;
             PosX_MyPlayer = PosX_Player2;
@@ -9967,6 +10034,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
         {
+            photonView.RPC("PosX_Koshin_Player3", RpcTarget.All);
             PosX_Player3 = myPlayer.transform.position.x - StartMark3.transform.position.x;
             realPosX_Player3 = myPlayer.transform.position.x;
             PosX_MyPlayer = PosX_Player3;
@@ -9974,10 +10042,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
         {
+            photonView.RPC("PosX_Koshin_Player4", RpcTarget.All);
             PosX_Player4 = myPlayer.transform.position.x - StartMark4.transform.position.x;
             realPosX_Player4 = myPlayer.transform.position.x;
             PosX_MyPlayer = PosX_Player4;
         }
+
+        checkPosX_Koshin_Atai();        // PosXの数値はいくつ？
     }
 
     public void WhoIsTopPlayer()        // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
@@ -9991,39 +10062,277 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         PosX_BottomPlayer = Mathf.Min(PosX_Player1, PosX_Player2, PosX_Player3, PosX_Player4);
     }
 
-    public void CheckCanUseTaihou()     // 人間大砲が撃てるか確認します
+    [PunRPC]
+    public void PosX_Koshin_Player1()   // 誰のX軸座標を更新するの？
     {
-        Debug.Log("CheckCanUseTaihou 人間大砲が撃てるか確認します");
-        Debug.Log("X_dis_betweenTop : " + X_dis_betweenTop);
-        Debug.Log("(X_dis30po/2)-1 : " + ((X_dis30po / 2) - 1));
+        PosX_Koshin_PlayerNum = 1;
+    }
 
-        if (X_dis_betweenTop >= ((X_dis30po/2)-1))      // 首位との差が 14 以上開いていたら
+    [PunRPC]
+    public void PosX_Koshin_Player2()   // 誰のX軸座標を更新するの？
+    {
+        PosX_Koshin_PlayerNum = 2;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Player3()   // 誰のX軸座標を更新するの？
+    {
+        PosX_Koshin_PlayerNum = 3;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Player4()   // 誰のX軸座標を更新するの？
+    {
+        PosX_Koshin_PlayerNum = 4;
+    }
+
+    public static int GetPointDigit(int PosX_MyPlayer_Moto, int Shutoku_Keta)   // 数値の中から指定した桁の値を取り出す
+    {
+        return (int)(PosX_MyPlayer_Moto / Mathf.Pow(10, Shutoku_Keta - 1)) % 10;
+    }
+
+    public void checkPosX_Koshin_Atai()  // PosXの数値はいくつ？
+    {
+        int PosX_MyPlayer_Moto = Mathf.FloorToInt(PosX_MyPlayer);
+        PosX_Koshin_Atai_10keta = GetPointDigit(PosX_MyPlayer_Moto, 2);  // 十桁の値
+        PosX_Koshin_Atai_1keta = GetPointDigit(PosX_MyPlayer_Moto, 1);   // 一桁の値
+        checkPosX_Koshin_Atai_10keta();
+        checkPosX_Koshin_Atai_1keta();
+        photonView.RPC("totalPosX_Koshin_Atai", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void totalPosX_Koshin_Atai()
+    {
+        PosX_Koshin_Atai = PosX_Koshin_Atai_10keta * 10 + PosX_Koshin_Atai_1keta;
+
+        switch (PosX_Koshin_PlayerNum)
         {
-            Flg_CanUseTaihou = true;
-            Button_TaihouFire.SetActive(true);
-        }
-        else
-        {
-            Flg_CanUseTaihou = false;
-            Button_TaihouFire.SetActive(false);
+            case 1: //
+                PosX_Player1 = PosX_Koshin_Atai;
+                break;
+            case 2: //
+                PosX_Player2 = PosX_Koshin_Atai;
+                break;
+            case 3: //
+                PosX_Player3 = PosX_Koshin_Atai;
+                break;
+            case 4: //
+                PosX_Player4 = PosX_Koshin_Atai;
+                break;
+            default:
+                // その他処理
+                break;
         }
     }
 
-    public void CanUse_Taihou()
+
+    public void checkPosX_Koshin_Atai_10keta()
     {
-        Flg_CanUseTaihou = true;
-        Button_TaihouFire.SetActive(true);
+
+        switch (PosX_Koshin_Atai_10keta)
+        {
+            case 1: //
+                photonView.RPC("PosX_Koshin_Atai_10keta_1", RpcTarget.All);
+                break;
+            case 2: //
+                photonView.RPC("PosX_Koshin_Atai_10keta_2", RpcTarget.All);
+                break;
+            case 3: //
+                photonView.RPC("PosX_Koshin_Atai_10keta_3", RpcTarget.All);
+                break;
+            case 4: //
+                photonView.RPC("PosX_Koshin_Atai_10keta_4", RpcTarget.All);
+                break;
+            case 5: //
+                photonView.RPC("PosX_Koshin_Atai_10keta_5", RpcTarget.All);
+                break;
+            case 6: //
+                photonView.RPC("PosX_Koshin_Atai_10keta_6", RpcTarget.All);
+                break;
+            case 7: //
+                photonView.RPC("PosX_Koshin_Atai_10keta_7", RpcTarget.All);
+                break;
+            case 8: //
+                photonView.RPC("PosX_Koshin_Atai_10keta_8", RpcTarget.All);
+                break;
+            case 9: //
+                photonView.RPC("PosX_Koshin_Atai_10keta_9", RpcTarget.All);
+                break;
+            case 0: //
+                photonView.RPC("PosX_Koshin_Atai_10keta_0", RpcTarget.All);
+                break;
+            default:
+                // その他処理
+                break;
+        }
     }
 
-    public void CannotUse_Taihou()
+    [PunRPC]
+    public void PosX_Koshin_Atai_10keta_1()
     {
-        Flg_CanUseTaihou = false;
-        Button_TaihouFire.SetActive(false);
+        PosX_Koshin_Atai_10keta = 1;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_10keta_2()
+    {
+        PosX_Koshin_Atai_10keta = 2;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_10keta_3()
+    {
+        PosX_Koshin_Atai_10keta = 3;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_10keta_4()
+    {
+        PosX_Koshin_Atai_10keta = 4;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_10keta_5()
+    {
+        PosX_Koshin_Atai_10keta = 5;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_10keta_6()
+    {
+        PosX_Koshin_Atai_10keta = 6;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_10keta_7()
+    {
+        PosX_Koshin_Atai_10keta = 7;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_10keta_8()
+    {
+        PosX_Koshin_Atai_10keta = 8;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_10keta_9()
+    {
+        PosX_Koshin_Atai_10keta = 9;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_10keta_0()
+    {
+        PosX_Koshin_Atai_10keta = 0;
+    }
+
+    public void checkPosX_Koshin_Atai_1keta()
+    {
+
+        switch (PosX_Koshin_Atai_1keta)
+        {
+            case 1: //
+                photonView.RPC("PosX_Koshin_Atai_1keta_1", RpcTarget.All);
+                break;
+            case 2: //
+                photonView.RPC("PosX_Koshin_Atai_1keta_2", RpcTarget.All);
+                break;
+            case 3: //
+                photonView.RPC("PosX_Koshin_Atai_1keta_3", RpcTarget.All);
+                break;
+            case 4: //
+                photonView.RPC("PosX_Koshin_Atai_1keta_4", RpcTarget.All);
+                break;
+            case 5: //
+                photonView.RPC("PosX_Koshin_Atai_1keta_5", RpcTarget.All);
+                break;
+            case 6: //
+                photonView.RPC("PosX_Koshin_Atai_1keta_6", RpcTarget.All);
+                break;
+            case 7: //
+                photonView.RPC("PosX_Koshin_Atai_1keta_7", RpcTarget.All);
+                break;
+            case 8: //
+                photonView.RPC("PosX_Koshin_Atai_1keta_8", RpcTarget.All);
+                break;
+            case 9: //
+                photonView.RPC("PosX_Koshin_Atai_1keta_9", RpcTarget.All);
+                break;
+            case 0: //
+                photonView.RPC("PosX_Koshin_Atai_1keta_0", RpcTarget.All);
+                break;
+            default:
+                // その他処理
+                break;
+        }
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_1keta_1()
+    {
+        PosX_Koshin_Atai_1keta = 1;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_1keta_2()
+    {
+        PosX_Koshin_Atai_1keta = 2;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_1keta_3()
+    {
+        PosX_Koshin_Atai_1keta = 3;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_1keta_4()
+    {
+        PosX_Koshin_Atai_1keta = 4;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_1keta_5()
+    {
+        PosX_Koshin_Atai_1keta = 5;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_1keta_6()
+    {
+        PosX_Koshin_Atai_1keta = 6;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_1keta_7()
+    {
+        PosX_Koshin_Atai_1keta = 7;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_1keta_8()
+    {
+        PosX_Koshin_Atai_1keta = 8;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_1keta_9()
+    {
+        PosX_Koshin_Atai_1keta = 9;
+    }
+
+    [PunRPC]
+    public void PosX_Koshin_Atai_1keta_0()
+    {
+        PosX_Koshin_Atai_1keta = 0;
     }
 
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
+        /*
         if (stream.IsWriting)        //データの送信
         {
             Debug.Log("★★データの送信★★");
@@ -10055,18 +10364,144 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             realPosX_Player4 = (float)stream.ReceiveNext();
 
         }
+        */
     }
 
-    private void RequestOwner()
+    #endregion
+
+
+    /*
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (this.photonView.IsMine == false)
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
-            if (this.photonView.OwnershipTransfer != OwnershipOption.Request)
-                Debug.LogError("OwnershipTransferをRequestに変更してください。");
-            else
-                this.photonView.RequestOwnership();
+            stream.SendNext(PosX_Player1);
+            stream.SendNext(PosY_taraiSet);
+
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            stream.SendNext(PosX_Player2);
+            stream.SendNext(PosY_taraiSet);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            stream.SendNext(PosX_Player3);
+            stream.SendNext(PosY_taraiSet);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            stream.SendNext(PosX_Player4);
+            stream.SendNext(PosY_taraiSet);
+        }
+
+
+        if (PhotonNetwork.NickName != TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 でないなら
+        {
+            //PosX_Player1 = (float)stream.ReceiveNext();
+            PosX_Player2 = (float)stream.ReceiveNext();
+            PosX_Player3 = (float)stream.ReceiveNext();
+            PosX_Player4 = (float)stream.ReceiveNext();
+            PosY_taraiSet = (float)stream.ReceiveNext();
+        }
+
+        if (PhotonNetwork.NickName != TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 でないなら
+        {
+            PosX_Player1 = (float)stream.ReceiveNext();
+            //PosX_Player2 = (float)stream.ReceiveNext();
+            PosX_Player3 = (float)stream.ReceiveNext();
+            PosX_Player4 = (float)stream.ReceiveNext();
+            PosY_taraiSet = (float)stream.ReceiveNext();
+        }
+
+
+        if (PhotonNetwork.NickName != TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 でないなら
+        {
+            PosX_Player1 = (float)stream.ReceiveNext();
+            PosX_Player2 = (float)stream.ReceiveNext();
+            //PosX_Player3 = (float)stream.ReceiveNext();
+            PosX_Player4 = (float)stream.ReceiveNext();
+            PosY_taraiSet = (float)stream.ReceiveNext();
+        }
+
+
+        if (PhotonNetwork.NickName != TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 でないなら
+        {
+            PosX_Player1 = (float)stream.ReceiveNext();
+            PosX_Player2 = (float)stream.ReceiveNext();
+            PosX_Player3 = (float)stream.ReceiveNext();
+            //PosX_Player4 = (float)stream.ReceiveNext();
+            PosY_taraiSet = (float)stream.ReceiveNext();
+        }
+
+
+    }
+
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)        //データの送信
+        {
+            Debug.Log("★★データの送信★★");
+            if (Flg_Update_PosX)
+            {
+                stream.SendNext(PosX_Player1);
+                stream.SendNext(PosX_Player2);
+                stream.SendNext(PosX_Player3);
+                stream.SendNext(PosX_Player4);
+
+                stream.SendNext(PosY_taraiSet);
+
+                stream.SendNext(realPosX_Player1);
+                stream.SendNext(realPosX_Player2);
+                stream.SendNext(realPosX_Player3);
+                stream.SendNext(realPosX_Player4);
+                Debug.Log("◎◎データの送信◎◎ true");
+                Pos_Hasshin_Text.text = "PosX を送信中";
+            }
+        }
+        else                       //データの受信
+        {
+            Debug.Log("★★データの受信★★");
+            
+PosX_Player1 = (float)stream.ReceiveNext();
+PosX_Player2 = (float)stream.ReceiveNext();
+PosX_Player3 = (float)stream.ReceiveNext();
+PosX_Player4 = (float)stream.ReceiveNext();
+
+this.receivePosX_Player1 = (float)stream.ReceiveNext();
+SelectJankenMSC.PosX_Player1 = receivePosX_Player1;
+this.receivePosX_Player2 = (float)stream.ReceiveNext();
+SelectJankenMSC.PosX_Player2 = receivePosX_Player2;
+this.receivePosX_Player3 = (float)stream.ReceiveNext();
+SelectJankenMSC.PosX_Player3 = receivePosX_Player3;
+this.receivePosX_Player4 = (float)stream.ReceiveNext();
+SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
+
+
+            receivePosX_Player1 = (float)stream.ReceiveNext();
+            PosX_Player1 = receivePosX_Player1;
+            receivePosX_Player2 = (float)stream.ReceiveNext();
+            PosX_Player2 = receivePosX_Player2;
+            receivePosX_Player3 = (float)stream.ReceiveNext();
+            PosX_Player3 = receivePosX_Player3;
+            receivePosX_Player4 = (float)stream.ReceiveNext();
+            PosX_Player4 = receivePosX_Player4;
+
+            PosY_taraiSet = (float)stream.ReceiveNext();
+
+            realPosX_Player1 = (float)stream.ReceiveNext();
+            realPosX_Player2 = (float)stream.ReceiveNext();
+            realPosX_Player3 = (float)stream.ReceiveNext();
+            realPosX_Player4 = (float)stream.ReceiveNext();
+            Pos_Hasshin_Text.text = "ただ今 データ受信中";
         }
     }
+*/
+
 
     public void BackTo_TitleScene() // タイトル画面へ戻ります
     {
@@ -10123,6 +10558,36 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
     */
 
+
+    public void CheckCanUseTaihou()     // 人間大砲が撃てるか確認します
+    {
+        Debug.Log("CheckCanUseTaihou 人間大砲が撃てるか確認します");
+        Debug.Log("X_dis_betweenTop : " + X_dis_betweenTop);
+        Debug.Log("(X_dis30po/2)-1 : " + ((X_dis30po / 2) - 1));
+
+        if (X_dis_betweenTop >= ((X_dis30po / 2) - 1))      // 首位との差が 14 以上開いていたら
+        {
+            Flg_CanUseTaihou = true;
+            Button_TaihouFire.SetActive(true);
+        }
+        else
+        {
+            Flg_CanUseTaihou = false;
+            Button_TaihouFire.SetActive(false);
+        }
+    }
+
+    public void CanUse_Taihou()
+    {
+        Flg_CanUseTaihou = true;
+        Button_TaihouFire.SetActive(true);
+    }
+
+    public void CannotUse_Taihou()
+    {
+        Flg_CanUseTaihou = false;
+        Button_TaihouFire.SetActive(false);
+    }
 
     public void ShareTaihouFireStream()
     {
@@ -10184,8 +10649,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         photonView.RPC("CloseSubCamera_Group_AfterWait1sec", RpcTarget.All);   // 全員一斉にサブカメラを閉じる
 
         Flg_Update_PosX = true;
-        //Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
-        photonView.RPC("Update_PosX_Players", RpcTarget.All);
+        Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        //photonView.RPC("Update_PosX_Players", RpcTarget.All);
         WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
         CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
     }
@@ -10413,7 +10878,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (rndFalling <= 4)
         {
             //photonView.RPC("Update_PosX_Players", RpcTarget.All);
-            //Update_PosX_Players();                           // 各プレイヤーのX軸位置を同期します
+            Update_PosX_Players();                           // 各プレイヤーのX軸位置を同期します
             share_tarai_Position();                            // たらいの位置を移動して共有する
             photonView.RPC("FallTarai", RpcTarget.All);        // たらいを表示、落下、非表示
             Tarai.transform.DORotate(new Vector3(0f, 0f, 0), 0f);   // たらいを上向きにセットする
@@ -10443,6 +10908,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
+            /*
             share_tarai_Position();                            // たらいの位置を移動して共有する
             photonView.RPC("FallSara", RpcTarget.All);        // たらいを表示、落下、非表示
             Sara.transform.DORotate(new Vector3(0f, 0f, 0), 0f);   // たらいを上向きにセットする
@@ -10469,6 +10935,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                     );
                     sequence.Play();
                 });
+                */
         }
     }
 
