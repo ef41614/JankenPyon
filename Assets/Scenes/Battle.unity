@@ -36978,6 +36978,7 @@ MonoBehaviour:
   flo_sky_taraiSet: 7
   Image_Group_Introp: {fileID: 0}
   Text_Group_Intro: {fileID: 0}
+  Tarai_to_SetWFlag: 0
 --- !u!114 &1357978145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37111,7 +37112,7 @@ MonoBehaviour:
     type: 3}
   playerPrefab_pchan: {fileID: 261074773749362242, guid: 951d5defec470e746a1c8be0e3863877,
     type: 3}
-  playerPrefab_mobuchan: {fileID: 8862173996902067432, guid: 2bffeb6a5e7ded643aad02a3d0132eb9,
+  playerPrefab_mobuchan: {fileID: 3656597837066784371, guid: 2bffeb6a5e7ded643aad02a3d0132eb9,
     type: 3}
   playerPrefab_Zunko: {fileID: 2239757030654393519, guid: 4d2c0fdf92593dc4eba8ef40f2a3261e,
     type: 3}
@@ -37445,6 +37446,7 @@ MonoBehaviour:
   flo_sky_taraiSet: 7
   Image_Group_Introp: {fileID: 1417989193}
   Text_Group_Intro: {fileID: 1693176241}
+  Tarai_to_SetWFlag: 0
 --- !u!4 &1361133989
 Transform:
   m_ObjectHideFlags: 0
@@ -51416,6 +51418,7 @@ MonoBehaviour:
   flo_sky_taraiSet: 7
   Image_Group_Introp: {fileID: 0}
   Text_Group_Intro: {fileID: 0}
+  Tarai_to_SetWFlag: 0
 --- !u!114 &1807578428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55110,6 +55113,7 @@ MonoBehaviour:
   flo_sky_taraiSet: 7
   Image_Group_Introp: {fileID: 0}
   Text_Group_Intro: {fileID: 0}
+  Tarai_to_SetWFlag: 0
 --- !u!114 &1979535157
 MonoBehaviour:
   m_ObjectHideFlags: 0

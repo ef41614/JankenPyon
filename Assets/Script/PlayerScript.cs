@@ -91,6 +91,11 @@ public class PlayerScript : MonoBehaviour
                     SelectJankenMSC.Judge_GOAL();         // ゴールラインに到達したか判定する
                     //SelectJankenMSC.Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
                     SelectJankenMSC.Share_MyJankenPanel_Button_Flg_ON();  // ジャンケン開始ボタン フラグ をON
+                    int RndGo_Tarai = UnityEngine.Random.Range(1, 8);
+                    if (RndGo_Tarai <= 4)            // たらいが落ちるフラグON
+                    {
+                        SelectJankenMSC.Tarai_to_SetWFlag = true;  // たらいが落ちると、確定で白旗一枚     
+                    }
                     SelectJankenMSC.ShareAfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理 ⇒ 全員に共有する
                     SelectJankenMSC.FallTarai_stream();          // たらいを落とす
                 });

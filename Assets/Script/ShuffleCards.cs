@@ -69,6 +69,7 @@ namespace say
         int RndSet_CardPos_Wall;             // A～E どの位置にカードをセットするか
         int RndSet_CardPos_WFlag;            // A～E どの位置にカードをセットするか
 
+        //public bool Tarai_to_SetWFlag = false;  // たらいが落ちると、確定で白旗一枚
 
         private void Awake()
         {
@@ -137,23 +138,23 @@ namespace say
             KingChancePlayer = UnityEngine.Random.Range(1, 5);          // 1～4  パブリック 王さまチャンス → どのプレイヤーがカードをセットするか
             DoreiChancePlayer = UnityEngine.Random.Range(1, 5);
             int safe = 0;
-            while (KingChancePlayer == DoreiChancePlayer || safe >20)   // ChancePlayer が被らないようにします
+            while (KingChancePlayer == DoreiChancePlayer || safe > 20)   // ChancePlayer が被らないようにします
             {
                 DoreiChancePlayer = UnityEngine.Random.Range(1, 5);
                 safe++;
             }
 
-            RndSet_CardPos_King   = UnityEngine.Random.Range(1, 6);        // A～E どの位置にカードをセットするか
-            RndSet_CardPos_Dorei  = UnityEngine.Random.Range(1, 6);
+            RndSet_CardPos_King = UnityEngine.Random.Range(1, 6);        // A～E どの位置にカードをセットするか
+            RndSet_CardPos_Dorei = UnityEngine.Random.Range(1, 6);
             RndSet_CardPos_Muteki = UnityEngine.Random.Range(1, 6);
-            RndSet_CardPos_Wall   = UnityEngine.Random.Range(1, 6);
-            RndSet_CardPos_WFlag  = UnityEngine.Random.Range(1, 6);
+            RndSet_CardPos_Wall = UnityEngine.Random.Range(1, 6);
+            RndSet_CardPos_WFlag = UnityEngine.Random.Range(1, 6);
 
 
-            Debug.Log("参加人数でセットチャンス調整" + SelectJankenMSC.SankaNinzu);          
+            Debug.Log("参加人数でセットチャンス調整" + SelectJankenMSC.SankaNinzu);
             if (FirstChancePush_Flg == 0)                                // 王さま-どれい-セットチャンス 判定まえ ならば
             {
-                KingDorei_SetChance = UnityEngine.Random.Range(SelectJankenMSC.SankaNinzu*-1, 5);   // -3～4  ローカル   王さま-どれい-セットチャンス
+                KingDorei_SetChance = UnityEngine.Random.Range(SelectJankenMSC.SankaNinzu * -1, 5);   // -3～4  ローカル   王さま-どれい-セットチャンス
                 SelectJankenMSC.Share_Done_FirstChancePush();            // 王さま-どれい-セットチャンス 判定したら FirstChancePush_Flg を 0→1 [ 共有する ]
             }
 
@@ -194,8 +195,10 @@ namespace say
             }
 
             int RndGo_Muteki = UnityEngine.Random.Range(1, 21);
-            int RndGo_Wall   = UnityEngine.Random.Range(1, 21);
-            int RndGo_WFlag  = UnityEngine.Random.Range(1, 21);
+            int RndGo_Wall = UnityEngine.Random.Range(1, 21);
+            int RndGo_WFlag = UnityEngine.Random.Range(1, 21);
+            //int RndGo_Tarai = UnityEngine.Random.Range(1, 8);
+
 
             if (RndGo_Muteki >= 15)
             {
@@ -209,6 +212,12 @@ namespace say
             {
                 Set_WFlagCard();             // 白旗カード をセットします  A,B,C,D,E
             }
+            if (SelectJankenMSC.Tarai_to_SetWFlag)            // たらいが落ちるフラグON
+            {
+                //SelectJankenMSC.Tarai_to_SetWFlag = true;  // たらいが落ちると、確定で白旗一枚
+                Set_WFlagCard();             // 白旗カード をセットします  A,B,C,D,E              
+            }
+            //Tarai_to_SetWFlag = false;
         }
 
         public void Check_ChancePlayer_King()  // 王さまカード をセット するプレイヤーを確認します

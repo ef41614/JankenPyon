@@ -278,6 +278,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public bool NoneWFlag = false;
     public bool bool_CanDo_Hantei_Stream = false;  // 勝敗判定（Hantei_Stream） を実行できるかのフラグ
 
+    int int_WFlagP1 = 0;
+    int int_WFlagP2 = 0;
+    int int_WFlagP3 = 0;
+    int int_WFlagP4 = 0;
+    int NumWFlag_AllPlayer = 0;
+
     public string PresentPlayerID;
     private PhotonView photonView = null;
 
@@ -520,6 +526,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public GameObject Image_Group_Introp;
     public GameObject Text_Group_Intro;
+
+    public bool Tarai_to_SetWFlag = false;  // たらいが落ちると、確定で白旗一枚
 
     #endregion
 
@@ -1388,6 +1396,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Countdown_Until_Push_OpenMyJankenPanel_Button()   // ジャンケンパネルが開かれていないならば、カウントダウン開始
     {
+        //PrecheckTaiho_PosX();         // PosX の値を共有し、大砲が撃てるか確認する
+        WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
+        CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
+
         Debug.Log("Countdown_timer_PanelOpen : " + Countdown_timer_PanelOpen);
         if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)  // ジャンケンパネルが既に表示されていたら
         {
@@ -1460,6 +1472,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             if (timeHyoji == 5 || timeHyoji == 20)
             {
                 bottonwo_oshitene_SE();   // ボタンを おしてね のSEを流す
+                WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
+                CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
             }
             Countdown_timer_PanelOpen++;
             Countdown_Until_Push_OpenMyJankenPanel_Button();
@@ -2391,11 +2405,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(2f, () => Check_Can_Hantei_Stream());
 
-        Flg_Update_PosX = true;
-        Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        PrecheckTaiho_PosX();  // PosX の値を共有し、大砲が撃てるか確認する
+        //Flg_Update_PosX = true;
+        //Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
         //photonView.RPC("Update_PosX_Players", RpcTarget.All);
-        WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
-        CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
+        //WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
+        //CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
     }
 
     [PunRPC]
@@ -2941,6 +2956,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Error06_Text.text = "AfterJumpDone処理ダブり";
         }
         Flg_FromWin_ToJumpDone = 0;
+
+        PrecheckTaiho_PosX();  // PosX の値を共有し、大砲が撃てるか確認する
+        //Flg_Update_PosX = true;
+        //Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        //WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
+        //CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
+    }
+
+    public void PrecheckTaiho_PosX()  // PosX の値を共有し、大砲が撃てるか確認する
+    {
         Flg_Update_PosX = true;
         Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
         WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
@@ -4423,6 +4448,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         bool NoneWFlagP3 = true;
         bool NoneWFlagP4 = true;
 
+        int_WFlagP1 = 0;
+        int_WFlagP2 = 0;
+        int_WFlagP3 = 0;
+        int_WFlagP4 = 0;
+        NumWFlag_AllPlayer = 0;  // 白旗が場に何本あるか？
+
         if (alivePlayer1 == 1) // Player1 が生きている
         {
             if (KP1 != 46) // 白旗 ではない
@@ -4432,6 +4463,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             else
             {
                 NoneWFlagP1 = false; // 白旗 有り
+                int_WFlagP1 = 1;
             }
         }
         else  // Player1 が脱落後
@@ -4448,6 +4480,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             else
             {
                 NoneWFlagP2 = false; // 白旗 有り
+                int_WFlagP2 = 1;
             }
         }
         else  // Player2 が脱落後
@@ -4464,6 +4497,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             else
             {
                 NoneWFlagP3 = false; // 白旗 有り
+                int_WFlagP3 = 1;
             }
         }
         else  // Player3 が脱落後
@@ -4480,6 +4514,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             else
             {
                 NoneWFlagP4 = false; // 白旗 有り
+                int_WFlagP4 = 1;
             }
         }
         else  // Player4 が脱落後
@@ -4499,6 +4534,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("NoneWFlagP2 ： " + NoneWFlagP2);
         Debug.Log("NoneWFlagP3 ： " + NoneWFlagP3);
         Debug.Log("NoneWFlagP4 ： " + NoneWFlagP4);
+
+        CheckAlivePlayer_DependOn_Absent();  // 生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）
+        NumWFlag_AllPlayer = int_WFlagP1 + int_WFlagP2 + int_WFlagP3 + int_WFlagP4;  // 白旗が場に何本あるか？
     }
 
     public void Syohai_Hantei()         //【JK-25】生存者同士の 勝ち負けを判定（負けた人のaliveフラグ を 0 にする） → 人数が減る ＆＆ 移動ステップ数を 勝った手に応じて上書き ＆＆ 負けた人の黒カバー表示
@@ -4518,9 +4556,18 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Check_Wall_Existence();              //【JK-25】 N回目の すべてのプレイヤーの手 の中に 壁(88)      があるか ： NoneWall   を取得
         Check_WFlag_Existence();             //【JK-25】 N回目の すべてのプレイヤーの手 の中に 白旗(46)    があるか ： NoneWFlag  を取得
 
-        if (!NoneWFlag) // WFlagあり → 白旗一人負け → 残りプレイヤーの判定
+        if (!NoneWFlag) // WFlagあり → 白旗一人負け or 全員白旗ならあいこ→ 残りプレイヤーの判定
         {
-            Lose_WFlag();                      //    ⇒  白旗 の人のみ 脱落
+            CountLivePlayer();               //【JK-26】残留しているプレイヤー人数をカウントする ： NumLivePlayer を取得
+            NumWFlag_AllPlayer = int_WFlagP1 + int_WFlagP2 + int_WFlagP3 + int_WFlagP4;  // 白旗が場に何本あるか？
+            if (NumLivePlayer == NumWFlag_AllPlayer)
+            {
+                Aiko();                      //    ⇒  全員白旗なので あいこ
+            }
+            else
+            {
+                Lose_WFlag();                //    ⇒  白旗 の人のみ 脱落
+            }
         }
 
         if (!NoneKing && !NoneDorei)     // Kingあり Doreiあり → どれい 一人勝ち
@@ -4662,6 +4709,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【JK-25】あいこ です");
         photonView.RPC("ShareInfo_Aiko", RpcTarget.All);
     }
+
     [PunRPC]
     public void ShareInfo_Aiko()    //【JK-25】あいこを 全員に共有
     {
@@ -10648,11 +10696,12 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         Countdown_Until_Push_OpenMyJankenPanel_Button();   // ジャンケンパネルが開かれていないならば、カウントダウン開始
         photonView.RPC("CloseSubCamera_Group_AfterWait1sec", RpcTarget.All);   // 全員一斉にサブカメラを閉じる
 
-        Flg_Update_PosX = true;
-        Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
+        PrecheckTaiho_PosX();  // PosX の値を共有し、大砲が撃てるか確認する
+        //Flg_Update_PosX = true;
+        //Update_PosX_Players();          // 各プレイヤーのX軸位置を同期します
         //photonView.RPC("Update_PosX_Players", RpcTarget.All);
-        WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
-        CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
+        //WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
+        //CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
     }
 
 
@@ -10874,9 +10923,11 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     #region// 金たらい
     public void FallTarai_stream()
     {
-        int rndFalling = UnityEngine.Random.Range(1, 8);
-        if (rndFalling <= 4)
+        //int rndFalling = UnityEngine.Random.Range(1, 8);
+        if(Tarai_to_SetWFlag)    // たらいが落ちると、確定で白旗一枚
         {
+            Tarai_to_SetWFlag = false;
+        
             //photonView.RPC("Update_PosX_Players", RpcTarget.All);
             Update_PosX_Players();                           // 各プレイヤーのX軸位置を同期します
             share_tarai_Position();                            // たらいの位置を移動して共有する
@@ -10888,8 +10939,8 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
                 .OnComplete(() =>
                 {                  // ジャンプが終了したら、以下の操作をする
                                    //Tarai.transform.DORotate(new Vector3(0f, 0f,180), 0.5f);
-                Tarai_Guwan.Play();  // tarai当たった時のエフェクト
-                BGM_SE_MSC.Tarai_Guwan_SE();
+                    Tarai_Guwan.Play();  // tarai当たった時のエフェクト
+                    BGM_SE_MSC.Tarai_Guwan_SE();
                     PlayerSC.anim.SetBool("damage", true);
                     var sequence3 = DOTween.Sequence();
                     sequence3.InsertCallback(1.5f, () => Tarai_Fukki());
