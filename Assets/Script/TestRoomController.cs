@@ -46,6 +46,9 @@ namespace BEFOOL.PhotonTest
         public GameObject BGM_SE_Manager;
         BGM_SE_Manager BGM_SE_MSC;
 
+        float span = 2f;
+        private float currentTime = 0f;
+
         void Start()
         {
             BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
@@ -72,6 +75,18 @@ namespace BEFOOL.PhotonTest
             PNameCheck();
             Set_PNameTextAll();
             //ToSet_MyHeadName();
+        }
+
+        void Update()
+        {
+            currentTime += Time.deltaTime;
+
+            if (currentTime > span)
+            {
+                Debug.Log(allPlayers.Length + ": allPlayers.Length");
+                Debug.Log(int_JoinedPlayerAllNum + ": int_JoinedPlayerAllNum");
+                currentTime = 0f;
+            }
         }
 
         // <summary>
@@ -287,8 +302,9 @@ namespace BEFOOL.PhotonTest
         {
             {
                 Debug.Log(player.NickName + "が退出しました");
-                UpdateMemberList();
-                UpdateMemberList();
+                //UpdateMemberList();
+                //UpdateMemberList();
+                SelectJankenMSC.Logout_InTheMiddle();   // 途中退席した人の処理
             }
         }
 
@@ -300,6 +316,7 @@ namespace BEFOOL.PhotonTest
             {
                 joinedMembersText.text += p.NickName + "\n";
             }
+            int_JoinedPlayerAllNum = allPlayers.Length;
         }
 
         public void MyNameIs(Player player)

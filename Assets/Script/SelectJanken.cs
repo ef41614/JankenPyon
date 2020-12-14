@@ -529,6 +529,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public bool Tarai_to_SetWFlag = false;  // たらいが落ちると、確定で白旗一枚
 
+    public bool logon_player1 = true;  // false の時、ログオフ状態である
+    public bool logon_player2 = true;
+    public bool logon_player3 = true;
+    public bool logon_player4 = true;
+
     #endregion
 
     #region // 【START】初期設定の処理一覧
@@ -904,7 +909,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         //TestRoomControllerSC.PNameCheck();  // 現在の参加人数を更新する（プレイヤー名が埋まっていなかったら入れる）
         NinzuCheck();                       // 【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します
-        Share_AcutivePlayerID();            // 【START-07】現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+        //Share_AcutivePlayerID(); //           // 【START-07】現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
         Share_InitialSetting();             // 【START-07】スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）
         if (int_MatchPlayerMaxNum > 4)      // マッチ人数が5人以上であるならば
         {
@@ -1322,6 +1327,24 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します");
         TestRoomControllerSC.PNameCheck();            // 現在の参加人数を更新する（プレイヤー名が埋まっていなかったら入れる）
         SankaNinzu = TestRoomControllerSC.int_JoinedPlayerAllNum;  // 総参加人数 を更新
+
+        if(logon_player1 == false)   // player1 が退出しました
+        {
+            int_NowWaiting_Player1 = 1;  // これ以降、常に待機フラグが ON になる
+        }
+        if (logon_player2 == false)
+        {
+            int_NowWaiting_Player2 = 1;
+        }
+        if (logon_player3 == false)
+        {
+            int_NowWaiting_Player3 = 1;
+        }
+        if (logon_player4 == false)
+        {
+            int_NowWaiting_Player4 = 1;
+        }
+
         int_WaitingPlayers_All = int_NowWaiting_Player1 + int_NowWaiting_Player2 + int_NowWaiting_Player3 + int_NowWaiting_Player4;   // 現在待機中の総人数 を更新
         Debug.Log("総参加人数（SankaNinzu） ： " + SankaNinzu);
         Debug.Log("現在待機中の総人数（int_WaitingPlayers_All） ： " + int_WaitingPlayers_All);
@@ -2429,7 +2452,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         //TestRoomControllerSC.PNameCheck();  // 現在の参加人数を更新する（プレイヤー名が埋まっていなかったら入れる）
         NinzuCheck();                       // 【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します
-        Share_AcutivePlayerID();            // 【JK-11_1】現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+        //Share_AcutivePlayerID(); //           // 【JK-11_1】現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
         Check_NowWaiting();
     }
 
@@ -3059,7 +3082,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         //TestRoomControllerSC.PNameCheck();   // 現在の参加人数を更新する（プレイヤー名が埋まっていなかったら入れる）
         NinzuCheck();                          // 【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します
-        Share_AcutivePlayerID();               // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+        //Share_AcutivePlayerID(); //              // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
         Check_Iam_alive();
     }
 
@@ -3177,7 +3200,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         //TestRoomControllerSC.PNameCheck();     // 現在の参加人数を更新する（プレイヤー名が埋まっていなかったら入れる）
         NinzuCheck();                       // 【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します
-        Share_AcutivePlayerID();               // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+        //Share_AcutivePlayerID(); //              // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
                                                //Check_Iam_Winner();
         photonView.RPC("Check_Iam_Winner", RpcTarget.All);
     }
@@ -3781,6 +3804,24 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void CountLivePlayer()       //【JK-26】残留しているプレイヤー人数をカウントする
     {
         CheckAlivePlayer_DependOn_Absent();  // 生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）
+
+        if (logon_player1 == false)   // player1 が退出しました
+        {
+            alivePlayer1 = 0;         // これ以降、常に alivePlayerフラグ が 0 になる
+        }
+        if (logon_player2 == false)
+        {
+            alivePlayer2 = 0;         // これ以降、常に alivePlayerフラグ が 0 になる
+        }
+        if (logon_player3 == false)
+        {
+            alivePlayer3 = 0;         // これ以降、常に alivePlayerフラグ が 0 になる
+        }
+        if (logon_player4 == false)
+        {
+            alivePlayer4 = 0;         // これ以降、常に alivePlayerフラグ が 0 になる
+        }
+
         NumLivePlayer = alivePlayer1 + alivePlayer2 + alivePlayer3 + alivePlayer4;
         Debug.Log("【JK-26】NumLivePlayer 残留プレイヤー数 ： " + NumLivePlayer);
     }
@@ -4714,7 +4755,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void ShareInfo_Aiko()    //【JK-25】あいこを 全員に共有
     {
         Debug.Log("【JK-25】あいこ です");
-        Share_AcutivePlayerID();    // 現在操作している人のプレイヤー名取得
+        //Share_AcutivePlayerID(); //   // 現在操作している人のプレイヤー名取得
     }
 
     #region                   // Janken_Win_Part
@@ -4730,7 +4771,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void ShareInfo_Win_Gu()  //【JK-25】 ぐー の人のみ 残留（Win_Gu）を 全員に共有
     {
         Debug.Log("【JK-25】ぐー の人のみ 残留（Win_Gu）");
-        Share_AcutivePlayerID();    // 現在操作している人のプレイヤー名取得
+        //Share_AcutivePlayerID(); //   // 現在操作している人のプレイヤー名取得
     }
 
     public void Win_Choki()         //【JK-25】ちょき の人のみ 残留（移動ステップ数を 6 に上書き）
@@ -4745,7 +4786,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void ShareInfo_Win_Choki()   //【JK-25】 ちょき の人のみ 残留（Win_Choki）を 全員に共有
     {
         Debug.Log("【JK-25】ちょき の人のみ 残留");
-        Share_AcutivePlayerID();       // 現在操作している人のプレイヤー名取得
+        //Share_AcutivePlayerID(); //      // 現在操作している人のプレイヤー名取得
     }
 
     public void Win_Pa()               //【JK-25】ぱー の人のみ 残留（移動ステップ数を 6 に上書き）
@@ -4760,7 +4801,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void ShareInfo_Win_Pa()   //【JK-25】 ぱー の人のみ 残留（Win_Pa）を 全員に共有
     {
         Debug.Log("【JK-25】ぱー の人のみ 残留");
-        Share_AcutivePlayerID();     // 現在操作している人のプレイヤー名取得
+        //Share_AcutivePlayerID(); //    // 現在操作している人のプレイヤー名取得
     }
 
     public void Win_King()               //【JK-25】王さま の人のみ 残留（移動ステップ数を 4 に上書き）
@@ -4775,7 +4816,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void ShareInfo_Win_King()   //【JK-25】 王さま の人のみ 残留（Win_King）を 全員に共有
     {
         Debug.Log("【JK-25】王さま の人のみ 残留");
-        Share_AcutivePlayerID();     // 現在操作している人のプレイヤー名取得
+        //Share_AcutivePlayerID(); //    // 現在操作している人のプレイヤー名取得
     }
 
     public void Win_Dorei()               //【JK-25】どれい の人のみ 残留（移動ステップ数を 15 に上書き）
@@ -4790,7 +4831,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void ShareInfo_Win_Dorei()   //【JK-25】 どれい の人のみ 残留（Win_Dorei）を 全員に共有
     {
         Debug.Log("【JK-25】どれい の人のみ 残留");
-        Share_AcutivePlayerID();     // 現在操作している人のプレイヤー名取得
+        //Share_AcutivePlayerID(); //    // 現在操作している人のプレイヤー名取得
     }
 
     public void Win_Muteki()               //【JK-25】むてき の人のみ 残留（移動ステップ数を 15 に上書き）
@@ -5286,7 +5327,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         //TestRoomControllerSC.PNameCheck(); // プレイヤー名が埋まっていなかったら入れる
         NinzuCheck();                       // 【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します
-        Share_AcutivePlayerID();  // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+        //Share_AcutivePlayerID(); // // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
         //photonView.RPC("SharePlayerTeNum", RpcTarget.All);
         SharePlayerTeNum();
     }
@@ -11401,6 +11442,58 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     {
         Ninja_Button.SetActive(false);
     }
+
+
+    #region// ログアウト関連
+    public void Logout_InTheMiddle()  // 途中退席した人の処理
+    {
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            photonView.RPC("Logout_Player1", RpcTarget.All);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            photonView.RPC("Logout_Player2", RpcTarget.All);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            photonView.RPC("Logout_Player3", RpcTarget.All);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            photonView.RPC("Logout_Player4", RpcTarget.All);
+        }
+    }
+
+
+    [PunRPC]
+    public void Logout_Player1()  // player1 が退出しました
+    {
+        logon_player1 = false;
+    }
+
+    [PunRPC]
+    public void Logout_Player2()  // player2 が退出しました
+    {
+        logon_player2 = false;
+    }
+
+    [PunRPC]
+    public void Logout_Player3()  // player3 が退出しました
+    {
+        logon_player3 = false;
+    }
+
+    [PunRPC]
+    public void Logout_Player4()  // player4 が退出しました
+    {
+        logon_player4 = false;
+    }
+    #endregion
+
     // End
 
 }
