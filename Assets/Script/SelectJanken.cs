@@ -47,6 +47,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject Debug_Buttons;  // デバッグ用のボタン
     public GameObject WinPanel;       // 優勝者決定後のパネル
 
+    public GameObject Goal_Iwai_1;       // 優勝者決定後のお祝いメンバー
+    public GameObject Goal_Iwai_2;       // 優勝者決定後のお祝いメンバー
+    public GameObject Goal_Iwai_3;       // 優勝者決定後のお祝いメンバー
+
     public GameObject Winner_avator_1;
     public GameObject Winner_avator_2;
     public GameObject Winner_avator_3;
@@ -134,6 +138,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject Kachi_White2;
     public GameObject Kachi_White3;
     public GameObject Kachi_White4;
+
+    public GameObject Logout_Kakejiku1;
+    public GameObject Logout_Kakejiku2;
+    public GameObject Logout_Kakejiku3;
+    public GameObject Logout_Kakejiku4;
 
     public Image Img_Player1_Te1;
     public Image Img_Player1_Te2;
@@ -529,10 +538,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public bool Tarai_to_SetWFlag = false;  // たらいが落ちると、確定で白旗一枚
 
-    public bool logon_player1 = true;  // false の時、ログオフ状態である
-    public bool logon_player2 = true;
-    public bool logon_player3 = true;
-    public bool logon_player4 = true;
+     bool logon_player1 = true;  // false の時、ログオフ状態である
+     bool logon_player2 = true;
+     bool logon_player3 = true;
+     bool logon_player4 = true;
 
     #endregion
 
@@ -561,6 +570,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             CloseDebug_Buttons();
             ClosePanel_Intro();
             ClosePanel_ToTitle();
+            AppearLogout_Kakejiku_All();      // すべての掛け軸を開く
             if (BGM_SE_MSC.firstMatch <= 3)
             {
                 AppearPanel_Intro();
@@ -653,6 +663,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             CloseSyoji_Panel();
             CloseNinja_Button();
             Reset_AllAisatsu();
+            //CloseLogout_Kakejiku_All();        // すべての掛け軸を閉じる（消す）
             CloseTarai();
             CloseSara();
             //Erase_Text_Announcement();
@@ -741,6 +752,38 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             if (Shiai_Kaishi)
             {
                 text_Room_shimekiri.text = "試合開始したので、ルームへの入室をしめきりました";
+                Debug.Log(SankaNinzu + ": SankaNinzu");
+
+                if (logon_player1 == false)      // player1 が退出しました
+                {
+                    alivePlayer1 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
+                    int_NowWaiting_Player1 = 1;  // これ以降、常に待機フラグが ON になる
+                }
+                if (logon_player2 == false)
+                {
+                    alivePlayer2 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
+                    int_NowWaiting_Player2 = 1;  // これ以降、常に待機フラグが ON になる
+                }
+                if (logon_player3 == false)
+                {
+                    alivePlayer3 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
+                    int_NowWaiting_Player3 = 1;  // これ以降、常に待機フラグが ON になる
+                }
+                if (logon_player4 == false)
+                {
+                    alivePlayer4 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
+                    int_NowWaiting_Player4 = 1;  // これ以降、常に待機フラグが ON になる
+                }
+
+                Debug.Log("alivePlayer1 ： " + alivePlayer1);
+                Debug.Log("alivePlayer2 ： " + alivePlayer2);
+                Debug.Log("alivePlayer3 ： " + alivePlayer3);
+                Debug.Log("alivePlayer4 ： " + alivePlayer4);
+
+                Debug.Log("logon_player1 ： " + logon_player1);
+                Debug.Log("logon_player2 ： " + logon_player2);
+                Debug.Log("logon_player3 ： " + logon_player3);
+                Debug.Log("logon_player4 ： " + logon_player4);
             }
 
             /*
@@ -1347,6 +1390,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         int_WaitingPlayers_All = int_NowWaiting_Player1 + int_NowWaiting_Player2 + int_NowWaiting_Player3 + int_NowWaiting_Player4;   // 現在待機中の総人数 を更新
         Debug.Log("総参加人数（SankaNinzu） ： " + SankaNinzu);
+
+        Debug.Log("int_NowWaiting_Player1 ： " + int_NowWaiting_Player1);
+        Debug.Log("int_NowWaiting_Player2 ： " + int_NowWaiting_Player2);
+        Debug.Log("int_NowWaiting_Player3 ： " + int_NowWaiting_Player3);
+        Debug.Log("int_NowWaiting_Player4 ： " + int_NowWaiting_Player4);
+
         Debug.Log("現在待機中の総人数（int_WaitingPlayers_All） ： " + int_WaitingPlayers_All);
         if (SankaNinzu >= 2 && (Shiai_Kaishi == false))  // 試合開始まえであれば
         {
@@ -5320,6 +5369,73 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Kachi_White4.SetActive(false);
     }
     #endregion
+
+    #region // 掛け軸の表示・非表示
+    public void AppearLogout_Kakejiku_All()  // すべての掛け軸を開く
+    {
+        AppearLogout_Kakejiku1();
+        AppearLogout_Kakejiku2();
+        AppearLogout_Kakejiku3();
+        AppearLogout_Kakejiku4();
+    }
+
+    [PunRPC]
+    public void AppearLogout_Kakejiku1()
+    {
+        Logout_Kakejiku1.SetActive(true);
+    }
+
+    [PunRPC]
+    public void AppearLogout_Kakejiku2()
+    {
+        Logout_Kakejiku2.SetActive(true);
+    }
+
+    [PunRPC]
+    public void AppearLogout_Kakejiku3()
+    {
+        Logout_Kakejiku3.SetActive(true);
+    }
+
+    [PunRPC]
+    public void AppearLogout_Kakejiku4()
+    {
+        Logout_Kakejiku4.SetActive(true);
+    }
+
+    public void CloseLogout_Kakejiku_All()  // すべての掛け軸を閉じる（消す）
+    {
+        CloseLogout_Kakejiku1();
+        CloseLogout_Kakejiku2();
+        CloseLogout_Kakejiku3();
+        CloseLogout_Kakejiku4();
+    }
+
+    [PunRPC]
+    public void CloseLogout_Kakejiku1()
+    {
+        Logout_Kakejiku1.SetActive(false);
+    }
+
+    [PunRPC]
+    public void CloseLogout_Kakejiku2()
+    {
+        Logout_Kakejiku2.SetActive(false);
+    }
+
+    [PunRPC]
+    public void CloseLogout_Kakejiku3()
+    {
+        Logout_Kakejiku3.SetActive(false);
+    }
+
+    [PunRPC]
+    public void CloseLogout_Kakejiku4()
+    {
+        Logout_Kakejiku4.SetActive(false);
+    }
+    #endregion
+
     #endregion
 
 
@@ -10596,6 +10712,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     {
         BGM_SE_MSC.firstRead_Selectjanken = 0;
         BGM_SE_MSC.firstRead_TestRoomController = 0;
+        Logout_InTheMiddle();       // 途中退席した人の処理
         PhotonNetwork.LeaveRoom();
         SceneManager.LoadScene("Launcher");
     }
@@ -11142,7 +11259,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     }
     #endregion
 
-
+    #region  // ゴール処理一連
     public void Judge_GOAL()   // ゴールラインに到達したか判定する
     {
         if (myPlayer.transform.position.x >= GoalCorn_Head.transform.position.x)  // ゴールにたどり着いた！
@@ -11195,6 +11312,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         SetMyAvator_ForChamp();  // チャンプ のアバターを ゴールパネル（表彰台）にセットします。
     }
 
+
     public void SetMyAvator_ForChamp()  // チャンプ のアバターを ゴールパネル（表彰台）にセットします。
     {
         photonView.RPC("CloseWinner_avator_All", RpcTarget.All);
@@ -11224,7 +11342,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     }
 
     [PunRPC]
-    public void ShareGameSet()   // GOAL して GameSet した旨を全員に共有する
+    public void ShareGameSet()          // GOAL して GameSet した旨を全員に共有する
     {
         Debug.Log("GOOOOOALLL！！！！");
         Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
@@ -11244,12 +11362,27 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
         GameSet_Flg = true;
         Erase_Text_Announcement();
+        CloseGoal_Iwai_All();
+        int iwai = UnityEngine.Random.Range(1, 4);
+        if (iwai == 1)
+        {
+            AppearGoal_Iwai_1();
+        }
+        else if (iwai == 2)
+        {
+            AppearGoal_Iwai_2();
+        }
+        else
+        {
+            AppearGoal_Iwai_3();
+        }
         AppearWinPanel();
         BGM_SE_MSC.Fanfare_solo_SE();
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(5f, () => BGM_SE_MSC.Fanfare_Roop_BGM());
     }
 
+    
     public void AppearGameSet_LOGO()
     {
         GameSet_LOGO.SetActive(true);
@@ -11279,6 +11412,45 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     {
         Debug_Buttons.SetActive(false);
     }
+
+
+    public void AppearGoal_Iwai_1()
+    {
+        Goal_Iwai_1.SetActive(true);
+    }
+
+    public void CloseGoal_Iwai_1()
+    {
+        Goal_Iwai_1.SetActive(false);
+    }
+
+    public void AppearGoal_Iwai_2()
+    {
+        Goal_Iwai_2.SetActive(true);
+    }
+
+    public void CloseGoal_Iwai_2()
+    {
+        Goal_Iwai_2.SetActive(false);
+    }
+
+    public void AppearGoal_Iwai_3()
+    {
+        Goal_Iwai_3.SetActive(true);
+    }
+
+    public void CloseGoal_Iwai_3()
+    {
+        Goal_Iwai_3.SetActive(false);
+    }
+
+    public void CloseGoal_Iwai_All()
+    {
+        CloseGoal_Iwai_1();
+        CloseGoal_Iwai_2();
+        CloseGoal_Iwai_3();
+    }
+
 
     public void AppearWinPanel()
     {
@@ -11359,6 +11531,8 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         CloseWinner_avator_4();
         CloseWinner_avator_5();
     }
+    #endregion
+
 
     #region  // イントロ（ルール説明）
     public void AppearPanel_Intro()
@@ -11473,24 +11647,36 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     public void Logout_Player1()  // player1 が退出しました
     {
         logon_player1 = false;
+        alivePlayer1 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
+        int_NowWaiting_Player1 = 1;  // これ以降、常に待機フラグが ON になる
+        AppearLogout_Kakejiku1();    // 掛け軸を表示する 
     }
 
     [PunRPC]
     public void Logout_Player2()  // player2 が退出しました
     {
         logon_player2 = false;
+        alivePlayer2 = 0;         // これ以降、常に alivePlayerフラグ が 0 になる
+        int_NowWaiting_Player2 = 1;  // これ以降、常に待機フラグが ON になる
+        AppearLogout_Kakejiku2();    // 掛け軸を表示する
     }
 
     [PunRPC]
     public void Logout_Player3()  // player3 が退出しました
     {
         logon_player3 = false;
+        alivePlayer3 = 0;         // これ以降、常に alivePlayerフラグ が 0 になる
+        int_NowWaiting_Player3 = 1;  // これ以降、常に待機フラグが ON になる
+        AppearLogout_Kakejiku3();    // 掛け軸を表示する
     }
 
     [PunRPC]
     public void Logout_Player4()  // player4 が退出しました
     {
         logon_player4 = false;
+        alivePlayer4 = 0;         // これ以降、常に alivePlayerフラグ が 0 になる
+        int_NowWaiting_Player4 = 1;  // これ以降、常に待機フラグが ON になる
+        AppearLogout_Kakejiku4();    // 掛け軸を表示する
     }
     #endregion
 

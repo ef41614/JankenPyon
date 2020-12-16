@@ -46,7 +46,7 @@ namespace BEFOOL.PhotonTest
         public GameObject BGM_SE_Manager;
         BGM_SE_Manager BGM_SE_MSC;
 
-        float span = 2f;
+        float span = 0.1f;
         private float currentTime = 0f;
 
         void Start()
@@ -184,12 +184,15 @@ namespace BEFOOL.PhotonTest
             Debug.Log("「PNameCheck」現時点の参加人数を更新します（プレイヤー名が埋まっていなかったら入れる）");
             if (string_PID4 != "5")
             {
+                SelectJankenMSC.AppearLogout_Kakejiku_All();
+
                 //Debug.Log("string_PID4 まだ埋まっていない");
                 string_PName1 = allPlayers[0].NickName;
                 string_PID1 = allPlayers[0].UserId;
                 //Debug.Log(string_PID1 + ": string_PID1");
                 //Debug.Log(allPlayers.Length + ": allPlayers.Length");
                 int_JoinedPlayerAllNum = 1;
+                SelectJankenMSC.CloseLogout_Kakejiku1();
 
                 if (allPlayers.Length >= 2)
                 {
@@ -198,6 +201,7 @@ namespace BEFOOL.PhotonTest
                     //Debug.Log(string_PID2 + ": string_PID2");
                     //Debug.Log(allPlayers.Length + ": allPlayers.Length");
                     int_JoinedPlayerAllNum = 2;
+                    SelectJankenMSC.CloseLogout_Kakejiku2();
                 }
 
                 if (allPlayers.Length >= 3)
@@ -207,6 +211,7 @@ namespace BEFOOL.PhotonTest
                     string_PID3 = allPlayers[2].UserId;
                     //Debug.Log(string_PID3 + ": string_PID3");
                     int_JoinedPlayerAllNum = 3;
+                    SelectJankenMSC.CloseLogout_Kakejiku3();
                 }
 
                 if (allPlayers.Length >= 4)
@@ -216,6 +221,7 @@ namespace BEFOOL.PhotonTest
                     string_PID4 = allPlayers[3].UserId;
                     //Debug.Log(string_PID4 + ": string_PID4");
                     int_JoinedPlayerAllNum = 4;
+                    SelectJankenMSC.CloseLogout_Kakejiku4();
                 }
 
                 //string_PName4 = allPlayers[3].NickName;
@@ -304,7 +310,7 @@ namespace BEFOOL.PhotonTest
                 Debug.Log(player.NickName + "が退出しました");
                 //UpdateMemberList();
                 //UpdateMemberList();
-                SelectJankenMSC.Logout_InTheMiddle();   // 途中退席した人の処理
+                //SelectJankenMSC.Logout_InTheMiddle();   // 途中退席した人の処理
             }
         }
 
