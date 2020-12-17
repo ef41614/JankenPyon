@@ -367,6 +367,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public float JumpMaeTaiki = 2.0f;
     float span = 0.5f;
     private float currentTime = 0f; // test
+    private float currentTime10 = 0f; // test
 
     public GameObject BGM_SE_Manager;
     BGM_SE_Manager BGM_SE_MSC;
@@ -460,10 +461,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     float X_dis_betweenTop = 0;  // 自分と首位とのX軸距離
     float PosX_TopPlayer = 0;    // 首位のX軸距離
     float PosX_MyPlayer = 0;     // 自分のX軸距離
-     float PosX_Player1;
-     float PosX_Player2;
-     float PosX_Player3;
-     float PosX_Player4;
+    float PosX_Player1;
+    float PosX_Player2;
+    float PosX_Player3;
+    float PosX_Player4;
     float PosX_BottomPlayer = 0;
 
     //int Shutoku_Keta = 0;
@@ -498,7 +499,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public bool Flg_CanUseTaihou = false;
     public GameObject Button_TaihouFire;
     public float flo_str = 0.1f;
-    public int int_vib= 5;
+    public int int_vib = 5;
     public float flo_ran = 30;
     public bool Flg_Taihou_punch = false;
 
@@ -518,7 +519,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Text text_Gold_P3;
     public Text text_Gold_P4;
     public Text Text_Gold_fusoku;
-    
+
     int int_calculation_Gold;  // 現在の所持金（ゴールド）にマイナス/プラスする数値
 
     public GameObject Sara;
@@ -538,10 +539,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public bool Tarai_to_SetWFlag = false;  // たらいが落ちると、確定で白旗一枚
 
-     bool logon_player1 = true;  // false の時、ログオフ状態である
-     bool logon_player2 = true;
-     bool logon_player3 = true;
-     bool logon_player4 = true;
+    bool logon_player1 = true;  // false の時、ログオフ状態である
+    bool logon_player2 = true;
+    bool logon_player3 = true;
+    bool logon_player4 = true;
+
+    bool Flg_before_Hantei_Stream;  // 勝敗判定（Hantei_Stream） 実行前ならtrue、実行始まったらfalse
 
     #endregion
 
@@ -713,7 +716,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             text_Gold_P3.text = Gold_Player3.ToString();
             text_Gold_P4.text = Gold_Player4.ToString();
 
-           // Debug.Log(" myPlayer.transform.position.x : " + myPlayer.transform.position.x);
+            // Debug.Log(" myPlayer.transform.position.x : " + myPlayer.transform.position.x);
 
             /*
             if(Flg_CanUseTaihou)
@@ -877,6 +880,31 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             currentTime = 0f;
         }
+
+        currentTime10 += Time.deltaTime;
+        if (currentTime10 > 10)      // 10秒間隔で処理する
+        {
+            if (Shiai_Kaishi)        // 試合中であれば
+            {
+                if ((int_IamNowWaiting == 1) && Flg_before_Hantei_Stream)    // 自分のジャンケン手 決定して待機中 （0：まだ決定してない、1：決定して待機中）
+                {                                                           // 勝敗判定（Hantei_Stream） 実行前なら
+                    Debug.Log("【currentTime10】一旦全部のログオンフラグをfalseにする（ローカル処理）");
+                    logon_player1 = false;
+                    logon_player2 = false;
+                    logon_player3 = false;
+                    logon_player4 = false;
+
+                    Debug.Log("【currentTime10】全員に対して死活監視を実行");
+                    photonView.RPC("Response_AliveMonitoring", RpcTarget.All);  // 全員に対して死活監視を実行
+
+                    var sequence = DOTween.Sequence();
+                    sequence.InsertCallback(1.5f, () => Check_Can_Hantei_Stream());
+                }
+            }
+
+            currentTime10 = 0f;
+        }
+
 
         if (ToRight_SubCamera)
         {
@@ -1371,7 +1399,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         TestRoomControllerSC.PNameCheck();            // 現在の参加人数を更新する（プレイヤー名が埋まっていなかったら入れる）
         SankaNinzu = TestRoomControllerSC.int_JoinedPlayerAllNum;  // 総参加人数 を更新
 
-        if(logon_player1 == false)   // player1 が退出しました
+        if (logon_player1 == false)   // player1 が退出しました
         {
             int_NowWaiting_Player1 = 1;  // これ以降、常に待機フラグが ON になる
         }
@@ -1402,7 +1430,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             //AppearPanel_Ikemasu();  // いけます ボタン(パネル) 参加人数2人以上になったら表示する
             photonView.RPC("AppearPanel_Ikemasu", RpcTarget.All);
         }
-        if(int_WaitingPlayers_All >= 1)  // 待機人数が1人以上であれば
+        if (int_WaitingPlayers_All >= 1)  // 待機人数が1人以上であれば
         {
             AppearNinja_Button();
         }
@@ -2456,6 +2484,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Countdown_Push_JankenTe_KetteiButton_Flg = false;
         CheckAlivePlayer_DependOn_Absent();     // 生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）
 
+        CheckLogout_Kakejiku();                 // 不在の人について「ログアウト中」の掛け軸を表示させる
+
         photonView.RPC("Share_Push_KetteiBtn", RpcTarget.All);
         Debug.Log("【JK-05】ジャンケン手 決定ボタン（「これでOK!」）を押しました。ジャンケン手 これで決定します");
         ShuffleCardsMSC.CloseMyJankenPanel();   // 不要なパネルを閉じる
@@ -2641,9 +2671,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         //CanDo_Hantei_Stream_OFF();             // 勝敗判定（Hantei_Stream） を実行できるかのフラグ（CanDoフラグ OFF）
         Debug.Log("【JK-21】勝敗判定（Hantei_Stream） 開始");
 
+        photonView.RPC("ShareStartHantei_Stream", RpcTarget.All);       // 勝敗判定（Hantei_Stream） 実行中の旨を全体共有する
+
         photonView.RPC("ShareCloseMyJankenPanel", RpcTarget.All);       // 延長戦の人がそのままになってしまうので、Myジャンケンパネルを閉じさせる
         photonView.RPC("Share_ResetFlg_AfterJumpDone", RpcTarget.All);  // AfterJumpDone フラグを 0 にリセットする
 
+        CheckLogout_Kakejiku();                 // 不在の人について「ログアウト中」の掛け軸を表示させる
         ToCheck_Iam_alive();            // ジャンケンで自分が生き残っているかどうかの確認をする
 
         Debug.Log("【JK-21】黒カバー表示確認");
@@ -2685,6 +2718,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("【JK-27_3】決着！ 生存者 1名になりました");    // ここでジャンケンの勝者が 1名 になった
             AfterWinnerDecision();    //【JK-100】この時点で ジャンケン生存者は 1名です。これから勝者の前進ジャンプ処理に移ります。
         }
+    }
+
+
+    [PunRPC]
+    public void ShareStartHantei_Stream() // 勝敗判定（Hantei_Stream） 実行中の旨を全体共有する
+    {
+        Flg_before_Hantei_Stream = false;  // 勝敗判定（Hantei_Stream） 実行前ならtrue、実行始まったらfalse
+    }
+
+    [PunRPC]
+    public void ShareEndHantei_Stream()  // 勝敗判定（Hantei_Stream） 実行終了の旨を全体共有する
+    {
+        Flg_before_Hantei_Stream = true;  // 勝敗判定（Hantei_Stream） 実行前ならtrue、実行始まったらfalse
     }
 
     [PunRPC]
@@ -3004,6 +3050,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(1.5f, () => CloseSubCamera_Group());
 
+        ShareEndHantei_Stream();  // 勝敗判定（Hantei_Stream） 実行終了の旨を全体共有する
+
         Debug.Log("【JK-201】PrepareToNextSet 次のセットへ移る準備 をします");
         PrepareToNextSet();           //【JK-201】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
         Debug.Log("【JK-202】PrepareToNextSet 次のセットへ移る準備 終わりました");
@@ -3249,8 +3297,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         //TestRoomControllerSC.PNameCheck();     // 現在の参加人数を更新する（プレイヤー名が埋まっていなかったら入れる）
         NinzuCheck();                       // 【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します
-        //Share_AcutivePlayerID(); //              // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
-                                               //Check_Iam_Winner();
+                                            //Share_AcutivePlayerID(); //              // 現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
+                                            //Check_Iam_Winner();
         photonView.RPC("Check_Iam_Winner", RpcTarget.All);
     }
 
@@ -5044,7 +5092,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             photonView.RPC("AppearImg_CoverBlack_P4", RpcTarget.All);
         }
     }
-    
+
     public void Lose_Muteki()     //【JK-25】むてき の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
         Debug.Log("【JK-25】むてき（601） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
@@ -5073,7 +5121,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             photonView.RPC("AppearImg_CoverBlack_P4", RpcTarget.All);
         }
     }
-    
+
     public void Lose_Wall()     //【JK-25】壁 の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
         Debug.Log("【JK-25】壁（88） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
@@ -5102,7 +5150,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             photonView.RPC("AppearImg_CoverBlack_P4", RpcTarget.All);
         }
     }
-    
+
     public void Lose_WFlag()     //【JK-25】白旗 の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
         Debug.Log("【JK-25】白旗（46） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
@@ -5244,6 +5292,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #endregion
 
 
+
     #region // 黒カバーの表示・非表示
     [PunRPC]
     public void AppearImg_CoverBlack_P1() // 黒カバー 表示させる
@@ -5371,6 +5420,53 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #endregion
 
     #region // 掛け軸の表示・非表示
+    public void CheckLogout_Kakejiku()
+    {
+        if (logon_player1 == false)      // player1 が退出しました
+        {
+            alivePlayer1 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
+            int_NowWaiting_Player1 = 1;  // これ以降、常に待機フラグが ON になる
+            AppearLogout_Kakejiku1();    // 「ログアウト中」を表示させる
+        }
+        else
+        {
+            CloseLogout_Kakejiku1();
+        }
+
+        if (logon_player2 == false)
+        {
+            alivePlayer2 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
+            int_NowWaiting_Player2 = 1;  // これ以降、常に待機フラグが ON になる
+            AppearLogout_Kakejiku2();
+        }
+        else
+        {
+            CloseLogout_Kakejiku2();
+        }
+
+        if (logon_player3 == false)
+        {
+            alivePlayer3 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
+            int_NowWaiting_Player3 = 1;  // これ以降、常に待機フラグが ON になる
+            AppearLogout_Kakejiku3();
+        }
+        else
+        {
+            CloseLogout_Kakejiku3();
+        }
+
+        if (logon_player4 == false)
+        {
+            alivePlayer4 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
+            int_NowWaiting_Player4 = 1;  // これ以降、常に待機フラグが ON になる
+            AppearLogout_Kakejiku4();
+        }
+        else
+        {
+            CloseLogout_Kakejiku4();
+        }
+    }
+
     public void AppearLogout_Kakejiku_All()  // すべての掛け軸を開く
     {
         AppearLogout_Kakejiku1();
@@ -5433,6 +5529,35 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void CloseLogout_Kakejiku4()
     {
         Logout_Kakejiku4.SetActive(false);
+    }
+
+
+    [PunRPC]
+    public void Still_Login_Player1()  // player1 がまだ入出中です
+    {
+        logon_player1 = true;
+        CloseLogout_Kakejiku1();    // 掛け軸を閉じる 
+    }
+
+    [PunRPC]
+    public void Still_Login_Player2()  // player2 がまだ入出中です
+    {
+        logon_player2 = true;
+        CloseLogout_Kakejiku2();    // 掛け軸を閉じる
+    }
+
+    [PunRPC]
+    public void Still_Login_Player3()  // player3 がまだ入出中です
+    {
+        logon_player3 = true;
+        CloseLogout_Kakejiku3();    // 掛け軸を閉じる
+    }
+
+    [PunRPC]
+    public void Still_Login_Player4()  // player4 がまだ入出中です
+    {
+        logon_player4 = true;
+        CloseLogout_Kakejiku4();    // 掛け軸を閉じる
     }
     #endregion
 
@@ -11678,6 +11803,31 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         int_NowWaiting_Player4 = 1;  // これ以降、常に待機フラグが ON になる
         AppearLogout_Kakejiku4();    // 掛け軸を表示する
     }
+
+    [PunRPC]
+    public void Response_AliveMonitoring()  // 死活監視の返答
+    {
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            photonView.RPC("Still_Login_Player1", RpcTarget.All);   // 私はまだログイン中です！
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            photonView.RPC("Still_Login_Player2", RpcTarget.All);   // 私はまだログイン中です！
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            photonView.RPC("Still_Login_Player3", RpcTarget.All);   // 私はまだログイン中です！
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            photonView.RPC("Still_Login_Player4", RpcTarget.All);   // 私はまだログイン中です！
+        }
+    }
+
     #endregion
 
     // End
