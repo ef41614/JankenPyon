@@ -6,6 +6,8 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Linq;
 using System;
+using DG.Tweening;
+
 
 namespace BEFOOL.PhotonTest
 {
@@ -312,7 +314,10 @@ namespace BEFOOL.PhotonTest
                 //UpdateMemberList();
                 //SelectJankenMSC.Logout_InTheMiddle();   // 途中退席した人の処理
                 //SelectJankenMSC.Check_NowLoginMember();   // 一旦全員のフラグをログアウトにして、ログインしている人から返答をもらう
-                SelectJankenMSC.Ctrl_Check_NowLoginMember();   // 一旦全員のフラグをログアウトにして、ログインしている人から返答をもらう              
+                SelectJankenMSC.Ctrl_Check_NowLoginMember();     // 一旦全員のフラグをログアウトにして、ログインしている人から返答をもらう        
+                //SelectJankenMSC.SharePlus_TochuTaiseki_ninzu();  // ログアウトした人の人数を +1 する
+                var sequence = DOTween.Sequence();
+                sequence.InsertCallback(3f, () => SelectJankenMSC.PreCheck_Can_Hantei_Stream());   //  Check_Can_Hantei_Stream に進む前の前段階のチェック
             }
         }
 
