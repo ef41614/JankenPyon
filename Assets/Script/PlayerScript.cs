@@ -92,9 +92,13 @@ public class PlayerScript : MonoBehaviour
                     //SelectJankenMSC.Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
                     SelectJankenMSC.Share_MyJankenPanel_Button_Flg_ON();  // ジャンケン開始ボタン フラグ をON
                     int RndGo_Tarai = UnityEngine.Random.Range(1, 8);
-                    if (RndGo_Tarai <= 4)            // たらいが落ちるフラグON
+                    if (RndGo_Tarai <= 3)            // たらいが落ちるフラグON
                     {
                         SelectJankenMSC.Tarai_to_SetWFlag = true;  // たらいが落ちると、確定で白旗一枚     
+                    }
+                    else if (RndGo_Tarai >= 5)       // アイテムカードの裏面Up 一連の処理 実施するフラグON
+                    {
+                        SelectJankenMSC.Stream_Encounter_ItemCard_UraUp();  // アイテムカードの裏面Up 一連の処理  （現在は Gold+10 のみ）
                     }
                     SelectJankenMSC.ShareAfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理 ⇒ 全員に共有する
                     SelectJankenMSC.FallTarai_stream();          // たらいを落とす

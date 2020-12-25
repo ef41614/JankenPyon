@@ -26,6 +26,20 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject playerPrefab_Zunko;
     [SerializeField] SortingGroup MysortingGroup;
 
+    public GameObject Prefab_Encounter_ItemCard_UraUp;  // ジャンプ後に確率でエンカウントするアイテムカードの裏面
+    GameObject Temp_Encounter_ItemCard_UraUp;           // ジャンプ後に確率でエンカウントするアイテムカードの裏面_Temp
+    public GameObject MainCanvas;
+    public GameObject Prefab_Encounter_ItemCard_Down;  // ジャンプ後に確率でエンカウントするアイテムカードの裏面_ダウン
+    GameObject Temp_Encounter_ItemCard_Down;           // ジャンプ後に確率でエンカウントするアイテムカードの裏面_タウン_Temp
+
+    public GameObject Encounter_ItemCard_UraUp;      // ジャンプ後に確率でエンカウントするアイテムカードの裏面
+    public GameObject Encounter_ItemCard_Down;       // ジャンプ後に確率でエンカウントするアイテムカードの裏面_ダウン
+    public GameObject Center_Mark;                   // 中央位置を示すためのマーカー
+    public GameObject Upperr_Mark;                   // 画面上部位置を示すためのマーカー
+    CardReverse CardReverseMSC;                      //スクリプト名 + このページ上でのニックネーム
+
+    public Text text_Gold_Plus10;
+
     bool CreatePlayerPrefab_Flg = true;
 
     public GameObject StartCorn_Head;  // スタートラインのコーン
@@ -685,6 +699,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                                                     //sequence.InsertCallback(5f, () => AppearPanel_Ikemasu());
                                                     //MoveTo_cafe_kanban_0_5();   // SubCamera を -5 の位置に移動する
             CloseSubCamera_Group();
+            CloseEncounter_ItemCard_Down();
+            CloseEncounter_ItemCard_UraUp();
             Button_TaihouFire.SetActive(false);
             AppearPanel_SyokaiTaihou();
 
@@ -693,6 +709,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             SelectJankenMSC = myPlayer.GetComponent<SelectJanken>();
             Pos_Hasshin_Text.text = "";
+
+            Debug.Log("アイテムカードの裏面生成！");
+            //Make_Encounter_ItemCard_UraUp();  // ジャンプ後に確率でエンカウントするアイテムカードの裏面
+            Debug.Log("アイテムカードの裏面生成できたかな？？");
+
         }
         else
         {
@@ -2095,6 +2116,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
             //var sequence2 = DOTween.Sequence();
             //sequence2.InsertCallback(3f, () => Countdown_Until_Push_OpenMyJankenPanel_Button());
+
+            //MoveUp_Temp_Encounter_ItemCard_UraUp();   //ローカル座標で上方向に移動
+            //Stream_Encounter_ItemCard_UraUp();  // アイテムカードの裏面Down 一連の処理
+
             var sequence = DOTween.Sequence();
             sequence.InsertCallback(3f, () => Start_GameMatch_After3());
         }
@@ -2116,6 +2141,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         AppearOpenMyJankenPanel_Button();
         Countdown_Until_Push_OpenMyJankenPanel_Button();
         Ctrl_Check_NowLoginMember();       // 一旦全員のフラグをログアウトにして、ログインしている人から返答をもらう    
+
+        //Destroy(Temp_Encounter_ItemCard_UraUp); //オブジェクトを消す
+        //Make_Encounter_ItemCard_UraUp();  // ジャンプ後に確率でエンカウントするアイテムカードの裏面
+
+        //Stream_Encounter_ItemCard_Down();  // アイテムカードの裏面Down 一連の処理
+        //Make_Encounter_ItemCard_Down();  // ジャンプ後に確率でエンカウントするアイテムカードの裏面を生成します
+        //MoveUp_Temp_Encounter_ItemCard_Down();   // 画面中央に移動
     }
 
 
@@ -11310,12 +11342,12 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         int_calculation_Gold = 5;
     }
 
-    public void Set_p10_calculation_Gold()
+    public void Set_p10_calculation_Gold() // ゴールド +10
     {
         int_calculation_Gold = 10;
     }
 
-    public void Set_p20_calculation_Gold()
+    public void Set_p20_calculation_Gold() // ゴールド +20
     {
         int_calculation_Gold = 20;
     }
@@ -11330,7 +11362,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         int_calculation_Gold = -10;
     }
 
-    public void Set_m20_calculation_Gold()
+    public void Set_m20_calculation_Gold()  // ゴールド -20
     {
         int_calculation_Gold = -20;
     }
@@ -11360,6 +11392,25 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
             Gold_Player4 = Gold_Player4 + int_calculation_Gold;
             Gold_MyPlayer = Gold_Player4;
         }
+    }
+
+    public void Stream_Gold_Plus10()  // 所持金（ゴールド）を+10する 一連の処理
+    {
+        Set_p10_calculation_Gold();  // ゴールド +10
+        calculate_Gold_Players();    // 所持金（ゴールド）をマイナス/プラスします          
+        Appear_text_Gold_Plus10();   // text_Gold_Plus10 を開く
+    }
+
+    public void Appear_text_Gold_Plus10()  // text_Gold_Plus10 を開く
+    {
+        text_Gold_Plus10.text = "+10G";
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(2.5f, () => Erase_text_Gold_Plus10());
+    }
+
+    public void Erase_text_Gold_Plus10()  // text_Gold_Plus10 を空欄にする（消しゴムで消すかのように）
+    {
+        text_Gold_Plus10.text = "";
     }
     #endregion
 
@@ -12135,6 +12186,111 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     {
         logon_player4 = false;
     }
+
+    #endregion
+
+
+    #region// エンカウントするアイテムカード関連
+    #region// アイテムカードの裏面Up
+    public void Stream_Encounter_ItemCard_UraUp()  // アイテムカードの裏面Up 一連の処理  （現在は Gold+10 のみ）
+    {
+        AppearEncounter_ItemCard_UraUp();
+        Encounter_ItemCard_UraUp.transform.position = Center_Mark.transform.position;         // プレイヤー位置を Center_Mark に移動
+        //Encounter_ItemCard_UraUp.transform.DOLocalMove(Upperr_Mark.transform.position, 1);    // プレイヤー位置を Upperr_Mark に移動      
+        Encounter_ItemCard_UraUp.transform.DOLocalMove(new Vector3(0, 500, 0), 1.5f);              //ローカル座標で上方向に移動
+
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(2.5f, () => CloseEncounter_ItemCard_UraUp());
+
+        var sequence2 = DOTween.Sequence();
+        sequence2.InsertCallback(2.5f, () => Stream_Encounter_ItemCard_Down());     // アイテムカードの裏面Down 一連の処理
+    }
+
+    public void AppearEncounter_ItemCard_UraUp()
+    {
+        Encounter_ItemCard_UraUp.SetActive(true);
+    }
+
+    public void CloseEncounter_ItemCard_UraUp()
+    {
+        Encounter_ItemCard_UraUp.SetActive(false);
+    }
+
+    /*
+    public void Make_Encounter_ItemCard_UraUp()  // ジャンプ後に確率でエンカウントするアイテムカードの裏面を生成します
+    {
+        Debug.Log("アイテムカードの裏面生成します！");
+        //Prefab_Encounter_ItemCard_UraUp = (GameObject)Resources.Load("Prefabs/Prefab_Encounter_ItemCard_UraUp");
+        //Temp_Encounter_ItemCard_UraUp = Instantiate(Prefab_Encounter_ItemCard_UraUp, this.transform.position, Quaternion.identity);
+
+        Temp_Encounter_ItemCard_UraUp = Instantiate(Prefab_Encounter_ItemCard_UraUp, this.transform.position, Quaternion.identity);
+
+        //Temp_Encounter_ItemCard_UraUp = PhotonNetwork.Instantiate(Prefab_Encounter_ItemCard_UraUp.name, this.transform.position, Quaternion.identity,0);
+
+        Temp_Encounter_ItemCard_UraUp.transform.SetParent(MainCanvas.transform, false);
+        Debug.Log("アイテムカードの裏面生成しました！");
+    }
+
+    public void MoveUp_Temp_Encounter_ItemCard_UraUp()   //ローカル座標で上方向に移動
+    {
+        Temp_Encounter_ItemCard_UraUp.transform.DOLocalMove(new Vector3(0, 500, 0), 1);              //ローカル座標で上方向に移動
+    }
+    */
+    #endregion
+
+    #region// アイテムカードの裏面Down
+    public void Stream_Encounter_ItemCard_Down()  // アイテムカードの裏面Down 一連の処理
+    {
+        AppearEncounter_ItemCard_Down();
+        Encounter_ItemCard_Down.transform.position = Upperr_Mark.transform.position;         // プレイヤー位置を Upperr_Mark に移動
+        Encounter_ItemCard_Down.transform.DOLocalMove(Center_Mark.transform.position, 1);    // プレイヤー位置を Center_Mark に移動
+        CardReverseMSC = Encounter_ItemCard_Down.GetComponent<CardReverse>();         
+        CardReverseMSC.StartCardOpen();                                                      // カードをクルンと回す
+
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(4f, () => CloseEncounter_ItemCard_Down());
+
+        var sequence2 = DOTween.Sequence();
+        sequence2.InsertCallback(4f, () => Stream_Gold_Plus10());     // 所持金（ゴールド）を+10する 一連の処理
+
+        /*
+        Make_Encounter_ItemCard_Down();           // ジャンプ後に確率でエンカウントするアイテムカードの裏面Downを生成します
+        MoveUp_Temp_Encounter_ItemCard_Down();    // 画面中央に移動
+        CardReverseMSC.StartCardOpen();
+        */
+    }
+
+    public void Make_Encounter_ItemCard_Down()  // ジャンプ後に確率でエンカウントするアイテムカードの裏面を生成します
+    {
+        CardReverseMSC = Prefab_Encounter_ItemCard_Down.GetComponent<CardReverse>();
+
+        Debug.Log("アイテムカードのダウン分、生成します！");
+        Temp_Encounter_ItemCard_Down = Instantiate(Prefab_Encounter_ItemCard_Down, Upperr_Mark.transform.position, Quaternion.identity);
+        Temp_Encounter_ItemCard_Down.transform.SetParent(MainCanvas.transform, false);
+        Temp_Encounter_ItemCard_Down.transform.position = Upperr_Mark.transform.position;  // プレイヤー位置を Upperr_Mark に移動
+        Debug.Log("アイテムカードのダウン分、生成しました！");
+    }
+
+    public void MoveUp_Temp_Encounter_ItemCard_Down()   // 画面中央に移動
+    {
+        //        Temp_Encounter_ItemCard_Down.transform.DOLocalMove(new Vector3(0, -500, 0), 1);              //ローカル座標で上方向に移動
+        // Temp_Encounter_ItemCard_Down.transform.position = Center_Mark.transform.position;  // プレイヤー位置を Center_Mark に移動
+        //Temp_Encounter_ItemCard_UraUp.transform.DOLocalMove(Center_Mark.transform.position, 1);      // プレイヤー位置を Center_Mark に移動
+        Temp_Encounter_ItemCard_UraUp.transform.DOLocalMove(new Vector3(0, -500, 0), 1);      // プレイヤー位置を Center_Mark に移動
+    }
+
+    public void AppearEncounter_ItemCard_Down()
+    {
+        Encounter_ItemCard_Down.SetActive(true);
+    }
+    
+    public void CloseEncounter_ItemCard_Down()
+    {
+        Encounter_ItemCard_Down.SetActive(false);
+    }
+
+
+    #endregion
 
     #endregion
 
