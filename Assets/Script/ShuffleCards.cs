@@ -68,6 +68,8 @@ namespace say
         int RndSet_CardPos_Muteki;           // A～E どの位置にカードをセットするか
         int RndSet_CardPos_Wall;             // A～E どの位置にカードをセットするか
         int RndSet_CardPos_WFlag;            // A～E どの位置にカードをセットするか
+        int RndSet_CardPos_WFlag2;           // A～E どの位置にカードをセットするか
+        int RndSet_CardPos_WFlag3;           // A～E どの位置にカードをセットするか
 
         //public bool Tarai_to_SetWFlag = false;  // たらいが落ちると、確定で白旗一枚
 
@@ -149,6 +151,8 @@ namespace say
             RndSet_CardPos_Muteki = UnityEngine.Random.Range(1, 6);
             RndSet_CardPos_Wall = UnityEngine.Random.Range(1, 6);
             RndSet_CardPos_WFlag = UnityEngine.Random.Range(1, 6);
+            RndSet_CardPos_WFlag2 = UnityEngine.Random.Range(1, 6);
+            RndSet_CardPos_WFlag3 = UnityEngine.Random.Range(1, 6);
 
 
             Debug.Log("参加人数でセットチャンス調整" + SelectJankenMSC.SankaNinzu);
@@ -217,7 +221,28 @@ namespace say
                 //SelectJankenMSC.Tarai_to_SetWFlag = true;  // たらいが落ちると、確定で白旗一枚
                 Set_WFlagCard();             // 白旗カード をセットします  A,B,C,D,E              
             }
-            //Tarai_to_SetWFlag = false;
+            if (SelectJankenMSC.Katakori_to_SetWFlag)            // 肩こりフラグON
+            {
+                int Katakori_degree = UnityEngine.Random.Range(0, 11);       // 肩こりの程度
+                if (Katakori_degree <= 0)
+                {
+                }
+
+                if (Katakori_degree >= 1)
+                {
+                    Set_WFlagCard();             // 白旗カード をセットします  A,B,C,D,E              
+                }
+
+                if (Katakori_degree >= 4)
+                {
+                    Set_WFlagCard2();             // 白旗カード をセットします  A,B,C,D,E              
+                }
+
+                if (Katakori_degree >= 9)
+                {
+                    Set_WFlagCard3();             // 白旗カード をセットします  A,B,C,D,E              
+                }
+            }
         }
 
         public void Check_ChancePlayer_King()  // 王さまカード をセット するプレイヤーを確認します
@@ -436,6 +461,66 @@ namespace say
                 RndCreateCard_D = 46;  // 白旗の番号をセット
             }
             else if (RndSet_CardPos_WFlag == 5)
+            {
+                Button_E.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_E = 46;  // 白旗の番号をセット
+            }
+        }
+
+        public void Set_WFlagCard2()  // 白旗カード をセットします  A,B,C,D,E
+        {
+            Debug.Log("白旗カード をセットします");
+            if (RndSet_CardPos_WFlag2 == 1)
+            {
+                Button_A.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_A = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag2 == 2)
+            {
+                Button_B.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_B = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag2 == 3)
+            {
+                Button_C.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_C = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag2 == 4)
+            {
+                Button_D.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_D = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag2 == 5)
+            {
+                Button_E.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_E = 46;  // 白旗の番号をセット
+            }
+        }
+
+        public void Set_WFlagCard3()  // 白旗カード をセットします  A,B,C,D,E
+        {
+            Debug.Log("白旗カード をセットします");
+            if (RndSet_CardPos_WFlag3 == 1)
+            {
+                Button_A.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_A = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag3 == 2)
+            {
+                Button_B.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_B = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag3 == 3)
+            {
+                Button_C.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_C = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag3 == 4)
+            {
+                Button_D.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
+                RndCreateCard_D = 46;  // 白旗の番号をセット
+            }
+            else if (RndSet_CardPos_WFlag3 == 5)
             {
                 Button_E.gameObject.GetComponent<Image>().sprite = sprite_WFlag;
                 RndCreateCard_E = 46;  // 白旗の番号をセット

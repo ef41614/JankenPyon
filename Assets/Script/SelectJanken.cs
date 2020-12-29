@@ -38,6 +38,18 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject Upperr_Mark;                   // 画面上部位置を示すためのマーカー
     CardReverse CardReverseMSC;                      //スクリプト名 + このページ上でのニックネーム
 
+    public Image ItemCard_Omote;   // アイテムカード表面デフォルト
+    public Sprite Fatigue_Card;    // 疲労
+    public Sprite Gold_Card;       // ゴールド
+    public Text text_Item_Setsumei;  // アイテムカードの説明
+
+    public bool Katakori_to_SetWFlag = false;  // 肩こりのせいで白旗0～3枚
+    public GameObject Katakori_Mark;           // 左に表示する肩こりマーク
+    public GameObject HariQ_Button;
+    public Text Text_Katakori_cure;
+    public Text Text_Gold_fusoku_HariQ;
+    public bool Katakori_hajimari_Flg = true;  // true：肩こり発症したばかり
+
     public Text text_Gold_Plus10;
 
     bool CreatePlayerPrefab_Flg = true;
@@ -54,6 +66,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject PosPlayer4_obj;
 
     public GameObject Panel_Intro;
+
+    bool GoalFlg = false;
 
     public GameObject GoalCorn_Head;  // ゴールラインのコーン
     public GameObject GameSet_LOGO;
@@ -691,6 +705,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             //CloseLogout_Kakejiku_All();        // すべての掛け軸を閉じる（消す）
             CloseTarai();
             CloseSara();
+            HariQ_Button.SetActive(false);    //非表示にする
+            Katakori_Mark.SetActive(false);   //非表示にする
             //Erase_Text_Announcement();
             //AppearPanel_Ikemasu();
             //ClosePanel_Ikemasu();
@@ -730,10 +746,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (currentTime > span)
         {
-            text_PosX_P1.text = (CourseLength - PosX_Player1).ToString();
-            text_PosX_P2.text = (CourseLength - PosX_Player2).ToString();
-            text_PosX_P3.text = (CourseLength - PosX_Player3).ToString();
-            text_PosX_P4.text = (CourseLength - PosX_Player4).ToString();
+            text_PosX_P1.text = "あと" + (CourseLength - PosX_Player1).ToString() + "ｍ";
+            text_PosX_P2.text = "あと" + (CourseLength - PosX_Player2).ToString() + "ｍ";
+            text_PosX_P3.text = "あと" + (CourseLength - PosX_Player3).ToString() + "ｍ";
+            text_PosX_P4.text = "あと" + (CourseLength - PosX_Player4).ToString() + "ｍ";
 
             //text_PosX_realP1.text = realPosX_Player1.ToString("f1");
             //text_PosX_realP2.text = realPosX_Player2.ToString("f1");
@@ -913,6 +929,36 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                 else                              // 待機中（決定ボタン押下済み）
                 {
                     AppearTaiki_OK_P4();
+                }
+
+                if (GoalFlg)  // プレイヤーがゴールしたら
+                {
+                    if (Encounter_ItemCard_Down.activeSelf)   // アクティブだったら
+                    {
+                        CloseEncounter_ItemCard_Down();       // アイテムカード閉じる
+                    }
+                    if (HariQ_Button.activeSelf)   // アクティブだったら
+                    {
+                        HariQ_Button.SetActive(false);    //非表示にする
+                    }
+                }
+                else  // まだ試合中なら
+                {
+                    if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)  // ジャンケンパネルが既に表示されていたら
+                    {
+                        HariQ_Button.SetActive(false);    //非表示にする
+                    }
+                    else  // ジャンケンパネルが開かれていない状態である
+                    {
+                        if (Katakori_to_SetWFlag)  // 肩こりフラグONの時
+                        {
+                            if (HariQ_Button.activeSelf == false)  // 表示されていなければ
+                            {
+                                HariQ_Button.SetActive(true);     //表示する
+                            }
+
+                        }
+                    }
                 }
             }
 
@@ -1980,7 +2026,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【JK-38】（延長戦）各プレイヤーの生存フラグは そのままです（リセットしません）");
         // ResetAlivePlayer();      
         Debug.Log("【JK-39】（延長戦）待機中フラグを全員一律 初期化 0：待機前（初期値） にします");
-        Reset_NowWaiting();                    //【JK-39】 待機中フラグを全員一律 初期化 0：待機前（初期値） にする
+        //Reset_NowWaiting();                    //【JK-39】 待機中フラグを全員一律 初期化 0：待機前（初期値） にする
         Debug.Log("【JK-40】（延長戦）共通ジャンケン パネル（ベース）を表示します");
         ShuffleCardsMSC.AppearJankenCards_Panel();
         Debug.Log("【JK-41】（延長戦）自分のジャンケン パネル（カード選択画面）を表示します");
@@ -2116,9 +2162,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
             //var sequence2 = DOTween.Sequence();
             //sequence2.InsertCallback(3f, () => Countdown_Until_Push_OpenMyJankenPanel_Button());
-
-            //MoveUp_Temp_Encounter_ItemCard_UraUp();   //ローカル座標で上方向に移動
-            //Stream_Encounter_ItemCard_UraUp();  // アイテムカードの裏面Down 一連の処理
 
             var sequence = DOTween.Sequence();
             sequence.InsertCallback(3f, () => Start_GameMatch_After3());
@@ -3185,7 +3228,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ShuffleCardsMSC.ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
     }
 
-    public void Check_WaitingFlg_DependOn_alive()  //【JK-44】（延長戦）ジャンケン生存者（aliveフラグが 1 の人）は待機フラグを0に、敗北者は待機フラグを1にする && 黒カバー表示
+    public void Check_WaitingFlg_DependOn_alive()  //【JK-44】（延長戦）ジャンケン生存者（aliveフラグが 1 の人）は待機フラグを0に、敗北者は待機フラグを1のままにする && 黒カバー表示
     {
         //CheckAlivePlayer_DependOn_Absent();        // 生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）
         CountLivePlayer();       //【JK-26】残留しているプレイヤー人数をカウントする★
@@ -3260,6 +3303,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         Debug.Log("【JK-204】待機中フラグ（確認用パラメータ） を 初期化（0にする）");
         Reset_NowWaiting();      // 待機中フラグ（確認用パラメータ） を 初期化（0にする）
+
+        Katakori_stream();    // 肩こりフラグがONの時のみ実行される（治癒されるまで）
 
         ResetCountdown_timer_PanelOpen_1();
         if (Flg_AfterJumpDone == 0)
@@ -11313,107 +11358,6 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         Debug.Log("PhotonNetwork.NickName ランチャー：" + PhotonNetwork.NickName);
     }
 
-    #region// 所持金（ゴールド）
-    public void Update_Gold_Players()   // 各プレイヤーの所持金（ゴールド）を同期します
-    {
-        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
-        {
-            Gold_MyPlayer = Gold_Player1;
-        }
-
-        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
-        {
-            Gold_MyPlayer = Gold_Player2;
-        }
-
-        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
-        {
-            Gold_MyPlayer = Gold_Player3;
-        }
-
-        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
-        {
-            Gold_MyPlayer = Gold_Player4;
-        }
-    }
-
-    public void Set_p05_calculation_Gold() // ゴールド +5
-    {
-        int_calculation_Gold = 5;
-    }
-
-    public void Set_p10_calculation_Gold() // ゴールド +10
-    {
-        int_calculation_Gold = 10;
-    }
-
-    public void Set_p20_calculation_Gold() // ゴールド +20
-    {
-        int_calculation_Gold = 20;
-    }
-
-    public void Set_m05_calculation_Gold() // ゴールド -5
-    {
-        int_calculation_Gold = -5;
-    }
-
-    public void Set_m10_calculation_Gold()  // ゴールド -10
-    {
-        int_calculation_Gold = -10;
-    }
-
-    public void Set_m20_calculation_Gold()  // ゴールド -20
-    {
-        int_calculation_Gold = -20;
-    }
-
-    public void calculate_Gold_Players()   // 所持金（ゴールド）をマイナス/プラスします
-    {
-        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
-        {
-            Gold_Player1 = Gold_Player1 + int_calculation_Gold;
-            Gold_MyPlayer = Gold_Player1;
-        }
-
-        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
-        {
-            Gold_Player2 = Gold_Player2 + int_calculation_Gold;
-            Gold_MyPlayer = Gold_Player2;
-        }
-
-        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
-        {
-            Gold_Player3 = Gold_Player3 + int_calculation_Gold;
-            Gold_MyPlayer = Gold_Player3;
-        }
-
-        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
-        {
-            Gold_Player4 = Gold_Player4 + int_calculation_Gold;
-            Gold_MyPlayer = Gold_Player4;
-        }
-    }
-
-    public void Stream_Gold_Plus10()  // 所持金（ゴールド）を+10する 一連の処理
-    {
-        Set_p10_calculation_Gold();  // ゴールド +10
-        calculate_Gold_Players();    // 所持金（ゴールド）をマイナス/プラスします          
-        Appear_text_Gold_Plus10();   // text_Gold_Plus10 を開く
-    }
-
-    public void Appear_text_Gold_Plus10()  // text_Gold_Plus10 を開く
-    {
-        text_Gold_Plus10.text = "+10G";
-        var sequence = DOTween.Sequence();
-        sequence.InsertCallback(2.5f, () => Erase_text_Gold_Plus10());
-    }
-
-    public void Erase_text_Gold_Plus10()  // text_Gold_Plus10 を空欄にする（消しゴムで消すかのように）
-    {
-        text_Gold_Plus10.text = "";
-    }
-    #endregion
-
 
     #region// 忍者（相手の手札を見る）
     public void PushNinjaButton()  // Myジャンケンパネルを一旦閉じて、現時点で決まっている手札を見る。5秒後、再度Myジャンケンパネルを表示させる
@@ -11655,6 +11599,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
             Debug.Log("GOOOOOALLL！！！！");
             Check_Champ_Avator();
             photonView.RPC("ShareGameSet", RpcTarget.All);
+            GoalFlg = true;
         }
         else  // まだゴールまで来ていない
         {
@@ -12190,6 +12135,110 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     #endregion
 
 
+    #region// 所持金（ゴールド）
+    public void Update_Gold_Players()   // 各プレイヤーの所持金（ゴールド）を同期します
+    {
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            Gold_MyPlayer = Gold_Player1;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            Gold_MyPlayer = Gold_Player2;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            Gold_MyPlayer = Gold_Player3;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            Gold_MyPlayer = Gold_Player4;
+        }
+    }
+
+    public void Set_p05_calculation_Gold() // ゴールド +5
+    {
+        int_calculation_Gold = 5;
+    }
+
+    public void Set_p10_calculation_Gold() // ゴールド +10
+    {
+        int_calculation_Gold = 10;
+    }
+
+    public void Set_p20_calculation_Gold() // ゴールド +20
+    {
+        int_calculation_Gold = 20;
+    }
+
+    public void Set_m05_calculation_Gold() // ゴールド -5
+    {
+        int_calculation_Gold = -5;
+    }
+
+    public void Set_m10_calculation_Gold()  // ゴールド -10
+    {
+        int_calculation_Gold = -10;
+    }
+
+    public void Set_m20_calculation_Gold()  // ゴールド -20
+    {
+        int_calculation_Gold = -20;
+    }
+
+    public void calculate_Gold_Players()   // 所持金（ゴールド）をマイナス/プラスします
+    {
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            Gold_Player1 = Gold_Player1 + int_calculation_Gold;
+            Gold_MyPlayer = Gold_Player1;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            Gold_Player2 = Gold_Player2 + int_calculation_Gold;
+            Gold_MyPlayer = Gold_Player2;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            Gold_Player3 = Gold_Player3 + int_calculation_Gold;
+            Gold_MyPlayer = Gold_Player3;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            Gold_Player4 = Gold_Player4 + int_calculation_Gold;
+            Gold_MyPlayer = Gold_Player4;
+        }
+    }
+
+    public void Stream_Gold_Plus10()  // 所持金（ゴールド）を+10する 一連の処理
+    {
+        Set_p10_calculation_Gold();  // ゴールド +10
+        calculate_Gold_Players();    // 所持金（ゴールド）をマイナス/プラスします          
+        Appear_text_Gold_Plus10();   // text_Gold_Plus10 を開く
+        BGM_SE_MSC.CoinGet_SE();     // コインゲット
+    }
+
+    public void Appear_text_Gold_Plus10()  // text_Gold_Plus10 を開く
+    {
+        text_Gold_Plus10.text = "+10G";
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(3.5f, () => Erase_text_Gold_Plus10());
+    }
+
+    public void Erase_text_Gold_Plus10()  // text_Gold_Plus10 を空欄にする（消しゴムで消すかのように）
+    {
+        text_Gold_Plus10.text = "";
+    }
+    #endregion
+
+
+
     #region// エンカウントするアイテムカード関連
     #region// アイテムカードの裏面Up
     public void Stream_Encounter_ItemCard_UraUp()  // アイテムカードの裏面Up 一連の処理  （現在は Gold+10 のみ）
@@ -12199,11 +12248,13 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         //Encounter_ItemCard_UraUp.transform.DOLocalMove(Upperr_Mark.transform.position, 1);    // プレイヤー位置を Upperr_Mark に移動      
         Encounter_ItemCard_UraUp.transform.DOLocalMove(new Vector3(0, 500, 0), 1.5f);              //ローカル座標で上方向に移動
 
+        RandomChange_ItemCard_Omote();   // アイテムカードの図柄を ランダムで変更する
+
         var sequence = DOTween.Sequence();
-        sequence.InsertCallback(2.5f, () => CloseEncounter_ItemCard_UraUp());
+        sequence.InsertCallback(1.5f, () => CloseEncounter_ItemCard_UraUp());
 
         var sequence2 = DOTween.Sequence();
-        sequence2.InsertCallback(2.5f, () => Stream_Encounter_ItemCard_Down());     // アイテムカードの裏面Down 一連の処理
+        sequence2.InsertCallback(1.5f, () => Stream_Encounter_ItemCard_Down());     // アイテムカードの裏面Down 一連の処理
     }
 
     public void AppearEncounter_ItemCard_UraUp()
@@ -12216,26 +12267,6 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         Encounter_ItemCard_UraUp.SetActive(false);
     }
 
-    /*
-    public void Make_Encounter_ItemCard_UraUp()  // ジャンプ後に確率でエンカウントするアイテムカードの裏面を生成します
-    {
-        Debug.Log("アイテムカードの裏面生成します！");
-        //Prefab_Encounter_ItemCard_UraUp = (GameObject)Resources.Load("Prefabs/Prefab_Encounter_ItemCard_UraUp");
-        //Temp_Encounter_ItemCard_UraUp = Instantiate(Prefab_Encounter_ItemCard_UraUp, this.transform.position, Quaternion.identity);
-
-        Temp_Encounter_ItemCard_UraUp = Instantiate(Prefab_Encounter_ItemCard_UraUp, this.transform.position, Quaternion.identity);
-
-        //Temp_Encounter_ItemCard_UraUp = PhotonNetwork.Instantiate(Prefab_Encounter_ItemCard_UraUp.name, this.transform.position, Quaternion.identity,0);
-
-        Temp_Encounter_ItemCard_UraUp.transform.SetParent(MainCanvas.transform, false);
-        Debug.Log("アイテムカードの裏面生成しました！");
-    }
-
-    public void MoveUp_Temp_Encounter_ItemCard_UraUp()   //ローカル座標で上方向に移動
-    {
-        Temp_Encounter_ItemCard_UraUp.transform.DOLocalMove(new Vector3(0, 500, 0), 1);              //ローカル座標で上方向に移動
-    }
-    */
     #endregion
 
     #region// アイテムカードの裏面Down
@@ -12247,37 +12278,14 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         CardReverseMSC = Encounter_ItemCard_Down.GetComponent<CardReverse>();         
         CardReverseMSC.StartCardOpen();                                                      // カードをクルンと回す
 
+        //RandomChange_ItemCard_Omote();   // アイテムカードの図柄を ランダムで変更する
+
         var sequence = DOTween.Sequence();
-        sequence.InsertCallback(4f, () => CloseEncounter_ItemCard_Down());
+        sequence.InsertCallback(3f, () => CloseEncounter_ItemCard_Down());
 
-        var sequence2 = DOTween.Sequence();
-        sequence2.InsertCallback(4f, () => Stream_Gold_Plus10());     // 所持金（ゴールド）を+10する 一連の処理
 
-        /*
-        Make_Encounter_ItemCard_Down();           // ジャンプ後に確率でエンカウントするアイテムカードの裏面Downを生成します
-        MoveUp_Temp_Encounter_ItemCard_Down();    // 画面中央に移動
-        CardReverseMSC.StartCardOpen();
-        */
     }
 
-    public void Make_Encounter_ItemCard_Down()  // ジャンプ後に確率でエンカウントするアイテムカードの裏面を生成します
-    {
-        CardReverseMSC = Prefab_Encounter_ItemCard_Down.GetComponent<CardReverse>();
-
-        Debug.Log("アイテムカードのダウン分、生成します！");
-        Temp_Encounter_ItemCard_Down = Instantiate(Prefab_Encounter_ItemCard_Down, Upperr_Mark.transform.position, Quaternion.identity);
-        Temp_Encounter_ItemCard_Down.transform.SetParent(MainCanvas.transform, false);
-        Temp_Encounter_ItemCard_Down.transform.position = Upperr_Mark.transform.position;  // プレイヤー位置を Upperr_Mark に移動
-        Debug.Log("アイテムカードのダウン分、生成しました！");
-    }
-
-    public void MoveUp_Temp_Encounter_ItemCard_Down()   // 画面中央に移動
-    {
-        //        Temp_Encounter_ItemCard_Down.transform.DOLocalMove(new Vector3(0, -500, 0), 1);              //ローカル座標で上方向に移動
-        // Temp_Encounter_ItemCard_Down.transform.position = Center_Mark.transform.position;  // プレイヤー位置を Center_Mark に移動
-        //Temp_Encounter_ItemCard_UraUp.transform.DOLocalMove(Center_Mark.transform.position, 1);      // プレイヤー位置を Center_Mark に移動
-        Temp_Encounter_ItemCard_UraUp.transform.DOLocalMove(new Vector3(0, -500, 0), 1);      // プレイヤー位置を Center_Mark に移動
-    }
 
     public void AppearEncounter_ItemCard_Down()
     {
@@ -12289,10 +12297,119 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         Encounter_ItemCard_Down.SetActive(false);
     }
 
+    public void RandomChange_ItemCard_Omote()   // アイテムカードの図柄を ランダムで変更する
+    {
+        int RandomChange_ItemCard = UnityEngine.Random.Range(1, 5);
+
+        if(RandomChange_ItemCard <= 2)
+        {
+            ChangeTo_Fatigue_Card();   // 図柄を 疲労カード にする
+        }
+        else if (RandomChange_ItemCard >= 3)
+        {
+            ChangeTo_Gold_Card();   // 図柄を Goldカード にする
+        }
+    }
+
+
+    public void ChangeTo_Fatigue_Card()   // 図柄を 疲労カード にする
+    {
+        ItemCard_Omote.sprite = Fatigue_Card;
+        text_Item_Setsumei.text = "疲労で 肩こり";
+        Katakori_to_SetWFlag = true;  // 肩こりのせいで白旗0～3枚
+    }
+
+    public void ChangeTo_Gold_Card()   // 図柄を Goldカード にする
+    {
+        ItemCard_Omote.sprite = Gold_Card;
+        text_Item_Setsumei.text = "ゴールド +10G";
+
+        var sequence2 = DOTween.Sequence();
+        sequence2.InsertCallback(3f, () => Stream_Gold_Plus10());     // 所持金（ゴールド）を+10する 一連の処理
+    }
+
 
     #endregion
 
+    #region// 肩こり
+    public void Katakori_stream()  // 肩こりフラグがONの時のみ実行される（治癒されるまで）
+    {
+        if (Katakori_to_SetWFlag)  // 肩こりフラグONの時 → 治るか確認
+        {
+            if (Katakori_hajimari_Flg == false)  // 肩こり発症して2ターン目以降
+            {
+                int Katakori_cure = UnityEngine.Random.Range(1, 11);       // 肩こりの自然治癒率
+                if (Katakori_cure <= 3)
+                {
+                    CureKatakori();  // 肩こりが治癒しました
+                }
+            }
+            else                     // 肩こり発症して1ターン目
+            {
+                //Katakori_stream_After3();  // 肩こりフラグがONの時のみ実行される（治癒されるまで）
+                Katakori_hajimari_Flg = false;    // 肩こり発症して2ターン目以降の合図
+                var sequence = DOTween.Sequence();
+                sequence.InsertCallback(3f, () => Katakori_stream_After3());
+            }
+        }
+    }
+
+    public void Katakori_stream_After3()  // 肩こりフラグがONの時のみ実行される（治癒されるまで）
+    {
+        HariQ_Button.SetActive(true);     //表示する
+        Katakori_Mark.SetActive(true);    //表示する       
+    }
+
+    public void CureKatakori()  // 肩こりが治癒しました
+    {
+        BGM_SE_MSC.cure_SE();  // ぴゅいーん（回復音）
+        Text_Katakori_cure.text = "肩こりが治りました";
+        Katakori_Mark.SetActive(false);   //非表示にする
+        Katakori_to_SetWFlag = false;    // 肩こりが治癒しました（フラグOFF）
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(2f, () => CureKatakori2());
+    }
+
+    public void CureKatakori2()  // 肩こりが治癒しました2
+    {
+        HariQ_Button.SetActive(false);    //非表示にする
+        Debug.Log("肩こりが治癒しました");
+        Text_Katakori_cure.text = "";
+        Katakori_hajimari_Flg = true;
+    }
+
     #endregion
+
+
+    #region// はりきゅう
+    public void PushHariQButton()  // 肩こりフラグをOFFにする
+    {
+        if (Gold_MyPlayer >= 10)
+        {
+            Set_m10_calculation_Gold();  // ゴールド -10
+            calculate_Gold_Players();    // 所持金（ゴールド）をマイナス/プラスします
+            ResetCountdown_timer_Kettei_1();
+            CureKatakori();  // 肩こりが治癒しました
+        }
+        else  // ゴールドが足りないよ
+        {
+            // ぽわわ～ん。。。
+            BGM_SE_MSC.gold_fusoku_SE();
+            Text_Gold_fusoku_HariQ.text = "ゴールドが 不足しています...";
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(3f, () => Erase_Text_Gold_fusoku_HariQ());
+        }
+    }
+
+    public void Erase_Text_Gold_fusoku_HariQ()
+    {
+        Text_Gold_fusoku_HariQ.text = "";
+    }
+    #endregion
+
+    #endregion
+
+
 
     // End
 

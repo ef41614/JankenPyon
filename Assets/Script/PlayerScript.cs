@@ -98,7 +98,7 @@ public class PlayerScript : MonoBehaviour
                     }
                     else if (RndGo_Tarai >= 5)       // アイテムカードの裏面Up 一連の処理 実施するフラグON
                     {
-                        SelectJankenMSC.Stream_Encounter_ItemCard_UraUp();  // アイテムカードの裏面Up 一連の処理  （現在は Gold+10 のみ）
+                        SelectJankenMSC.Stream_Encounter_ItemCard_UraUp();  // アイテムカードの裏面Up 一連の処理
                     }
                     SelectJankenMSC.ShareAfterJump();     // 右にジャンプ（ぴょーん！）が完了してからの処理 ⇒ 全員に共有する
                     SelectJankenMSC.FallTarai_stream();          // たらいを落とす

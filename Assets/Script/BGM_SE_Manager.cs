@@ -32,6 +32,8 @@ public class BGM_SE_Manager : MonoBehaviour
     public AudioClip TaihouFire;
     public AudioClip gold_fusoku;
     public AudioClip Tarai_Guwan;
+    public AudioClip cure;
+    public AudioClip CoinGet;
 
     public string Aikotoba = "";  // あいことば（ルーム名になる）
 
@@ -133,6 +135,16 @@ public class BGM_SE_Manager : MonoBehaviour
     public void Tarai_Guwan_SE()
     {
         audioSource.PlayOneShot(Tarai_Guwan);
+    }
+
+    public void cure_SE()
+    {
+        audioSource.PlayOneShot(cure);
+    }
+
+    public void CoinGet_SE()
+    {
+        audioSource.PlayOneShot(CoinGet);
     }
     #endregion
 
