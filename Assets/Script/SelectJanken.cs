@@ -375,7 +375,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Button Btn_C;
     public Button Btn_D;
     public Button Btn_E;
-    public Button Btn_Omakase;
+    public Button Btn_Omakase;    
+    public Button Btn_Redistribute;  // じゃんけんカードの再配布ボタン
 
     public bool CanPushBtn_A = true;
     public bool CanPushBtn_B = true;
@@ -947,17 +948,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                     if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)  // ジャンケンパネルが既に表示されていたら
                     {
                         HariQ_Button.SetActive(false);    //非表示にする
-                    }
-                    else  // ジャンケンパネルが開かれていない状態である
-                    {
-                        if (Katakori_to_SetWFlag)  // 肩こりフラグONの時
-                        {
-                            if (HariQ_Button.activeSelf == false)  // 表示されていなければ
-                            {
-                                HariQ_Button.SetActive(true);     //表示する
-                            }
-
-                        }
                     }
                 }
             }
@@ -2284,29 +2274,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
     #endregion
 
-    #region// じゃんけんカード 手のセット
-    public void Share_Done_FirstChancePush()  // 王さま-どれい-セットチャンス 判定したら 0→1 [ 共有する ]
-    {
-        photonView.RPC("Done_FirstChancePush", RpcTarget.All);
-    }
-
-    [PunRPC]
-    public void Done_FirstChancePush()  // 王さま-どれい-セットチャンス 判定したら 0→1 にする
-    {
-        ShuffleCardsMSC.FirstChancePush_Flg = 1;
-    }
-
-    public void Share_Reset_FirstChancePush_Flg()  // 王さま-どれい-セットチャンス リセットして 1→0 にする [ 共有する ]
-    {
-        photonView.RPC("Reset_FirstChancePush_Flg", RpcTarget.All);
-    }
-
-    [PunRPC]
-    public void Reset_FirstChancePush_Flg()  // 王さま-どれい-セットチャンス リセットして 1→0 にする
-    {
-        ShuffleCardsMSC.FirstChancePush_Flg = 0;
-    }
-    #endregion
 
     #region // あいさつボタンを押した時の処理 一連
     public void Aisatsu_Who_Say()     // 誰があいさつしたの？ →それによってセリフの表示位置が変わる
@@ -4992,8 +4959,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         else if (NoneKing && !NoneDorei) // King無し Doreiあり → どれい 一人負け → 今まで通りの判定（市民同士のみ）
         {
-            Lose_Dorei();                      //    ⇒  どれい の人のみ 脱落
-            Shimin_Syohai_Hantei_Part();       // 市民同士のみ ノーマル勝敗判定パート
+            if (NoneWall && NoneMuteki && NonePa && NoneChoki && NoneGu)  // 市民カードが存在していないなら
+            {
+                Aiko();                            //    ⇒  全員どれいなので あいこ
+            }
+            else                                   // 市民が存在するなら
+            {
+                Lose_Dorei();                      //    ⇒  どれい の人のみ 脱落
+                Shimin_Syohai_Hantei_Part();       // 市民同士のみ ノーマル勝敗判定パート
+            }
         }
 
         else if (NoneKing && NoneDorei)        // King無し Dorei無し → 今まで通りの判定（市民同士のみ）
@@ -11358,6 +11332,35 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         Debug.Log("PhotonNetwork.NickName ランチャー：" + PhotonNetwork.NickName);
     }
 
+    #region// じゃんけんカードの再配布
+    public void Redistribute_JankenCards()    // じゃんけんカードの再配布を実施します
+    {
+        ResetMyNumTe_All();               // 【JK-29】MyNumTe 数値を -1 にリセット（int,text）
+        Reset_MyRireki_All();             // 【JK-30】MyRireki イメージを null にリセット（Image）
+        ToCanPush_All();                  // 【JK-31】じゃんけんカードボタン を押せるようにする(フラグのリセット）（bool）
+        ShuffleCardsMSC.Reset_All();      // 【JK-34】じゃんけんカード 手のリセット
+        ShuffleCardsMSC.Set_All();        // 【JK-35】じゃんけんカード 手のセット
+    }
+
+    public void PushRedistributeButton()     // じゃんけんカードの再配布ボタンを押下
+    {
+        if (Gold_MyPlayer >= 10)
+        {
+            Set_m10_calculation_Gold();  // ゴールド -10
+            calculate_Gold_Players();    // 所持金（ゴールド）をマイナス/プラスします
+            ResetCountdown_timer_Kettei_1();  // 自動カウントダウンを一時停止
+            Redistribute_JankenCards();    // じゃんけんカードの再配布を実施します
+        }
+        else  // ゴールドが足りないよ
+        {
+            // ぽわわ～ん。。。
+            BGM_SE_MSC.gold_fusoku_SE();
+            Text_Gold_fusoku.text = "ゴールドが 不足しています...";
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(3f, () => Erase_Text_Gold_fusoku());
+        }
+    }
+    #endregion
 
     #region// 忍者（相手の手札を見る）
     public void PushNinjaButton()  // Myジャンケンパネルを一旦閉じて、現時点で決まっている手札を見る。5秒後、再度Myジャンケンパネルを表示させる
@@ -12336,20 +12339,23 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     {
         if (Katakori_to_SetWFlag)  // 肩こりフラグONの時 → 治るか確認
         {
-            if (Katakori_hajimari_Flg == false)  // 肩こり発症して2ターン目以降
+            if (Katakori_hajimari_Flg == false)  // 肩こり発症して2ターン目以降である
             {
+                if (HariQ_Button.activeSelf == false)  // 表示されていなければ
+                {
+                    HariQ_Button.SetActive(true);     //表示する
+                }
                 int Katakori_cure = UnityEngine.Random.Range(1, 11);       // 肩こりの自然治癒率
-                if (Katakori_cure <= 3)
+                if (Katakori_cure <= 2)
                 {
                     CureKatakori();  // 肩こりが治癒しました
                 }
             }
             else                     // 肩こり発症して1ターン目
             {
-                //Katakori_stream_After3();  // 肩こりフラグがONの時のみ実行される（治癒されるまで）
-                Katakori_hajimari_Flg = false;    // 肩こり発症して2ターン目以降の合図
+                Katakori_hajimari_Flg = false;             // フラグを肩こり発症して2ターン目以降の扱いにする
                 var sequence = DOTween.Sequence();
-                sequence.InsertCallback(3f, () => Katakori_stream_After3());
+                sequence.InsertCallback(3f, () => Katakori_stream_After3());  // 肩こりフラグがONの時のみ実行される（治癒されるまで）
             }
         }
     }
@@ -12376,6 +12382,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         Debug.Log("肩こりが治癒しました");
         Text_Katakori_cure.text = "";
         Katakori_hajimari_Flg = true;
+        Redistribute_JankenCards();    // じゃんけんカードの再配布
     }
 
     #endregion

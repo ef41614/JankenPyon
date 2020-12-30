@@ -64,8 +64,7 @@ public class PlayerScript : MonoBehaviour
 
     public void JumpRight()       // 右方向へ 指定された回数 ぴょん と跳ねながら移動する
     {
-        //SelectJankenMSC.Check_KageDistance();               //  MyKage と MyPlayer の距離を求める（Y軸の初期位置）
-        SelectJankenMSC.Share_Reset_FirstChancePush_Flg();  // 王さま-どれい-セットチャンス リセットして 1→0 にする [ 共有する ]
+        //SelectJankenMSC.Check_KageDistance();               //  MyKage と MyPlayer の距離を求める（Y軸の初期位置）       
         Debug.Log("進む（ジャンプする）回数 (MoveForward_StepNum) を 上書きします");
         Debug.Log("original_StepNum ：" + SelectJankenMSC.original_StepNum);
         MoveForward_StepNum = SelectJankenMSC.original_StepNum;
@@ -92,7 +91,7 @@ public class PlayerScript : MonoBehaviour
                     //SelectJankenMSC.Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
                     SelectJankenMSC.Share_MyJankenPanel_Button_Flg_ON();  // ジャンケン開始ボタン フラグ をON
                     int RndGo_Tarai = UnityEngine.Random.Range(1, 8);
-                    if (RndGo_Tarai <= 3)            // たらいが落ちるフラグON
+                    if (RndGo_Tarai <= 2)            // たらいが落ちるフラグON
                     {
                         SelectJankenMSC.Tarai_to_SetWFlag = true;  // たらいが落ちると、確定で白旗一枚     
                     }

@@ -59,10 +59,6 @@ namespace say
         public GameObject TestRoomController;  //ヒエラルキー上のオブジェクト名
         TestRoomController TestRoomControllerSC;
 
-        public int FirstChancePush_Flg = 0;  // 最初に押した人に判定させるフラグ ：0ならばまだ判定前なのでできる
-        int KingDorei_SetChance = 0;         // 0～3  ローカル   王さま-どれい-セットチャンス
-        public int KingChancePlayer = 0;     // 0～4  パブリック 王さまチャンス → どのプレイヤーがカードをセットするか
-        public int DoreiChancePlayer = 0;    // 0～4  パブリック どれいチャンス → どのプレイヤーがカードをセットするか
         int RndSet_CardPos_King;             // A～E どの位置にカードをセットするか
         int RndSet_CardPos_Dorei;            // A～E どの位置にカードをセットするか
         int RndSet_CardPos_Muteki;           // A～E どの位置にカードをセットするか
@@ -111,40 +107,9 @@ namespace say
         //####################################  other  ####################################
 
         #region// じゃんけんカード 手のセット
-        /*
-        public void Share_Done_FirstChancePush()  // 王さま-どれい-セットチャンス 判定したら 0→1 [ 共有する ]
-        {
-            photonView.RPC("Done_FirstChancePush", RpcTarget.All);
-        }
-
-        [PunRPC]
-        public void Done_FirstChancePush()  // 王さま-どれい-セットチャンス 判定したら 0→1 にする
-        {
-            FirstChancePush_Flg = 1;
-        }
-
-        public void Share_Reset_FirstChancePush_Flg()  // 王さま-どれい-セットチャンス リセットして 1→0 にする [ 共有する ]
-        {
-            photonView.RPC("Reset_FirstChancePush_Flg", RpcTarget.All);
-        }
-
-        [PunRPC]
-        public void Reset_FirstChancePush_Flg()  // 王さま-どれい-セットチャンス リセットして 1→0 にする
-        {
-            FirstChancePush_Flg = 0;
-        }
-        */
 
         public void Set_All()
         {
-            KingChancePlayer = UnityEngine.Random.Range(1, 5);          // 1～4  パブリック 王さまチャンス → どのプレイヤーがカードをセットするか
-            DoreiChancePlayer = UnityEngine.Random.Range(1, 5);
-            int safe = 0;
-            while (KingChancePlayer == DoreiChancePlayer || safe > 20)   // ChancePlayer が被らないようにします
-            {
-                DoreiChancePlayer = UnityEngine.Random.Range(1, 5);
-                safe++;
-            }
 
             RndSet_CardPos_King = UnityEngine.Random.Range(1, 6);        // A～E どの位置にカードをセットするか
             RndSet_CardPos_Dorei = UnityEngine.Random.Range(1, 6);
@@ -154,68 +119,70 @@ namespace say
             RndSet_CardPos_WFlag2 = UnityEngine.Random.Range(1, 6);
             RndSet_CardPos_WFlag3 = UnityEngine.Random.Range(1, 6);
 
-
-            Debug.Log("参加人数でセットチャンス調整" + SelectJankenMSC.SankaNinzu);
-            if (FirstChancePush_Flg == 0)                                // 王さま-どれい-セットチャンス 判定まえ ならば
-            {
-                KingDorei_SetChance = UnityEngine.Random.Range(SelectJankenMSC.SankaNinzu * -1, 5);   // -3～4  ローカル   王さま-どれい-セットチャンス
-                SelectJankenMSC.Share_Done_FirstChancePush();            // 王さま-どれい-セットチャンス 判定したら FirstChancePush_Flg を 0→1 [ 共有する ]
-            }
-
-            A_Set();
+            A_Set();    // ぐー、ちょき、ぱー のみセット
             B_Set();
             C_Set();
             D_Set();
             E_Set();
 
-            Debug.Log("ここまでか 通常ジャンケン手のセット");
-            Debug.Log("ここから 王さま-どれい カードのセット処理");
+            Debug.Log("ここまでが 通常ジャンケン手のセット");
+            Debug.Log("ここから 特殊カードのセット処理");
 
-            Debug.Log("KingChancePlayer ： " + KingChancePlayer);
-            Debug.Log("DoreiChancePlayer ： " + DoreiChancePlayer);
-            Debug.Log("RndSet_CardPos_King ： " + RndSet_CardPos_King);
-            Debug.Log("RndSet_CardPos_Dorei ： " + RndSet_CardPos_Dorei);
-            Debug.Log("KingDorei_SetChance ： " + KingDorei_SetChance);
+            int RndGo_King = UnityEngine.Random.Range(1, 101);
+            int RndGo_Dorei = UnityEngine.Random.Range(1, 101);
+            int RndGo_Muteki = UnityEngine.Random.Range(1, 101);
+            int RndGo_Wall = UnityEngine.Random.Range(1, 101);
+            int RndGo_WFlag = UnityEngine.Random.Range(1, 101);
 
-            if (KingDorei_SetChance <= 0)     // 王さまチャンス0、どれいチャンス0： 共に 0
+            int RndGo_ReverseOrder = UnityEngine.Random.Range(1, 11);  // 正規順でセットするか、逆順でセットするか
+
+            if (RndGo_ReverseOrder <= 5)  // 従来通りのカードセット順
             {
-                Debug.Log("0 なので何もしません");
+                if (RndGo_King >= 90)
+                {
+                    Set_KingCard();              // 王様カード をセットします  A,B,C,D,E
+                }
+                if (RndGo_Dorei >= 90)
+                {
+                    Set_DoreiCard();             // どれいカード をセットします  A,B,C,D,E
+                }
+                if (RndGo_Muteki >= 90)
+                {
+                    Set_MutekiCard();            // むてきカード をセットします  A,B,C,D,E
+                }
+                if (RndGo_Wall >= 90)
+                {
+                    Set_WallCard();              // 壁カード をセットします  A,B,C,D,E
+                }
+                if (RndGo_WFlag >= 90)
+                {
+                    Set_WFlagCard();             // 白旗カード をセットします  A,B,C,D,E
+                }
             }
-            if (KingDorei_SetChance == 1)     // 王さまチャンス0、どれいチャンス1： 片方 1
+            else                          // 従来とは逆のカードセット順
             {
-                Debug.Log("1 なので どれいチャンス1");
-                Check_ChancePlayer_Dorei();   // どれいカード をセット するプレイヤーを確認します
-            }
-            if (KingDorei_SetChance == 2)     // 王さまチャンス1、どれいチャンス0： 片方 1
-            {
-                Debug.Log("2 なので 王さまチャンス1");
-                Check_ChancePlayer_King();    // 王さまカード をセット するプレイヤーを確認します
-            }
-            if (KingDorei_SetChance >= 3)     // 王さまチャンス1、どれいチャンス1： 両方 1（ペア成立）
-            {
-                Debug.Log("3 なので 王さまチャンス1、どれいチャンス1： 両方 1");
-                Check_ChancePlayer_Dorei();   // どれいカード をセット するプレイヤーを確認します
-                Check_ChancePlayer_King();    // 王さまカード をセット するプレイヤーを確認します
+                if (RndGo_WFlag >= 90)
+                {
+                    Set_WFlagCard();             // 白旗カード をセットします  A,B,C,D,E
+                }
+                if (RndGo_Wall >= 90)
+                {
+                    Set_WallCard();              // 壁カード をセットします  A,B,C,D,E
+                }
+                if (RndGo_Muteki >= 90)
+                {
+                    Set_MutekiCard();            // むてきカード をセットします  A,B,C,D,E
+                }
+                if (RndGo_Dorei >= 90)
+                {
+                    Set_DoreiCard();             // どれいカード をセットします  A,B,C,D,E
+                }
+                if (RndGo_King >= 90)
+                {
+                    Set_KingCard();              // 王様カード をセットします  A,B,C,D,E
+                }
             }
 
-            int RndGo_Muteki = UnityEngine.Random.Range(1, 21);
-            int RndGo_Wall = UnityEngine.Random.Range(1, 21);
-            int RndGo_WFlag = UnityEngine.Random.Range(1, 21);
-            //int RndGo_Tarai = UnityEngine.Random.Range(1, 8);
-
-
-            if (RndGo_Muteki >= 15)
-            {
-                Set_MutekiCard();            // むてきカード をセットします  A,B,C,D,E
-            }
-            if (RndGo_Wall >= 15)
-            {
-                Set_WallCard();              // 壁カード をセットします  A,B,C,D,E
-            }
-            if (RndGo_WFlag >= 15)
-            {
-                Set_WFlagCard();             // 白旗カード をセットします  A,B,C,D,E
-            }
             if (SelectJankenMSC.Tarai_to_SetWFlag)            // たらいが落ちるフラグON
             {
                 //SelectJankenMSC.Tarai_to_SetWFlag = true;  // たらいが落ちると、確定で白旗一枚
@@ -245,77 +212,6 @@ namespace say
             }
         }
 
-        public void Check_ChancePlayer_King()  // 王さまカード をセット するプレイヤーを確認します
-        {
-            if (KingChancePlayer == 1)
-            {
-                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
-                {
-                    Debug.Log("プレイヤー1 に 王さまカードセットします");
-                    Set_KingCard();  // 王さまカード をセットします
-                }
-            }
-            if (KingChancePlayer == 2)
-            {
-                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
-                {
-                    Debug.Log("プレイヤー2 に 王さまカードセットします");
-                    Set_KingCard();  // 王さまカード をセットします
-                }
-            }
-            if (KingChancePlayer == 3)
-            {
-                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
-                {
-                    Debug.Log("プレイヤー3 に 王さまカードセットします");
-                    Set_KingCard();  // 王さまカード をセットします
-                }
-            }
-            if (KingChancePlayer == 4)
-            {
-                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
-                {
-                    Debug.Log("プレイヤー4 に 王さまカードセットします");
-                    Set_KingCard();  // 王さまカード をセットします
-                }
-            }
-        }
-
-        public void Check_ChancePlayer_Dorei()   // どれいカード をセット するプレイヤーを確認します
-        {
-            if (DoreiChancePlayer == 1)
-            {
-                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
-                {
-                    Debug.Log("プレイヤー1 に どれいカードセットします");
-                    Set_DoreiCard();  // どれいカード をセットします
-                }
-            }
-            if (DoreiChancePlayer == 2)
-            {
-                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
-                {
-                    Debug.Log("プレイヤー2 に どれいカードセットします");
-                    Set_DoreiCard();  // どれいカード をセットします
-                }
-            }
-            if (DoreiChancePlayer == 3)
-            {
-                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
-                {
-                    Debug.Log("プレイヤー3 に どれいカードセットします");
-                    Set_DoreiCard();  // どれいカード をセットします
-                }
-            }
-            if (DoreiChancePlayer == 4)
-            {
-                if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
-                {
-                    Debug.Log("プレイヤー4 に どれいカードセットします");
-                    Set_DoreiCard();  // どれいカード をセットします
-                }
-            }
-        }
 
         public void Set_DoreiCard()  // どれいカード をセットします  A,B,C,D,E
         {
