@@ -580,7 +580,23 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     bool Flg_before_Check_NowLoginMember = true;    // 実行前ならtrue、実行始まったらfalse
     bool Flg_PreCheck_Can_Hantei_Stream = true;     // 実行前ならtrue、実行始まったらfalse
 
+    int int_Default_Life = 8;
+    int Life_MyPlayer = 0;     // 自分の体力
+    int Life_Player1;
+    int Life_Player2;
+    int Life_Player3;
+    int Life_Player4;
+    int int_calculation_Life;  // 現在の体力 にマイナス/プラスする数値
 
+    int Life_Koshin_PlayerNum = 0;      // 誰のLifeを更新するの？
+    int Life_Koshin_Atai = 0;           // 数値はいくつ？
+
+    public Text text_Life_P1;
+    public Text text_Life_P2;
+    public Text text_Life_P3;
+    public Text text_Life_P4;
+
+    public GameObject Panel_AutoLogout;
     #endregion
 
     #region // 【START】初期設定の処理一覧
@@ -698,6 +714,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             ShareAfterJump();   //【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する
 
             BGM_SE_MSC.FunAndLight_BGM();      // Battle シーンBGM
+
+            StartSet_Life_Players();   // 体力をセットします[初期値のセット]
             CloseStartLogo();
             CloseAisatsu_Panel();
             CloseSyoji_Panel();
@@ -706,6 +724,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             //CloseLogout_Kakejiku_All();        // すべての掛け軸を閉じる（消す）
             CloseTarai();
             CloseSara();
+            ClosePanel_AutoLogout();
             HariQ_Button.SetActive(false);    //非表示にする
             Katakori_Mark.SetActive(false);   //非表示にする
             //Erase_Text_Announcement();
@@ -747,10 +766,18 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (currentTime > span)
         {
-            text_PosX_P1.text = "あと" + (CourseLength - PosX_Player1).ToString() + "ｍ";
-            text_PosX_P2.text = "あと" + (CourseLength - PosX_Player2).ToString() + "ｍ";
-            text_PosX_P3.text = "あと" + (CourseLength - PosX_Player3).ToString() + "ｍ";
-            text_PosX_P4.text = "あと" + (CourseLength - PosX_Player4).ToString() + "ｍ";
+            text_PosX_P1.text =(CourseLength - PosX_Player1).ToString();
+            text_PosX_P2.text =(CourseLength - PosX_Player2).ToString();
+            text_PosX_P3.text =(CourseLength - PosX_Player3).ToString();
+            text_PosX_P4.text =(CourseLength - PosX_Player4).ToString();
+
+            text_Life_P1.text = (Life_Player1).ToString();
+
+
+            //text_PosX_P1.text = "あと" + (CourseLength - PosX_Player1).ToString() + "ｍ";
+            //text_PosX_P2.text = "あと" + (CourseLength - PosX_Player2).ToString() + "ｍ";
+            //text_PosX_P3.text = "あと" + (CourseLength - PosX_Player3).ToString() + "ｍ";
+            //text_PosX_P4.text = "あと" + (CourseLength - PosX_Player4).ToString() + "ｍ";
 
             //text_PosX_realP1.text = realPosX_Player1.ToString("f1");
             //text_PosX_realP2.text = realPosX_Player2.ToString("f1");
@@ -2153,6 +2180,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Countdown_Push_OpenMyJankenPanel_Button_Flg = true;
             //var sequence2 = DOTween.Sequence();
             //sequence2.InsertCallback(3f, () => Countdown_Until_Push_OpenMyJankenPanel_Button());
+
+            StartSet_Life_Players();   // 体力をセットします[初期値のセット]
 
             var sequence = DOTween.Sequence();
             sequence.InsertCallback(3f, () => Start_GameMatch_After3());
@@ -11442,6 +11471,11 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
                                    //Tarai.transform.DORotate(new Vector3(0f, 0f,180), 0.5f);
                     Tarai_Guwan.Play();  // tarai当たった時のエフェクト
                     BGM_SE_MSC.Tarai_Guwan_SE();
+                    Set_minus_01_calculation_Life();  // Life -1
+                    calculate_Life_Players();         // 現在の体力 にマイナス/プラスします
+                    ResetCountdown_timer_Kettei_1();  // 自動カウントダウンを一時停止
+                    Update_Life_Players();            // 各プレイヤーのLifeを同期します
+
                     PlayerSC.anim.SetBool("damage", true);
                     var sequence3 = DOTween.Sequence();
                     sequence3.InsertCallback(1.5f, () => Tarai_Fukki());
@@ -11701,7 +11735,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         sequence.InsertCallback(3f, () => AfterGameSet());
     }
 
-    public void AfterGameSet()
+    public void AfterGameSet()               // 試合終了後の処理
     {
         Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
         GameSet_Flg = true;
@@ -11724,8 +11758,27 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         BGM_SE_MSC.Fanfare_solo_SE();
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(5f, () => BGM_SE_MSC.Fanfare_Roop_BGM());
+
+        var sequence30 = DOTween.Sequence();
+        sequence30.InsertCallback(25f, () => AutoLogout_AfterGoal());
     }
 
+    public void AutoLogout_AfterGoal()          // 試合終了後に自動ログアウトする処理 （30秒後）
+    {
+        AppearPanel_AutoLogout();
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(10f, () => BackTo_TitleScene());    // タイトル画面へ戻ります            
+    }
+
+    public void AppearPanel_AutoLogout()
+    {
+        Panel_AutoLogout.SetActive(true);
+    }
+
+    public void ClosePanel_AutoLogout()
+    {
+        Panel_AutoLogout.SetActive(false);
+    }
 
     public void AppearGameSet_LOGO()
     {
@@ -12427,6 +12480,267 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     {
         BGM_SE_MSC.cancel_SE();     // キャンセル音
     }
+
+
+    #region// 体力（Life）
+
+    public void StartSet_Life_Players()   // 体力をセットします[初期値のセット]
+    {
+        int_calculation_Life = 0;
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            Life_Player1 = int_Default_Life;
+            Life_MyPlayer = Life_Player1;
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(0.1f, () => Update_Life_Players());
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            Life_Player2 = int_Default_Life;
+            Life_MyPlayer = Life_Player2;
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(0.2f, () => Update_Life_Players());
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            Life_Player3 = int_Default_Life;
+            Life_MyPlayer = Life_Player3;
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(0.3f, () => Update_Life_Players());
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            Life_Player4 = int_Default_Life;
+            Life_MyPlayer = Life_Player4;
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(0.4f, () => Update_Life_Players());
+        }
+    }
+
+    public void Set_plus_01_calculation_Life() // Life +1
+    {
+        int_calculation_Life = 1;
+    }
+
+    public void Set_minus_01_calculation_Life() // Life -1
+    {
+        int_calculation_Life = -1;
+    }
+
+    public void calculate_Life_Players()   // 現在の体力 にマイナス/プラスします
+    {
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            Life_Player1 = Life_Player1 + int_calculation_Life;
+            Life_MyPlayer = Life_Player1;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            Life_Player2 = Life_Player2 + int_calculation_Life;
+            Life_MyPlayer = Life_Player2;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            Life_Player3 = Life_Player3 + int_calculation_Life;
+            Life_MyPlayer = Life_Player3;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            Life_Player4 = Life_Player4 + int_calculation_Life;
+            Life_MyPlayer = Life_Player4;
+        }
+    }
+
+
+    [PunRPC]
+    public void Update_Life_Players()   // 各プレイヤーのLifeを同期します
+    {
+        //Flg_Update_Life = true;
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            photonView.RPC("Life_Koshin_Player1", RpcTarget.All);         // 誰のLifeを更新するの？
+            Life_MyPlayer = Life_Player1;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            photonView.RPC("Life_Koshin_Player2", RpcTarget.All);         // 誰のLifeを更新するの？
+            Life_MyPlayer = Life_Player2;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            photonView.RPC("Life_Koshin_Player3", RpcTarget.All);         // 誰のLifeを更新するの？
+            Life_MyPlayer = Life_Player3;
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            photonView.RPC("Life_Koshin_Player4", RpcTarget.All);         // 誰のLifeを更新するの？
+            Life_MyPlayer = Life_Player4;
+        }
+
+        Life_Koshin_Atai = Life_MyPlayer;
+        checkLife_Koshin_Atai();                                   // Lifeの数値はいくつ？ → その値を全員に共有
+        photonView.RPC("totalLife_Koshin_Atai", RpcTarget.All);    // 該当プレイヤーのLifeを指定された値に更新する
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Player1()   // 誰のLifeを更新するの？
+    {
+        Life_Koshin_PlayerNum = 1;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Player2()   // 誰のLifeを更新するの？
+    {
+        Life_Koshin_PlayerNum = 2;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Player3()   // 誰のLifeを更新するの？
+    {
+        Life_Koshin_PlayerNum = 3;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Player4()   // 誰のLifeを更新するの？
+    {
+        Life_Koshin_PlayerNum = 4;
+    }
+
+
+    public void checkLife_Koshin_Atai()        // Lifeの数値はいくつ？ → その値を全員に共有
+    {
+        switch (Life_Koshin_Atai)
+        {
+            case 1: //
+                photonView.RPC("Life_Koshin_Atai_1", RpcTarget.All);
+                break;
+            case 2: //
+                photonView.RPC("Life_Koshin_Atai_2", RpcTarget.All);
+                break;
+            case 3: //
+                photonView.RPC("Life_Koshin_Atai_3", RpcTarget.All);
+                break;
+            case 4: //
+                photonView.RPC("Life_Koshin_Atai_4", RpcTarget.All);
+                break;
+            case 5: //
+                photonView.RPC("Life_Koshin_Atai_5", RpcTarget.All);
+                break;
+            case 6: //
+                photonView.RPC("Life_Koshin_Atai_6", RpcTarget.All);
+                break;
+            case 7: //
+                photonView.RPC("Life_Koshin_Atai_7", RpcTarget.All);
+                break;
+            case 8: //
+                photonView.RPC("Life_Koshin_Atai_8", RpcTarget.All);
+                break;
+            case 9: //
+                photonView.RPC("Life_Koshin_Atai_9", RpcTarget.All);
+                break;
+            case 0: //
+                photonView.RPC("Life_Koshin_Atai_0", RpcTarget.All);
+                break;
+            default:
+                // その他処理
+                break;
+        }
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Atai_1()
+    {
+        Life_Koshin_Atai = 1;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Atai_2()
+    {
+        Life_Koshin_Atai = 2;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Atai_3()
+    {
+        Life_Koshin_Atai = 3;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Atai_4()
+    {
+        Life_Koshin_Atai = 4;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Atai_5()
+    {
+        Life_Koshin_Atai = 5;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Atai_6()
+    {
+        Life_Koshin_Atai = 6;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Atai_7()
+    {
+        Life_Koshin_Atai = 7;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Atai_8()
+    {
+        Life_Koshin_Atai = 8;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Atai_9()
+    {
+        Life_Koshin_Atai = 9;
+    }
+
+    [PunRPC]
+    public void Life_Koshin_Atai_0()
+    {
+        Life_Koshin_Atai = 0;
+    }
+
+
+    [PunRPC]
+    public void totalLife_Koshin_Atai()          // 該当プレイヤーのLifeを指定された値に更新する
+    {
+        switch (Life_Koshin_PlayerNum)
+        {
+            case 1: //
+                Life_Player1 = Life_Koshin_Atai;
+                break;
+            case 2: //
+                Life_Player2 = Life_Koshin_Atai;
+                break;
+            case 3: //
+                Life_Player3 = Life_Koshin_Atai;
+                break;
+            case 4: //
+                Life_Player4 = Life_Koshin_Atai;
+                break;
+            default:
+                // その他処理
+                break;
+        }
+    }
+
+    #endregion
 
     // End
 
