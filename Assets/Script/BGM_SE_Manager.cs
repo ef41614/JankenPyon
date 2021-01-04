@@ -34,6 +34,12 @@ public class BGM_SE_Manager : MonoBehaviour
     public AudioClip Tarai_Guwan;
     public AudioClip cure;
     public AudioClip CoinGet;
+    public AudioClip Shiharai;
+    public AudioClip Tired;
+    public AudioClip Distribute_JankenCards_15;
+    public AudioClip Distribute_JankenCards_18;
+    public AudioClip Card_Mekuri;
+    public AudioClip cancel;
 
     public string Aikotoba = "";  // あいことば（ルーム名になる）
 
@@ -145,6 +151,36 @@ public class BGM_SE_Manager : MonoBehaviour
     public void CoinGet_SE()
     {
         audioSource.PlayOneShot(CoinGet);
+    }
+
+    public void Shiharai_SE()
+    {
+        audioSource.PlayOneShot(Shiharai);
+    }
+
+    public void Tired_SE()
+    {
+        audioSource.PlayOneShot(Tired);
+    }
+
+    public void Distribute_JankenCards_15_SE()
+    {
+        audioSource.PlayOneShot(Distribute_JankenCards_15);
+    }
+
+    public void Distribute_JankenCards_18_SE()
+    {
+        audioSource.PlayOneShot(Distribute_JankenCards_18);
+    }
+
+    public void Card_Mekuri_SE()
+    {
+        audioSource.PlayOneShot(Card_Mekuri);
+    }
+
+    public void cancel_SE()
+    {
+        audioSource.PlayOneShot(cancel);
     }
     #endregion
 

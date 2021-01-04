@@ -2005,6 +2005,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【JK-01】セット開始したばかりなので、ジャンケン手「決定ボタン」を非表示にします");
         Check_CanAppear_KetteiBtn();     // 【JK-01】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたら決定ボタンを表示する
         Countdown_Until_Push_JankenTe_KetteiButton();     // ジャンケンパネルが開かれていて、決定ボタンか押されていならば、カウントダウン開始
+        ShuffleCardsMSC.Distribute_JankenCards();         // じゃんけんカードの配布（一旦非表示にしてから、順番に表示していく）
     }
 
     [PunRPC]
@@ -9958,6 +9959,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Btn_A.interactable = false;
         CanPushBtn_A = false;
         Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
+        BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
     }
 
     public void Push_Btn_B() // 【JK-02】ジャンケンカードボタン押したよ
@@ -10007,6 +10009,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Btn_B.interactable = false;
         CanPushBtn_B = false;
         Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
+        BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
     }
 
     public void Push_Btn_C() // 【JK-02】ジャンケンカードボタン押したよ
@@ -10056,6 +10059,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Btn_C.interactable = false;
         CanPushBtn_C = false;
         Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
+        BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
     }
 
     public void Push_Btn_D() // 【JK-02】ジャンケンカードボタン押したよ
@@ -10105,6 +10109,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Btn_D.interactable = false;
         CanPushBtn_D = false;
         Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
+        BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
     }
 
     public void Push_Btn_E() // 【JK-02】ジャンケンカードボタン押したよ
@@ -10154,6 +10159,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Btn_E.interactable = false;
         CanPushBtn_E = false;
         Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
+        BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
     }
 
     public void PushBtn_Omakase() // 【JK-02】おまかせボタン押したよ
@@ -10170,6 +10176,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Btn_Omakase.interactable = false;
         CanPushBtn_Omakase = false;
         Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
+        BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
     }
 
     #endregion
@@ -11350,6 +11357,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
             calculate_Gold_Players();    // 所持金（ゴールド）をマイナス/プラスします
             ResetCountdown_timer_Kettei_1();  // 自動カウントダウンを一時停止
             Redistribute_JankenCards();    // じゃんけんカードの再配布を実施します
+            ShuffleCardsMSC.Distribute_JankenCards();         // じゃんけんカードの配布（一旦非表示にしてから、順番に表示していく）
         }
         else  // ゴールドが足りないよ
         {
@@ -12284,9 +12292,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         //RandomChange_ItemCard_Omote();   // アイテムカードの図柄を ランダムで変更する
 
         var sequence = DOTween.Sequence();
-        sequence.InsertCallback(3f, () => CloseEncounter_ItemCard_Down());
-
-
+        sequence.InsertCallback(3.5f, () => CloseEncounter_ItemCard_Down());
     }
 
 
@@ -12363,7 +12369,8 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     public void Katakori_stream_After3()  // 肩こりフラグがONの時のみ実行される（治癒されるまで）
     {
         HariQ_Button.SetActive(true);     //表示する
-        Katakori_Mark.SetActive(true);    //表示する       
+        Katakori_Mark.SetActive(true);    //表示する    
+        BGM_SE_MSC.Tired_SE();
     }
 
     public void CureKatakori()  // 肩こりが治癒しました
@@ -12416,7 +12423,10 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
 
     #endregion
 
-
+    public void PlayCancel_SE()     // キャンセル音
+    {
+        BGM_SE_MSC.cancel_SE();     // キャンセル音
+    }
 
     // End
 

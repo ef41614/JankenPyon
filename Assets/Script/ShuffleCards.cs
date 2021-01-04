@@ -7,6 +7,7 @@ using Photon.Realtime;
 using System.Linq;
 using System;
 using BEFOOL.PhotonTest;
+using DG.Tweening;
 using Random = UnityEngine.Random;
 
 namespace say
@@ -59,6 +60,9 @@ namespace say
         public GameObject TestRoomController;  //ヒエラルキー上のオブジェクト名
         TestRoomController TestRoomControllerSC;
 
+        public GameObject BGM_SE_Manager;
+        BGM_SE_Manager BGM_SE_MSC;
+
         int RndSet_CardPos_King;             // A～E どの位置にカードをセットするか
         int RndSet_CardPos_Dorei;            // A～E どの位置にカードをセットするか
         int RndSet_CardPos_Muteki;           // A～E どの位置にカードをセットするか
@@ -75,6 +79,8 @@ namespace say
             ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
             SelectJankenMSC = SelectJankenManager.GetComponent<SelectJanken>();
             TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
+            BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
+            BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
         }
 
         //☆################☆################  Start  ################☆################☆
@@ -138,46 +144,46 @@ namespace say
 
             if (RndGo_ReverseOrder <= 5)  // 従来通りのカードセット順
             {
-                if (RndGo_King >= 90)
+                if (RndGo_King >= 85)
                 {
                     Set_KingCard();              // 王様カード をセットします  A,B,C,D,E
                 }
-                if (RndGo_Dorei >= 90)
+                if (RndGo_Dorei >= 85)
                 {
                     Set_DoreiCard();             // どれいカード をセットします  A,B,C,D,E
                 }
-                if (RndGo_Muteki >= 90)
+                if (RndGo_Muteki >= 85)
                 {
                     Set_MutekiCard();            // むてきカード をセットします  A,B,C,D,E
                 }
-                if (RndGo_Wall >= 90)
+                if (RndGo_Wall >= 85)
                 {
                     Set_WallCard();              // 壁カード をセットします  A,B,C,D,E
                 }
-                if (RndGo_WFlag >= 90)
+                if (RndGo_WFlag >= 85)
                 {
                     Set_WFlagCard();             // 白旗カード をセットします  A,B,C,D,E
                 }
             }
             else                          // 従来とは逆のカードセット順
             {
-                if (RndGo_WFlag >= 90)
+                if (RndGo_WFlag >= 85)
                 {
                     Set_WFlagCard();             // 白旗カード をセットします  A,B,C,D,E
                 }
-                if (RndGo_Wall >= 90)
+                if (RndGo_Wall >= 85)
                 {
                     Set_WallCard();              // 壁カード をセットします  A,B,C,D,E
                 }
-                if (RndGo_Muteki >= 90)
+                if (RndGo_Muteki >= 85)
                 {
                     Set_MutekiCard();            // むてきカード をセットします  A,B,C,D,E
                 }
-                if (RndGo_Dorei >= 90)
+                if (RndGo_Dorei >= 85)
                 {
                     Set_DoreiCard();             // どれいカード をセットします  A,B,C,D,E
                 }
-                if (RndGo_King >= 90)
+                if (RndGo_King >= 85)
                 {
                     Set_KingCard();              // 王様カード をセットします  A,B,C,D,E
                 }
@@ -681,6 +687,34 @@ namespace say
 
 
         #region// じゃんけんカードボタン 表示・非表示の設定
+
+        public void Distribute_JankenCards()  // じゃんけんカードの配布（一旦非表示にしてから、順番に表示していく）
+        {
+            CloseButton_A();
+            CloseButton_B();
+            CloseButton_C();
+            CloseButton_D();
+            CloseButton_E();
+
+            //BGM_SE_MSC.Distribute_JankenCards_18_SE();
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(0.38f, () => BGM_SE_MSC.Distribute_JankenCards_18_SE());
+
+            var sequenceA = DOTween.Sequence();
+            sequenceA.InsertCallback(0.5f, () => AppearButton_A());
+
+            var sequenceB = DOTween.Sequence();
+            sequenceB.InsertCallback(0.7f, () => AppearButton_B());
+
+            var sequenceC = DOTween.Sequence();
+            sequenceC.InsertCallback(0.9f, () => AppearButton_C());
+
+            var sequenceD = DOTween.Sequence();
+            sequenceD.InsertCallback(1.1f, () => AppearButton_D());
+
+            var sequenceE = DOTween.Sequence();
+            sequenceE.InsertCallback(1.3f, () => AppearButton_E());
+        }
 
         public void ClosePanel_To_Defalt()   // 不要なパネルを閉じて、デフォルト状態にする
         {
