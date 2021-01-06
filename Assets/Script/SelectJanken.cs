@@ -338,8 +338,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject ZunkoClone; //ヒエラルキー上のオブジェクト名
     PlayerScript PlayerSC;//スクリプト名 + このページ上でのニックネーム
 
-    [SerializeField] private Camera _camera;
-    [SerializeField] private Camera _subcamera;
+    //[SerializeField] private Camera _camera;
+    //[SerializeField] private Camera _subcamera;
 
     public GameObject MainCamera; //ヒエラルキー上のオブジェクト名
     MyCameraController MyCameraControllerMSC;//スクリプト名 + このページ上でのニックネーム
@@ -591,6 +591,52 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     int Life_Koshin_PlayerNum = 0;      // 誰のLifeを更新するの？
     int Life_Koshin_Atai = 0;           // 数値はいくつ？
 
+    public GameObject Heart1_P1;
+    public GameObject Heart2_P1;
+    public GameObject Heart3_P1;
+    public GameObject Heart4_P1;
+    public GameObject Heart5_P1;
+    public GameObject Heart6_P1;
+    public GameObject Heart7_P1;
+    public GameObject Heart8_P1;
+
+    public GameObject Heart1_P2;
+    public GameObject Heart2_P2;
+    public GameObject Heart3_P2;
+    public GameObject Heart4_P2;
+    public GameObject Heart5_P2;
+    public GameObject Heart6_P2;
+    public GameObject Heart7_P2;
+    public GameObject Heart8_P2;
+
+    public GameObject Heart1_P3;
+    public GameObject Heart2_P3;
+    public GameObject Heart3_P3;
+    public GameObject Heart4_P3;
+    public GameObject Heart5_P3;
+    public GameObject Heart6_P3;
+    public GameObject Heart7_P3;
+    public GameObject Heart8_P3;
+
+    public GameObject Heart1_P4;
+    public GameObject Heart2_P4;
+    public GameObject Heart3_P4;
+    public GameObject Heart4_P4;
+    public GameObject Heart5_P4;
+    public GameObject Heart6_P4;
+    public GameObject Heart7_P4;
+    public GameObject Heart8_P4;
+
+    public GameObject Heart_Damage_P1;
+    public GameObject Heart_Damage_P2;
+    public GameObject Heart_Damage_P3;
+    public GameObject Heart_Damage_P4;
+
+    public CanvasGroup canvas_Damage_P1;
+    public CanvasGroup canvas_Damage_P2;
+    public CanvasGroup canvas_Damage_P3;
+    public CanvasGroup canvas_Damage_P4;
+
     public Text text_Life_P1;
     public Text text_Life_P2;
     public Text text_Life_P3;
@@ -771,7 +817,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             text_PosX_P3.text =(CourseLength - PosX_Player3).ToString();
             text_PosX_P4.text =(CourseLength - PosX_Player4).ToString();
 
-            text_Life_P1.text = (Life_Player1).ToString();
+            //Set_LifeHeart();    // 各プレイヤーの体力ハートをセットする
+            //text_Life_P1.text = (Life_Player1).ToString();
 
 
             //text_PosX_P1.text = "あと" + (CourseLength - PosX_Player1).ToString() + "ｍ";
@@ -1630,6 +1677,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         //PrecheckTaiho_PosX();         // PosX の値を共有し、大砲が撃てるか確認する
         WhoIsTopPlayer();               // 各プレイヤーのX軸位置を比較し、現在の首位と、自分との距離を算出する
         CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
+        Update_Life_Players();          // 各プレイヤーのLifeを同期します
 
         Debug.Log("Countdown_timer_PanelOpen : " + Countdown_timer_PanelOpen);
         if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)  // ジャンケンパネルが既に表示されていたら
@@ -2308,6 +2356,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region // あいさつボタンを押した時の処理 一連
     public void Aisatsu_Who_Say()     // 誰があいさつしたの？ →それによってセリフの表示位置が変わる
     {
+        Direction_Heart_Damage_P1();
+
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
             photonView.RPC("Aisatsu_P1", RpcTarget.All);
@@ -2610,6 +2660,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         CountLivePlayer();       //【JK-26】残留しているプレイヤー人数をカウントする★
 
         //CheckLogout_Kakejiku();                 // 不在の人について「ログアウト中」の掛け軸を表示させる
+        Update_Life_Players();                    // 各プレイヤーのLifeを同期します
 
         photonView.RPC("Share_Push_KetteiBtn", RpcTarget.All);
         Debug.Log("【JK-05】ジャンケン手 決定ボタン（「これでOK!」）を押しました。ジャンケン手 これで決定します");
@@ -3299,9 +3350,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                                       //anzenPoint = 0;
 
         Debug.Log("【JK-204】待機中フラグ（確認用パラメータ） を 初期化（0にする）");
-        Reset_NowWaiting();      // 待機中フラグ（確認用パラメータ） を 初期化（0にする）
+        Reset_NowWaiting();          // 待機中フラグ（確認用パラメータ） を 初期化（0にする）
 
-        Katakori_stream();    // 肩こりフラグがONの時のみ実行される（治癒されるまで）
+        Katakori_stream();           // 肩こりフラグがONの時のみ実行される（治癒されるまで）
+        Update_Life_Players();       // 各プレイヤーのLifeを同期します
 
         ResetCountdown_timer_PanelOpen_1();
         if (Flg_AfterJumpDone == 0)
@@ -11252,13 +11304,13 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         if (Flg_Taihou_punch)
         {
             var vecPunch = new Vector3(0.05f, 0.05f, 0.05f);
-            _camera.transform.DOPunchScale(Vector3.one, duration: 2, vibrato: int_vib, flo_ran);
+            //_camera.transform.DOPunchScale(Vector3.one, duration: 2, vibrato: int_vib, flo_ran);
             SubCamera_Group.transform.DOPunchScale(vecPunch, duration: 2, vibrato: int_vib, flo_ran);
         }
         else
         {
             var vecPunch = new Vector3(0.01f, 0.02f, 0.01f);
-            _camera.DOShakePosition(duration: 2, strength: flo_str, vibrato: int_vib, randomness: flo_ran, fadeOut: true);
+            //_camera.DOShakePosition(duration: 2, strength: flo_str, vibrato: int_vib, randomness: flo_ran, fadeOut: true);
             SubCamera_Group.transform.DOPunchScale(vecPunch, duration: 2, vibrato: int_vib, flo_ran);
             //SubCamera_Group.transform.DOShakePosition(duration: 2, strength: flo_str*0.5f, vibrato: int_vib, randomness: flo_ran*0.5f, fadeOut: true);
             //_camera.DOShakePosition(duration: 2, strength: 2, vibrato: 2, randomness: 30, fadeOut: true);
@@ -11457,24 +11509,25 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         if (Tarai_to_SetWFlag)    // たらいが落ちると、確定で白旗一枚
         {
             Tarai_to_SetWFlag = false;
+            Vector3 PosMyHead = new Vector3(PlayerSC.MyTenjo.transform.position.x, PlayerSC.MyHead.transform.position.y, PlayerSC.MyTenjo.transform.position.z);
 
             //photonView.RPC("Update_PosX_Players", RpcTarget.All);
-            Update_PosX_Players();                           // 各プレイヤーのX軸位置を同期します
-            share_tarai_Position();                            // たらいの位置を移動して共有する
-            photonView.RPC("FallTarai", RpcTarget.All);        // たらいを表示、落下、非表示
+            Update_PosX_Players();                                  // 各プレイヤーのX軸位置を同期します
+            share_tarai_Position();                                 // たらいの位置を移動して共有する（MyTenjo）
+            photonView.RPC("FallTarai", RpcTarget.All);             // たらいを表示 → 4秒後に非表示
             Tarai.transform.DORotate(new Vector3(0f, 0f, 0), 0f);   // たらいを上向きにセットする
             Tarai.transform
-                .DOMove(new Vector3(0, (flo_sky_taraiSet * -1 + 0.5f), 0), 0.5f)   // 下に移動する
-                .SetRelative()     // 今いる位置を基準にする  
-                .OnComplete(() =>
-                {                  // ジャンプが終了したら、以下の操作をする
+                .DOMove(PosMyHead, 0.5f)                            // たらいを下（キャラの頭の位置）に移動する（落下させる） (PosMyHead)
+                                                                    //.SetRelative()     // 今いる位置を基準にする  
+                .OnComplete(() =>                                   // ジャンプが終了したら、以下の操作をする
+                {                 
                                    //Tarai.transform.DORotate(new Vector3(0f, 0f,180), 0.5f);
-                    Tarai_Guwan.Play();  // tarai当たった時のエフェクト
+                    Tarai_Guwan.Play();                             // tarai当たった時のエフェクト
                     BGM_SE_MSC.Tarai_Guwan_SE();
-                    Set_minus_01_calculation_Life();  // Life -1
-                    calculate_Life_Players();         // 現在の体力 にマイナス/プラスします
-                    ResetCountdown_timer_Kettei_1();  // 自動カウントダウンを一時停止
-                    Update_Life_Players();            // 各プレイヤーのLifeを同期します
+                    Set_minus_01_calculation_Life();                // Life -1
+                    calculate_Life_Players();                       // 現在の体力 にマイナス/プラスします
+                    ResetCountdown_timer_Kettei_1();                // 自動カウントダウンを一時停止
+                    Update_Life_Players();                          // 各プレイヤーのLifeを同期します
 
                     PlayerSC.anim.SetBool("damage", true);
                     var sequence3 = DOTween.Sequence();
@@ -11486,7 +11539,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
                         Debug.Log("たらいを回転させる");
                         Tarai.transform.DORotate(new Vector3(0f, 0f, 180), 0.3f);
                     })
-                    .Join(Tarai.transform.DOJump(new Vector3(-1, -1.2f, 0), 1.5f, 1, 0.3f)
+                    .Join(Tarai.transform.DOLocalJump(new Vector3(-1, -1.2f, 0), 1.5f, 1, 0.3f)
                     .SetRelative()
                     );
                     sequence.Play();
@@ -11601,11 +11654,14 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     public void Tarai_MoveTo_PosX_Player1()   // Tarai を realPosX_Player1 の位置に移動する
     {
         Debug.Log("Tarai を realPosX_Player1 の位置に移動する");
-        Tarai.transform.position = new Vector3(realPosX_Player1, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
-        Tarai_Guwan.transform.position = new Vector3(realPosX_Player1, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
+        //Tarai.transform.position = new Vector3(realPosX_Player1, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
+        //Tarai_Guwan.transform.position = new Vector3(realPosX_Player1, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
         //Tarai.transform.position = new Vector3(realPosX_Player1, PosY_taraiSet, Tarai.transform.position.z);
         Sara.transform.position = new Vector3(PosX_Player1, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
         Sara_Guwan.transform.position = new Vector3(PosX_Player1, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
+
+        Tarai.transform.position = PlayerSC.MyTenjo.transform.position;
+        Tarai_Guwan.transform.position = new Vector3(PlayerSC.MyTenjo.transform.position.x, PlayerSC.MyHead.transform.position.y, PlayerSC.MyTenjo.transform.position.z);
     }
 
     [PunRPC]
@@ -12486,6 +12542,8 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
 
     public void StartSet_Life_Players()   // 体力をセットします[初期値のセット]
     {
+        Debug.Log("体力をセットします[初期値のセット]");
+
         int_calculation_Life = 0;
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
@@ -12518,6 +12576,11 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
             var sequence = DOTween.Sequence();
             sequence.InsertCallback(0.4f, () => Update_Life_Players());
         }
+    }
+
+    public void Set_Zero_calculation_Life() // Life +-0
+    {
+        int_calculation_Life = 0;
     }
 
     public void Set_plus_01_calculation_Life() // Life +1
@@ -12589,6 +12652,8 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         Life_Koshin_Atai = Life_MyPlayer;
         checkLife_Koshin_Atai();                                   // Lifeの数値はいくつ？ → その値を全員に共有
         photonView.RPC("totalLife_Koshin_Atai", RpcTarget.All);    // 該当プレイヤーのLifeを指定された値に更新する
+        Check_DamageUmu();                                         // ダメージの有無を確認する
+        Set_LifeHeart();                                           // 各プレイヤーの体力ハートをセットする
     }
 
     [PunRPC]
@@ -12739,6 +12804,757 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
                 break;
         }
     }
+
+
+    #region// 体力 ハートの調整
+
+    public void Set_LifeHeart()  // 各プレイヤーの体力ハートをセットする
+    {
+        text_Life_P1.text = (Life_Player1).ToString();
+        text_Life_P2.text = (Life_Player2).ToString();
+        text_Life_P3.text = (Life_Player3).ToString();
+        text_Life_P4.text = (Life_Player4).ToString();
+
+        Set_LifeHeart_P1();  // プレイヤーP1の体力ハートをセットする
+        Set_LifeHeart_P2();  // プレイヤーP2の体力ハートをセットする
+        Set_LifeHeart_P3();  // プレイヤーP3の体力ハートをセットする
+        Set_LifeHeart_P4();  // プレイヤーP4の体力ハートをセットする
+        //Check_DamageUmu();  // ダメージの有無を確認する
+    }
+
+    #region// 体力 ハートの調整_P1
+    public void Set_LifeHeart_P1()  // プレイヤーP1の体力ハートをセットする
+    {
+        switch (Life_Player1)
+        {
+            case 1: //
+                Set_LifeHeart_P1_to1();
+                break;
+
+            case 2: //
+                Set_LifeHeart_P1_to2();
+                break;
+
+            case 3: //
+                Set_LifeHeart_P1_to3();
+                break;
+
+            case 4: //
+                Set_LifeHeart_P1_to4();
+                break;
+
+            case 5: //
+                Set_LifeHeart_P1_to5();
+                break;
+
+            case 6: //
+                Set_LifeHeart_P1_to6();
+                break;
+
+            case 7: //
+                Set_LifeHeart_P1_to7();
+                break;
+
+            case 8: //
+                Set_LifeHeart_P1_to8();
+                break;
+
+            case 0: //
+                Set_LifeHeart_P1_to0();
+                break;
+
+            default:
+                // その他処理
+                break;
+        }
+    }
+
+
+    [PunRPC]
+    public void Set_LifeHeart_P1_to1()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P1.SetActive(true);
+        Heart2_P1.SetActive(false);
+        Heart3_P1.SetActive(false);
+        Heart4_P1.SetActive(false);
+        Heart5_P1.SetActive(false);
+        Heart6_P1.SetActive(false);
+        Heart7_P1.SetActive(false);
+        Heart8_P1.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P1_to2()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P1.SetActive(true);
+        Heart2_P1.SetActive(true);
+        Heart3_P1.SetActive(false);
+        Heart4_P1.SetActive(false);
+        Heart5_P1.SetActive(false);
+        Heart6_P1.SetActive(false);
+        Heart7_P1.SetActive(false);
+        Heart8_P1.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P1_to3()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P1.SetActive(true);
+        Heart2_P1.SetActive(true);
+        Heart3_P1.SetActive(true);
+        Heart4_P1.SetActive(false);
+        Heart5_P1.SetActive(false);
+        Heart6_P1.SetActive(false);
+        Heart7_P1.SetActive(false);
+        Heart8_P1.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P1_to4()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P1.SetActive(true);
+        Heart2_P1.SetActive(true);
+        Heart3_P1.SetActive(true);
+        Heart4_P1.SetActive(true);
+        Heart5_P1.SetActive(false);
+        Heart6_P1.SetActive(false);
+        Heart7_P1.SetActive(false);
+        Heart8_P1.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P1_to5()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P1.SetActive(true);
+        Heart2_P1.SetActive(true);
+        Heart3_P1.SetActive(true);
+        Heart4_P1.SetActive(true);
+        Heart5_P1.SetActive(true);
+        Heart6_P1.SetActive(false);
+        Heart7_P1.SetActive(false);
+        Heart8_P1.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P1_to6()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P1.SetActive(true);
+        Heart2_P1.SetActive(true);
+        Heart3_P1.SetActive(true);
+        Heart4_P1.SetActive(true);
+        Heart5_P1.SetActive(true);
+        Heart6_P1.SetActive(true);
+        Heart7_P1.SetActive(false);
+        Heart8_P1.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P1_to7()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P1.SetActive(true);
+        Heart2_P1.SetActive(true);
+        Heart3_P1.SetActive(true);
+        Heart4_P1.SetActive(true);
+        Heart5_P1.SetActive(true);
+        Heart6_P1.SetActive(true);
+        Heart7_P1.SetActive(true);
+        Heart8_P1.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P1_to8()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P1.SetActive(true);
+        Heart2_P1.SetActive(true);
+        Heart3_P1.SetActive(true);
+        Heart4_P1.SetActive(true);
+        Heart5_P1.SetActive(true);
+        Heart6_P1.SetActive(true);
+        Heart7_P1.SetActive(true);
+        Heart8_P1.SetActive(true);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P1_to0()  // 各プレイヤーの体力ハートを0にする
+    {
+        Heart1_P1.SetActive(false);
+        Heart2_P1.SetActive(false);
+        Heart3_P1.SetActive(false);
+        Heart4_P1.SetActive(false);
+        Heart5_P1.SetActive(false);
+        Heart6_P1.SetActive(false);
+        Heart7_P1.SetActive(false);
+        Heart8_P1.SetActive(false);
+    }
+    #endregion
+
+
+    #region// 体力 ハートの調整_P2
+    public void Set_LifeHeart_P2()  // プレイヤーP2の体力ハートをセットする
+    {
+        switch (Life_Player2)
+        {
+            case 1: //
+                Set_LifeHeart_P2_to1();
+                break;
+
+            case 2: //
+                Set_LifeHeart_P2_to2();
+                break;
+
+            case 3: //
+                Set_LifeHeart_P2_to3();
+                break;
+
+            case 4: //
+                Set_LifeHeart_P2_to4();
+                break;
+
+            case 5: //
+                Set_LifeHeart_P2_to5();
+                break;
+
+            case 6: //
+                Set_LifeHeart_P2_to6();
+                break;
+
+            case 7: //
+                Set_LifeHeart_P2_to7();
+                break;
+
+            case 8: //
+                Set_LifeHeart_P2_to8();
+                break;
+
+            case 0: //
+                Set_LifeHeart_P2_to0();
+                break;
+
+            default:
+                // その他処理
+                break;
+        }
+    }
+
+
+    [PunRPC]
+    public void Set_LifeHeart_P2_to1()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P2.SetActive(true);
+        Heart2_P2.SetActive(false);
+        Heart3_P2.SetActive(false);
+        Heart4_P2.SetActive(false);
+        Heart5_P2.SetActive(false);
+        Heart6_P2.SetActive(false);
+        Heart7_P2.SetActive(false);
+        Heart8_P2.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P2_to2()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P2.SetActive(true);
+        Heart2_P2.SetActive(true);
+        Heart3_P2.SetActive(false);
+        Heart4_P2.SetActive(false);
+        Heart5_P2.SetActive(false);
+        Heart6_P2.SetActive(false);
+        Heart7_P2.SetActive(false);
+        Heart8_P2.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P2_to3()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P2.SetActive(true);
+        Heart2_P2.SetActive(true);
+        Heart3_P2.SetActive(true);
+        Heart4_P2.SetActive(false);
+        Heart5_P2.SetActive(false);
+        Heart6_P2.SetActive(false);
+        Heart7_P2.SetActive(false);
+        Heart8_P2.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P2_to4()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P2.SetActive(true);
+        Heart2_P2.SetActive(true);
+        Heart3_P2.SetActive(true);
+        Heart4_P2.SetActive(true);
+        Heart5_P2.SetActive(false);
+        Heart6_P2.SetActive(false);
+        Heart7_P2.SetActive(false);
+        Heart8_P2.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P2_to5()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P2.SetActive(true);
+        Heart2_P2.SetActive(true);
+        Heart3_P2.SetActive(true);
+        Heart4_P2.SetActive(true);
+        Heart5_P2.SetActive(true);
+        Heart6_P2.SetActive(false);
+        Heart7_P2.SetActive(false);
+        Heart8_P2.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P2_to6()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P2.SetActive(true);
+        Heart2_P2.SetActive(true);
+        Heart3_P2.SetActive(true);
+        Heart4_P2.SetActive(true);
+        Heart5_P2.SetActive(true);
+        Heart6_P2.SetActive(true);
+        Heart7_P2.SetActive(false);
+        Heart8_P2.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P2_to7()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P2.SetActive(true);
+        Heart2_P2.SetActive(true);
+        Heart3_P2.SetActive(true);
+        Heart4_P2.SetActive(true);
+        Heart5_P2.SetActive(true);
+        Heart6_P2.SetActive(true);
+        Heart7_P2.SetActive(true);
+        Heart8_P2.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P2_to8()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P2.SetActive(true);
+        Heart2_P2.SetActive(true);
+        Heart3_P2.SetActive(true);
+        Heart4_P2.SetActive(true);
+        Heart5_P2.SetActive(true);
+        Heart6_P2.SetActive(true);
+        Heart7_P2.SetActive(true);
+        Heart8_P2.SetActive(true);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P2_to0()  // 各プレイヤーの体力ハートを0にする
+    {
+        Heart1_P2.SetActive(false);
+        Heart2_P2.SetActive(false);
+        Heart3_P2.SetActive(false);
+        Heart4_P2.SetActive(false);
+        Heart5_P2.SetActive(false);
+        Heart6_P2.SetActive(false);
+        Heart7_P2.SetActive(false);
+        Heart8_P2.SetActive(false);
+    }
+    #endregion
+
+
+    #region// 体力 ハートの調整_P3
+    public void Set_LifeHeart_P3()  // プレイヤーP3の体力ハートをセットする
+    {
+        switch (Life_Player3)
+        {
+            case 1: //
+                Set_LifeHeart_P3_to1();
+                break;
+
+            case 2: //
+                Set_LifeHeart_P3_to2();
+                break;
+
+            case 3: //
+                Set_LifeHeart_P3_to3();
+                break;
+
+            case 4: //
+                Set_LifeHeart_P3_to4();
+                break;
+
+            case 5: //
+                Set_LifeHeart_P3_to5();
+                break;
+
+            case 6: //
+                Set_LifeHeart_P3_to6();
+                break;
+
+            case 7: //
+                Set_LifeHeart_P3_to7();
+                break;
+
+            case 8: //
+                Set_LifeHeart_P3_to8();
+                break;
+
+            case 0: //
+                Set_LifeHeart_P3_to0();
+                break;
+
+            default:
+                // その他処理
+                break;
+        }
+    }
+
+
+    [PunRPC]
+    public void Set_LifeHeart_P3_to1()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P3.SetActive(true);
+        Heart2_P3.SetActive(false);
+        Heart3_P3.SetActive(false);
+        Heart4_P3.SetActive(false);
+        Heart5_P3.SetActive(false);
+        Heart6_P3.SetActive(false);
+        Heart7_P3.SetActive(false);
+        Heart8_P3.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P3_to2()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P3.SetActive(true);
+        Heart2_P3.SetActive(true);
+        Heart3_P3.SetActive(false);
+        Heart4_P3.SetActive(false);
+        Heart5_P3.SetActive(false);
+        Heart6_P3.SetActive(false);
+        Heart7_P3.SetActive(false);
+        Heart8_P3.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P3_to3()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P3.SetActive(true);
+        Heart2_P3.SetActive(true);
+        Heart3_P3.SetActive(true);
+        Heart4_P3.SetActive(false);
+        Heart5_P3.SetActive(false);
+        Heart6_P3.SetActive(false);
+        Heart7_P3.SetActive(false);
+        Heart8_P3.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P3_to4()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P3.SetActive(true);
+        Heart2_P3.SetActive(true);
+        Heart3_P3.SetActive(true);
+        Heart4_P3.SetActive(true);
+        Heart5_P3.SetActive(false);
+        Heart6_P3.SetActive(false);
+        Heart7_P3.SetActive(false);
+        Heart8_P3.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P3_to5()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P3.SetActive(true);
+        Heart2_P3.SetActive(true);
+        Heart3_P3.SetActive(true);
+        Heart4_P3.SetActive(true);
+        Heart5_P3.SetActive(true);
+        Heart6_P3.SetActive(false);
+        Heart7_P3.SetActive(false);
+        Heart8_P3.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P3_to6()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P3.SetActive(true);
+        Heart2_P3.SetActive(true);
+        Heart3_P3.SetActive(true);
+        Heart4_P3.SetActive(true);
+        Heart5_P3.SetActive(true);
+        Heart6_P3.SetActive(true);
+        Heart7_P3.SetActive(false);
+        Heart8_P3.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P3_to7()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P3.SetActive(true);
+        Heart2_P3.SetActive(true);
+        Heart3_P3.SetActive(true);
+        Heart4_P3.SetActive(true);
+        Heart5_P3.SetActive(true);
+        Heart6_P3.SetActive(true);
+        Heart7_P3.SetActive(true);
+        Heart8_P3.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P3_to8()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P3.SetActive(true);
+        Heart2_P3.SetActive(true);
+        Heart3_P3.SetActive(true);
+        Heart4_P3.SetActive(true);
+        Heart5_P3.SetActive(true);
+        Heart6_P3.SetActive(true);
+        Heart7_P3.SetActive(true);
+        Heart8_P3.SetActive(true);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P3_to0()  // 各プレイヤーの体力ハートを0にする
+    {
+        Heart1_P3.SetActive(false);
+        Heart2_P3.SetActive(false);
+        Heart3_P3.SetActive(false);
+        Heart4_P3.SetActive(false);
+        Heart5_P3.SetActive(false);
+        Heart6_P3.SetActive(false);
+        Heart7_P3.SetActive(false);
+        Heart8_P3.SetActive(false);
+    }
+    #endregion
+
+
+    #region// 体力 ハートの調整_P4
+    public void Set_LifeHeart_P4()  // プレイヤーP4の体力ハートをセットする
+    {
+        switch (Life_Player4)
+        {
+            case 1: //
+                Set_LifeHeart_P4_to1();
+                break;
+
+            case 2: //
+                Set_LifeHeart_P4_to2();
+                break;
+
+            case 3: //
+                Set_LifeHeart_P4_to3();
+                break;
+
+            case 4: //
+                Set_LifeHeart_P4_to4();
+                break;
+
+            case 5: //
+                Set_LifeHeart_P4_to5();
+                break;
+
+            case 6: //
+                Set_LifeHeart_P4_to6();
+                break;
+
+            case 7: //
+                Set_LifeHeart_P4_to7();
+                break;
+
+            case 8: //
+                Set_LifeHeart_P4_to8();
+                break;
+
+            case 0: //
+                Set_LifeHeart_P4_to0();
+                break;
+
+            default:
+                // その他処理
+                break;
+        }
+    }
+
+
+    [PunRPC]
+    public void Set_LifeHeart_P4_to1()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P4.SetActive(true);
+        Heart2_P4.SetActive(false);
+        Heart3_P4.SetActive(false);
+        Heart4_P4.SetActive(false);
+        Heart5_P4.SetActive(false);
+        Heart6_P4.SetActive(false);
+        Heart7_P4.SetActive(false);
+        Heart8_P4.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P4_to2()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P4.SetActive(true);
+        Heart2_P4.SetActive(true);
+        Heart3_P4.SetActive(false);
+        Heart4_P4.SetActive(false);
+        Heart5_P4.SetActive(false);
+        Heart6_P4.SetActive(false);
+        Heart7_P4.SetActive(false);
+        Heart8_P4.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P4_to3()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P4.SetActive(true);
+        Heart2_P4.SetActive(true);
+        Heart3_P4.SetActive(true);
+        Heart4_P4.SetActive(false);
+        Heart5_P4.SetActive(false);
+        Heart6_P4.SetActive(false);
+        Heart7_P4.SetActive(false);
+        Heart8_P4.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P4_to4()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P4.SetActive(true);
+        Heart2_P4.SetActive(true);
+        Heart3_P4.SetActive(true);
+        Heart4_P4.SetActive(true);
+        Heart5_P4.SetActive(false);
+        Heart6_P4.SetActive(false);
+        Heart7_P4.SetActive(false);
+        Heart8_P4.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P4_to5()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P4.SetActive(true);
+        Heart2_P4.SetActive(true);
+        Heart3_P4.SetActive(true);
+        Heart4_P4.SetActive(true);
+        Heart5_P4.SetActive(true);
+        Heart6_P4.SetActive(false);
+        Heart7_P4.SetActive(false);
+        Heart8_P4.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P4_to6()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P4.SetActive(true);
+        Heart2_P4.SetActive(true);
+        Heart3_P4.SetActive(true);
+        Heart4_P4.SetActive(true);
+        Heart5_P4.SetActive(true);
+        Heart6_P4.SetActive(true);
+        Heart7_P4.SetActive(false);
+        Heart8_P4.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P4_to7()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P4.SetActive(true);
+        Heart2_P4.SetActive(true);
+        Heart3_P4.SetActive(true);
+        Heart4_P4.SetActive(true);
+        Heart5_P4.SetActive(true);
+        Heart6_P4.SetActive(true);
+        Heart7_P4.SetActive(true);
+        Heart8_P4.SetActive(false);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P4_to8()  // 各プレイヤーの体力ハートをセットする
+    {
+        Heart1_P4.SetActive(true);
+        Heart2_P4.SetActive(true);
+        Heart3_P4.SetActive(true);
+        Heart4_P4.SetActive(true);
+        Heart5_P4.SetActive(true);
+        Heart6_P4.SetActive(true);
+        Heart7_P4.SetActive(true);
+        Heart8_P4.SetActive(true);
+    }
+
+    [PunRPC]
+    public void Set_LifeHeart_P4_to0()  // 各プレイヤーの体力ハートを0にする
+    {
+        Heart1_P4.SetActive(false);
+        Heart2_P4.SetActive(false);
+        Heart3_P4.SetActive(false);
+        Heart4_P4.SetActive(false);
+        Heart5_P4.SetActive(false);
+        Heart6_P4.SetActive(false);
+        Heart7_P4.SetActive(false);
+        Heart8_P4.SetActive(false);
+    }
+    #endregion
+
+    public void Check_DamageUmu()  // ダメージの有無を確認する
+    {
+        if(int_calculation_Life < 0)      // int_calculation_Life がマイナスであれば
+        {
+            Direction_Heart_Damage();  // 被ダメージ時、ハートを白く点滅させる
+        }
+        Set_Zero_calculation_Life();      // int_calculation_Life +-0
+    }
+
+    public void Direction_Heart_Damage()  // 被ダメージ時、ハートを白く点滅させる
+    {
+        if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+        {
+            photonView.RPC("PosX_Koshin_Player1", RpcTarget.All);
+            Direction_Heart_Damage_P1();
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+        {
+            photonView.RPC("PosX_Koshin_Player2", RpcTarget.All);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+        {
+            photonView.RPC("PosX_Koshin_Player3", RpcTarget.All);
+        }
+
+        else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+        {
+            photonView.RPC("PosX_Koshin_Player4", RpcTarget.All);
+        }
+    }
+
+    public void Direction_Heart_Damage_P1()  // 被ダメージ時、ハートを白く点滅させる
+    {
+        Debug.Log("被ダメージ時、ハートを白く点滅させる");
+        //canvas_Damage_P1.DOFade(0.0f, 0.5f).SetLoops(3, LoopType.Yoyo);
+        AppearHeart_Damage_P1();
+
+        var sequence = DOTween.Sequence();
+        sequence.InsertCallback(0.2f, () => CloseHeart_Damage_P1());
+
+        var sequence2 = DOTween.Sequence();
+        sequence2.InsertCallback(0.4f, () => AppearHeart_Damage_P1());
+
+        var sequence3 = DOTween.Sequence();
+        sequence3.InsertCallback(0.6f, () => CloseHeart_Damage_P1());
+
+        var sequence4 = DOTween.Sequence();
+        sequence4.InsertCallback(0.8f, () => AppearHeart_Damage_P1());
+
+        var sequence5 = DOTween.Sequence();
+        sequence5.InsertCallback(1.0f, () => CloseHeart_Damage_P1());
+    }
+
+    public void AppearHeart_Damage_P1()
+    {
+        Heart_Damage_P1.SetActive(true);       
+    }
+
+    public void CloseHeart_Damage_P1()
+    {
+        Heart_Damage_P1.SetActive(false);        
+    }
+
+    #endregion
 
     #endregion
 

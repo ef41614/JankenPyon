@@ -24,6 +24,8 @@ public class PlayerScript : MonoBehaviour
     int FlyingTime_byTaihou = 10;   // 人間大砲で飛んでいる時間
     public ParticleSystem Taihou_Kemuri;
     public ParticleSystem Sunabokori;
+    public GameObject MyTenjo;
+    public GameObject MyHead;
 
     // Start is called before the first frame update
     void Start()
