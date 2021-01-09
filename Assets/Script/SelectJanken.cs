@@ -580,7 +580,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     bool Flg_before_Check_NowLoginMember = true;    // 実行前ならtrue、実行始まったらfalse
     bool Flg_PreCheck_Can_Hantei_Stream = true;     // 実行前ならtrue、実行始まったらfalse
 
-    int int_Default_Life = 8;
+    int int_Default_Life = 8;  //★
     int Life_MyPlayer = 0;     // 自分の体力
     int Life_Player1;
     int Life_Player2;
@@ -643,6 +643,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Text text_Life_P4;
 
     public GameObject Panel_AutoLogout;
+    int Level_MyHealing = 0;  // 体力がゼロになってから回復するまでの治療の程度 （治療レベル）
+    public GameObject Panel_Kizetsu;
     #endregion
 
     #region // 【START】初期設定の処理一覧
@@ -783,6 +785,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             CloseSubCamera_Group();
             CloseEncounter_ItemCard_Down();
             CloseEncounter_ItemCard_UraUp();
+            ClosePanel_Kizetsu();
             Button_TaihouFire.SetActive(false);
             AppearPanel_SyokaiTaihou();
 
@@ -795,7 +798,6 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("アイテムカードの裏面生成！");
             //Make_Encounter_ItemCard_UraUp();  // ジャンプ後に確率でエンカウントするアイテムカードの裏面
             Debug.Log("アイテムカードの裏面生成できたかな？？");
-
         }
         else
         {
@@ -1691,40 +1693,48 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、ボタンを おしてね Text");
             Text_Announcement.text = "ボタンを おしてね";   // テキスト表示
 
-            if (Countdown_timer_PanelOpen == 1)             // ボタンを おしてね のSEを流す
-            {
-                var sequence5 = DOTween.Sequence();
-                sequence5.InsertCallback(5f, () => Checking_PanelOpen(5));
-            }
-            else if (Countdown_timer_PanelOpen == 2)
-            {
-                var sequence10 = DOTween.Sequence();
-                sequence10.InsertCallback(5f, () => Checking_PanelOpen(10));
-            }
-            else if (Countdown_timer_PanelOpen == 3)
-            {
-                var sequence15 = DOTween.Sequence();
-                sequence15.InsertCallback(5f, () => Checking_PanelOpen(15));
-            }
-            else if (Countdown_timer_PanelOpen == 4)       // ボタンを おしてね のSEを流す
-            {
-                var sequence20 = DOTween.Sequence();
-                sequence20.InsertCallback(5f, () => Checking_PanelOpen(20));
-            }
-            else if (Countdown_timer_PanelOpen == 5)
-            {
-                var sequence25 = DOTween.Sequence();
-                sequence25.InsertCallback(5f, () => Checking_PanelOpen(25));
-            }
-            else if (Countdown_timer_PanelOpen == 6)
+            if (Life_MyPlayer <= 0)        // 体力がゼロになっているなら（気絶していたら）
             {
                 var sequence30 = DOTween.Sequence();
-                sequence30.InsertCallback(5f, () => Auto_Push_OpenMyJankenPanel_Button());
+                sequence30.InsertCallback(10f, () => Auto_Push_OpenMyJankenPanel_Button());
             }
-            else
-            {
-                Debug.Log("右上「開始ボタン」の Countdown_timer_PanelOpen が 1～6 以外です");
-                ResetCountdown_timer_PanelOpen_1();
+            else                           // 体力が1以上あれば（平常時）
+            {          
+                if (Countdown_timer_PanelOpen == 1)             // ボタンを おしてね のSEを流す
+                {
+                    var sequence5 = DOTween.Sequence();
+                    sequence5.InsertCallback(5f, () => Checking_PanelOpen(5));
+                }
+                else if (Countdown_timer_PanelOpen == 2)
+                {
+                    var sequence10 = DOTween.Sequence();
+                    sequence10.InsertCallback(5f, () => Checking_PanelOpen(10));
+                }
+                else if (Countdown_timer_PanelOpen == 3)
+                {
+                    var sequence15 = DOTween.Sequence();
+                    sequence15.InsertCallback(5f, () => Checking_PanelOpen(15));
+                }
+                else if (Countdown_timer_PanelOpen == 4)       // ボタンを おしてね のSEを流す
+                {
+                    var sequence20 = DOTween.Sequence();
+                    sequence20.InsertCallback(5f, () => Checking_PanelOpen(20));
+                }
+                else if (Countdown_timer_PanelOpen == 5)
+                {
+                    var sequence25 = DOTween.Sequence();
+                    sequence25.InsertCallback(5f, () => Checking_PanelOpen(25));
+                }
+                else if (Countdown_timer_PanelOpen == 6)
+                {
+                    var sequence30 = DOTween.Sequence();
+                    sequence30.InsertCallback(5f, () => Auto_Push_OpenMyJankenPanel_Button());
+                }
+                else
+                {
+                    Debug.Log("右上「開始ボタン」の Countdown_timer_PanelOpen が 1～6 以外です");
+                    ResetCountdown_timer_PanelOpen_1();
+                }
             }
         }
         else
@@ -1830,40 +1840,51 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("ジャンケンパネルが開かれていて、決定ボタンか押されていないので、カウントダウン開始しました");
             Debug.Log("カードを選んでね");
 
-            if (Countdown_timer_Kettei == 1)
-            {
-                var sequence5 = DOTween.Sequence();
-                sequence5.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(5));
-            }
-            else if (Countdown_timer_Kettei == 2)
-            {
-                var sequence10 = DOTween.Sequence();
-                sequence10.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(10));
-            }
-            else if (Countdown_timer_Kettei == 3)
-            {
-                var sequence15 = DOTween.Sequence();
-                sequence15.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(15));
-            }
-            else if (Countdown_timer_Kettei == 4)
-            {
-                var sequence20 = DOTween.Sequence();
-                sequence20.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(20));
-            }
-            else if (Countdown_timer_Kettei == 5)
-            {
-                var sequence25 = DOTween.Sequence();
-                sequence25.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(25));
-            }
-            else if (Countdown_timer_Kettei == 6)
+            if (Life_MyPlayer <= 0)        // 体力がゼロになっているなら（気絶していたら）
             {
                 var sequence = DOTween.Sequence();
-                sequence.InsertCallback(5f, () => Auto_Push_Omakase_Button());
+                sequence.InsertCallback(2f, () => PushBtn_Omakase());
+
+                var sequence2 = DOTween.Sequence();
+                sequence2.InsertCallback(5f, () => Auto_Push_JankenTe_KetteiButton());
             }
-            else
+            else                           // 体力が1以上あれば（平常時）
             {
-                Debug.Log("「決定ボタン」の Countdown_timer_Kettei が 1～6 以外です");
-                ResetCountdown_timer_Kettei_1();
+                if (Countdown_timer_Kettei == 1)
+                {
+                    var sequence5 = DOTween.Sequence();
+                    sequence5.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(5));
+                }
+                else if (Countdown_timer_Kettei == 2)
+                {
+                    var sequence10 = DOTween.Sequence();
+                    sequence10.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(10));
+                }
+                else if (Countdown_timer_Kettei == 3)
+                {
+                    var sequence15 = DOTween.Sequence();
+                    sequence15.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(15));
+                }
+                else if (Countdown_timer_Kettei == 4)
+                {
+                    var sequence20 = DOTween.Sequence();
+                    sequence20.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(20));
+                }
+                else if (Countdown_timer_Kettei == 5)
+                {
+                    var sequence25 = DOTween.Sequence();
+                    sequence25.InsertCallback(5f, () => Countdown_KetteiButton_Hyoji(25));
+                }
+                else if (Countdown_timer_Kettei == 6)
+                {
+                    var sequence = DOTween.Sequence();
+                    sequence.InsertCallback(5f, () => Auto_Push_Omakase_Button());
+                }
+                else
+                {
+                    Debug.Log("「決定ボタン」の Countdown_timer_Kettei が 1～6 以外です");
+                    ResetCountdown_timer_Kettei_1();
+                }
             }
             //var sequenc3 = DOTween.Sequence();
             //sequenc3.InsertCallback(35f, () => korede_iikana_SE());
@@ -2055,6 +2076,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void PushOpenMyJankenPanel_Button()    // 【JK-01】OpenMyJankenPanel_Button（右上のセット開始ボタン） を押した時の処理
     {
+        //PlayerSC.anim.SetBool("down", false);
+
         MoveTo_MyKagePos();  // 裏でY軸位置の調整
         ResetCountdown_timer_Kettei_1();
         Countdown_Push_JankenTe_KetteiButton_Flg = true;
@@ -2356,7 +2379,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region // あいさつボタンを押した時の処理 一連
     public void Aisatsu_Who_Say()     // 誰があいさつしたの？ →それによってセリフの表示位置が変わる
     {
-        Direction_Heart_Damage_P1();
+        //PlayerSC.anim.SetBool("down", true);
+        //Direction_Heart_Damage_P1();
 
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
@@ -3352,8 +3376,22 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Debug.Log("【JK-204】待機中フラグ（確認用パラメータ） を 初期化（0にする）");
         Reset_NowWaiting();          // 待機中フラグ（確認用パラメータ） を 初期化（0にする）
 
+        Debug.Log("【JK-205】Katakori_stream");
         Katakori_stream();           // 肩こりフラグがONの時のみ実行される（治癒されるまで）
+
+        Debug.Log("【JK-206】Check_IamHealed");
+        Check_IamHealed();           // 完治して体力が全快したか確認（一定値で回復）
+
+        Debug.Log("【JK-207】Check_LifeZERO");
+        Check_LifeZERO();            // 体力がゼロになっているか確認する → セロなら白旗ALL
+
+        Debug.Log("【JK-208】Update_Life_Players");
         Update_Life_Players();       // 各プレイヤーのLifeを同期します
+
+        if (Life_MyPlayer > 0)        // 体力がゼロより上なら（通常時）
+        {
+            Redistribute_JankenCards();    // じゃんけんカードの再配布を実施します
+        }
 
         ResetCountdown_timer_PanelOpen_1();
         if (Flg_AfterJumpDone == 0)
@@ -11513,9 +11551,9 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
 
             //photonView.RPC("Update_PosX_Players", RpcTarget.All);
             Update_PosX_Players();                                  // 各プレイヤーのX軸位置を同期します
+            Tarai.transform.DORotate(new Vector3(0f, 0f, 0), 0f);   // たらいを上向きにセットする
             share_tarai_Position();                                 // たらいの位置を移動して共有する（MyTenjo）
             photonView.RPC("FallTarai", RpcTarget.All);             // たらいを表示 → 4秒後に非表示
-            Tarai.transform.DORotate(new Vector3(0f, 0f, 0), 0f);   // たらいを上向きにセットする
             Tarai.transform
                 .DOMove(PosMyHead, 0.5f)                            // たらいを下（キャラの頭の位置）に移動する（落下させる） (PosMyHead)
                                                                     //.SetRelative()     // 今いる位置を基準にする  
@@ -11524,25 +11562,35 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
                                    //Tarai.transform.DORotate(new Vector3(0f, 0f,180), 0.5f);
                     Tarai_Guwan.Play();                             // tarai当たった時のエフェクト
                     BGM_SE_MSC.Tarai_Guwan_SE();
-                    Set_minus_01_calculation_Life();                // Life -1
+                    int minus_Life = UnityEngine.Random.Range(1, 11);
+                    if(minus_Life <= 7)
+                    {
+                        Set_minus_01_calculation_Life();                // Life -1
+                    }
+                    else
+                    {
+                        Set_minus_02_calculation_Life();                // Life -2
+                    }                 
                     calculate_Life_Players();                       // 現在の体力 にマイナス/プラスします
                     ResetCountdown_timer_Kettei_1();                // 自動カウントダウンを一時停止
                     Update_Life_Players();                          // 各プレイヤーのLifeを同期します
 
                     PlayerSC.anim.SetBool("damage", true);
                     var sequence3 = DOTween.Sequence();
-                    sequence3.InsertCallback(1.5f, () => Tarai_Fukki());
+                    sequence3.InsertCallback(1.5f, () => Tarai_Fukki());    
 
-                    Sequence sequence = DOTween.Sequence()
-                    .OnStart(() =>
-                    {
-                        Debug.Log("たらいを回転させる");
-                        Tarai.transform.DORotate(new Vector3(0f, 0f, 180), 0.3f);
-                    })
-                    .Join(Tarai.transform.DOLocalJump(new Vector3(-1, -1.2f, 0), 1.5f, 1, 0.3f)
-                    .SetRelative()
-                    );
-                    sequence.Play();
+                    Debug.Log("たらいを回転させる");
+                    Tarai.transform.DORotate(new Vector3(0f, 0f, 180), 0.3f);
+                    //Tarai.transform.DOMove(new Vector3(PlayerSC.MyHead.transform.position.x-0.3f, PlayerSC.MyHead.transform.position.y, PlayerSC.MyHead.transform.position.z), 0.2f);
+                    //Tarai.transform.DOMove(new Vector3(PlayerSC.ToTarai.transform.position.x, PlayerSC.ToTarai.transform.position.y, PlayerSC.ToTarai.transform.position.z), 0.3f);
+                    var sequence = DOTween.Sequence();
+                    sequence.InsertCallback(0.3f, () => FallTarai_After03());
+                    Tarai.transform.DOJump(new Vector3(PlayerSC.ToTarai.transform.position.x, PlayerSC.ToTarai.transform.position.y, PlayerSC.ToTarai.transform.position.z), 0.5f, 1, 0.3f);
+
+
+                    //.Join(Tarai.transform.DOJump(new Vector3(PlayerSC.ToTarai.transform.position.x, PlayerSC.ToTarai.transform.position.y, PlayerSC.ToTarai.transform.position.z), 0.5f, 1, 0.3f);
+
+
                 });
         }
         else
@@ -11578,13 +11626,19 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         }
     }
 
+    public void FallTarai_After03()
+    {
+        Tarai.transform.DOMove(new Vector3(PlayerSC.ToTarai.transform.position.x, PlayerSC.ToTarai.transform.position.y - 0.01f, PlayerSC.ToTarai.transform.position.z), 5.3f);
+
+    }
+
     public void Tarai_Fukki()
     {
         PlayerSC.anim.SetBool("damage", false);
     }
 
     [PunRPC]
-    public void FallTarai()                                // たらいを表示、落下、非表示
+    public void FallTarai()                                // たらいを表示、(落下)、非表示
     {
         AppearTarai();                                     // 全員にたらいを一斉に表示ONさせる
         var sequence = DOTween.Sequence();
@@ -11602,7 +11656,10 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     public void share_tarai_Position()                // たらいの位置をジャンパーの位置に移動して全員に共有する
     {
         Debug.Log("たらいの位置を移動して共有する");
+        Tarai.transform.position = PlayerSC.MyTenjo.transform.position;
+        Tarai_Guwan.transform.position = new Vector3(PlayerSC.MyTenjo.transform.position.x, PlayerSC.MyHead.transform.position.y, PlayerSC.MyTenjo.transform.position.z);
 
+        /*
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
             PosY_taraiSet = StartMark1.transform.position.y;
@@ -11626,7 +11683,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
             PosY_taraiSet = StartMark4.transform.position.y;
             photonView.RPC("Tarai_MoveTo_PosX_Player4", RpcTarget.All);  // たらいの位置を移動して共有する
         }
-
+        */
         //photonView.RPC("Appeartarai_Group", RpcTarget.All);  // 全員にたらいを一斉に開かせる
     }
 
@@ -11785,6 +11842,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         AppearGameSet_LOGO();
         CloseOpenMyJankenPanel_Button();
         CloseDebug_Buttons();
+        ClosePanel_Kizetsu();      // 気絶パネルを非表示にする
         BGM_SE_MSC.Stop_BGM();
         BGM_SE_MSC.whistle_SE();
         var sequence = DOTween.Sequence();
@@ -12593,6 +12651,11 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         int_calculation_Life = -1;
     }
 
+    public void Set_minus_02_calculation_Life() // Life -2
+    {
+        int_calculation_Life = -2;
+    }
+
     public void calculate_Life_Players()   // 現在の体力 にマイナス/プラスします
     {
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
@@ -12654,6 +12717,7 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         photonView.RPC("totalLife_Koshin_Atai", RpcTarget.All);    // 該当プレイヤーのLifeを指定された値に更新する
         Check_DamageUmu();                                         // ダメージの有無を確認する
         Set_LifeHeart();                                           // 各プレイヤーの体力ハートをセットする
+        Check_LifeZERO();                                          // 体力がゼロになっているか確認する → セロなら白旗ALL
     }
 
     [PunRPC]
@@ -13553,6 +13617,113 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
     {
         Heart_Damage_P1.SetActive(false);        
     }
+
+    #region// LifeZERO（体力ゼロの時の処理＆回復）
+
+    public void Check_LifeZERO()  // 体力がゼロになっているか確認する → セロなら白旗ALL
+    {
+        Debug.Log("Check_LifeZERO スタート");
+        if (Shiai_Kaishi)        // 試合中であれば
+        {
+            Debug.Log("試合中です");
+            if (Life_MyPlayer <= 0)        // 体力がゼロになっているなら
+            {
+                LoseTurns();       // 体力がゼロになっているため、ジャンケンカードを白旗のみにします（一回休み）
+            }
+        }
+    }
+
+    public void LoseTurns()       // 体力がゼロになっているため、ジャンケンカードを白旗のみにします（一回休み）
+    {
+        Debug.Log("LoseTurns スタート");
+
+        PlayerSC.anim.SetBool("down", true);
+        Debug.Log("anim down スタート");
+
+        ShuffleCardsMSC.SetAll_WFlagCard();    // すべて白旗カード でセットします（このターンは負け確定）  
+
+        Debug.Log("SetAll_WFlagCard スタート");
+
+        if (Level_MyHealing <= 0)
+        {
+            var sequence = DOTween.Sequence();
+            sequence.InsertCallback(0.5f, () => AppearPanel_Kizetsu());
+            //AppearPanel_Kizetsu();
+            //var sequence = DOTween.Sequence();
+            //sequence.InsertCallback(5f, () => ClosePanel_Kizetsu());
+        }       
+    }
+
+    public void Check_IamHealed()  // 完治して体力が全快したか確認（一定値で回復）
+    {
+        if (Shiai_Kaishi)        // 試合中であれば
+        {
+            if (Life_MyPlayer <= 0)        // 体力がゼロになっているなら
+            {
+                PlayerSC.anim.SetBool("down", true);
+                int HealingPoint = UnityEngine.Random.Range(3, 10);  // 治療レベルにプラスする値（治療の進行具合）
+                Level_MyHealing = Level_MyHealing + HealingPoint;
+                if (Level_MyHealing >= 10)      // 治療レベルが10に達しました！
+                {
+                    // 自分の体力を8にする（全快しました！）
+                    if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
+                    {
+                        Life_MyPlayer = int_Default_Life;  // MAX ＝ 8
+                        Life_Player1 = Life_MyPlayer;
+                    }
+
+                    else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
+                    {
+                        Life_MyPlayer = int_Default_Life;
+                        Life_Player2 = Life_MyPlayer;
+                    }
+
+                    else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
+                    {
+                        Life_MyPlayer = int_Default_Life;
+                        Life_Player3 = Life_MyPlayer;
+                    }
+
+                    else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
+                    {
+                        Life_MyPlayer = int_Default_Life;
+                        Life_Player4 = Life_MyPlayer;
+                    }
+                    Update_Life_Players();          // 各プレイヤーのLifeを同期します
+                    Level_MyHealing = 0;
+                    PlayerSC.anim.SetBool("down", false);
+                    BGM_SE_MSC.cure_SE();  // ぴゅいーん（回復音）
+                    Text_Katakori_cure.text = "体力が回復しました";
+                    ClosePanel_Kizetsu();      // 気絶パネルを非表示にする
+
+                    Katakori_Mark.SetActive(false);   //非表示にする
+                    Katakori_to_SetWFlag = false;    // 肩こりが治癒しました（フラグOFF）
+                    HariQ_Button.SetActive(false);    //非表示にする
+                    Katakori_hajimari_Flg = true;
+
+                    var sequence = DOTween.Sequence();
+                    sequence.InsertCallback(4f, () => IamHealed2());
+                }
+
+            }
+        }
+    }
+
+    public void IamHealed2()  // 体力が回復しました2
+    {
+        Text_Katakori_cure.text = "";
+    }
+
+    public void AppearPanel_Kizetsu()
+    {
+        Panel_Kizetsu.SetActive(true);        
+    }
+
+    public void ClosePanel_Kizetsu()
+    {
+        Panel_Kizetsu.SetActive(false);        
+    }
+    #endregion
 
     #endregion
 

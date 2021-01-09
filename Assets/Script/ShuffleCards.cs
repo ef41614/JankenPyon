@@ -97,7 +97,7 @@ namespace say
             count_selected = 1;
 
             Reset_All();
-            Set_All();
+            //Set_All();
             ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
         }
 
@@ -189,6 +189,8 @@ namespace say
                 }
             }
 
+            Debug.Log("たらいが落ちるフラグによる判定スタート");
+
             if (SelectJankenMSC.Tarai_to_SetWFlag)            // たらいが落ちるフラグON
             {
                 //SelectJankenMSC.Tarai_to_SetWFlag = true;  // たらいが落ちると、確定で白旗一枚
@@ -216,6 +218,12 @@ namespace say
                     Set_WFlagCard3();             // 白旗カード をセットします  A,B,C,D,E              
                 }
             }
+
+            Debug.Log("たらいが落ちるフラグによる判定おわり");
+
+            //SelectJankenMSC.Check_LifeZERO();  // 体力がゼロになっているか確認する → セロなら白旗ALL
+            //Debug.Log("Check_LifeZERO おわり");
+
         }
 
 

@@ -21,11 +21,12 @@ public class PlayerScript : MonoBehaviour
     public GameObject Text_StepNum;
     float span = 0.1f;
     private float currentTime = 0f; // test
-    int FlyingTime_byTaihou = 10;   // 人間大砲で飛んでいる時間
+    //int FlyingTime_byTaihou = 10;   // 人間大砲で飛んでいる時間
     public ParticleSystem Taihou_Kemuri;
     public ParticleSystem Sunabokori;
     public GameObject MyTenjo;
     public GameObject MyHead;
+    public GameObject ToTarai;
 
     // Start is called before the first frame update
     void Start()
