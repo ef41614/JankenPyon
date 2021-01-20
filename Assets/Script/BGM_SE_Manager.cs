@@ -11,6 +11,8 @@ public class BGM_SE_Manager : MonoBehaviour
     public int firstRead_Selectjanken = 0;         // Selectjanken.cs が 2回呼ばれるのを防ぐためのフラグ
     public int firstRead_TestRoomController = 0;   // TestRoomController.cs が 2回呼ばれるのを防ぐためのフラグ
 
+    public int stage_No = 0;                       // Battle ステージ
+
     private AudioSource audioSource = null;
     AudioSource loopAudioSource;
 
@@ -22,6 +24,9 @@ public class BGM_SE_Manager : MonoBehaviour
     public AudioClip SasazukaHighwayPark;   // Mike シーンBGM
     public AudioClip FunAndLight;           // Battle シーンBGM
     public AudioClip Fanfare_Roop;
+    public AudioClip iseki_ogg;
+    public AudioClip NightTown_funk;
+    public AudioClip AcrivePark_jog;
 
     // SE
     public AudioClip whistle;
@@ -57,6 +62,8 @@ public class BGM_SE_Manager : MonoBehaviour
         }
         audioSource = GetComponent<AudioSource>();
         loopAudioSource = GetComponent<AudioSource>();
+        //stage_No = UnityEngine.Random.Range(0, 2);      // Battle ステージ
+
     }
 
     private void Start()
@@ -65,6 +72,8 @@ public class BGM_SE_Manager : MonoBehaviour
         loopAudioSource.loop = true;
         //Volume_Panel = GameObject.Find("Volume_Panel");
     }
+
+    #region // 音量調整
 
     public void find_Vol_Panel()
     {
@@ -100,6 +109,7 @@ public class BGM_SE_Manager : MonoBehaviour
         audioSource.volume = 1;
         loopAudioSource.volume = 1;
     }
+    #endregion
 
 
     #region // SE *******************************
@@ -216,6 +226,23 @@ public class BGM_SE_Manager : MonoBehaviour
         loopAudioSource.Play();
     }
 
+    public void iseki_ogg_BGM()
+    {
+        loopAudioSource.clip = iseki_ogg;
+        loopAudioSource.Play();
+    }
+
+    public void NightTown_funk_BGM()
+    {
+        loopAudioSource.clip = NightTown_funk;
+        loopAudioSource.Play();
+    }
+
+    public void AcrivePark_jog_BGM()
+    {
+        loopAudioSource.clip = AcrivePark_jog;
+        loopAudioSource.Play();
+    }
     #endregion
 
     /*

@@ -645,6 +645,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public GameObject Panel_AutoLogout;
     int Level_MyHealing = 0;  // 体力がゼロになってから回復するまでの治療の程度 （治療レベル）
     public GameObject Panel_Kizetsu;
+
+    public GameObject Stage_kaidou;
+    public GameObject Stage_iseki;
+    public GameObject NightTown;
+    public GameObject ActivePark;
+
     #endregion
 
     #region // 【START】初期設定の処理一覧
@@ -761,7 +767,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Debug.Log("【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する");
             ShareAfterJump();   //【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する
 
-            BGM_SE_MSC.FunAndLight_BGM();      // Battle シーンBGM
+            BattleStage_Set();                 // Battle シーンの 背景 と BGM をセットします
+            //BGM_SE_MSC.FunAndLight_BGM();      // Battle シーンBGM「街の街道」
 
             StartSet_Life_Players();   // 体力をセットします[初期値のセット]
             CloseStartLogo();
@@ -1084,6 +1091,83 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         // Debug.LogFormat("待機中合計：" + int_WaitingPlayers_All + "人");
     }
+
+    #region // BattleStage_Set ステージセット
+    public void BattleStage_Set()     // Battle シーンの 背景 と BGM をセットします
+    {
+        Close_All_Stage();
+        if (BGM_SE_MSC.stage_No == 0)
+        {
+            AppearStage_kaidou();
+            BGM_SE_MSC.FunAndLight_BGM();       // Battle シーンBGM「街の街道」
+        }
+        else if (BGM_SE_MSC.stage_No == 1)
+        {
+            AppearStage_iseki();
+            BGM_SE_MSC.iseki_ogg_BGM();         // Battle シーンBGM「ピラミッド（遺跡）」
+        }
+        else if (BGM_SE_MSC.stage_No == 2)
+        {
+            AppearNightTown();
+            BGM_SE_MSC.NightTown_funk_BGM();    // Battle シーンBGM「ナイトタウン」
+        }
+        else if (BGM_SE_MSC.stage_No == 3)
+        {
+            AppearActivePark();
+            BGM_SE_MSC.AcrivePark_jog_BGM();    // Battle シーンBGM「運動公園」
+        }
+    }
+
+    public void Close_All_Stage()   
+    {
+        CloseStage_kaidou();
+        CloseStage_iseki();
+        CloseNightTown();
+        CloseActivePark();
+    }
+
+    public void AppearStage_kaidou()  // 街道
+    {
+        Stage_kaidou.SetActive(true);
+    }
+
+    public void CloseStage_kaidou()  
+    {
+        Stage_kaidou.SetActive(false);
+    }
+
+    public void AppearStage_iseki()  // ピラミッド（遺跡）
+    {
+        Stage_iseki.SetActive(true);
+    }
+
+    public void CloseStage_iseki()
+    {
+        Stage_iseki.SetActive(false);
+    }
+
+    public void AppearNightTown()  // ナイトタウン
+    {
+        NightTown.SetActive(true);
+    }
+
+    public void CloseNightTown()
+    {
+        NightTown.SetActive(false);
+    }
+
+
+    public void AppearActivePark()  // 運動公園
+    {
+        ActivePark.SetActive(true);
+    }
+
+    public void CloseActivePark()
+    {
+        ActivePark.SetActive(false);
+    }
+    #endregion
+
 
     public void shareChangeFlg_PreCheck_Can_Hantei_Stream_True()   // 実行前ならtrue、実行始まったらfalse
     {
@@ -12500,8 +12584,11 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         ItemCard_Omote.sprite = Gold_Card;
         text_Item_Setsumei.text = "ゴールド +10G";
 
-        var sequence2 = DOTween.Sequence();
-        sequence2.InsertCallback(3f, () => Stream_Gold_Plus10());     // 所持金（ゴールド）を+10する 一連の処理
+        if (GameSet_Flg == false)     // 試合中であれば
+        {
+            var sequence2 = DOTween.Sequence();
+            sequence2.InsertCallback(3f, () => Stream_Gold_Plus10());     // 所持金（ゴールド）を+10する 一連の処理
+        }
     }
 
 
@@ -12526,9 +12613,12 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
             }
             else                     // 肩こり発症して1ターン目
             {
-                Katakori_hajimari_Flg = false;             // フラグを肩こり発症して2ターン目以降の扱いにする
-                var sequence = DOTween.Sequence();
-                sequence.InsertCallback(3f, () => Katakori_stream_After3());  // 肩こりフラグがONの時のみ実行される（治癒されるまで）
+                Katakori_hajimari_Flg = false;       // フラグを肩こり発症して2ターン目以降の扱いにする
+                if (GameSet_Flg == false)            // 試合中であれば
+                {
+                    var sequence = DOTween.Sequence();
+                    sequence.InsertCallback(3f, () => Katakori_stream_After3());  // 肩こりフラグがONの時のみ実行される（治癒されるまで）
+                }
             }
         }
     }

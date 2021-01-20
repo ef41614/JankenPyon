@@ -80,7 +80,7 @@ public class PlayerScript : MonoBehaviour
             //////////////////////////// 移動終了地点   // ジャンプする力  // ジャンプする回数   // アニメーション時間
             transform
                 // .DOJump(new Vector3(MoveForward_StepNum * 1.0f, 0f), 0.5f, MoveForward_StepNum, MoveForward_StepNum * 1.0f)
-                .DOJump(new Vector3(SelectJankenMSC.original_StepNum * 1.0f, 0f), 0.5f, SelectJankenMSC.original_StepNum, SelectJankenMSC.original_StepNum * 1.0f)
+                .DOJump(new Vector3(SelectJankenMSC.original_StepNum * 1.0f, 0f), 0.5f, SelectJankenMSC.original_StepNum, SelectJankenMSC.original_StepNum * 0.75f)
                 .SetRelative()
                 .SetEase(Ease.Linear)
                 .SetRelative()

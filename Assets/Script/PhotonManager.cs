@@ -16,7 +16,11 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     RoomOptions roomOptions;
     string Chimei = "";
     string Michi = "";
-    string Jikan = "";
+    //string Jikan = "";
+
+    int Rnd_Chimei;
+    int Rnd_Michi;
+    int Rnd_Jikan;
 
     float span = 5f;
     private float currentTime = 0f; // test
@@ -41,6 +45,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         Debug.Log("PhotonManager 出席確認");
+        BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
         BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
         BGM_SE_MSC.SasazukaHighwayPark_BGM();
 
@@ -67,11 +72,14 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     private void Set_initial_Parameters()      // ランダムマッチ用のルーム名を作成します
     {
         Debug.Log("Set_initial_Parameters() 変数初期化処理");
+
+        BGM_SE_MSC.stage_No = UnityEngine.Random.Range(0, 4);      // Battle ステージ
+
         // 部屋名設定
         RudCreate_Chimei();
         RudCreate_Michi();
-        RudCreate_Jikan();
-        dispRoomName = Chimei+" _" + Michi + " ("+Jikan+" )";
+        //RudCreate_Jikan();
+        dispRoomName = Chimei + " " + Michi;
         Debug.Log("dispRoomName をランダム生成します" + dispRoomName);
         //dispRoomName = "";
         dispMessage = "";
@@ -330,90 +338,312 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     #region// ステージ名を組み合わせでランダムに生成する処理
     public void RudCreate_Chimei()  //変数「 Rnd_Chimei 」の値を元に、 全10パターンの間で場合分けをする
     {
-        int Rnd_Chimei = UnityEngine.Random.Range(1, 11);
+        Rnd_Chimei = UnityEngine.Random.Range(1, 10);
 
-        switch (Rnd_Chimei)
+        if (BGM_SE_MSC.stage_No == 0)  // 街の街道
         {
-            case 1: //
-                Chimei = "コンパトリ";
-                break;
-            case 2: //
-                Chimei = "ペリアーテ";
-                break;
-            case 3: //
-                Chimei = "サクローナ";
-                break;
-            case 4: //
-                Chimei = "モンテルニ";
-                break;
-            case 5: //
-                Chimei = "ジェナポリ";
-                break;
-            case 6: //
-                Chimei = "クレモデナ";
-                break;
-            case 7: //
-                Chimei = "ディカーラ";
-                break;
-            case 8: //
-                Chimei = "ディポバッソ";
-                break;
-            case 9: //
-                Chimei = "リブレグラ";
-                break;
-            case 10: //
-                Chimei = "スカレッコ";
-                break;
-            default:
-                // その他処理
-                break;
+            switch (Rnd_Chimei)
+            {
+                case 1: //
+                    Chimei = "コンパトリ";
+                    break;
+                case 2: //
+                    Chimei = "ペリアーテ";
+                    break;
+                case 3: //
+                    Chimei = "サクローナ";
+                    break;
+                case 4: //
+                    Chimei = "モンテルニ";
+                    break;
+                case 5: //
+                    Chimei = "ジェナポリ";
+                    break;
+                case 6: //
+                    Chimei = "クレモデナ";
+                    break;
+                case 7: //
+                    Chimei = "ディカーラ";
+                    break;
+                case 8: //
+                    Chimei = "ディポバッソ";
+                    break;
+                case 9: //
+                    Chimei = "スカレッコ";
+                    break;
+                default:
+                    // その他処理
+                    break;
+            }
+        }
+
+        if (BGM_SE_MSC.stage_No == 1)   // エジプトのピラミッド
+        {
+            switch (Rnd_Chimei)
+            {
+                case 1: //
+                    Chimei = "ラッシメピレ";
+                    break;
+                case 2: //
+                    Chimei = "ペエニ";
+                    break;
+                case 3: //
+                    Chimei = "ドラクーアー";
+                    break;
+                case 4: //
+                    Chimei = "リングアコ";
+                    break;
+                case 5: //
+                    Chimei = "コツヨン";
+                    break;
+                case 6: //
+                    Chimei = "ニュポ";
+                    break;
+                case 7: //
+                    Chimei = "ヘテー";
+                    break;
+                case 8: //
+                    Chimei = "ストーララト";
+                    break;
+                case 9: //
+                    Chimei = "ソコゾダ";
+                    break;
+                default:
+                    // その他処理
+                    break;
+            }
+        }
+
+        if (BGM_SE_MSC.stage_No == 2)   // ナイトタウン
+        {
+            switch (Rnd_Chimei)
+            {
+                case 1: //
+                    Chimei = "トラース";
+                    break;
+                case 2: //
+                    Chimei = "ナブスト";
+                    break;
+                case 3: //
+                    Chimei = "モンファルク";
+                    break;
+                case 4: //
+                    Chimei = "ケーハイク";
+                    break;
+                case 5: //
+                    Chimei = "ローリ";
+                    break;
+                case 6: //
+                    Chimei = "ゼンデ";
+                    break;
+                case 7: //
+                    Chimei = "コーバー";
+                    break;
+                case 8: //
+                    Chimei = "グランベルス";
+                    break;
+                case 9: //
+                    Chimei = "ウフォレート";
+                    break;
+                default:
+                    // その他処理
+                    break;
+            }
+        }
+
+        if (BGM_SE_MSC.stage_No == 3)   // 運動公園
+        {
+            switch (Rnd_Chimei)
+            {
+                case 1: //
+                    Chimei = "ルスル";
+                    break;
+                case 2: //
+                    Chimei = "イーストン";
+                    break;
+                case 3: //
+                    Chimei = "ソルムスピ";
+                    break;
+                case 4: //
+                    Chimei = "フォート";
+                    break;
+                case 5: //
+                    Chimei = "エックリー";
+                    break;
+                case 6: //
+                    Chimei = "ルディーキャン";
+                    break;
+                case 7: //
+                    Chimei = "ポップルドウ";
+                    break;
+                case 8: //
+                    Chimei = "ミアドロ";
+                    break;
+                case 9: //
+                    Chimei = "シーブロ";
+                    break;
+                default:
+                    // その他処理
+                    break;
+            }
         }
     }
-
 
     public void RudCreate_Michi()  //変数「 Rnd_Michi 」の値を元に、 全10パターンの間で場合分けをする
     {
-        int Rnd_Michi = UnityEngine.Random.Range(1, 11);
+        Rnd_Michi = UnityEngine.Random.Range(1, 10);
 
-        switch (Rnd_Michi)
+        if (BGM_SE_MSC.stage_No == 0)   // 街の街道
         {
-            case 1: //
-                Michi = " いなかみち";
-                break;
-            case 2: //
-                Michi = " ストリート";
-                break;
-            case 3: //
-                Michi = " しょうてんがい";
-                break;
-            case 4: //
-                Michi = " ゆうほどう";
-                break;
-            case 5: //
-                Michi = " さんぽみち";
-                break;
-            case 6: //
-                Michi = " ２ばんがい";
-                break;
-            case 7: //
-                Michi = " ひがしどおり";
-                break;
-            case 8: //
-                Michi = " ちゅうおうどおり";
-                break;
-            case 9: //
-                Michi = " ５ばんつうろ";
-                break;
-            case 10: //
-                Michi = " うらみち";
-                break;
-            default:
-                // その他処理
-                break;
+            switch (Rnd_Michi)
+            {
+                case 1: //
+                    Michi = " いなかみち";
+                    break;
+                case 2: //
+                    Michi = " ストリート";
+                    break;
+                case 3: //
+                    Michi = " しょうてんがい";
+                    break;
+                case 4: //
+                    Michi = " ゆうほどう";
+                    break;
+                case 5: //
+                    Michi = " さんぽみち";
+                    break;
+                case 6: //
+                    Michi = " ２ばんがい";
+                    break;
+                case 7: //
+                    Michi = " ひがしどおり";
+                    break;
+                case 8: //
+                    Michi = " ちゅうおうどおり";
+                    break;
+                case 9: //
+                    Michi = " うらみち";
+                    break;
+                default:
+                    // その他処理
+                    break;
+            }
         }
+
+        if (BGM_SE_MSC.stage_No == 1)   // エジプトのピラミッド
+        {
+            switch (Rnd_Michi)
+            {
+                case 1: //
+                    Michi = " 王の間";
+                    break;
+                case 2: //
+                    Michi = " 王妃の間";
+                    break;
+                case 3: //
+                    Michi = " 大回廊";
+                    break;
+                case 4: //
+                    Michi = " 地下の間";
+                    break;
+                case 5: //
+                    Michi = " 玄室";
+                    break;
+                case 6: //
+                    Michi = " 上昇通路";
+                    break;
+                case 7: //
+                    Michi = " 水平通路";
+                    break;
+                case 8: //
+                    Michi = " 下降通路";
+                    break;
+                case 9: //
+                    Michi = " 控えの間";
+                    break;
+                default:
+                    // その他処理
+                    break;
+            }
+        }
+
+        if (BGM_SE_MSC.stage_No == 2)   // ナイトタウン
+        {
+            switch (Rnd_Michi)
+            {
+                case 1: //
+                    Michi = " いなかみち";
+                    break;
+                case 2: //
+                    Michi = " ストリート";
+                    break;
+                case 3: //
+                    Michi = " しょうてんがい";
+                    break;
+                case 4: //
+                    Michi = " ゆうほどう";
+                    break;
+                case 5: //
+                    Michi = " さんぽみち";
+                    break;
+                case 6: //
+                    Michi = " ２ばんがい";
+                    break;
+                case 7: //
+                    Michi = " ひがしどおり";
+                    break;
+                case 8: //
+                    Michi = " ちゅうおうどおり";
+                    break;
+                case 9: //
+                    Michi = " うらみち";
+                    break;
+                default:
+                    // その他処理
+                    break;
+            }
+        }
+
+        if (BGM_SE_MSC.stage_No == 3)   // 運動公園
+        {
+            switch (Rnd_Michi)
+            {
+                case 1: //
+                    Michi = " 運動公園";
+                    break;
+                case 2: //
+                    Michi = " 運動場";
+                    break;
+                case 3: //
+                    Michi = " パルコ";
+                    break;
+                case 4: //
+                    Michi = " 競技場";
+                    break;
+                case 5: //
+                    Michi = " グラウンド";
+                    break;
+                case 6: //
+                    Michi = " スポーツ場";
+                    break;
+                case 7: //
+                    Michi = " アスレチック場";
+                    break;
+                case 8: //
+                    Michi = " パーク";
+                    break;
+                case 9: //
+                    Michi = " 広場";
+                    break;
+                default:
+                    // その他処理
+                    break;
+            }
+        }
+
     }
 
-
+    /*
     public void RudCreate_Jikan()  //変数「 Rnd_Jikan 」の値を元に、 全5パターンの間で場合分けをする
     {
         int Rnd_Jikan = UnityEngine.Random.Range(1, 6);
@@ -440,6 +670,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
                 break;
         }
     }
+    */
     #endregion
 
 
