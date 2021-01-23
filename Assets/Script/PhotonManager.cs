@@ -673,7 +673,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     */
     #endregion
 
-
+    #region// 設定GUI
     // ---------- 設定GUI ----------
     void OnGUI()
     {
@@ -764,4 +764,5 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             }
         }
     }
+    #endregion
 }

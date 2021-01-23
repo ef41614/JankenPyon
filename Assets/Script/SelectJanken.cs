@@ -1166,6 +1166,55 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         ActivePark.SetActive(false);
     }
+
+
+    #region// ステージ情報共有                    // Battle シーンに移ったタイミングで
+    public void ToShareStageNo()                  // ステージ情報共有（ログインしてきた他プレイヤーに、既に決定している StageNo を共有する）
+    {
+        if (BGM_SE_MSC.stage_No == 0)             // 街道
+        {
+            photonView.RPC("ShareStageNo_00", RpcTarget.Others);
+        }
+        else if (BGM_SE_MSC.stage_No == 1)       // Battle シーンBGM「ピラミッド（遺跡）」
+        {
+            photonView.RPC("ShareStageNo_01", RpcTarget.Others);
+        }
+        else if (BGM_SE_MSC.stage_No == 2)     // Battle シーンBGM「ナイトタウン」
+        {
+            photonView.RPC("ShareStageNo_02", RpcTarget.Others);
+        }
+        else if (BGM_SE_MSC.stage_No == 3)     // Battle シーンBGM「運動公園」
+        {
+            photonView.RPC("ShareStageNo_03", RpcTarget.Others);
+        }
+    }
+
+    [PunRPC]
+    public void ShareStageNo_00()
+    {
+        BGM_SE_MSC.stage_No = 0;
+    }
+
+    [PunRPC]
+    public void ShareStageNo_01()
+    {
+        BGM_SE_MSC.stage_No = 1;
+    }
+
+    [PunRPC]
+    public void ShareStageNo_02()
+    {
+        BGM_SE_MSC.stage_No = 2;
+    }
+
+    [PunRPC]
+    public void ShareStageNo_03()
+    {
+        BGM_SE_MSC.stage_No = 3;
+    }
+
+    #endregion
+
     #endregion
 
 

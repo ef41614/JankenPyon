@@ -11,7 +11,7 @@ public class BGM_SE_Manager : MonoBehaviour
     public int firstRead_Selectjanken = 0;         // Selectjanken.cs が 2回呼ばれるのを防ぐためのフラグ
     public int firstRead_TestRoomController = 0;   // TestRoomController.cs が 2回呼ばれるのを防ぐためのフラグ
 
-    public int stage_No = 0;                       // Battle ステージ
+    public int stage_No = -1;                       // Battle ステージ
 
     private AudioSource audioSource = null;
     AudioSource loopAudioSource;
