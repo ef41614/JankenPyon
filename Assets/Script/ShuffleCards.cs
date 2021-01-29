@@ -37,6 +37,9 @@ namespace say
         public int RndCreateCard_C = 0;
         public int RndCreateCard_D = 0;
         public int RndCreateCard_E = 0;
+        public int int_StockCard_Up = 0;
+        public int int_StockCard_Down = 0;
+
         public GameObject Button_A;
         public GameObject Button_B;
         public GameObject Button_C;
@@ -73,6 +76,10 @@ namespace say
 
         //public bool Tarai_to_SetWFlag = false;  // たらいが落ちると、確定で白旗一枚
 
+        public GameObject Stock_Card_U;      // ストックカード 右枠
+        public GameObject Stock_Button_U;
+
+
         private void Awake()
         {
             Debug.Log("ShuffleCards Awake 出席確認");
@@ -99,6 +106,7 @@ namespace say
             Reset_All();
             //Set_All();
             ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
+            Stock_Button_U.SetActive(false);
         }
 
 
@@ -825,6 +833,15 @@ namespace say
         public void CloseWait_JankenPanel()        //●非表示にする
         {
             Wait_JankenPanel.SetActive(false);
+        }
+        #endregion
+
+        #region// カードストック機能 stock
+        public void StockU_Set_MutekiCard()  // StockR に むてきカード をセットします  
+        {
+            Debug.Log("StockU に むてきカード をセットします  ");
+            Stock_Button_U.gameObject.GetComponent<Image>().sprite = sprite_Muteki;
+            int_StockCard_Up = 601;
         }
         #endregion
 

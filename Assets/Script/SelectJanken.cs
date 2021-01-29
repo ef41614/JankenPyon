@@ -375,14 +375,18 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Button Btn_C;
     public Button Btn_D;
     public Button Btn_E;
+    public Button Btn_StockCard_Up;
+    public Button Btn_StockCard_Down;
     public Button Btn_Omakase;    
     public Button Btn_Redistribute;  // じゃんけんカードの再配布ボタン
 
-    public bool CanPushBtn_A = true;
-    public bool CanPushBtn_B = true;
-    public bool CanPushBtn_C = true;
-    public bool CanPushBtn_D = true;
-    public bool CanPushBtn_E = true;
+    public int CanPushBtn_A = 0; // 0:true, 1:false
+    public int CanPushBtn_B = 0; // 0:true, 1:false
+    public int CanPushBtn_C = 0; // 0:true, 1:false
+    public int CanPushBtn_D = 0; // 0:true, 1:false
+    public int CanPushBtn_E = 0; // 0:true, 1:false
+    public int CanPushBtn_StockCard_Up = 0;
+    public int CanPushBtn_StockCard_Down = 0;
     public bool CanPushBtn_Omakase = true;
 
     public GameObject Text_WaitingPlayers_All;
@@ -1093,6 +1097,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     }
 
     #region // BattleStage_Set ステージセット
+    [PunRPC]
     public void BattleStage_Set()     // Battle シーンの 背景 と BGM をセットします
     {
         Close_All_Stage();
@@ -1187,6 +1192,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("ShareStageNo_03", RpcTarget.Others);
         }
+        photonView.RPC("BattleStage_Set", RpcTarget.Others);  // Battle シーンの 背景 と BGM をセットします
     }
 
     [PunRPC]
@@ -2282,7 +2288,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Debug.Log("【JK-01】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたら「決定ボタン」を表示する");
         ShuffleCardsMSC.CloseKetteiBtn();         // ボタンを閉じる（消す）
-        if (!CanPushBtn_A && !CanPushBtn_B && !CanPushBtn_C && !CanPushBtn_D && !CanPushBtn_E)  // 5つすべてのジャンケン手を押した後ならば
+        if ((CanPushBtn_A + CanPushBtn_B + CanPushBtn_C + CanPushBtn_D + CanPushBtn_E + CanPushBtn_StockCard_Up + CanPushBtn_StockCard_Down) >= 5)  // 合計5枚分のじゃんけんカードを押した後ならば
         {
             ShuffleCardsMSC.AppearKetteiBtn();    // 決定ボタンを表示する
             Debug.Log("【JK-01】条件に合っていたため「決定ボタン」を表示しました");
@@ -2849,6 +2855,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         //CloseMyKakejiku();    // 自分はログインしているので、掛け軸外しますよ
         photonView.RPC("CloseMyKakejiku", RpcTarget.All);
+
+        if (Btn_StockCard_Up.interactable == false)  // ストックカードを押していたら、→ ストック削除or非表示
+        {
+            ShuffleCardsMSC.Stock_Button_U.SetActive(false);
+        }
     }
 
     [PunRPC]
@@ -10167,7 +10178,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Push_Btn_A() // 【JK-02】ジャンケンカードボタン押したよ
     {
         Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
-        if (CanPushBtn_A)
+        if (CanPushBtn_A ==0)
         {
             Debug.Log("【JK-02】RndCreateCard_A ： " + ShuffleCardsMSC.RndCreateCard_A);
             if (ShuffleCardsMSC.RndCreateCard_A == 0) //グー
@@ -10209,7 +10220,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             }
         }
         Btn_A.interactable = false;
-        CanPushBtn_A = false;
+        CanPushBtn_A = 1;
         Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
         BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
     }
@@ -10217,7 +10228,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Push_Btn_B() // 【JK-02】ジャンケンカードボタン押したよ
     {
         Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
-        if (CanPushBtn_B)
+        if (CanPushBtn_B == 0)
         {
             Debug.Log("【JK-02】RndCreateCard_B ： " + ShuffleCardsMSC.RndCreateCard_B);
             if (ShuffleCardsMSC.RndCreateCard_B == 0) //グー
@@ -10259,7 +10270,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             }
         }
         Btn_B.interactable = false;
-        CanPushBtn_B = false;
+        CanPushBtn_B = 1;
         Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
         BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
     }
@@ -10267,7 +10278,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Push_Btn_C() // 【JK-02】ジャンケンカードボタン押したよ
     {
         Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
-        if (CanPushBtn_C)
+        if (CanPushBtn_C == 0)
         {
             Debug.Log("【JK-02】RndCreateCard_C ： " + ShuffleCardsMSC.RndCreateCard_C);
             if (ShuffleCardsMSC.RndCreateCard_C == 0) //グー
@@ -10309,7 +10320,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             }
         }
         Btn_C.interactable = false;
-        CanPushBtn_C = false;
+        CanPushBtn_C = 1;
         Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
         BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
     }
@@ -10317,7 +10328,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Push_Btn_D() // 【JK-02】ジャンケンカードボタン押したよ
     {
         Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
-        if (CanPushBtn_D)
+        if (CanPushBtn_D == 0)
         {
             Debug.Log("【JK-02】RndCreateCard_D ： " + ShuffleCardsMSC.RndCreateCard_D);
             if (ShuffleCardsMSC.RndCreateCard_D == 0) //グー
@@ -10359,7 +10370,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             }
         }
         Btn_D.interactable = false;
-        CanPushBtn_D = false;
+        CanPushBtn_D = 1;
         Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
         BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
     }
@@ -10367,7 +10378,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Push_Btn_E() // 【JK-02】ジャンケンカードボタン押したよ
     {
         Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
-        if (CanPushBtn_E)
+        if (CanPushBtn_E == 0)
         {
             Debug.Log("【JK-02】RndCreateCard_E ： " + ShuffleCardsMSC.RndCreateCard_E);
             if (ShuffleCardsMSC.RndCreateCard_E == 0) //グー
@@ -10409,9 +10420,62 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             }
         }
         Btn_E.interactable = false;
-        CanPushBtn_E = false;
+        CanPushBtn_E = 1;
         Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
         BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
+    }
+
+    public void Push_StockCard_Up() // StockCard_Up ボタン押したよ
+    {
+        Debug.Log("StockCard_Up ボタン を1枚 押下しました");
+        if (ShuffleCardsMSC.MyJankenPanel.activeSelf)   // Myジャンケンパネルが開かれていたら
+        {
+            if (CanPushBtn_StockCard_Up == 0)
+            {
+                Debug.Log("int_StockCard_Up ： " + ShuffleCardsMSC.int_StockCard_Up);
+                if (ShuffleCardsMSC.int_StockCard_Up == 0) //グー
+                {
+                    SelectGu();
+                }
+                else if (ShuffleCardsMSC.int_StockCard_Up == 1) //チョキ
+                {
+                    SelectChoki();
+                }
+                else if (ShuffleCardsMSC.int_StockCard_Up == 2) //パー
+                {
+                    SelectPa();
+                }
+                else if (ShuffleCardsMSC.int_StockCard_Up == 13) //王さま
+                {
+                    SelectKing();
+                }
+                else if (ShuffleCardsMSC.int_StockCard_Up == 23) //どれい
+                {
+                    SelectDorei();
+                }
+                else if (ShuffleCardsMSC.int_StockCard_Up == 601) //むてき
+                {
+                    SelectMuteki();
+                }
+                else if (ShuffleCardsMSC.int_StockCard_Up == 88) //壁
+                {
+                    SelectWall();
+                }
+                else if (ShuffleCardsMSC.int_StockCard_Up == 46) //白旗
+                {
+                    SelectWFlag();
+                }
+
+                else
+                {
+                    Debug.Log("ランダム値の見直しが必要！！");
+                }
+            }
+            Btn_StockCard_Up.interactable = false;
+            CanPushBtn_StockCard_Up = 1;
+            Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
+            BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
+        }
     }
 
     public void PushBtn_Omakase() // 【JK-02】おまかせボタン押したよ
@@ -10444,37 +10508,45 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ToCanPush_C();
         ToCanPush_D();
         ToCanPush_E();
+        ToCanPushBtn_StockCard_Up();
         ToCanPush_Omakase();
     }
 
     public void ToCanPush_A() // 【JK-02】ジャンケンカードボタン押せるようにするよ
     {
         Btn_A.interactable = true;
-        CanPushBtn_A = true;
+        CanPushBtn_A = 0;
     }
 
     public void ToCanPush_B() // 【JK-02】ジャンケンカードボタン押せるようにするよ
     {
         Btn_B.interactable = true;
-        CanPushBtn_B = true;
+        CanPushBtn_B = 0;
     }
 
     public void ToCanPush_C() // 【JK-02】ジャンケンカードボタン押せるようにするよ
     {
         Btn_C.interactable = true;
-        CanPushBtn_C = true;
+        CanPushBtn_C = 0;
     }
 
     public void ToCanPush_D() // 【JK-02】ジャンケンカードボタン押せるようにするよ
     {
         Btn_D.interactable = true;
-        CanPushBtn_D = true;
+        CanPushBtn_D = 0;
     }
 
     public void ToCanPush_E() // 【JK-02】ジャンケンカードボタン押せるようにするよ
     {
         Btn_E.interactable = true;
-        CanPushBtn_E = true;
+        CanPushBtn_E = 0;
+    }
+
+    public void ToCanPushBtn_StockCard_Up() // 【JK-02】ジャンケンカードボタン押せるようにするよ
+    {
+        Btn_StockCard_Up.interactable = true;
+        CanPushBtn_StockCard_Up = 0;
+        //ShuffleCardsMSC.Stock_Button_U.SetActive(true);
     }
 
     public void ToCanPush_Omakase() // 【JK-02】おまかせボタン押せるようにするよ
@@ -12608,15 +12680,20 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
 
     public void RandomChange_ItemCard_Omote()   // アイテムカードの図柄を ランダムで変更する
     {
-        int RandomChange_ItemCard = UnityEngine.Random.Range(1, 5);
+        int RandomChange_ItemCard = UnityEngine.Random.Range(1, 70);
 
         if(RandomChange_ItemCard <= 2)
         {
             ChangeTo_Fatigue_Card();   // 図柄を 疲労カード にする
         }
-        else if (RandomChange_ItemCard >= 3)
+        else if (RandomChange_ItemCard >= 3 && RandomChange_ItemCard <= 4)
         {
-            ChangeTo_Gold_Card();   // 図柄を Goldカード にする
+            ChangeTo_Gold_Card();      // 図柄を Goldカード にする
+        }
+        else
+        {
+            ShuffleCardsMSC.Stock_Button_U.SetActive(true);
+            ChangeTo_Muteki_Card();    // 図柄を むてきチョキカード にする
         }
     }
 
@@ -12640,6 +12717,12 @@ SelectJankenMSC.PosX_Player4 = receivePosX_Player4;
         }
     }
 
+    public void ChangeTo_Muteki_Card()   // 図柄を むてきチョキカード にする
+    {
+        ItemCard_Omote.sprite = ShuffleCardsMSC.sprite_Muteki;
+        text_Item_Setsumei.text = "むてきチョキ をストック";
+        ShuffleCardsMSC.StockU_Set_MutekiCard();     // StockU に むてきカード をセットします  
+    }
 
     #endregion
 

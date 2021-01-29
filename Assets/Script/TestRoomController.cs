@@ -103,7 +103,7 @@ namespace BEFOOL.PhotonTest
             Set_PNameTextAll();
             SelectJankenMSC.ToShare_InitialSetting();   // プレイヤー名 横の顔アイコンをセットして共有する
             //ToSet_MyHeadName();                       // Myプレイヤー名をキャラの頭上に表示
-            SelectJankenMSC.ToShareStageNo();           // ステージ情報共有
+            SelectJankenMSC.ToShareStageNo();           // ステージ情報共有（ログインしてきた他プレイヤーに、既に決定している StageNo を共有する）
         }
 
         public void LoginCheck(Player player)
