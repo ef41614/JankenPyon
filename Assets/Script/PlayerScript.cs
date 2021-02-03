@@ -27,6 +27,8 @@ public class PlayerScript : MonoBehaviour
     public GameObject MyTenjo;
     public GameObject MyHead;
     public GameObject ToTarai;
+    public GameObject Barrier;   // 魔方陣と上バリアのセット
+
 
     // Start is called before the first frame update
     void Start()
@@ -162,5 +164,17 @@ public class PlayerScript : MonoBehaviour
     {
         anim.SetFloat("Speed", 2.0f);
         anim.SetTrigger("P_run");
+    }
+
+    public void AppearBarrier()
+    {
+        Debug.Log("AppearBarrier！");
+        Barrier.SetActive(true);
+    }
+
+    public void CloseBarrier()
+    {
+        Debug.Log("CloseBarrier！");
+        Barrier.SetActive(false);
     }
 }

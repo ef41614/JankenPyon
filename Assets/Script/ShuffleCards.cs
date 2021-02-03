@@ -76,8 +76,10 @@ namespace say
 
         //public bool Tarai_to_SetWFlag = false;  // たらいが落ちると、確定で白旗一枚
 
-        public GameObject Stock_Card_U;      // ストックカード 右枠
-        public GameObject Stock_Button_U;
+        public GameObject Stock_Card_Up;      // ストックカード Up枠
+        public GameObject Stock_Button_Up;
+        public GameObject Stock_Card_Down;      // ストックカード Down枠
+        public GameObject Stock_Button_Down;
 
 
         private void Awake()
@@ -106,7 +108,8 @@ namespace say
             Reset_All();
             //Set_All();
             ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
-            Stock_Button_U.SetActive(false);
+            Stock_Button_Up.SetActive(false);
+            Stock_Button_Down.SetActive(false);
         }
 
 
@@ -837,11 +840,18 @@ namespace say
         #endregion
 
         #region// カードストック機能 stock
-        public void StockU_Set_MutekiCard()  // StockR に むてきカード をセットします  
+        public void StockUp_Set_MutekiCard()  // StockU に むてきカード をセットします  
         {
             Debug.Log("StockU に むてきカード をセットします  ");
-            Stock_Button_U.gameObject.GetComponent<Image>().sprite = sprite_Muteki;
+            Stock_Button_Up.gameObject.GetComponent<Image>().sprite = sprite_Muteki;
             int_StockCard_Up = 601;
+        }
+
+        public void StockDown_Set_MutekiCard()  // StockDown に むてきカード をセットします  
+        {
+            Debug.Log("StockDown に むてきカード をセットします  ");
+            Stock_Button_Down.gameObject.GetComponent<Image>().sprite = sprite_Muteki;
+            int_StockCard_Down = 601;
         }
         #endregion
 

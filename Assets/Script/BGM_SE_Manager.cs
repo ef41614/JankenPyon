@@ -45,6 +45,7 @@ public class BGM_SE_Manager : MonoBehaviour
     public AudioClip Distribute_JankenCards_18;
     public AudioClip Card_Mekuri;
     public AudioClip cancel;
+    public AudioClip barrier;
 
     public string Aikotoba = "";  // あいことば（ルーム名になる）
 
@@ -191,6 +192,11 @@ public class BGM_SE_Manager : MonoBehaviour
     public void cancel_SE()
     {
         audioSource.PlayOneShot(cancel);
+    }
+
+    public void barrier_SE()
+    {
+        audioSource.PlayOneShot(barrier);
     }
     #endregion
 
