@@ -84,12 +84,13 @@ namespace say
 
         private void Awake()
         {
-            Debug.Log("ShuffleCards Awake 出席確認");
+            Debug.Log("ShuffleCards Awake 出席確認はじめ");
             ClosePanel_To_Defalt();   // 不要なパネルを閉じて、デフォルト状態にする
             SelectJankenMSC = SelectJankenManager.GetComponent<SelectJanken>();
             TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
             BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
             BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
+            Debug.Log("ShuffleCards Awake 出席確認おわり");
         }
 
         //☆################☆################  Start  ################☆################☆

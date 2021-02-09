@@ -372,7 +372,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public Button Btn_E;
     public Button Btn_StockCard_Up;
     public Button Btn_StockCard_Down;
-    public Button Btn_Omakase;    
+    public Button Btn_Omakase;
     public Button Btn_Redistribute;  // じゃんけんカードの再配布ボタン
 
     public int CanPushBtn_A = 0; // 0:true, 1:false
@@ -658,12 +658,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             this.photonView = GetComponent<PhotonView>();
             Debug.Log("【START-01】SelectJanken void Awake() 出席確認1");
-            //Debug.Log("【START-01】キャラ アバター 誰を選んだかを（ログイン前画面から）コンバートします");
+            Debug.Log("【START-01】キャラ アバター 誰を選んだかを（ログイン前画面から）コンバートします");
             int_conMyCharaAvatar = CLauncherScript.get_int_MyCharaAvatar(); // 【START-01】キャラ アバター 誰を選んだか（ログイン前画面からコンバートする）
 
-            //Debug.Log("【START-02】int_conMyCharaAvatar（★キャラアバター） ： " + int_conMyCharaAvatar);
+            Debug.Log("【START-02】int_conMyCharaAvatar（★キャラアバター） ： " + int_conMyCharaAvatar);
 
-            //Debug.Log("【START-03】他スクリプトと連携できるようにします");
+            Debug.Log("【START-03】他スクリプトと連携できるようにします");
             ShuffleCardsMSC = ShuffleCardsManager.GetComponent<ShuffleCards>();
             TestRoomControllerSC = TestRoomController.GetComponent<TestRoomController>();
             MyCameraControllerMSC = MainCamera.GetComponent<MyCameraController>();
@@ -696,20 +696,20 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Flg_StartDone = 1;
             //var customProperties = photonView.Owner.CustomProperties;
-            //Debug.Log("【START-03】SelectJanken  void Start() 出席確認2");
+            Debug.Log("【START-03】SelectJanken  void Start() 出席確認2");
             ClosePanel_Ikemasu();
             myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
 
-            //Debug.Log("【START-03】 各変数を 初期化（リセット）します");
+            Debug.Log("【START-03】 各変数を 初期化（リセット）します");
             count_a = 1;
-            //Debug.Log("【START-03】 各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする");
+            Debug.Log("【START-03】 各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする");
             ResetAlivePlayer();            //【START-03】 各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする
 
-            //Debug.Log("【START-04】自プレイヤーを生成します");
-            //Debug.Log("CreatePlayerPrefab_Flg ： " + CreatePlayerPrefab_Flg);
+            Debug.Log("【START-04】自プレイヤーを生成します");
+            Debug.Log("CreatePlayerPrefab_Flg ： " + CreatePlayerPrefab_Flg);
 
 
-            //Debug.Log("myPlayer が 存在していなかったのでキャラ作成します！！！");
+            Debug.Log("myPlayer が 存在していなかったのでキャラ作成します！！！");
             if (CreatePlayerPrefab_Flg)
             {
                 CreatePlayerPrefab();          //【START-04】Photonに接続していれば自プレイヤーを生成
@@ -719,28 +719,28 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             myPlayer = GameObject.FindGameObjectWithTag("MyPlayer");
 
-            //Debug.Log("【START-05】スタートラインにランダムに移動させます");
+            Debug.Log("【START-05】スタートラインにランダムに移動させます");
             MoveToStartLineRandom();       //【START-05】スタートラインにランダムに移動させる
 
-            //Debug.Log("【START-06】MyPlayer にカメラを追従するようにセットします");
+            Debug.Log("【START-06】MyPlayer にカメラを追従するようにセットします");
             MyCameraControllerMSC.SetMyCamera();  //【START-06】MyPlayer にカメラを追従するようにセット
 
             MyKage = GameObject.FindWithTag("MyKage");
             MyKageControllerMSC = MyKage.GetComponent<MyKageController>();
 
-            //Debug.Log("【START-07】スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）");
+            Debug.Log("【START-07】スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）");
             ToShare_InitialSetting();     // 【START-07】スタート時 初期設定を全プレイヤーで共有
             Check_KageDistance();         //  MyKage と MyPlayer の距離を求める（Y軸の初期位置）
 
-            //Debug.Log("【START-09】ジャンケン手「決定ボタン」を表示できるか確認します");
+            Debug.Log("【START-09】ジャンケン手「決定ボタン」を表示できるか確認します");
             Check_CanAppear_KetteiBtn();  // 【START-09】ジャンケン手「決定ボタン」を表示できるか確認
 
-            //Debug.Log("【START-10】総参加人数 と 現在待機中の総人数 をチェックします");
+            Debug.Log("【START-10】総参加人数 と 現在待機中の総人数 をチェックします");
             NinzuCheck();                 // 【START-10】総参加人数 と 現在待機中の総人数  && 2人以上で「いけますパネル」を表示
             NumLivePlayer = SankaNinzu;
-            //Debug.Log("【START-11】NumLivePlayer（総参加人数＝生存者数） は " + NumLivePlayer);
+            Debug.Log("【START-11】NumLivePlayer（総参加人数＝生存者数） は " + NumLivePlayer);
 
-            //Debug.Log("【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する");
+            Debug.Log("【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する");
             ShareAfterJump();   //【START-12】右上の開始ボタンを押せるように各値をリセット ⇒ 全員に共有する
 
             BattleStage_Set();                 // Battle シーンの 背景 と BGM をセットします
@@ -770,13 +770,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             AppearPanel_SyokaiTaihou();
 
             X_dis30po = cafe_kanban_005.transform.position.x - cafe_kanban_035.transform.position.x;
-            //Debug.Log("X_dis30po : " + X_dis30po);
+            Debug.Log("X_dis30po : " + X_dis30po);
 
             SelectJankenMSC = myPlayer.GetComponent<SelectJanken>();
             Pos_Hasshin_Text.text = "";
 
-            //Debug.Log("アイテムカードの裏面生成！");
-            //Debug.Log("アイテムカードの裏面生成できたかな？？");
+            Debug.Log("アイテムカードの裏面生成！");
+            Debug.Log("アイテムカードの裏面生成できたかな？？");
         }
         else
         {
@@ -793,10 +793,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         if (currentTime > span)
         {
-            text_PosX_P1.text =(CourseLength - PosX_Player1).ToString();
-            text_PosX_P2.text =(CourseLength - PosX_Player2).ToString();
-            text_PosX_P3.text =(CourseLength - PosX_Player3).ToString();
-            text_PosX_P4.text =(CourseLength - PosX_Player4).ToString();
+            text_PosX_P1.text = (CourseLength - PosX_Player1).ToString();
+            text_PosX_P2.text = (CourseLength - PosX_Player2).ToString();
+            text_PosX_P3.text = (CourseLength - PosX_Player3).ToString();
+            text_PosX_P4.text = (CourseLength - PosX_Player4).ToString();
 
             text_MyGold.text = Gold_MyPlayer.ToString();
 
@@ -804,19 +804,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             if (Shiai_Kaishi)
             {
                 text_Room_shimekiri.text = "試合開始したので、ルームへの入室をしめきりました";
-                //Debug.Log(SankaNinzu + ": SankaNinzu");
+                Debug.Log(SankaNinzu + ": SankaNinzu");
 
-                //Debug.Log("alivePlayer1 ： " + alivePlayer1);
-                //Debug.Log("alivePlayer2 ： " + alivePlayer2);
-                //Debug.Log("alivePlayer3 ： " + alivePlayer3);
-                //Debug.Log("alivePlayer4 ： " + alivePlayer4);
+                Debug.Log("alivePlayer1 ： " + alivePlayer1);
+                Debug.Log("alivePlayer2 ： " + alivePlayer2);
+                Debug.Log("alivePlayer3 ： " + alivePlayer3);
+                Debug.Log("alivePlayer4 ： " + alivePlayer4);
 
-                //Debug.Log("logon_player1 ： " + logon_player1);
-                //Debug.Log("logon_player2 ： " + logon_player2);
-                //Debug.Log("logon_player3 ： " + logon_player3);
-                //Debug.Log("logon_player4 ： " + logon_player4);
+                Debug.Log("logon_player1 ： " + logon_player1);
+                Debug.Log("logon_player2 ： " + logon_player2);
+                Debug.Log("logon_player3 ： " + logon_player3);
+                Debug.Log("logon_player4 ： " + logon_player4);
 
-                //Debug.Log("Flg_PreCheck_Can_Hantei_Stream ： " + Flg_PreCheck_Can_Hantei_Stream);
+                Debug.Log("Flg_PreCheck_Can_Hantei_Stream ： " + Flg_PreCheck_Can_Hantei_Stream);
 
 
                 if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)               // ジャンケンパネルが既に表示されていたら
@@ -966,7 +966,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
     }
 
-    public void Close_All_Stage()   
+    public void Close_All_Stage()
     {
         CloseStage_kaidou();
         CloseStage_iseki();
@@ -979,7 +979,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Stage_kaidou.SetActive(true);
     }
 
-    public void CloseStage_kaidou()  
+    public void CloseStage_kaidou()
     {
         Stage_kaidou.SetActive(false);
     }
@@ -1088,46 +1088,46 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         CreatePlayerPrefab_Flg = false;
 
-        //Debug.Log("【START-04】Photonに接続したので 自プレイヤーを生成");
+        Debug.Log("【START-04】Photonに接続したので 自プレイヤーを生成");
 
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
             myPlayer = PhotonNetwork.Instantiate(playerPrefab_utako.name, new Vector3(-15f, 0f, 0f), Quaternion.identity, 0);
             utakoClone = GameObject.FindWithTag("MyPlayer");
-            //Debug.Log("utakoClone の名前は: " + utakoClone.name);
+            Debug.Log("utakoClone の名前は: " + utakoClone.name);
             PlayerSC = utakoClone.GetComponent<PlayerScript>();
         }
         else if (int_conMyCharaAvatar == 2) // Unityちゃん
         {
             myPlayer = PhotonNetwork.Instantiate(playerPrefab_unitychan.name, new Vector3(-15f, 0f, 0f), Quaternion.identity, 0);
             unitychanClone = GameObject.FindWithTag("MyPlayer");
-            //Debug.Log("unitychanClone の名前は: " + unitychanClone.name);
+            Debug.Log("unitychanClone の名前は: " + unitychanClone.name);
             PlayerSC = unitychanClone.GetComponent<PlayerScript>();
         }
         else if (int_conMyCharaAvatar == 3) // Pちゃん
         {
             myPlayer = PhotonNetwork.Instantiate(playerPrefab_pchan.name, new Vector3(-15f, 0f, 0f), Quaternion.identity, 0);
             pchanClone = GameObject.FindWithTag("MyPlayer");
-            //Debug.Log("pchanClone の名前は: " + pchanClone.name);
+            Debug.Log("pchanClone の名前は: " + pchanClone.name);
             PlayerSC = pchanClone.GetComponent<PlayerScript>();
         }
         else if (int_conMyCharaAvatar == 4) // モブちゃん
         {
             myPlayer = PhotonNetwork.Instantiate(playerPrefab_mobuchan.name, new Vector3(-15f, 0f, 0f), Quaternion.identity, 0);
             mobuchanClone = GameObject.FindWithTag("MyPlayer");
-            //Debug.Log("mobuchanClone の名前は: " + mobuchanClone.name);
+            Debug.Log("mobuchanClone の名前は: " + mobuchanClone.name);
             PlayerSC = mobuchanClone.GetComponent<PlayerScript>();
         }
         else if (int_conMyCharaAvatar == 5) // ずん子ちゃん
         {
             myPlayer = PhotonNetwork.Instantiate(playerPrefab_Zunko.name, new Vector3(-15f, 0f, 0f), Quaternion.identity, 0);
             ZunkoClone = GameObject.FindWithTag("MyPlayer");
-            //Debug.Log("ZunkoClone の名前は: " + ZunkoClone.name);
+            Debug.Log("ZunkoClone の名前は: " + ZunkoClone.name);
             PlayerSC = ZunkoClone.GetComponent<PlayerScript>();
         }
         else
         {
-            //Debug.Log("【START-04】自プレイヤーを生成 できませんでした");
+            Debug.Log("【START-04】自プレイヤーを生成 できませんでした");
         }
     }
 
@@ -1139,62 +1139,62 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Share_InitialSetting();             // 【START-07】スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）
         if (int_MatchPlayerMaxNum > 4)      // マッチ人数が5人以上であるならば
         {
-            //Debug.Log("【START-08】マッチ人数が5人以上のため、スタートラインにランダムに移動させます");
+            Debug.Log("【START-08】マッチ人数が5人以上のため、スタートラインにランダムに移動させます");
             MoveToStartLineRandom();        // スタートラインにランダムに移動させる
-            //Debug.Log("【START-08】マッチ人数が5人以上のため、スタートラインにランダムに移動させました");
+            Debug.Log("【START-08】マッチ人数が5人以上のため、スタートラインにランダムに移動させました");
         }
     }
 
     public void Share_InitialSetting()     //【START-07】スタート時 初期設定を全プレイヤーで共有する（座標、顔アイコン、頭上プレイヤー名）
     {
-        //Debug.Log("【START-07】* Share_InitialSetting 実行 *");
+        Debug.Log("【START-07】* Share_InitialSetting 実行 *");
         WhoAreYou();     // 私の名前（真名）を表示
-        //Debug.Log("AcutivePlayerName  " + AcutivePlayerName);
-        //Debug.Log("AcutivePlayerID  " + AcutivePlayerID);
+        Debug.Log("AcutivePlayerName  " + AcutivePlayerName);
+        Debug.Log("AcutivePlayerID  " + AcutivePlayerID);
 
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
-            //Debug.Log("【START-07】プレイヤー1のアイコンをセットします");
+            Debug.Log("【START-07】プレイヤー1のアイコンをセットします");
             SharePlayerIcon_Player1();
-            //Debug.Log("【START-07】スタートマーク の位置へ移動します");
+            Debug.Log("【START-07】スタートマーク の位置へ移動します");
             MoveToStartMark1();                // 【START-07】スタートマーク1 の位置へ移動する
             PlayerSC.int_MySpriteOrder = 1;    // order in layer の順番調整に使用する整数
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
         {
-            //Debug.Log("【START-07】プレイヤー2のアイコンをセットします");
+            Debug.Log("【START-07】プレイヤー2のアイコンをセットします");
             SharePlayerIcon_Player2();
-            //Debug.Log("【START-07】スタートマーク の位置へ移動します");
+            Debug.Log("【START-07】スタートマーク の位置へ移動します");
             MoveToStartMark2();                // 【START-07】スタートマーク2 の位置へ移動する
             PlayerSC.int_MySpriteOrder = 2;    // order in layer の順番調整に使用する整数
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
         {
-            //Debug.Log("【START-07】プレイヤー3のアイコンをセットします");
+            Debug.Log("【START-07】プレイヤー3のアイコンをセットします");
             SharePlayerIcon_Player3();
-            //Debug.Log("【START-07】スタートマーク の位置へ移動します");
+            Debug.Log("【START-07】スタートマーク の位置へ移動します");
             MoveToStartMark3();                // 【START-07】スタートマーク3 の位置へ移動する
             PlayerSC.int_MySpriteOrder = 3;    // order in layer の順番調整に使用する整数
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
         {
-            //Debug.Log("【START-07】プレイヤー4のアイコンをセットします");
+            Debug.Log("【START-07】プレイヤー4のアイコンをセットします");
             SharePlayerIcon_Player4();
-            //Debug.Log("【START-07】スタートマーク の位置へ移動します");
+            Debug.Log("【START-07】スタートマーク の位置へ移動します");
             MoveToStartMark4();                // 【START-07】スタートマーク4 の位置へ移動する
             PlayerSC.int_MySpriteOrder = 4;    // order in layer の順番調整に使用する整数
         }
 
-        //Debug.Log("【START-07】MyPlayer に かげ を追従するようにセットします");
+        Debug.Log("【START-07】MyPlayer に かげ を追従するようにセットします");
         MyKageControllerMSC.SetMyKage();       // MyPlayer に かげ を追従するようにセット
 
-        //Debug.Log("【START-07】order in layer （画像表示順）の順番調整をします");
+        Debug.Log("【START-07】order in layer （画像表示順）の順番調整をします");
         PlayerSC.SortMySpriteOrder();          // order in layer （画像表示順）の順番調整を実施する
 
-        //Debug.Log("【START-07】名前とアイコンをセットします");
+        Debug.Log("【START-07】名前とアイコンをセットします");
         Text_MyPName_SelectPanel.text = AcutivePlayerName;  // SelectPanel にAcutivePlayerName をセット
         Text_Head_MyPName.text = AcutivePlayerName;         // 画面上部 にAcutivePlayerName をセット
         SetMyIcon_SelectPanel();                 //【START-07】私のアイコンをセレクトパネルにセットします
@@ -1228,7 +1228,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Img_MyIcon_SelectPanel.gameObject.GetComponent<Image>().sprite = sprite_Icon_Zunko;
             Img_Head_MyIcon.gameObject.GetComponent<Image>().sprite = sprite_Icon_Zunko;
         }
-        //Debug.Log("【START-07】私のアイコンをセレクトパネルにセットしました");
+        Debug.Log("【START-07】私のアイコンをセレクトパネルにセットしました");
     }
 
     public void MoveToStartLineRandom()  // 【START-05】プレイヤーをスタートラインにランダムに移動(配置)させる
@@ -1245,7 +1245,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         float Rnd_PosX = UnityEngine.Random.Range(-0.5f, -1.0f);
         float Rnd_PosY = UnityEngine.Random.Range(-0.2f, -2.0f);
         myPlayer.transform.position = new Vector3(StartCorn_HeadTransform.position.x + Rnd_PosX, StartCorn_HeadTransform.position.y + Rnd_PosY, StartCorn_HeadTransform.position.z);
-        //Debug.Log("【START-05】プレイヤーをスタートラインにランダムに移動(配置)させました");
+        Debug.Log("【START-05】プレイヤーをスタートラインにランダムに移動(配置)させました");
     }
 
     public void Share_AcutivePlayerID() // 【START-07】【JK-11_1】現在操作している人のプレイヤー名とプレイヤーIDを取得し、共有する
@@ -1260,7 +1260,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     //[PunRPC]
     public void PlayerIDCheck(PhotonMessageInfo mi)  // 【START-07】【JK-11_1】
     {
-        //Debug.Log("【START-07】【JK-11_1】[PunRPC] PlayerIDCheck");
+        Debug.Log("【START-07】【JK-11_1】[PunRPC] PlayerIDCheck");
 
         if (mi.Sender != null)
         {
@@ -1270,7 +1270,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             AcutivePlayerID = senderID;
         }
         WhoAreYou();     // 私の名前（真名）を表示
-        //Debug.Log("AcutivePlayerName  " + AcutivePlayerName);  // 今ボタン押した人
+        Debug.Log("AcutivePlayerName  " + AcutivePlayerName);  // 今ボタン押した人
     }
 
 
@@ -1324,7 +1324,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("SetIconP1_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー1のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー1のアイコンをセットしました");
     }
     [PunRPC]
     public void SetIconP1_utako()                     // 【START-07】アイコンを うたこ にセット
@@ -1384,7 +1384,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("SetIconP2_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー2のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー2のアイコンをセットしました");
     }
     [PunRPC]
     public void SetIconP2_utako()                     // 【START-07】アイコンを うたこ にセット
@@ -1444,7 +1444,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("SetIconP3_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー3のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー3のアイコンをセットしました");
     }
     [PunRPC]
     public void SetIconP3_utako()                     // 【START-07】アイコンを うたこ にセット
@@ -1504,7 +1504,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("SetIconP4_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー4のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー4のアイコンをセットしました");
     }
     [PunRPC]
     public void SetIconP4_utako()                     // 【START-07】アイコンを うたこ にセット
@@ -1544,7 +1544,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void NinzuCheck()                          // 【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します ＆＆ 忍者ボタンの ON/OFF
     {
-        //Debug.Log("【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します");
+        Debug.Log("【START-10】【JK-12】現時点の参加人数を更新し、総参加人数 と 現在待機中の総人数 を確認します");
         TestRoomControllerSC.PNameCheck();            // 現在の参加人数を更新する（プレイヤー名が埋まっていなかったら入れる）
         SankaNinzu = TestRoomControllerSC.int_JoinedPlayerAllNum;  // 総参加人数 を更新
         SankaNinzu = SankaNinzu - int_TochuTaiseki;   // 途中退席した人の人数をカウントして、後で SankaNinzu から引く
@@ -1567,14 +1567,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
 
         int_WaitingPlayers_All = int_NowWaiting_Player1 + int_NowWaiting_Player2 + int_NowWaiting_Player3 + int_NowWaiting_Player4;   // 現在待機中の総人数 を更新
-        //Debug.Log("総参加人数（SankaNinzu） ： " + SankaNinzu);
+        Debug.Log("総参加人数（SankaNinzu） ： " + SankaNinzu);
 
-        //Debug.Log("int_NowWaiting_Player1 ： " + int_NowWaiting_Player1);
-        //Debug.Log("int_NowWaiting_Player2 ： " + int_NowWaiting_Player2);
-        //Debug.Log("int_NowWaiting_Player3 ： " + int_NowWaiting_Player3);
-        //Debug.Log("int_NowWaiting_Player4 ： " + int_NowWaiting_Player4);
+        Debug.Log("int_NowWaiting_Player1 ： " + int_NowWaiting_Player1);
+        Debug.Log("int_NowWaiting_Player2 ： " + int_NowWaiting_Player2);
+        Debug.Log("int_NowWaiting_Player3 ： " + int_NowWaiting_Player3);
+        Debug.Log("int_NowWaiting_Player4 ： " + int_NowWaiting_Player4);
 
-        //Debug.Log("現在待機中の総人数（int_WaitingPlayers_All） ： " + int_WaitingPlayers_All);
+        Debug.Log("現在待機中の総人数（int_WaitingPlayers_All） ： " + int_WaitingPlayers_All);
         if (SankaNinzu >= 1 && (Shiai_Kaishi == false))  // 試合開始まえであれば
         {
             //AppearPanel_Ikemasu();  // いけます ボタン(パネル) 参加人数2人以上になったら表示する
@@ -1592,33 +1592,33 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void AllPlayerWaiting_Forcibly()
     {
-        //Debug.Log("強制的に全員の待機フラグを 1 （待機中）にします");
+        Debug.Log("強制的に全員の待機フラグを 1 （待機中）にします");
         int_WaitingPlayers_All = SankaNinzu;
     }
 
 
     public void ToShareNinzu_2()   // 参加人数 2名 は居る → 全員に共有
     {
-        //Debug.Log("ToShare 参加人数 2名 は居る");
+        Debug.Log("ToShare 参加人数 2名 は居る");
         photonView.RPC("ShareNinzu_2", RpcTarget.All);
     }
 
     public void ToShareNinzu_3()   // 参加人数 3名 は居る → 全員に共有
     {
-        //Debug.Log("ToShare 参加人数 3名 は居る");
+        Debug.Log("ToShare 参加人数 3名 は居る");
         photonView.RPC("ShareNinzu_3", RpcTarget.All);
     }
 
     public void ToShareNinzu_4()   // 参加人数 4名 は居る → 全員に共有
     {
-        //Debug.Log("ToShare 参加人数 4名 は居る");
+        Debug.Log("ToShare 参加人数 4名 は居る");
         photonView.RPC("ShareNinzu_4", RpcTarget.All);
     }
 
     [PunRPC]
     public void ShareNinzu_2()   // 参加人数 2名 は居る → 全員に共有
     {
-        //Debug.Log("参加人数 2名 は居る → 全員に共有");
+        Debug.Log("参加人数 2名 は居る → 全員に共有");
         NumLivePlayer = 2;
         SankaNinzu = 2;
     }
@@ -1626,7 +1626,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void ShareNinzu_3()   // 参加人数 3名 は居る → 全員に共有
     {
-        //Debug.Log("参加人数 3名 は居る → 全員に共有");
+        Debug.Log("参加人数 3名 は居る → 全員に共有");
         NumLivePlayer = 3;
         SankaNinzu = 3;
     }
@@ -1634,7 +1634,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void ShareNinzu_4()   // 参加人数 4名 は居る → 全員に共有
     {
-        //Debug.Log("参加人数 4名 は居る → 全員に共有");
+        Debug.Log("参加人数 4名 は居る → 全員に共有");
         NumLivePlayer = 4;
         SankaNinzu = 4;
     }
@@ -1650,16 +1650,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         CheckCanUseTaihou();            // 人間大砲が撃てるか確認します
         Update_Life_Players();          // 各プレイヤーのLifeを同期します
 
-        //Debug.Log("Countdown_timer_PanelOpen : " + Countdown_timer_PanelOpen);
+        Debug.Log("Countdown_timer_PanelOpen : " + Countdown_timer_PanelOpen);
         if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)  // ジャンケンパネルが既に表示されていたら
         {
             Countdown_Push_OpenMyJankenPanel_Button_Flg = false;  // ボタンフラグをOFFにする
             Erase_Text_Announcement();
         }
-        //Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていない（アクティブでない）ならば、カウントダウン開始");
+        Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていない（アクティブでない）ならば、カウントダウン開始");
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg && GameSet_Flg == false)
         {
-            //Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、ボタンを おしてね Text");
+            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、ボタンを おしてね Text");
             Text_Announcement.text = "ボタンを おしてね";   // テキスト表示
 
             if (Life_MyPlayer <= 0)        // 体力がゼロになっているなら（気絶していたら）
@@ -1668,7 +1668,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                 sequence30.InsertCallback(10f, () => Auto_Push_OpenMyJankenPanel_Button());
             }
             else                           // 体力が1以上あれば（平常時）
-            {          
+            {
                 if (Countdown_timer_PanelOpen == 1)             // ボタンを おしてね のSEを流す
                 {
                     var sequence5 = DOTween.Sequence();
@@ -1701,14 +1701,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                 }
                 else
                 {
-                    //Debug.Log("右上「開始ボタン」の Countdown_timer_PanelOpen が 1～6 以外です");
+                    Debug.Log("右上「開始ボタン」の Countdown_timer_PanelOpen が 1～6 以外です");
                     ResetCountdown_timer_PanelOpen_1();
                 }
             }
         }
         else
         {
-            //Debug.Log("右上「開始ボタン」を自動で押す:既にジャンケンパネルが開かれているようです・・・");
+            Debug.Log("右上「開始ボタン」を自動で押す:既にジャンケンパネルが開かれているようです・・・");
         }
     }
 
@@ -1724,7 +1724,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
             Erase_Text_Announcement();
         }
-        //Debug.Log("右上「開始ボタン」のカウントダウン：" + timeHyoji);
+        Debug.Log("右上「開始ボタン」のカウントダウン：" + timeHyoji);
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg && GameSet_Flg == false)
         {
             if (timeHyoji == 5 || timeHyoji == 20)
@@ -1738,7 +1738,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("右上「開始ボタン」のカウントダウン、ここで中断です・・");
+            Debug.Log("右上「開始ボタン」のカウントダウン、ここで中断です・・");
             ResetCountdown_timer_PanelOpen_1();
         }
     }
@@ -1752,12 +1752,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg && GameSet_Flg == false)
         {
-            //Debug.Log("右上「開始ボタン」を自動で押す: ボタンを おしてね SE を流します");
+            Debug.Log("右上「開始ボタン」を自動で押す: ボタンを おしてね SE を流します");
             BGM_SE_MSC.bottonwo_oshitene_SE();         // ボタンを おしてね のSEを流す
         }
         else
         {
-            //Debug.Log("右上「開始ボタン」を自動で押す → ボタンを おしてね SE を流す条件を満たしていません・・・");
+            Debug.Log("右上「開始ボタン」を自動で押す → ボタンを おしてね SE を流す条件を満たしていません・・・");
         }
     }
 
@@ -1770,12 +1770,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg && GameSet_Flg == false)
         {
-            //Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、開始ボタンを おします Auto");
+            Debug.Log("右上の「開始ボタン」を自動で押す:ジャンケンパネルが開かれていないので、開始ボタンを おします Auto");
             PushOpenMyJankenPanel_Button();            // 右上の開始ボタンを自動で押す
         }
         else
         {
-            //Debug.Log("右上の「開始ボタン」を自動で押す → 開始ボタンを押す 条件を満たしていません・・・");
+            Debug.Log("右上の「開始ボタン」を自動で押す → 開始ボタンを押す 条件を満たしていません・・・");
         }
         ResetCountdown_timer_PanelOpen_1();
     }
@@ -1792,7 +1792,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Countdown_Until_Push_JankenTe_KetteiButton()   // ジャンケンパネルが開かれていて、決定ボタンか押されていならば、カウントダウン開始
     {
-        //Debug.Log("Countdown_timer_Kettei : " + Countdown_timer_Kettei);
+        Debug.Log("Countdown_timer_Kettei : " + Countdown_timer_Kettei);
 
         if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)
         {
@@ -1803,11 +1803,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Countdown_Push_JankenTe_KetteiButton_Flg = false;
         }
-        //Debug.Log("ジャンケンパネルが開かれていて、決定ボタンか押されていないならば、カウントダウン開始します");
+        Debug.Log("ジャンケンパネルが開かれていて、決定ボタンか押されていないならば、カウントダウン開始します");
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
         {
-            //Debug.Log("ジャンケンパネルが開かれていて、決定ボタンか押されていないので、カウントダウン開始しました");
-            //Debug.Log("カードを選んでね");
+            Debug.Log("ジャンケンパネルが開かれていて、決定ボタンか押されていないので、カウントダウン開始しました");
+            Debug.Log("カードを選んでね");
 
             if (Life_MyPlayer <= 0)        // 体力がゼロになっているなら（気絶していたら）
             {
@@ -1851,14 +1851,14 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                 }
                 else
                 {
-                    //Debug.Log("「決定ボタン」の Countdown_timer_Kettei が 1～6 以外です");
+                    Debug.Log("「決定ボタン」の Countdown_timer_Kettei が 1～6 以外です");
                     ResetCountdown_timer_Kettei_1();
                 }
             }
         }
         else
         {
-            //Debug.Log("「決定ボタン」を自動で押す:ジャンケンパネル閉じているようです・・・");
+            Debug.Log("「決定ボタン」を自動で押す:ジャンケンパネル閉じているようです・・・");
         }
     }
 
@@ -1878,7 +1878,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Countdown_Push_JankenTe_KetteiButton_Flg = false;
         }
-        //Debug.Log("決定ボタンのカウントダウン：" + timeHyoji);
+        Debug.Log("決定ボタンのカウントダウン：" + timeHyoji);
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
         {
             Countdown_timer_Kettei++;
@@ -1886,7 +1886,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("「決定ボタン」のカウントダウン、ここで中断です・・");
+            Debug.Log("「決定ボタン」のカウントダウン、ここで中断です・・");
             ResetCountdown_timer_Kettei_1();
         }
     }
@@ -1904,7 +1904,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg)
         {
-            //Debug.Log("決定ボタンか押されていないので、おまかせボタンを自動で押す Auto");
+            Debug.Log("決定ボタンか押されていないので、おまかせボタンを自動で押す Auto");
             PushBtn_Omakase();                      // おまかせボタンを自動で押す
 
             var sequenc3 = DOTween.Sequence();
@@ -1912,7 +1912,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("「決定ボタン」を自動で押す → おまかせボタンを自動で押す 条件を満たしていません・・・");
+            Debug.Log("「決定ボタン」を自動で押す → おまかせボタンを自動で押す 条件を満たしていません・・・");
         }
         ResetCountdown_timer_Kettei_1();
     }
@@ -1938,7 +1938,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg && Push_JankenTe_KetteiButton_Flg)
         {
-            //Debug.Log("決定ボタンか押されていないので、これでいいかな？ SEを流す");
+            Debug.Log("決定ボタンか押されていないので、これでいいかな？ SEを流す");
             BGM_SE_MSC.korede_iikana_SE();         // これでいいかな？ SEを流す
 
             var sequence2 = DOTween.Sequence();
@@ -1946,7 +1946,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("「決定ボタン」を自動で押す → これでいいかな？ SEを流す 条件を満たしていません・・・");
+            Debug.Log("「決定ボタン」を自動で押す → これでいいかな？ SEを流す 条件を満たしていません・・・");
         }
         ResetCountdown_timer_Kettei_1();
     }
@@ -1973,12 +1973,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         if (Countdown_Push_OpenMyJankenPanel_Button_Flg == false && GameSet_Flg == false && Countdown_Push_JankenTe_KetteiButton_Flg && Push_JankenTe_KetteiButton_Flg)
         {
-            //Debug.Log("決定ボタンか押されていないので、決定ボタンを自動で押す Auto");
+            Debug.Log("決定ボタンか押されていないので、決定ボタンを自動で押す Auto");
             JankenTe_Kettei();                     // 決定ボタンを自動で押す
         }
         else
         {
-            //Debug.Log("「決定ボタン」を自動で押す → 押す条件を満たしていません・・・");
+            Debug.Log("「決定ボタン」を自動で押す → 押す条件を満たしていません・・・");
         }
         ResetCountdown_timer_Kettei_1();
     }
@@ -2048,20 +2048,20 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
         Pos_Hasshin_Text.text = "";
 
-        //Debug.Log("【JK-01】******************************************************************");
-        //Debug.Log("【JK-01】■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-        //Debug.Log("【JK-01】OpenMyJankenPanel_Button（右上のセット開始ボタン） が押されました。セットを開始します。カードを配ります");
-        //Debug.Log("【JK-01】■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-        //Debug.Log("【JK-01】******************************************************************");
-        //Debug.Log("！！【JK-01】各プレイヤーの生存フラグは そのままです（リセットしません）！！");
-        //Debug.Log("！！【JK-01】各プレイヤーの待機中フラグは そのままです（リセットしません）！！");
+        Debug.Log("【JK-01】******************************************************************");
+        Debug.Log("【JK-01】■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        Debug.Log("【JK-01】OpenMyJankenPanel_Button（右上のセット開始ボタン） が押されました。セットを開始します。カードを配ります");
+        Debug.Log("【JK-01】■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        Debug.Log("【JK-01】******************************************************************");
+        Debug.Log("！！【JK-01】各プレイヤーの生存フラグは そのままです（リセットしません）！！");
+        Debug.Log("！！【JK-01】各プレイヤーの待機中フラグは そのままです（リセットしません）！！");
 
-        //Debug.Log("【JK-01】共通ジャンケン パネル（ベース）を表示します");
+        Debug.Log("【JK-01】共通ジャンケン パネル（ベース）を表示します");
         ShuffleCardsMSC.AppearJankenCards_Panel();
-        //Debug.Log("【JK-01】自分のジャンケン パネル（カード選択画面）を表示します");
+        Debug.Log("【JK-01】自分のジャンケン パネル（カード選択画面）を表示します");
         ShuffleCardsMSC.AppearMyJankenPanel();
 
-        //Debug.Log("【JK-01】セット開始したばかりなので、ジャンケン手「決定ボタン」を非表示にします");
+        Debug.Log("【JK-01】セット開始したばかりなので、ジャンケン手「決定ボタン」を非表示にします");
         Check_CanAppear_KetteiBtn();     // 【JK-01】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたら決定ボタンを表示する
         Countdown_Until_Push_JankenTe_KetteiButton();     // ジャンケンパネルが開かれていて、決定ボタンか押されていならば、カウントダウン開始
         ShuffleCardsMSC.Distribute_JankenCards();         // じゃんけんカードの配布（一旦非表示にしてから、順番に表示していく）
@@ -2070,48 +2070,48 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Janken_ExtraInning()              //【JK-37】ジャンケンカードを配る前の処理（延長戦突入時）
     {
-        //Debug.Log("【JK-38】■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■");
-        //Debug.Log("【JK-38】（延長戦）決着がつかなかったので延長戦に突入します！ジャンケンカードを配る準備をします。");
-        //Debug.Log("【JK-38】■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■");
-        //Debug.Log("【JK-38】（延長戦）各プレイヤーの生存フラグは そのままです（リセットしません）");
-        //Debug.Log("【JK-39】（延長戦）待機中フラグを全員一律 初期化 0：待機前（初期値） にします");
-        //Debug.Log("【JK-40】（延長戦）共通ジャンケン パネル（ベース）を表示します");
+        Debug.Log("【JK-38】■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■");
+        Debug.Log("【JK-38】（延長戦）決着がつかなかったので延長戦に突入します！ジャンケンカードを配る準備をします。");
+        Debug.Log("【JK-38】■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■**■■");
+        Debug.Log("【JK-38】（延長戦）各プレイヤーの生存フラグは そのままです（リセットしません）");
+        Debug.Log("【JK-39】（延長戦）待機中フラグを全員一律 初期化 0：待機前（初期値） にします");
+        Debug.Log("【JK-40】（延長戦）共通ジャンケン パネル（ベース）を表示します");
         ShuffleCardsMSC.AppearJankenCards_Panel();
-        //Debug.Log("【JK-41】（延長戦）自分のジャンケン パネル（カード選択画面）を表示します");
+        Debug.Log("【JK-41】（延長戦）自分のジャンケン パネル（カード選択画面）を表示します");
         ShuffleCardsMSC.AppearMyJankenPanel();
-        //Debug.Log("【JK-42】（延長戦）フラグに関わらず、全員一律「待機中」画面 を表示します");
+        Debug.Log("【JK-42】（延長戦）フラグに関わらず、全員一律「待機中」画面 を表示します");
         ShuffleCardsMSC.AppearWait_JankenPanel();
-        //Debug.Log("【JK-43】（延長戦）延長戦 開始したばかりなので、ジャンケン手「決定ボタン」を非表示にします");
+        Debug.Log("【JK-43】（延長戦）延長戦 開始したばかりなので、ジャンケン手「決定ボタン」を非表示にします");
         Check_CanAppear_KetteiBtn();          //【JK-43】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたら決定ボタンを表示する
-        //Debug.Log("【JK-44】（延長戦）ジャンケン生存者は待機フラグを0（待機まえ）に、敗北者は待機フラグを1（待機中）にし、黒カバーします");
+        Debug.Log("【JK-44】（延長戦）ジャンケン生存者は待機フラグを0（待機まえ）に、敗北者は待機フラグを1（待機中）にし、黒カバーします");
         Check_WaitingFlg_DependOn_alive();    //【JK-44】ジャンケン生存者は待機フラグを0（待機まえ）に、敗北者は待機フラグを1（待機中）にする&& 黒カバー表示【JK-45】
-        //Debug.Log("【JK-45】（延長戦）待機中フラグのプレイヤー間での共有が終わりました。");
+        Debug.Log("【JK-45】（延長戦）待機中フラグのプレイヤー間での共有が終わりました。");
 
         ToCheck_Iam_alive();            // ジャンケンで自分が生き残っているかどうかの確認をする
         if (Iam_alive == 1)    // 自分がまだジャンケン生存者であるならば
         {
-            //Debug.Log("【JK-46】（延長戦）自分はまだジャンケン生存者です。私の待機フラグは0（待機まえ）です。黒カバーしません。");
-            //Debug.Log("【JK-46】（延長戦）カードを選んで、延長戦を闘います！");
-            //Debug.Log("【JK-47】（延長戦）「待機中」画面 を非表示にします （→ カード選べるようになる）");
+            Debug.Log("【JK-46】（延長戦）自分はまだジャンケン生存者です。私の待機フラグは0（待機まえ）です。黒カバーしません。");
+            Debug.Log("【JK-46】（延長戦）カードを選んで、延長戦を闘います！");
+            Debug.Log("【JK-47】（延長戦）「待機中」画面 を非表示にします （→ カード選べるようになる）");
             ShuffleCardsMSC.CloseWait_JankenPanel();        //【JK-47】「待機中」画面 を非表示にする
             Countdown_Until_Push_JankenTe_KetteiButton();     // ジャンケンパネルが開かれていて、決定ボタンか押されていならば、カウントダウン開始
         }
         else                   // 自分がジャンケン敗北者であるならば
         {
-            //Debug.Log("【JK-46】（延長戦）自分はジャンケン敗北者...。私の待機フラグは1（待機中）です。黒カバーします。");
-            //Debug.Log("【JK-46】（延長戦）もうカードを選ぶこともできません。見守るだけです。");
-            //Debug.Log("【JK-47】（延長戦）私は待機中。「待機中」画面 は表示しておきます。（カードは選べない）");
+            Debug.Log("【JK-46】（延長戦）自分はジャンケン敗北者...。私の待機フラグは1（待機中）です。黒カバーします。");
+            Debug.Log("【JK-46】（延長戦）もうカードを選ぶこともできません。見守るだけです。");
+            Debug.Log("【JK-47】（延長戦）私は待機中。「待機中」画面 は表示しておきます。（カードは選べない）");
         }
     }
 
     public void Check_CanAppear_KetteiBtn()       // 【JK-01】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたらボタンを表示する
     {
-        //Debug.Log("【JK-01】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたら「決定ボタン」を表示する");
+        Debug.Log("【JK-01】まずジャンケン手「決定ボタン」を非表示 → 表示できるか確認し、条件に合っていたら「決定ボタン」を表示する");
         ShuffleCardsMSC.CloseKetteiBtn();         // ボタンを閉じる（消す）
         if ((CanPushBtn_A + CanPushBtn_B + CanPushBtn_C + CanPushBtn_D + CanPushBtn_E + CanPushBtn_StockCard_Up + CanPushBtn_StockCard_Down) >= 5)  // 合計5枚分のじゃんけんカードを押した後ならば
         {
             ShuffleCardsMSC.AppearKetteiBtn();    // 決定ボタンを表示する
-            //Debug.Log("【JK-01】条件に合っていたため「決定ボタン」を表示しました");
+            Debug.Log("【JK-01】条件に合っていたため「決定ボタン」を表示しました");
         }
     }
     #endregion
@@ -2123,7 +2123,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             Flg_IkemasuDone = 1;
             Share_Iam_Ikemasu();           // 私「試合開始、いけます！」を全員に向け共有する
-            //Debug.Log("全員の Ikemasu を合計します");
+            Debug.Log("全員の Ikemasu を合計します");
             photonView.RPC("Gokei_Ikemasu_PlayersAll", RpcTarget.All);
             CheckStart_GameMatch();        // 試合開始できるか確認する処理
             ClosePanel_Ikemasu();
@@ -2139,21 +2139,21 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         if (Shiai_Kaishi == false)  // 試合開始まえであれば、判定処理を実施する（試合中は判定する必要なし）
         {
-            //Debug.Log("現在の参加人数をチェック NinzuCheck");
+            Debug.Log("現在の参加人数をチェック NinzuCheck");
             NinzuCheck();
-            //Debug.Log("Ikemasu を合計します");
+            Debug.Log("Ikemasu を合計します");
             Gokei_Ikemasu_PlayersAll();  // Ikemasu を合計する
-            //Debug.Log("試合開始まえなので、試合開始できるか 判定処理を実施します");
+            Debug.Log("試合開始まえなので、試合開始できるか 判定処理を実施します");
             if (SankaNinzu == 4)
             {
-                //Debug.Log("4人そろったので、試合を開始します");
+                Debug.Log("4人そろったので、試合を開始します");
                 photonView.RPC("Start_GameMatch", RpcTarget.All);
             }
             else if (SankaNinzu == 3)
             {
                 if (int_Ikemasu_All >= 3)
                 {
-                    //Debug.Log("3人いけます！ので、試合を開始します");
+                    Debug.Log("3人いけます！ので、試合を開始します");
                     photonView.RPC("Start_GameMatch", RpcTarget.All);
                 }
             }
@@ -2161,7 +2161,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             {
                 if (int_Ikemasu_All >= 2)
                 {
-                    //Debug.Log("2人いけます！ので、試合を開始します");
+                    Debug.Log("2人いけます！ので、試合を開始します");
                     photonView.RPC("Start_GameMatch", RpcTarget.All);
                 }
             }
@@ -2169,7 +2169,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             {
                 if (int_Ikemasu_All >= 1)
                 {
-                    ////Debug.Log("まだ一人なので、他の参加者を待ちます");
+                    //Debug.Log("まだ一人なので、他の参加者を待ちます");
                     photonView.RPC("Start_GameMatch", RpcTarget.All);
                 }
             }
@@ -2218,7 +2218,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Start_GameMatch_After3()  // 試合開始してから 3秒後 にする処理
     {
-        //Debug.Log("試合開始してから 3秒後 にする処理をします");
+        Debug.Log("試合開始してから 3秒後 にする処理をします");
         ShuffleCardsMSC.Set_All();
         CloseTaiki_OK_All();
         CloseStartLogo();
@@ -2234,25 +2234,25 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         int_Iam_Ikemasu = 1;  // 私は いけます！
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
-            //Debug.Log("プレイヤー1はいけます！");
+            Debug.Log("プレイヤー1はいけます！");
             photonView.RPC("Player1_Ikemasu", RpcTarget.All);
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
         {
-            //Debug.Log("プレイヤー2はいけます！");
+            Debug.Log("プレイヤー2はいけます！");
             photonView.RPC("Player2_Ikemasu", RpcTarget.All);
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
         {
-            //Debug.Log("プレイヤー3はいけます！");
+            Debug.Log("プレイヤー3はいけます！");
             photonView.RPC("Player3_Ikemasu", RpcTarget.All);
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
         {
-            //Debug.Log("プレイヤー4はいけます！");
+            Debug.Log("プレイヤー4はいけます！");
             photonView.RPC("Player4_Ikemasu", RpcTarget.All);
         }
     }
@@ -2260,25 +2260,25 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Player1_Ikemasu()  // Player1 が いけます！⇒ 全員に情報提供（共有）する
     {
-        //Debug.Log("[PunRPC] Player1（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
+        Debug.Log("[PunRPC] Player1（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
         int_Ikemasu_Player1 = 1;
     }
     [PunRPC]
     public void Player2_Ikemasu()  // Player2 が いけます！⇒ 全員に情報提供（共有）する
     {
-        //Debug.Log("[PunRPC] Player2（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
+        Debug.Log("[PunRPC] Player2（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
         int_Ikemasu_Player2 = 1;
     }
     [PunRPC]
     public void Player3_Ikemasu()  // Player3 が いけます！⇒ 全員に情報提供（共有）する
     {
-        //Debug.Log("[PunRPC] Player3（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
+        Debug.Log("[PunRPC] Player3（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
         int_Ikemasu_Player3 = 1;
     }
     [PunRPC]
     public void Player4_Ikemasu()  // Player4 が いけます！⇒ 全員に情報提供（共有）する
     {
-        //Debug.Log("[PunRPC] Player4（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
+        Debug.Log("[PunRPC] Player4（" + AcutivePlayerName + "） が いけます！⇒ 全員に情報提供（共有）する");
         int_Ikemasu_Player4 = 1;
     }
 
@@ -2286,7 +2286,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Gokei_Ikemasu_PlayersAll()  // Ikemasu を合計する
     {
         int_Ikemasu_All = int_Ikemasu_Player1 + int_Ikemasu_Player2 + int_Ikemasu_Player3 + int_Ikemasu_Player4;    // 現在「試合開始、いけます！」な人の総人数 を更新
-        //Debug.Log("「試合開始、いけます！」の総人数（int_Ikemasu_All） ： " + int_Ikemasu_All);
+        Debug.Log("「試合開始、いけます！」の総人数（int_Ikemasu_All） ： " + int_Ikemasu_All);
     }
 
     [PunRPC]
@@ -2625,23 +2625,23 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Update_Life_Players();                    // 各プレイヤーのLifeを同期します
 
         photonView.RPC("Share_Push_KetteiBtn", RpcTarget.All);
-        //Debug.Log("【JK-05】ジャンケン手 決定ボタン（「これでOK!」）を押しました。ジャンケン手 これで決定します");
+        Debug.Log("【JK-05】ジャンケン手 決定ボタン（「これでOK!」）を押しました。ジャンケン手 これで決定します");
         ShuffleCardsMSC.CloseMyJankenPanel();   // 不要なパネルを閉じる
 
-        //Debug.Log("【JK-06】私のジャンケン手をみんなに提供（共有）します");
+        Debug.Log("【JK-06】私のジャンケン手をみんなに提供（共有）します");
         ToSharePlayerTeNum();                   // 【JK-06】私のジャンケン手をみんなに提供（共有）します
 
-        //Debug.Log("【JK-08】決定ボタンを押したので、他のプレイヤーを待っています");
+        Debug.Log("【JK-08】決定ボタンを押したので、他のプレイヤーを待っています");
         ShuffleCardsMSC.AppearWait_JankenPanel();   // 待機中パネルを表示
 
-        //Debug.Log("【JK-10】私は待機中です");
+        Debug.Log("【JK-10】私は待機中です");
         int_IamNowWaiting = 1;                  // 自分のジャンケン手 決定して待機中 （0：まだ決定してない、1：決定して待機中）
 
-        //Debug.Log("【JK-11】私が待機中ということを、全員（他のプレイヤー）に情報提供（共有）します");
+        Debug.Log("【JK-11】私が待機中ということを、全員（他のプレイヤー）に情報提供（共有）します");
         ToCheck_NowWaiting();                   // ジャンケンで自分が待機中の旨を 情報提供（共有）する
 
-        //Debug.Log("【JK-12】全員の待機フラグを確認します。その上で 勝敗判定（Hantei_Stream）フェーズへ進めるか確認します");
-        //Debug.Log("【JK-12】CanDoフラグ に関わらず、2 秒待機後、Check_Can_Hantei_Stream を実行します");
+        Debug.Log("【JK-12】全員の待機フラグを確認します。その上で 勝敗判定（Hantei_Stream）フェーズへ進めるか確認します");
+        Debug.Log("【JK-12】CanDoフラグ に関わらず、2 秒待機後、Check_Can_Hantei_Stream を実行します");
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(2f, () => Check_Can_Hantei_Stream());
 
@@ -2664,12 +2664,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Share_Push_KetteiBtn()               // 【JK-05】ジャンケン手 決定ボタン（「これでOK!」）押下したことを伝える
     {
-        //Debug.Log("【JK-05】******************************************************************");
-        //Debug.Log("【JK-05】■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-        //Debug.Log("【JK-05】AcutivePlayerName" + AcutivePlayerName + "が ジャンケン手 決定ボタン（「これでOK!」）を押しました。ジャンケン手 これで決定します");
-        //Debug.Log("【JK-05】PhotonNetwork.NickName" + PhotonNetwork.NickName + "が ジャンケン手 決定ボタン（「これでOK!」）を押しました。ジャンケン手 これで決定します");
-        //Debug.Log("【JK-05】■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-        //Debug.Log("【JK-05】******************************************************************");
+        Debug.Log("【JK-05】******************************************************************");
+        Debug.Log("【JK-05】■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        Debug.Log("【JK-05】AcutivePlayerName" + AcutivePlayerName + "が ジャンケン手 決定ボタン（「これでOK!」）を押しました。ジャンケン手 これで決定します");
+        Debug.Log("【JK-05】PhotonNetwork.NickName" + PhotonNetwork.NickName + "が ジャンケン手 決定ボタン（「これでOK!」）を押しました。ジャンケン手 これで決定します");
+        Debug.Log("【JK-05】■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        Debug.Log("【JK-05】******************************************************************");
     }
 
     #region // 【JK-11】待機中フラグ関連の処理
@@ -2681,32 +2681,32 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Check_NowWaiting()          // 【JK-11_2】ジャンケンで自分が待機中の旨を 情報提供（共有）する
     {
-        //Debug.Log("【JK-11_2】* ジャンケンで自分が待機中かどうかの確認をします *");
+        Debug.Log("【JK-11_2】* ジャンケンで自分が待機中かどうかの確認をします *");
         WhoAreYou();     // 私の名前（真名）を表示
-        //Debug.Log("AcutivePlayerName  " + AcutivePlayerName);
-        //Debug.Log("AcutivePlayerID  " + AcutivePlayerID);
+        Debug.Log("AcutivePlayerName  " + AcutivePlayerName);
+        Debug.Log("AcutivePlayerID  " + AcutivePlayerID);
 
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
-            //Debug.Log("プレイヤー1は待機中です");
+            Debug.Log("プレイヤー1は待機中です");
             photonView.RPC("Player1_NowWaiting", RpcTarget.All);
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2) // 自身がプレイヤー2 であるなら
         {
-            //Debug.Log("プレイヤー2は待機中です");
+            Debug.Log("プレイヤー2は待機中です");
             photonView.RPC("Player2_NowWaiting", RpcTarget.All);
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3) // 自身がプレイヤー3 であるなら
         {
-            //Debug.Log("プレイヤー3は待機中です");
+            Debug.Log("プレイヤー3は待機中です");
             photonView.RPC("Player3_NowWaiting", RpcTarget.All);
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4) // 自身がプレイヤー4 であるなら
         {
-            //Debug.Log("プレイヤー4は待機中です");
+            Debug.Log("プレイヤー4は待機中です");
             photonView.RPC("Player4_NowWaiting", RpcTarget.All);
         }
     }
@@ -2715,34 +2715,34 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Player1_NowWaiting()  // 【JK-11_3】Player1 が 待機中 ⇒ 全員に情報提供（共有）する
     {
         WhoAreYou();     // 私の名前（真名）を表示
-        //Debug.Log("[PunRPC] 【JK-11_3】Player1（" + AcutivePlayerName + "） が 待機中 ⇒ 全員に情報提供（共有）する");
+        Debug.Log("[PunRPC] 【JK-11_3】Player1（" + AcutivePlayerName + "） が 待機中 ⇒ 全員に情報提供（共有）する");
         int_NowWaiting_Player1 = 1;   // 0：待機前（初期値）、 1：待機中（決定ボタン押下後）
     }
     [PunRPC]
     public void Player2_NowWaiting()  // 【JK-11_3】Player2 が 待機中 ⇒ 全員に情報提供（共有）する
     {
         WhoAreYou();     // 私の名前（真名）を表示
-        //Debug.Log("[PunRPC] 【JK-11_3】Player2（" + AcutivePlayerName + "） が 待機中 ⇒ 全員に情報提供（共有）する");
+        Debug.Log("[PunRPC] 【JK-11_3】Player2（" + AcutivePlayerName + "） が 待機中 ⇒ 全員に情報提供（共有）する");
         int_NowWaiting_Player2 = 1;
     }
     [PunRPC]
     public void Player3_NowWaiting()  // 【JK-11_3】Player3 が 待機中 ⇒ 全員に情報提供（共有）する
     {
         WhoAreYou();     // 私の名前（真名）を表示
-        //Debug.Log("[PunRPC] 【JK-11_3】Player3（" + AcutivePlayerName + "） が 待機中 ⇒ 全員に情報提供（共有）する");
+        Debug.Log("[PunRPC] 【JK-11_3】Player3（" + AcutivePlayerName + "） が 待機中 ⇒ 全員に情報提供（共有）する");
         int_NowWaiting_Player3 = 1;
     }
     [PunRPC]
     public void Player4_NowWaiting()  // 【JK-11_3】Player4 が 待機中 ⇒ 全員に情報提供（共有）する
     {
         WhoAreYou();     // 私の名前（真名）を表示
-        //Debug.Log("[PunRPC] 【JK-11_3】Player4（" + AcutivePlayerName + "） が 待機中 ⇒ 全員に情報提供（共有）する");
+        Debug.Log("[PunRPC] 【JK-11_3】Player4（" + AcutivePlayerName + "） が 待機中 ⇒ 全員に情報提供（共有）する");
         int_NowWaiting_Player4 = 1;
     }
 
     public void Reset_NowWaiting()    //【JK-38】【JK-204】待機中確認のパラメータ 初期化
     {
-        //Debug.Log("【JK-38】【JK-204】全員の待機中フラグを 0（待機まえ）にリセットします");
+        Debug.Log("【JK-38】【JK-204】全員の待機中フラグを 0（待機まえ）にリセットします");
         int_NowWaiting_Player1 = 0;   // 0：待機前（初期値:決定ボタン押下前）、 1：待機中（決定ボタン押下後）
         int_NowWaiting_Player2 = 0;
         int_NowWaiting_Player3 = 0;
@@ -2756,7 +2756,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Share_TochuTaiseki_ninzu()  // ログアウトした人の人数を 全員に共有する
     {
-        //Debug.Log("int_TochuTaiseki ログアウトした人の人数を 全員に共有する");
+        Debug.Log("int_TochuTaiseki ログアウトした人の人数を 全員に共有する");
         if (int_TochuTaiseki == 1)
         {
             photonView.RPC("Reload_TochuTaiseki_ninzu_1", RpcTarget.All);
@@ -2775,129 +2775,129 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Plus_TochuTaiseki_ninzu()      // ログアウトした人の人数を +1 する
     {
         int_TochuTaiseki++;
-        //Debug.Log("int_TochuTaiseki" + int_TochuTaiseki);
+        Debug.Log("int_TochuTaiseki" + int_TochuTaiseki);
     }
 
     [PunRPC]
     public void Reload_TochuTaiseki_ninzu_1()      // ログアウトした人の人数を更新する
     {
         int_TochuTaiseki = 1;
-        //Debug.Log("int_TochuTaiseki を 1 にセットしました");
+        Debug.Log("int_TochuTaiseki を 1 にセットしました");
     }
 
     [PunRPC]
     public void Reload_TochuTaiseki_ninzu_2()      // ログアウトした人の人数を更新する
     {
         int_TochuTaiseki = 2;
-        //Debug.Log("int_TochuTaiseki を 2 にセットしました");
+        Debug.Log("int_TochuTaiseki を 2 にセットしました");
     }
 
     [PunRPC]
     public void Reload_TochuTaiseki_ninzu_3()      // ログアウトした人の人数を更新する
     {
         int_TochuTaiseki = 3;
-        //Debug.Log("int_TochuTaiseki を 3 にセットしました");
+        Debug.Log("int_TochuTaiseki を 3 にセットしました");
     }
 
 
     public void PreCheck_Can_Hantei_Stream()   // Check_Can_Hantei_Stream に進む前の前段階のチェック
     {
-        //Debug.Log("ログアウトした人が居るので、後処理のため、残った私が判定処理を行います");
+        Debug.Log("ログアウトした人が居るので、後処理のため、残った私が判定処理を行います");
         CloseMyKakejiku();    // 自分はログインしているので、掛け軸外しますよ
-        //Debug.Log("PreCheck_Can_Hantei_Stream 開始_01");
+        Debug.Log("PreCheck_Can_Hantei_Stream 開始_01");
         if (Shiai_Kaishi)        // 試合中であれば
         {
-            //Debug.Log("PreCheck_Can_Hantei_Stream 開始_02");
+            Debug.Log("PreCheck_Can_Hantei_Stream 開始_02");
 
             if (Flg_PreCheck_Can_Hantei_Stream)
             {
-                //Debug.Log("PreCheck_Can_Hantei_Stream 開始_03");
+                Debug.Log("PreCheck_Can_Hantei_Stream 開始_03");
                 photonView.RPC("ChangeFlg_PreCheck_Can_Hantei_Stream_False", RpcTarget.All);
 
                 int_TochuTaiseki++;              // ログアウトした人の人数を +1 する
                 Share_TochuTaiseki_ninzu();      // ログアウトした人の人数を 全員に共有する
-                //Debug.Log("int_TochuTaiseki ： " + int_TochuTaiseki);
+                Debug.Log("int_TochuTaiseki ： " + int_TochuTaiseki);
 
                 var sequence2 = DOTween.Sequence();
                 sequence2.InsertCallback(3.9f, () => shareChangeFlg_PreCheck_Can_Hantei_Stream_True());
 
                 if (ShuffleCardsMSC.JankenCards_Panel.activeSelf)               // ジャンケンパネルが既に表示されていたら
                 {
-                    //Debug.Log("PreCheck_Can_Hantei_Stream 開始_04");
+                    Debug.Log("PreCheck_Can_Hantei_Stream 開始_04");
 
                     if ((int_IamNowWaiting == 1) && Flg_before_Hantei_Stream)   // 自分のジャンケン手 決定して待機中 （0：まだ決定してない、1：決定して待機中）
                     {                                                           // 勝敗判定（Hantei_Stream） 実行前なら               
-                            //Debug.Log("PreCheck_Can_Hantei_Stream 開始_05");
+                                                                                Debug.Log("PreCheck_Can_Hantei_Stream 開始_05");
 
-                            Check_NowLoginMember();   // 一旦全員のフラグをログアウトにして、ログインしている人から返答をもらう
+                        Check_NowLoginMember();   // 一旦全員のフラグをログアウトにして、ログインしている人から返答をもらう
 
-                            //Debug.Log("1.5秒後、 Check_Can_Hantei_Stream に移行します");
-                            var sequence = DOTween.Sequence();
-                            sequence.InsertCallback(1.5f, () => Check_Can_Hantei_Stream());
+                        Debug.Log("1.5秒後、 Check_Can_Hantei_Stream に移行します");
+                        var sequence = DOTween.Sequence();
+                        sequence.InsertCallback(1.5f, () => Check_Can_Hantei_Stream());
                     }
                     else
                     {
-                        //Debug.Log("勝敗判定（Hantei_Stream） 実行中、もしくは実行後。・・Check_Can_Hantei_Stream には進みません");
+                        Debug.Log("勝敗判定（Hantei_Stream） 実行中、もしくは実行後。・・Check_Can_Hantei_Stream には進みません");
                     }
                 }
                 else
                 {
-                    //Debug.Log("ジャンケンパネルが非表示です。・・Check_Can_Hantei_Stream には進みません");
+                    Debug.Log("ジャンケンパネルが非表示です。・・Check_Can_Hantei_Stream には進みません");
                 }
             }
             else
             {
-                //Debug.Log("Flg_PreCheck_Can_Hantei_Stream が False です。・・Check_Can_Hantei_Stream には進みません");
+                Debug.Log("Flg_PreCheck_Can_Hantei_Stream が False です。・・Check_Can_Hantei_Stream には進みません");
             }
         }
         else
         {
-            //Debug.Log("まだ試合開始前です。・・Check_Can_Hantei_Stream には進みません");
+            Debug.Log("まだ試合開始前です。・・Check_Can_Hantei_Stream には進みません");
         }
 
     }
 
     public void Check_Can_Hantei_Stream()      // 【JK-12】勝敗判定（Hantei_Stream）フェーズへ進めるか確認する： 全員待機中であれば、勝敗判定（Hantei_Stream）に進む。
     {                                          // 一人でも待機まえであれば、何もしない（処理せず全員揃うまで待つ）
-        //Debug.Log("ローカルの CanDoフラグ を OFF にします");
-        //Debug.Log("ローカルの CanDoフラグ を OFF にしました");
-        //Debug.Log("【JK-12】Check_Can_Hantei_Stream()スタート： 勝敗判定（Hantei_Stream）フェーズへ進めるか確認します");
-        //Debug.Log("【JK-12】全員待機中であれば、勝敗判定（Hantei_Stream）に進む。/ 一人でも待機まえであれば、何もしない（処理せず全員揃うまで待つ）");
-        //Debug.Log("【JK-12】■count_RoundRoop : " + count_RoundRoop + " ラウンド");    // N回目のジャンケンループ
+        Debug.Log("ローカルの CanDoフラグ を OFF にします");
+        Debug.Log("ローカルの CanDoフラグ を OFF にしました");
+        Debug.Log("【JK-12】Check_Can_Hantei_Stream()スタート： 勝敗判定（Hantei_Stream）フェーズへ進めるか確認します");
+        Debug.Log("【JK-12】全員待機中であれば、勝敗判定（Hantei_Stream）に進む。/ 一人でも待機まえであれば、何もしない（処理せず全員揃うまで待つ）");
+        Debug.Log("【JK-12】■count_RoundRoop : " + count_RoundRoop + " ラウンド");    // N回目のジャンケンループ
         if (count_RoundRoop == 1)  // 1ラウンド目
         {
-            //Debug.Log("ラウンドループ 1回目");
-            //Debug.Log(TestRoomControllerSC.allPlayers.Length + ": allPlayers.Length");
-            //Debug.Log("現在の参加人数は " + TestRoomControllerSC.int_JoinedPlayerAllNum);
-            //Debug.Log("【JK-12】総参加人数 と 現在待機中の総人数 をチェックします");
+            Debug.Log("ラウンドループ 1回目");
+            Debug.Log(TestRoomControllerSC.allPlayers.Length + ": allPlayers.Length");
+            Debug.Log("現在の参加人数は " + TestRoomControllerSC.int_JoinedPlayerAllNum);
+            Debug.Log("【JK-12】総参加人数 と 現在待機中の総人数 をチェックします");
             NinzuCheck();                          // 【JK-12】総参加人数 と 現在待機中の総人数 （ログアウトしている人の分は「常に待機中」にする）
                                                    //if (int_WaitingPlayers_All >= 4)  // 参加している全員が待機中になっていたら
             if (int_WaitingPlayers_All == SankaNinzu)  // 参加している全員が待機中になっていたら
             {
-                //Debug.Log("■■ int_WaitingPlayers_All == 4 ■■");
-                //Debug.Log("全員待機中です。最後にOKを出した人が、代表して勝敗判定（Hantei_Stream） を実行し、結果を都度、全員に共有します");
+                Debug.Log("■■ int_WaitingPlayers_All == 4 ■■");
+                Debug.Log("全員待機中です。最後にOKを出した人が、代表して勝敗判定（Hantei_Stream） を実行し、結果を都度、全員に共有します");
                 Hantei_Stream();
             }
             else                                   // 一人でも待機まえである
             {
-                //Debug.Log("■■ int_WaitingPlayers_All < SankaNinzu ■■");
-                //Debug.Log("【JK-12_2】まだ決定ボタンを 押していない人がいます");
-                //Debug.Log("【JK-12_2】全員揃うまで待ちます...");
-                //Debug.Log("【JK-12_2】Now Waiting ...");
+                Debug.Log("■■ int_WaitingPlayers_All < SankaNinzu ■■");
+                Debug.Log("【JK-12_2】まだ決定ボタンを 押していない人がいます");
+                Debug.Log("【JK-12_2】全員揃うまで待ちます...");
+                Debug.Log("【JK-12_2】Now Waiting ...");
             }
             Te_RoundAll_ON();             // 全員のジャンケン手  全ラウンド分 表示
         }
         else                      // 2ラウンド目以降
         {
-            //Debug.Log("ラウンドループ 2回目以降");
-            //Debug.Log("自動的に 勝敗判定（Hantei_Stream）に進みます。ローカル実行してください。");
+            Debug.Log("ラウンドループ 2回目以降");
+            Debug.Log("自動的に 勝敗判定（Hantei_Stream）に進みます。ローカル実行してください。");
             Hantei_Stream();      //【JK-21】ジャンケン勝敗判定 実施 ⇒ ジャンケン勝者を1名に絞り込む（2名以上なら Check_Can_Hantei_Stream() に戻る）
         }
     }
 
     public void Hantei_Stream()  //【JK-21】ジャンケン勝敗判定 実施 ⇒ ジャンケン勝者を1名に絞り込む（2名以上なら Check_Can_Hantei_Stream() に戻る）
     {
-        //Debug.Log("【JK-21】勝敗判定（Hantei_Stream） 開始");
+        Debug.Log("【JK-21】勝敗判定（Hantei_Stream） 開始");
 
         photonView.RPC("ShareStartHantei_Stream", RpcTarget.All);       // 勝敗判定（Hantei_Stream） 実行中の旨を全体共有する
 
@@ -2906,40 +2906,40 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         ToCheck_Iam_alive();            // ジャンケンで自分が生き残っているかどうかの確認をする
 
-        //Debug.Log("【JK-21】黒カバー表示確認");
+        Debug.Log("【JK-21】黒カバー表示確認");
         if (Iam_alive == 1) // 自分がジャンケン生存者であるなら
         {
-            //Debug.Log("【JK-22】私は生きています！");
+            Debug.Log("【JK-22】私は生きています！");
             ShuffleCardsMSC.CloseWait_JankenPanel();        // 「待機中」を非表示にする
         }
         else                // 自分がジャンケン敗北者なら
         {
-            //Debug.Log("【JK-22】はぁ、はぁ、敗北者？");
+            Debug.Log("【JK-22】はぁ、はぁ、敗北者？");
             ShuffleCardsMSC.AppearWait_JankenPanel();       // 「待機中」を表示させる（画面を隠す）
         }
 
-        //Debug.Log("【JK-23】ジャンケン ラウンドループ を 開始します");
+        Debug.Log("【JK-23】ジャンケン ラウンドループ を 開始します");
         CountLivePlayer();            //【JK-26】残留しているプレイヤー人数をカウントする ： NumLivePlayer を取得
-        //Debug.Log("NumLivePlayer（ジャンケン生存者）" + NumLivePlayer);
+        Debug.Log("NumLivePlayer（ジャンケン生存者）" + NumLivePlayer);
 
         if (NumLivePlayer >= 2)       // ジャンケン生存者が2人以上残っている場合
         {
-            //Debug.Log("今、" + count_RoundRoop + "回目 のラウンドループです。まだ生存者2人以上です。");
+            Debug.Log("今、" + count_RoundRoop + "回目 のラウンドループです。まだ生存者2人以上です。");
             if (count_RoundRoop <= 5)     // 1～5回目 ラウンドループ
             {
                 JankenBattle_OneRoop();   //【JK-23】じゃんけん手の勝ち負けを判定 → 生存人数（NumLivePlayer）が減る（⇒その後、Check_Can_Hantei_Stream() に戻る）
             }
             else                          // 6回目以降 ラウンドループ
             {
-                //Debug.Log("ラウンドループを5回繰り返しましたが決着つきませんでした。残り1人になるまでやり直します");
+                Debug.Log("ラウンドループを5回繰り返しましたが決着つきませんでした。残り1人になるまでやり直します");
                 photonView.RPC("PrepareToNextSet", RpcTarget.All);
-                //Debug.Log("【JK-37】（延長戦）延長戦に突入します");
+                Debug.Log("【JK-37】（延長戦）延長戦に突入します");
                 photonView.RPC("Janken_ExtraInning", RpcTarget.All);
             }
         }
         else                   //【JK-27_3】ジャンケン生存者が1人のみの場合
         {
-            //Debug.Log("【JK-27_3】決着！ 生存者 1名になりました");    // ここでジャンケンの勝者が 1名 になった
+            Debug.Log("【JK-27_3】決着！ 生存者 1名になりました");    // ここでジャンケンの勝者が 1名 になった
             AfterWinnerDecision();    //【JK-100】この時点で ジャンケン生存者は 1名です。これから勝者の前進ジャンプ処理に移ります。
         }
     }
@@ -3089,7 +3089,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (Flg_OneLoopDone == 0)
         {
             Flg_OneLoopDone = 1;
-            //Debug.Log("【JK-23-】■count_RoundRoop : " + count_RoundRoop + " 回目（ラウンド）のジャンケンループ ");    // N回目のジャンケンループ
+            Debug.Log("【JK-23-】■count_RoundRoop : " + count_RoundRoop + " 回目（ラウンド）のジャンケンループ ");    // N回目のジャンケンループ
             StartCoroutine("Entrance_MainPart");    // メイン判定処理の前段階（2秒待機後に MainPart へ）
         }
         else
@@ -3101,15 +3101,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     IEnumerator Entrance_MainPart()             // メイン判定処理の前段階（2秒待機後に MainPart へ）
     {
-        //Debug.Log("【JK-23-】メイン判定処理の前段階（2秒待機後に MainPart へ）");
+        Debug.Log("【JK-23-】メイン判定処理の前段階（2秒待機後に MainPart へ）");
         yield return new WaitForSeconds(2.0f);
-        //Debug.Log("【JK-23-】2秒 待機しました");
+        Debug.Log("【JK-23-】2秒 待機しました");
         JankenBattle_MainPart();
     }
 
     public void JankenBattle_MainPart()   // 【JK-23-】ジャンケンバトルのメイン判定処理
     {
-        //Debug.Log("【JK-23-】ジャンケンバトルのメイン判定処理");
+        Debug.Log("【JK-23-】ジャンケンバトルのメイン判定処理");
         SetKP_counter();               //【JK-24】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する & 全員のジャンケン手  1ラウンド分ずつ 非表示
 
         var sequence2 = DOTween.Sequence();
@@ -3122,7 +3122,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         CountLivePlayer();             //【JK-26】残留しているプレイヤー人数をカウントする ： NumLivePlayer を取得
         photonView.RPC("Share_JKAvator_MakeSetting", RpcTarget.All);
         count_RoundRoop++;             // N回目 のループ を 1 進める
-        //Debug.Log("ジャンケンバトルのメイン判定処理おわり！ 3秒待って、ラウンドループのはじめに戻ります。");
+        Debug.Log("ジャンケンバトルのメイン判定処理おわり！ 3秒待って、ラウンドループのはじめに戻ります。");
         var sequence2 = DOTween.Sequence();
         sequence2.InsertCallback(1.4f, () => Share_ResetFlg_OneLoopDone());
         var sequence = DOTween.Sequence();
@@ -3137,15 +3137,15 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void PrepareToNextSet()     // 【JK-28】【JK-201】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット【JK-36】
     {
-        //Debug.Log("【JK-28】【JK-201】PrepareToNextSet 次のセットへ移る準備をします");
+        Debug.Log("【JK-28】【JK-201】PrepareToNextSet 次のセットへ移る準備をします");
         ResetMyNumTe_All();               // 【JK-29】MyNumTe 数値を -1 にリセット（int,text）
         Reset_MyRireki_All();             // 【JK-30】MyRireki イメージを null にリセット（Image）
         ToCanPush_All();                  // 【JK-31】じゃんけんカードボタン を押せるようにする(フラグのリセット）（bool）
         ResetPlayerTeNum();               // 【JK-32】Player1 ～ Player4 のじゃんけん手 数値を -1 にリセット（int,text）
         ResetImg_PlayerlayerRireki_All(); // 【JK-33】Player1 ～ Player4 のじゃんけん手 履歴イメージを null にリセット（Image）
-        //Debug.Log("【JK-34】じゃんけんカード 手のリセット");
+        Debug.Log("【JK-34】じゃんけんカード 手のリセット");
         ShuffleCardsMSC.Reset_All();      // 【JK-34】じゃんけんカード 手のリセット
-        //Debug.Log("【JK-35】じゃんけんカード 手のセット");
+        Debug.Log("【JK-35】じゃんけんカード 手のセット");
         ShuffleCardsMSC.Set_All();        // 【JK-35】じゃんけんカード 手のセット
                                           // ResetAlivePlayer();  // 各種カウンター リセット
         count_RoundRoop = 1;              // 【JK-36】ラウンドループカウンター 1に戻す
@@ -3153,17 +3153,17 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void AfterWinnerDecision()     //【JK-100】この時点で ジャンケン生存者は 1名です。これから勝者の前進ジャンプ処理に移ります。
     {
-        //Debug.Log("【JK-100】この時点で ジャンケン生存者は 1名です。これから勝者の前進ジャンプ処理に移ります。");
+        Debug.Log("【JK-100】この時点で ジャンケン生存者は 1名です。これから勝者の前進ジャンプ処理に移ります。");
 
         if (SankaNinzu == 1)          //【JK-101】参加人数が1人の時（テストプレイ時）
         {
-            //Debug.Log("【JK-101】参加人数が1人なので（テストプレイ時）、移動ステップ数を 4 に上書きします");
+            Debug.Log("【JK-101】参加人数が1人なので（テストプレイ時）、移動ステップ数を 4 に上書きします");
             original_StepNum = 4;     // 移動ステップ数を 4 に上書き
         }
 
-        //Debug.Log("【JK-102】ジャンケン勝敗 判定おわり");    // 【JK-102】ここでジャンケンの勝者が 1名 決まっている
+        Debug.Log("【JK-102】ジャンケン勝敗 判定おわり");    // 【JK-102】ここでジャンケンの勝者が 1名 決まっている
 
-        //Debug.Log("【JK-103】ジャンケン勝敗の勝利者は？");
+        Debug.Log("【JK-103】ジャンケン勝敗の勝利者は？");
         photonView.RPC("WhoIsWinner", RpcTarget.All);
 
         photonView.RPC("CloseMyKakejiku", RpcTarget.All);
@@ -3174,10 +3174,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ClosePanel_beforeJump()  // 3秒待ってからジャンケンパネルを閉じる
     {
-        //Debug.Log("【JK-104】ジャンケンで自分が勝利者かどうかの確認をします");
+        Debug.Log("【JK-104】ジャンケンで自分が勝利者かどうかの確認をします");
         ToCheck_Iam_Winner();         //【JK-104】ジャンケンで自分が勝利者かどうかの確認をする → 勝ってたら右にジャンプ（ぴょーん！）！【JK-110】
 
-        //Debug.Log("【JK-200】不要なパネルを閉じて、デフォルト状態にします");
+        Debug.Log("【JK-200】不要なパネルを閉じて、デフォルト状態にします");
         photonView.RPC("Close_AllPanel", RpcTarget.All);
     }
 
@@ -3226,7 +3226,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("AppearImg_CoverBlack_P4", RpcTarget.All);          // 黒カバー表示
         }
-        //Debug.Log("【JK-45】（延長戦）生き残っている者のみが「待機まえ」になりました。敗北者は待機中（見守り中）です。");
+        Debug.Log("【JK-45】（延長戦）生き残っている者のみが「待機まえ」になりました。敗北者は待機中（見守り中）です。");
     }
 
     public void ShareAfterJump()   // 右にジャンプ（ぴょーん！）が完了してからの処理（右上の開始ボタンを押せるように各値をリセット） ⇒ 全員に共有する
@@ -3242,27 +3242,27 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
         ShareEndHantei_Stream();  // 勝敗判定（Hantei_Stream） 実行終了の旨を全体共有する
 
-        //Debug.Log("【JK-201】PrepareToNextSet 次のセットへ移る準備 をします");
+        Debug.Log("【JK-201】PrepareToNextSet 次のセットへ移る準備 をします");
         PrepareToNextSet();           //【JK-201】次のセットへ移る準備： プレイヤー1～4の履歴リセット ＆ MyJanken手 もリセット
-        //Debug.Log("【JK-202】PrepareToNextSet 次のセットへ移る準備 終わりました");
+        Debug.Log("【JK-202】PrepareToNextSet 次のセットへ移る準備 終わりました");
 
-        //Debug.Log("【JK-203】全員の aliveフラグ を 1 にします（全員生存）");
+        Debug.Log("【JK-203】全員の aliveフラグ を 1 にします（全員生存）");
         ResetAlivePlayer();           //【JK-203】各種 生存者カウンター リセット
                                       //anzenPoint = 0;
 
-        //Debug.Log("【JK-204】待機中フラグ（確認用パラメータ） を 初期化（0にする）");
+        Debug.Log("【JK-204】待機中フラグ（確認用パラメータ） を 初期化（0にする）");
         Reset_NowWaiting();          // 待機中フラグ（確認用パラメータ） を 初期化（0にする）
 
-        //Debug.Log("【JK-205】Katakori_stream");
+        Debug.Log("【JK-205】Katakori_stream");
         Katakori_stream();           // 肩こりフラグがONの時のみ実行される（治癒されるまで）
 
-        //Debug.Log("【JK-206】Check_IamHealed");
+        Debug.Log("【JK-206】Check_IamHealed");
         Check_IamHealed();           // 完治して体力が全快したか確認（一定値で回復）
 
-        //Debug.Log("【JK-207】Check_LifeZERO");
+        Debug.Log("【JK-207】Check_LifeZERO");
         Check_LifeZERO();            // 体力がゼロになっているか確認する → セロなら白旗ALL
 
-        //Debug.Log("【JK-208】Update_Life_Players");
+        Debug.Log("【JK-208】Update_Life_Players");
         Update_Life_Players();       // 各プレイヤーのLifeを同期します
 
         if (Life_MyPlayer > 0)        // 体力がゼロより上なら（通常時）
@@ -3308,7 +3308,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ResetAlivePlayer()         //【START-03】【JK-203】各種 生存者カウンター リセット（全員の aliveフラグ を 1 にする）
     {
-        //Debug.Log("【START-03】【JK-203】全員の aliveフラグ を 1 にします（全員生存）");
+        Debug.Log("【START-03】【JK-203】全員の aliveフラグ を 1 にします（全員生存）");
         alivePlayer1 = 1;                    // ジャンケンで残留してれば 1 、負けたら 0
         alivePlayer2 = 1;
         alivePlayer3 = 1;
@@ -3328,7 +3328,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void CheckAlivePlayer_DependOn_Absent()         // 生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）
     {
-        //Debug.Log("生存カウンターのチェック前");
+        Debug.Log("生存カウンターのチェック前");
 
         if (logon_player1 == false)   // player1 が退出しました
         {
@@ -3347,7 +3347,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             alivePlayer4 = 0;         // これ以降、常に alivePlayerフラグ が 0 になる
         }
 
-        //Debug.Log("生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）");
+        Debug.Log("生存カウンターのチェック（欠席している所の aliveフラグ を 0 にする）");
         if (TestRoomControllerSC.string_PID2 == "")
         {
             alivePlayer2 = 0;
@@ -3362,10 +3362,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             alivePlayer4 = 0;
         }
-        //Debug.Log("alivePlayer1 ： " + alivePlayer1);
-        //Debug.Log("alivePlayer2 ： " + alivePlayer2);
-        //Debug.Log("alivePlayer3 ： " + alivePlayer3);
-        //Debug.Log("alivePlayer4 ： " + alivePlayer4);
+        Debug.Log("alivePlayer1 ： " + alivePlayer1);
+        Debug.Log("alivePlayer2 ： " + alivePlayer2);
+        Debug.Log("alivePlayer3 ： " + alivePlayer3);
+        Debug.Log("alivePlayer4 ： " + alivePlayer4);
     }
 
     public void ToCheck_Iam_alive()            // ジャンケンで自分が生き残っているかどうかの確認をする（Iam_alive の値を取得する）
@@ -3376,21 +3376,21 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Check_Iam_alive()              // ジャンケンで自分が生き残っているかどうかの確認をする（Iam_alive の値を取得する）
     {
-        //Debug.Log("* ジャンケンで自分が生き残っているかどうかの確認をします *");
+        Debug.Log("* ジャンケンで自分が生き残っているかどうかの確認をします *");
         WhoAreYou();     // 私の名前（真名）を表示
-        //Debug.Log("AcutivePlayerName  " + AcutivePlayerName);
-        //Debug.Log("AcutivePlayerID  " + AcutivePlayerID);
+        Debug.Log("AcutivePlayerName  " + AcutivePlayerName);
+        Debug.Log("AcutivePlayerID  " + AcutivePlayerID);
 
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
             if (alivePlayer1 == 1) // Player1 が生きている
             {
-                //Debug.Log("私は生きています！");
+                Debug.Log("私は生きています！");
                 Iam_alive = 1;
             }
             else
             {
-                //Debug.Log("はぁ、はぁ、敗北者？");
+                Debug.Log("はぁ、はぁ、敗北者？");
                 Iam_alive = -1;
             }
         }
@@ -3399,12 +3399,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (alivePlayer2 == 1) // Player2 が生きている
             {
-                //Debug.Log("私は生きています！");
+                Debug.Log("私は生きています！");
                 Iam_alive = 1;
             }
             else
             {
-                //Debug.Log("はぁ、はぁ、敗北者？");
+                Debug.Log("はぁ、はぁ、敗北者？");
                 Iam_alive = -1;
             }
         }
@@ -3413,12 +3413,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (alivePlayer3 == 1) // Player3 が生きている
             {
-                //Debug.Log("私は生きています！");
+                Debug.Log("私は生きています！");
                 Iam_alive = 1;
             }
             else
             {
-                //Debug.Log("はぁ、はぁ、敗北者？");
+                Debug.Log("はぁ、はぁ、敗北者？");
                 Iam_alive = -1;
             }
         }
@@ -3427,12 +3427,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (alivePlayer4 == 1) // Player4 が生きている
             {
-                //Debug.Log("私は生きています！");
+                Debug.Log("私は生きています！");
                 Iam_alive = 1;
             }
             else
             {
-                //Debug.Log("はぁ、はぁ、敗北者？");
+                Debug.Log("はぁ、はぁ、敗北者？");
                 Iam_alive = -1;
             }
         }
@@ -3441,33 +3441,33 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void WhoIsWinner()                //【JK-103】ジャンケン勝敗の勝利者は？（この時点で ジャンケン生存者は 1名です）
     {
-        //Debug.Log("【JK-103】ジャンケン勝敗の勝利者は？（この時点で ジャンケン生存者は 1名です）");
+        Debug.Log("【JK-103】ジャンケン勝敗の勝利者は？（この時点で ジャンケン生存者は 1名です）");
         WinnerNum = -1;                      // 一旦リセット
         CountLivePlayer();       //【JK-26】残留しているプレイヤー人数をカウントする★
         if (alivePlayer1 == 1)
         {
-            //Debug.Log("【JK-103】Player1 勝利");  // アバターはまだ確認していないけどね
+            Debug.Log("【JK-103】Player1 勝利");  // アバターはまだ確認していないけどね
             WinnerNum = 1;
             Text_WinnerName.text = TestRoomControllerSC.string_PName1;
             photonView.RPC("AppearKachi_White1", RpcTarget.All);
         }
         else if (alivePlayer2 == 1)
         {
-            //Debug.Log("【JK-103】Player2 勝利");
+            Debug.Log("【JK-103】Player2 勝利");
             WinnerNum = 2;
             Text_WinnerName.text = TestRoomControllerSC.string_PName2;
             photonView.RPC("AppearKachi_White2", RpcTarget.All);
         }
         else if (alivePlayer3 == 1)
         {
-            //Debug.Log("【JK-103】Player3 勝利");
+            Debug.Log("【JK-103】Player3 勝利");
             WinnerNum = 3;
             Text_WinnerName.text = TestRoomControllerSC.string_PName3;
             photonView.RPC("AppearKachi_White3", RpcTarget.All);
         }
         else if (alivePlayer4 == 1)
         {
-            //Debug.Log("【JK-103】Player4 勝利");
+            Debug.Log("【JK-103】Player4 勝利");
             WinnerNum = 4;
             Text_WinnerName.text = TestRoomControllerSC.string_PName4;
             photonView.RPC("AppearKachi_White4", RpcTarget.All);
@@ -3490,16 +3490,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Check_Iam_Winner()         //【JK-105】ジャンケンで自分が勝利者かどうかの確認をする
     {
-        //Debug.Log("【JK-105】ジャンケンで自分が勝利者かどうかの確認をします。自分が勝ってたらジャンプします。");
+        Debug.Log("【JK-105】ジャンケンで自分が勝利者かどうかの確認をします。自分が勝ってたらジャンプします。");
         WhoAreYou();     // 私の名前（真名）を表示
-        //Debug.Log("【JK-105】AcutivePlayerName  " + AcutivePlayerName);
-        //Debug.Log("【JK-105】AcutivePlayerID  " + AcutivePlayerID);
+        Debug.Log("【JK-105】AcutivePlayerName  " + AcutivePlayerName);
+        Debug.Log("【JK-105】AcutivePlayerID  " + AcutivePlayerID);
 
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
             if (WinnerNum == 1)          // プレイヤー1 が勝利者
             {
-                //Debug.Log("【JK-106】P1 自分の勝利！！ 前に進みます！");
+                Debug.Log("【JK-106】P1 自分の勝利！！ 前に進みます！");
                 FromWin_ToJump();       //【JK-106】ジャンケンに勝ったのでジャンプで移動する その一連の処理
             }
         }
@@ -3508,7 +3508,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (WinnerNum == 2)          // プレイヤー2 が勝利者
             {
-                //Debug.Log("【JK-106】P2 自分の勝利！！ 前に進みます！");
+                Debug.Log("【JK-106】P2 自分の勝利！！ 前に進みます！");
                 FromWin_ToJump();       //【JK-106】ジャンケンに勝ったのでジャンプで移動する その一連の処理
             }
         }
@@ -3517,7 +3517,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (WinnerNum == 3)          // プレイヤー3 が勝利者
             {
-                //Debug.Log("【JK-106】P3 自分の勝利！！ 前に進みます！");
+                Debug.Log("【JK-106】P3 自分の勝利！！ 前に進みます！");
                 FromWin_ToJump();       //【JK-106】ジャンケンに勝ったのでジャンプで移動する その一連の処理
             }
         }
@@ -3526,7 +3526,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (WinnerNum == 4)          // プレイヤー4 が勝利者
             {
-                //Debug.Log("【JK-106】P4 自分の勝利！！ 前に進みます！");
+                Debug.Log("【JK-106】P4 自分の勝利！！ 前に進みます！");
                 FromWin_ToJump();       //【JK-106】ジャンケンに勝ったのでジャンプで移動する その一連の処理
             }
         }
@@ -3534,13 +3534,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void WaitTime_2nd()
     {
-        //Debug.Log("2秒待ち");
+        Debug.Log("2秒待ち");
     }
 
     [PunRPC]
     public void Share_JKAvator_StandSetting()     // ジャンケン手、下アバターをスタンド（デフォルト）にし、それを全プレイヤーで共有する
     {
-        //Debug.Log("ジャンケン手、下アバターをスタンド（デフォルト）にし、それを全プレイヤーで共有する");
+        Debug.Log("ジャンケン手、下アバターをスタンド（デフォルト）にし、それを全プレイヤーで共有する");
 
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
@@ -3570,11 +3570,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ToCheck_Iam_alive();            // ジャンケンで自分が生き残っているかどうかの確認をする
         if (Iam_alive == 1)    // 自分がまだジャンケン生存者であるならば
         {
-            //Debug.Log("私はジャンケン生存者です");
+            Debug.Log("私はジャンケン生存者です");
         }
         else     // 自分がジャンケン敗北者ならば
         {
-            //Debug.Log("ジャンケン手、下アバターを負け（しゃがみモーション）にセットし、それを全プレイヤーで共有する");
+            Debug.Log("ジャンケン手、下アバターを負け（しゃがみモーション）にセットし、それを全プレイヤーで共有する");
             if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
             {
                 ShareJKAvator_Make_Player1();  // ジャンケン手、下アバターを負けにし、それを全プレイヤーで共有する
@@ -3619,7 +3619,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("Set_MakeP1_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー1のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー1のアイコンをセットしました");
     }
     [PunRPC]
     public void Set_MakeP1_utako()                     // アバターを 負け うたこ にセット
@@ -3675,7 +3675,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("Set_MakeP2_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー2のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー2のアイコンをセットしました");
     }
     [PunRPC]
     public void Set_MakeP2_utako()                     // アバターを 負け うたこ にセット
@@ -3731,7 +3731,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("Set_MakeP3_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー3のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー3のアイコンをセットしました");
     }
     [PunRPC]
     public void Set_MakeP3_utako()                     // アバターを 負け うたこ にセット
@@ -3787,7 +3787,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("Set_MakeP4_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー4のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー4のアイコンをセットしました");
     }
     [PunRPC]
     public void Set_MakeP4_utako()                     // アバターを 負け うたこ にセット
@@ -3830,11 +3830,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         ToCheck_Iam_alive();            // ジャンケンで自分が生き残っているかどうかの確認をする
         if (Iam_alive != 1)    // 自分がまだジャンケン敗北者であるならば
         {
-            //Debug.Log("私はジャンケン敗北者です");
+            Debug.Log("私はジャンケン敗北者です");
         }
         else     // 自分がジャンケン生存者ならば
         {
-            //Debug.Log("ジャンケン手、下アバターを勝ち（Happyモーション）にセットし、それを全プレイヤーで共有する");
+            Debug.Log("ジャンケン手、下アバターを勝ち（Happyモーション）にセットし、それを全プレイヤーで共有する");
             if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
             {
                 ShareJKAvator_Kachi_Player1();  // ジャンケン手、下アバターを勝ちにし、それを全プレイヤーで共有する
@@ -3879,7 +3879,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("Set_KachiP1_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー1のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー1のアイコンをセットしました");
     }
     [PunRPC]
     public void Set_KachiP1_utako()                     // アバターを 勝ち うたこ にセット
@@ -3935,7 +3935,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("Set_KachiP2_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー2のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー2のアイコンをセットしました");
     }
     [PunRPC]
     public void Set_KachiP2_utako()                     // アバターを 勝ち うたこ にセット
@@ -3991,7 +3991,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("Set_KachiP3_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー3のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー3のアイコンをセットしました");
     }
     [PunRPC]
     public void Set_KachiP3_utako()                     // アバターを 勝ち うたこ にセット
@@ -4047,7 +4047,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("Set_KachiP4_Zunko", RpcTarget.All);
         }
-        //Debug.Log("【START-07】プレイヤー4のアイコンをセットしました");
+        Debug.Log("【START-07】プレイヤー4のアイコンをセットしました");
     }
     [PunRPC]
     public void Set_KachiP4_utako()                     // アバターを 勝ち うたこ にセット
@@ -4105,13 +4105,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
 
         NumLivePlayer = alivePlayer1 + alivePlayer2 + alivePlayer3 + alivePlayer4;
-        //Debug.Log("【JK-26】NumLivePlayer 残留プレイヤー数 ： " + NumLivePlayer);
+        Debug.Log("【JK-26】NumLivePlayer 残留プレイヤー数 ： " + NumLivePlayer);
     }
 
     public void SetKP_counter()         //【JK-24】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する
     {
-        //Debug.Log("【JK-24】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する SetKP_counter()");    // N回目のラウンドループ
-        //Debug.Log("【JK-24】count_RoundRoop" + count_RoundRoop + " 回目（ラウンド）のジャンケンループ ");    // N回目のラウンドループ
+        Debug.Log("【JK-24】ジャンケン勝ち負け判定のループ回数 に伴い、KP に一時的（仮の）値を代入する SetKP_counter()");    // N回目のラウンドループ
+        Debug.Log("【JK-24】count_RoundRoop" + count_RoundRoop + " 回目（ラウンド）のジャンケンループ ");    // N回目のラウンドループ
 
         if (count_RoundRoop == 1)
         {
@@ -4155,13 +4155,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("count_RoundRoop ６回 超えました");
+            Debug.Log("count_RoundRoop ６回 超えました");
             // 再度、ジャンケン手カードの選択をする
         }
-        //Debug.Log("KP1 ： " + KP1);
-        //Debug.Log("KP2 ： " + KP2);
-        //Debug.Log("KP3 ： " + KP3);
-        //Debug.Log("KP4 ： " + KP4);
+        Debug.Log("KP1 ： " + KP1);
+        Debug.Log("KP2 ： " + KP2);
+        Debug.Log("KP3 ： " + KP3);
+        Debug.Log("KP4 ： " + KP4);
     }
 
     public void Check_Gu_Existence()    //【JK-25】NoneGu の判定を返す
@@ -4243,10 +4243,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             NoneGu = false; // グー無しOFF
         }
-        //Debug.Log("NoneGuP1 ： " + NoneGuP1);
-        //Debug.Log("NoneGuP2 ： " + NoneGuP2);
-        //Debug.Log("NoneGuP3 ： " + NoneGuP3);
-        //Debug.Log("NoneGuP4 ： " + NoneGuP4);
+        Debug.Log("NoneGuP1 ： " + NoneGuP1);
+        Debug.Log("NoneGuP2 ： " + NoneGuP2);
+        Debug.Log("NoneGuP3 ： " + NoneGuP3);
+        Debug.Log("NoneGuP4 ： " + NoneGuP4);
     }
 
     public void Check_Choki_Existence() //【JK-25】NoneChoki の判定を返す
@@ -4328,10 +4328,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             NoneChoki = false; // チョキ無しOFF
         }
-        //Debug.Log("NoneChokiP1 ： " + NoneChokiP1);
-        //Debug.Log("NoneChokiP2 ： " + NoneChokiP2);
-        //Debug.Log("NoneChokiP3 ： " + NoneChokiP3);
-        //Debug.Log("NoneChokiP4 ： " + NoneChokiP4);
+        Debug.Log("NoneChokiP1 ： " + NoneChokiP1);
+        Debug.Log("NoneChokiP2 ： " + NoneChokiP2);
+        Debug.Log("NoneChokiP3 ： " + NoneChokiP3);
+        Debug.Log("NoneChokiP4 ： " + NoneChokiP4);
     }
 
     public void Check_Pa_Existence()    //【JK-25】NonePa の判定を返す
@@ -4413,10 +4413,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             NonePa = false; // パー無しOFF
         }
-        //Debug.Log("NonePaP1 ： " + NonePaP1);
-        //Debug.Log("NonePaP2 ： " + NonePaP2);
-        //Debug.Log("NonePaP3 ： " + NonePaP3);
-        //Debug.Log("NonePaP4 ： " + NonePaP4);
+        Debug.Log("NonePaP1 ： " + NonePaP1);
+        Debug.Log("NonePaP2 ： " + NonePaP2);
+        Debug.Log("NonePaP3 ： " + NonePaP3);
+        Debug.Log("NonePaP4 ： " + NonePaP4);
     }
 
 
@@ -4499,10 +4499,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             NoneKing = false; // 王さま無しOFF
         }
-        //Debug.Log("NoneKingP1 ： " + NoneKingP1);
-        //Debug.Log("NoneKingP2 ： " + NoneKingP2);
-        //Debug.Log("NoneKingP3 ： " + NoneKingP3);
-        //Debug.Log("NoneKingP4 ： " + NoneKingP4);
+        Debug.Log("NoneKingP1 ： " + NoneKingP1);
+        Debug.Log("NoneKingP2 ： " + NoneKingP2);
+        Debug.Log("NoneKingP3 ： " + NoneKingP3);
+        Debug.Log("NoneKingP4 ： " + NoneKingP4);
     }
 
     public void Check_Dorei_Existence()    //【JK-25】NoneDorei の判定を返す
@@ -4584,10 +4584,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             NoneDorei = false; // どれい無しOFF
         }
-        //Debug.Log("NoneDoreiP1 ： " + NoneDoreiP1);
-        //Debug.Log("NoneDoreiP2 ： " + NoneDoreiP2);
-        //Debug.Log("NoneDoreiP3 ： " + NoneDoreiP3);
-        //Debug.Log("NoneDoreiP4 ： " + NoneDoreiP4);
+        Debug.Log("NoneDoreiP1 ： " + NoneDoreiP1);
+        Debug.Log("NoneDoreiP2 ： " + NoneDoreiP2);
+        Debug.Log("NoneDoreiP3 ： " + NoneDoreiP3);
+        Debug.Log("NoneDoreiP4 ： " + NoneDoreiP4);
     }
 
     public void Check_Muteki_Existence()    //【JK-25】NoneMuteki の判定を返す
@@ -4669,10 +4669,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             NoneMuteki = false; // むてき無しOFF
         }
-        //Debug.Log("NoneMutekiP1 ： " + NoneMutekiP1);
-        //Debug.Log("NoneMutekiP2 ： " + NoneMutekiP2);
-        //Debug.Log("NoneMutekiP3 ： " + NoneMutekiP3);
-        //Debug.Log("NoneMutekiP4 ： " + NoneMutekiP4);
+        Debug.Log("NoneMutekiP1 ： " + NoneMutekiP1);
+        Debug.Log("NoneMutekiP2 ： " + NoneMutekiP2);
+        Debug.Log("NoneMutekiP3 ： " + NoneMutekiP3);
+        Debug.Log("NoneMutekiP4 ： " + NoneMutekiP4);
     }
 
     public void Check_Wall_Existence()    //【JK-25】NoneWall の判定を返す
@@ -4754,10 +4754,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             NoneWall = false; // 壁無しOFF
         }
-        //Debug.Log("NoneWallP1 ： " + NoneWallP1);
-        //Debug.Log("NoneWallP2 ： " + NoneWallP2);
-        //Debug.Log("NoneWallP3 ： " + NoneWallP3);
-        //Debug.Log("NoneWallP4 ： " + NoneWallP4);
+        Debug.Log("NoneWallP1 ： " + NoneWallP1);
+        Debug.Log("NoneWallP2 ： " + NoneWallP2);
+        Debug.Log("NoneWallP3 ： " + NoneWallP3);
+        Debug.Log("NoneWallP4 ： " + NoneWallP4);
     }
 
     public void Check_WFlag_Existence()    //【JK-25】NoneWFlag の判定を返す
@@ -4849,10 +4849,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             NoneWFlag = false; // 白旗無しOFF
         }
-        //Debug.Log("NoneWFlagP1 ： " + NoneWFlagP1);
-        //Debug.Log("NoneWFlagP2 ： " + NoneWFlagP2);
-        //Debug.Log("NoneWFlagP3 ： " + NoneWFlagP3);
-        //Debug.Log("NoneWFlagP4 ： " + NoneWFlagP4);
+        Debug.Log("NoneWFlagP1 ： " + NoneWFlagP1);
+        Debug.Log("NoneWFlagP2 ： " + NoneWFlagP2);
+        Debug.Log("NoneWFlagP3 ： " + NoneWFlagP3);
+        Debug.Log("NoneWFlagP4 ： " + NoneWFlagP4);
 
         CountLivePlayer();       //【JK-26】残留しているプレイヤー人数をカウントする★
         NumWFlag_AllPlayer = int_WFlagP1 + int_WFlagP2 + int_WFlagP3 + int_WFlagP4;  // 白旗が場に何本あるか？
@@ -4860,11 +4860,11 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Syohai_Hantei()         //【JK-25】生存者同士の 勝ち負けを判定（負けた人のaliveフラグ を 0 にする） → 人数が減る ＆＆ 移動ステップ数を 勝った手に応じて上書き ＆＆ 負けた人の黒カバー表示
     {
-        //Debug.Log("");
-        //Debug.Log("");
-        //Debug.Log("【JK-25】Syohai_Hantei スタート");
-        //Debug.Log("");
-        //Debug.Log("");
+        Debug.Log("");
+        Debug.Log("");
+        Debug.Log("【JK-25】Syohai_Hantei スタート");
+        Debug.Log("");
+        Debug.Log("");
         CountLivePlayer();       //【JK-26】残留しているプレイヤー人数をカウントする★
         Check_Gu_Existence();                //【JK-25】 N回目の すべてのプレイヤーの手 の中に グー(0)     があるか ： NoneGu     を取得
         Check_Choki_Existence();             //【JK-25】 N回目の すべてのプレイヤーの手 の中に チョキ(1)   があるか ： NoneChoki  を取得
@@ -4964,67 +4964,67 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         if (NoneGu)           //【JK-25】（全員 Gu 無し）ちょき か ぱー
         {
-            //Debug.Log("【JK-25】(NoneGu) （全員 Gu 無し）ちょき か ぱー です");
+            Debug.Log("【JK-25】(NoneGu) （全員 Gu 無し）ちょき か ぱー です");
             if (NoneChoki)    //（全員 Choki 無し）ぱー のみ
             {
-                //Debug.Log("【JK-25】(NoneGu) ⇒ ぱー のみ あいこ");
+                Debug.Log("【JK-25】(NoneGu) ⇒ ぱー のみ あいこ");
                 Aiko();       //    ⇒ ぱー のみ
             }
             else if (NonePa)  // (全員 Pa 無し) ちょき のみ
             {
-                //Debug.Log("【JK-25】(NoneGu) ⇒ ちょき のみ あいこ");
+                Debug.Log("【JK-25】(NoneGu) ⇒ ちょき のみ あいこ");
                 Aiko();       //    ⇒ ちょき のみ
             }
             else              // ちょき と ぱー
             {
-                //Debug.Log("【JK-25】(NoneGu) ちょき と ぱー");
+                Debug.Log("【JK-25】(NoneGu) ちょき と ぱー");
                 Win_Choki();
                 Lose_Pa();    //    ⇒  ぱー の人のみ 脱落
             }
         }
         else if (NoneChoki)   //【JK-25】(全員 Choki 無し) ぐー か ぱー （↓これ以降、ぐー は必ずある）
         {
-            //Debug.Log("【JK-25】(NoneChoki) (全員 Choki 無し) ぐー か ぱー です");
+            Debug.Log("【JK-25】(NoneChoki) (全員 Choki 無し) ぐー か ぱー です");
             if (NoneGu)       // (全員 Gu 無し) ぱー のみ
             {
-                //Debug.Log("【JK-25】(NoneChoki) ⇒  ぱー のみ あいこ");
+                Debug.Log("【JK-25】(NoneChoki) ⇒  ぱー のみ あいこ");
                 Aiko();       //    ⇒  ぱー のみ
             }
             else if (NonePa)  // (全員 Pa 無し) ぐー のみ
             {
-                //Debug.Log("【JK-25】(NoneChoki) ⇒  ぐー のみ あいこ");
+                Debug.Log("【JK-25】(NoneChoki) ⇒  ぐー のみ あいこ");
                 Aiko();       //    ⇒  ぐー のみ
             }
             else              // ぐー と ぱー
             {
-                //Debug.Log("【JK-25】(NoneChoki) ぐー と ぱー");
+                Debug.Log("【JK-25】(NoneChoki) ぐー と ぱー");
                 Win_Pa();
                 Lose_Gu();    //    ⇒  ぐー の人のみ 脱落
             }
         }
         else if (NonePa)      //【JK-25】(全員 Pa 無し)  ぐー か ちょき （↓これ以降、ぐー と ちょき は必ずある）
         {
-            //Debug.Log("【JK-25】(NonePa) (全員 Pa 無し)  ぐー か ちょき です");
+            Debug.Log("【JK-25】(NonePa) (全員 Pa 無し)  ぐー か ちょき です");
             if (NoneGu)          // (全員 Gu 無し) ちょき のみ
             {
-                //Debug.Log("【JK-25】(NonePa) ⇒  ちょき のみ あいこ");
+                Debug.Log("【JK-25】(NonePa) ⇒  ちょき のみ あいこ");
                 Aiko();          //    ⇒  ちょき のみ
             }
             else if (NoneChoki)  //（全員 Choki 無し）ぐー のみ
             {
-                //Debug.Log("【JK-25】(NonePa) ⇒  ぐー のみ あいこ");
+                Debug.Log("【JK-25】(NonePa) ⇒  ぐー のみ あいこ");
                 Aiko();          //    ⇒  ぐー のみ
             }
             else                 // ぐー と ちょき
             {
-                //Debug.Log("【JK-25】(NonePa) ぐー と ちょき");
+                Debug.Log("【JK-25】(NonePa) ぐー と ちょき");
                 Win_Gu();
                 Lose_Choki();    //    ⇒  ちょき の人のみ 脱落
             }
         }
         else                     //【JK-25】 ぐー か ちょき か ぱー（↓これ以降、ぐー と ちょき と ぱー は必ずある）
         {
-            //Debug.Log("【JK-25】ぐー ちょき ぱー 全部 で あいこ");
+            Debug.Log("【JK-25】ぐー ちょき ぱー 全部 で あいこ");
             Aiko();              // ぐー ちょき ぱー 全部
         }
     }
@@ -5032,21 +5032,21 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void Aiko()              //【JK-25】残っている人、全員残留
     {
         // 残っている人、全員残留
-        //Debug.Log("【JK-25】あいこ です");
+        Debug.Log("【JK-25】あいこ です");
         photonView.RPC("ShareInfo_Aiko", RpcTarget.All);
     }
 
     [PunRPC]
     public void ShareInfo_Aiko()    //【JK-25】あいこを 全員に共有
     {
-        //Debug.Log("【JK-25】あいこ です");
+        Debug.Log("【JK-25】あいこ です");
     }
 
     #region                   // Janken_Win_Part
     public void Win_Gu()            //【JK-25】ぐー の人のみ 残留（移動ステップ数を 3 に上書き）
     {
         // ぐー の人のみ 残留
-        //Debug.Log("【JK-25】ぐー の人のみ 残留");
+        Debug.Log("【JK-25】ぐー の人のみ 残留");
         photonView.RPC("ShareInfo_Win_Gu", RpcTarget.All);    //【JK-25】 ぐー の人のみ 残留（Win_Gu）を 全員に共有
         original_StepNum = 3;       // 移動ステップ数を 3 に上書き
         photonView.RPC("ShareStepNum_3", RpcTarget.All);    // 移動ステップ数を 3 に上書き → 全員に共有
@@ -5054,13 +5054,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void ShareInfo_Win_Gu()  //【JK-25】 ぐー の人のみ 残留（Win_Gu）を 全員に共有
     {
-        //Debug.Log("【JK-25】ぐー の人のみ 残留（Win_Gu）");
+        Debug.Log("【JK-25】ぐー の人のみ 残留（Win_Gu）");
     }
 
     public void Win_Choki()         //【JK-25】ちょき の人のみ 残留（移動ステップ数を 6 に上書き）
     {
         // ちょき の人のみ 残留
-        //Debug.Log("【JK-25】ちょき の人のみ 残留");
+        Debug.Log("【JK-25】ちょき の人のみ 残留");
         photonView.RPC("ShareInfo_Win_Choki", RpcTarget.All);    //【JK-25】 ちょき の人のみ 残留（Win_Choki）を 全員に共有
         original_StepNum = 6;      // 移動ステップ数を 6 に上書き
         photonView.RPC("ShareStepNum_6", RpcTarget.All);    // 移動ステップ数を 6 に上書き → 全員に共有
@@ -5068,13 +5068,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void ShareInfo_Win_Choki()   //【JK-25】 ちょき の人のみ 残留（Win_Choki）を 全員に共有
     {
-        //Debug.Log("【JK-25】ちょき の人のみ 残留");
+        Debug.Log("【JK-25】ちょき の人のみ 残留");
     }
 
     public void Win_Pa()               //【JK-25】ぱー の人のみ 残留（移動ステップ数を 6 に上書き）
     {
         // ぱー の人のみ 残留
-        //Debug.Log("【JK-25】ぱー の人のみ 残留");
+        Debug.Log("【JK-25】ぱー の人のみ 残留");
         photonView.RPC("ShareInfo_Win_Pa", RpcTarget.All);    //【JK-25】 ぱー の人のみ 残留（Win_Pa）を 全員に共有
         original_StepNum = 6;     // 移動ステップ数を 6 に上書き
         photonView.RPC("ShareStepNum_6", RpcTarget.All);    // 移動ステップ数を 6 に上書き → 全員に共有
@@ -5082,13 +5082,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void ShareInfo_Win_Pa()   //【JK-25】 ぱー の人のみ 残留（Win_Pa）を 全員に共有
     {
-        //Debug.Log("【JK-25】ぱー の人のみ 残留");
+        Debug.Log("【JK-25】ぱー の人のみ 残留");
     }
 
     public void Win_King()               //【JK-25】王さま の人のみ 残留（移動ステップ数を 4 に上書き）
     {
         // 王さま の人のみ 残留
-        //Debug.Log("【JK-25】王さま の人のみ 残留");
+        Debug.Log("【JK-25】王さま の人のみ 残留");
         photonView.RPC("ShareInfo_Win_King", RpcTarget.All);    //【JK-25】 王さま の人のみ 残留（Win_King）を 全員に共有
         original_StepNum = 4;     // 移動ステップ数を 4 に上書き
         photonView.RPC("ShareStepNum_4", RpcTarget.All);    // 移動ステップ数を 4 に上書き → 全員に共有
@@ -5096,13 +5096,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void ShareInfo_Win_King()   //【JK-25】 王さま の人のみ 残留（Win_King）を 全員に共有
     {
-        //Debug.Log("【JK-25】王さま の人のみ 残留");
+        Debug.Log("【JK-25】王さま の人のみ 残留");
     }
 
     public void Win_Dorei()               //【JK-25】どれい の人のみ 残留（移動ステップ数を 15 に上書き）
     {
         // どれい の人のみ 残留
-        //Debug.Log("【JK-25】どれい の人のみ 残留");
+        Debug.Log("【JK-25】どれい の人のみ 残留");
         photonView.RPC("ShareInfo_Win_Dorei", RpcTarget.All);    //【JK-25】 どれい の人のみ 残留（Win_Dorei）を 全員に共有
         original_StepNum = 15;     // 移動ステップ数を 15 に上書き
         photonView.RPC("ShareStepNum_15", RpcTarget.All);    // 移動ステップ数を 15 に上書き → 全員に共有
@@ -5110,19 +5110,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void ShareInfo_Win_Dorei()   //【JK-25】 どれい の人のみ 残留（Win_Dorei）を 全員に共有
     {
-        //Debug.Log("【JK-25】どれい の人のみ 残留");
+        Debug.Log("【JK-25】どれい の人のみ 残留");
     }
 
     public void Win_Muteki()               //【JK-25】むてき の人のみ 残留（移動ステップ数を 15 に上書き）
     {
-        //Debug.Log("【JK-25】むてき の人のみ 残留");
+        Debug.Log("【JK-25】むてき の人のみ 残留");
         original_StepNum = 5;     // 移動ステップ数を 5 に上書き
         photonView.RPC("ShareStepNum_5", RpcTarget.All);    // 移動ステップ数を 5 に上書き → 全員に共有
     }
 
     public void Win_Wall()               //【JK-25】壁 の人のみ 残留（移動ステップ数を 15 に上書き）
     {
-        //Debug.Log("【JK-25】壁 の人のみ 残留");
+        Debug.Log("【JK-25】壁 の人のみ 残留");
         original_StepNum = 1;     // 移動ステップ数を 5 に上書き
         photonView.RPC("ShareStepNum_1", RpcTarget.All);    // 移動ステップ数を 5 に上書き → 全員に共有
     }
@@ -5132,7 +5132,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region                   // Janken_Lose_Part
     public void Lose_Gu()     //【JK-25】ぐー の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
-        //Debug.Log("【JK-25】ぐー（0） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        Debug.Log("【JK-25】ぐー（0） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
         if (KP1 == 0)
         {
             alivePlayer1 = 0;
@@ -5161,7 +5161,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Lose_Choki()  //【JK-25】ちょき の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
-        //Debug.Log("【JK-25】ちょき（1） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        Debug.Log("【JK-25】ちょき（1） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
         if (KP1 == 1)
         {
             alivePlayer1 = 0;
@@ -5190,7 +5190,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Lose_Pa()     //【JK-25】ぱー の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
-        //Debug.Log("【JK-25】ぱー（2） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        Debug.Log("【JK-25】ぱー（2） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
         if (KP1 == 2)
         {
             alivePlayer1 = 0;
@@ -5219,7 +5219,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Lose_King()     //【JK-25】王さま の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
-        //Debug.Log("【JK-25】王さま（13） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        Debug.Log("【JK-25】王さま（13） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
         if (KP1 == 13)
         {
             alivePlayer1 = 0;
@@ -5248,7 +5248,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Lose_Dorei()     //【JK-25】どれい の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
-        //Debug.Log("【JK-25】どれい（23） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        Debug.Log("【JK-25】どれい（23） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
         if (KP1 == 23)
         {
             alivePlayer1 = 0;
@@ -5277,7 +5277,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Lose_Muteki()     //【JK-25】むてき の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
-        //Debug.Log("【JK-25】むてき（601） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        Debug.Log("【JK-25】むてき（601） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
         if (KP1 == 601)
         {
             alivePlayer1 = 0;
@@ -5306,7 +5306,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Lose_Wall()     //【JK-25】壁 の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
-        //Debug.Log("【JK-25】壁（88） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        Debug.Log("【JK-25】壁（88） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
         if (KP1 == 88)
         {
             alivePlayer1 = 0;
@@ -5335,7 +5335,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Lose_WFlag()     //【JK-25】白旗 の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる
     {
-        //Debug.Log("【JK-25】白旗（46） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
+        Debug.Log("【JK-25】白旗（46） の人のみ 脱落  ：aliveフラグ を 0 にする  ＆ 黒カバーを表示させる");
         if (KP1 == 46)
         {
             alivePlayer1 = 0;
@@ -5370,7 +5370,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         WhoAreYou();
         original_StepNum = 1;     // 移動ステップ数を 1 に上書き
-        //Debug.Log("移動ステップ数（original_StepNum）を 1 に上書きしました");
+        Debug.Log("移動ステップ数（original_StepNum）を 1 に上書きしました");
     }
 
     [PunRPC]
@@ -5378,7 +5378,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         WhoAreYou();
         original_StepNum = 3;     // 移動ステップ数を 3 に上書き
-        //Debug.Log("移動ステップ数（original_StepNum）を 3 に上書きしました");
+        Debug.Log("移動ステップ数（original_StepNum）を 3 に上書きしました");
     }
 
     [PunRPC]
@@ -5386,7 +5386,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         WhoAreYou();
         original_StepNum = 4;     // 移動ステップ数を 4 に上書き
-        //Debug.Log("移動ステップ数（original_StepNum）を 4 に上書きしました");
+        Debug.Log("移動ステップ数（original_StepNum）を 4 に上書きしました");
     }
 
     [PunRPC]
@@ -5394,7 +5394,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         WhoAreYou();
         original_StepNum = 5;     // 移動ステップ数を 5 に上書き
-        //Debug.Log("移動ステップ数（original_StepNum）を 5 に上書きしました");
+        Debug.Log("移動ステップ数（original_StepNum）を 5 に上書きしました");
     }
 
     [PunRPC]
@@ -5402,7 +5402,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         WhoAreYou();
         original_StepNum = 6;     // 移動ステップ数を 6 に上書き
-        //Debug.Log("移動ステップ数（original_StepNum）を 6 に上書きしました");
+        Debug.Log("移動ステップ数（original_StepNum）を 6 に上書きしました");
     }
 
     [PunRPC]
@@ -5410,7 +5410,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         WhoAreYou();
         original_StepNum = 8;     // 移動ステップ数を 8 に上書き
-        //Debug.Log("移動ステップ数（original_StepNum）を 8 に上書きしました");
+        Debug.Log("移動ステップ数（original_StepNum）を 8 に上書きしました");
     }
 
     [PunRPC]
@@ -5418,7 +5418,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         WhoAreYou();
         original_StepNum = 15;     // 移動ステップ数を 15 に上書き
-        //Debug.Log("移動ステップ数（original_StepNum）を 15 に上書きしました");
+        Debug.Log("移動ステップ数（original_StepNum）を 15 に上書きしました");
     }
     #endregion
 
@@ -5631,7 +5631,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (logon_player1 == false)      // player1 が退出しました
         {
             alivePlayer1 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
-            int_NowWaiting_Player1 =0;  // これ以降、常に待機フラグが OFFになる
+            int_NowWaiting_Player1 = 0;  // これ以降、常に待機フラグが OFFになる
             AppearLogout_Kakejiku1();    // 「ログアウト中」を表示させる
         }
         else
@@ -5642,7 +5642,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (logon_player2 == false)
         {
             alivePlayer2 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
-            int_NowWaiting_Player2 =0;  // これ以降、常に待機フラグが OFFになる
+            int_NowWaiting_Player2 = 0;  // これ以降、常に待機フラグが OFFになる
             AppearLogout_Kakejiku2();
         }
         else
@@ -5653,7 +5653,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (logon_player3 == false)
         {
             alivePlayer3 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
-            int_NowWaiting_Player3 =0;  // これ以降、常に待機フラグが OFFになる
+            int_NowWaiting_Player3 = 0;  // これ以降、常に待機フラグが OFFになる
             AppearLogout_Kakejiku3();
         }
         else
@@ -5664,7 +5664,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (logon_player4 == false)
         {
             alivePlayer4 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
-            int_NowWaiting_Player4 =0;  // これ以降、常に待機フラグが OFFになる
+            int_NowWaiting_Player4 = 0;  // これ以降、常に待機フラグが OFFになる
             AppearLogout_Kakejiku4();
         }
         else
@@ -5779,34 +5779,34 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void SharePlayerTeNum()    // 【JK-06】現在プレイしているのが「プレイヤーX」 + そのジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）【JK-08】
     {
-        //Debug.Log("【JK-06】************ データ共有 SharePlayerTeNum  スタート **********");
+        Debug.Log("【JK-06】************ データ共有 SharePlayerTeNum  スタート **********");
         WhoAreYou();     // 私の名前（真名）を表示
 
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1)
         {
-            //Debug.Log("【JK-07】今からプレイヤー1＝私（" + AcutivePlayerName + "）のジャンケン手をみんなに提供（共有）します");
+            Debug.Log("【JK-07】今からプレイヤー1＝私（" + AcutivePlayerName + "）のジャンケン手をみんなに提供（共有）します");
             SharePlayerTeNum_Player1();
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName2)
         {
-            //Debug.Log("【JK-07】今からプレイヤー2＝私（" + AcutivePlayerName + "）のジャンケン手をみんなに提供（共有）します");
+            Debug.Log("【JK-07】今からプレイヤー2＝私（" + AcutivePlayerName + "）のジャンケン手をみんなに提供（共有）します");
             SharePlayerTeNum_Player2();
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName3)
         {
-            //Debug.Log("【JK-07】今からプレイヤー3＝私（" + AcutivePlayerName + "）のジャンケン手をみんなに提供（共有）します");
+            Debug.Log("【JK-07】今からプレイヤー3＝私（" + AcutivePlayerName + "）のジャンケン手をみんなに提供（共有）します");
             SharePlayerTeNum_Player3();
         }
 
         else if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName4)
         {
-            //Debug.Log("【JK-07】今からプレイヤー4＝私（" + AcutivePlayerName + "）のジャンケン手をみんなに提供（共有）します");
+            Debug.Log("【JK-07】今からプレイヤー4＝私（" + AcutivePlayerName + "）のジャンケン手をみんなに提供（共有）します");
             SharePlayerTeNum_Player4();
         }
 
-        //Debug.Log("【JK-08】************ データ共有 SharePlayerTeNum おわり **********");
+        Debug.Log("【JK-08】************ データ共有 SharePlayerTeNum おわり **********");
     }
 
 
@@ -5860,12 +5860,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Text_JankenPlayer4_Te4.text = "-1";
         Text_JankenPlayer4_Te5.text = "-1";
 
-        //Debug.Log("【JK-32】PlayerTeNum を すべて「-1」に リセットしました");
+        Debug.Log("【JK-32】PlayerTeNum を すべて「-1」に リセットしました");
     }
 
     public void Reset_MyRireki_All()  // 【JK-30】MyRireki イメージを null にリセット（Image）
     {
-        //Debug.Log("【JK-30】MyRireki イメージを null にリセット（Image）します");
+        Debug.Log("【JK-30】MyRireki イメージを null にリセット（Image）します");
         MyTeImg_1.gameObject.GetComponent<Image>().sprite = null;
         MyTeImg_2.gameObject.GetComponent<Image>().sprite = null;
         MyTeImg_3.gameObject.GetComponent<Image>().sprite = null;
@@ -5881,7 +5881,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ResetImg_PlayerlayerRireki_All()  // 【JK-33】Player1 ～ Player4 のじゃんけん手 履歴イメージを null にリセット（Image）
     {
-        //Debug.Log("【JK-33】Player1 ～ Player4 のじゃんけん手 履歴イメージを null にリセット（Image）");
+        Debug.Log("【JK-33】Player1 ～ Player4 のじゃんけん手 履歴イメージを null にリセット（Image）");
 
         Img_Player1_Te1.gameObject.GetComponent<Image>().sprite = null;
         Img_Player1_Te2.gameObject.GetComponent<Image>().sprite = null;
@@ -5907,7 +5907,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Img_Player4_Te4.gameObject.GetComponent<Image>().sprite = null;
         Img_Player4_Te5.gameObject.GetComponent<Image>().sprite = null;
 
-        //Debug.Log("【JK-33】ジャンケンカード裏 sprite_CardUra（Image）をセットします");
+        Debug.Log("【JK-33】ジャンケンカード裏 sprite_CardUra（Image）をセットします");
 
         Img_Player1_Te1.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
         Img_Player1_Te2.gameObject.GetComponent<Image>().sprite = sprite_CardUra;
@@ -9413,7 +9413,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void SelectGu()     // 【JK-03】手をグーにセット
     {
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
 
         if (count_a == 1)
         {
@@ -9447,19 +9447,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("count_a 6以上");
+            Debug.Log("count_a 6以上");
         }
-        //Debug.Log("【JK-03】手をグーにセット");
+        Debug.Log("【JK-03】手をグーにセット");
         PlayerTeNumSet(0);
-        //Debug.Log("【JK-04】手をグーにセットend");
+        Debug.Log("【JK-04】手をグーにセットend");
 
         count_a++;
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
     }
 
     public void SelectChoki()  // 【JK-03】手をチョキにセット
     {
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
 
         if (count_a == 1)
         {
@@ -9493,19 +9493,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("count_a 6以上");
+            Debug.Log("count_a 6以上");
         }
-        //Debug.Log("【JK-03】手をチョキにセット");
+        Debug.Log("【JK-03】手をチョキにセット");
         PlayerTeNumSet(1);
-        //Debug.Log("【JK-04】手をチョキにセットend");
+        Debug.Log("【JK-04】手をチョキにセットend");
 
         count_a++;
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
     }
 
     public void SelectPa()     // 【JK-03】手をパーにセット
     {
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
 
         if (count_a == 1)
         {
@@ -9539,19 +9539,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("count_a 6以上");
+            Debug.Log("count_a 6以上");
         }
-        //Debug.Log("【JK-03】手をパーにセット");
+        Debug.Log("【JK-03】手をパーにセット");
         PlayerTeNumSet(2);
-        //Debug.Log("【JK-04】手をパーにセットend");
+        Debug.Log("【JK-04】手をパーにセットend");
 
         count_a++;
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
     }
 
     public void SelectKing()     // 【JK-03】手を王さまにセット 1,2,3,4,5
     {
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
 
         if (count_a == 1)
         {
@@ -9585,19 +9585,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("count_a 6以上");
+            Debug.Log("count_a 6以上");
         }
-        //Debug.Log("【JK-03】手を王さまにセット");
+        Debug.Log("【JK-03】手を王さまにセット");
         PlayerTeNumSet(13);
-        //Debug.Log("【JK-04】手を王さまにセットend");
+        Debug.Log("【JK-04】手を王さまにセットend");
 
         count_a++;
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
     }
 
     public void SelectDorei()     // 【JK-03】手をどれいにセット  1,2,3,4,5
     {
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
 
         if (count_a == 1)
         {
@@ -9631,19 +9631,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("count_a 6以上");
+            Debug.Log("count_a 6以上");
         }
-        //Debug.Log("【JK-03】手をどれいにセット");
+        Debug.Log("【JK-03】手をどれいにセット");
         PlayerTeNumSet(23);
-        //Debug.Log("【JK-04】手をどれいにセットend");
+        Debug.Log("【JK-04】手をどれいにセットend");
 
         count_a++;
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
     }
 
     public void SelectMuteki()     // 【JK-03】手をむてきにセット  1,2,3,4,5
     {
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
 
         if (count_a == 1)
         {
@@ -9677,19 +9677,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("count_a 6以上");
+            Debug.Log("count_a 6以上");
         }
-        //Debug.Log("【JK-03】手をむてきにセット");
+        Debug.Log("【JK-03】手をむてきにセット");
         PlayerTeNumSet(601);
-        //Debug.Log("【JK-04】手をむてきにセットend");
+        Debug.Log("【JK-04】手をむてきにセットend");
 
         count_a++;
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
     }
 
     public void SelectWall()     // 【JK-03】手を壁にセット  1,2,3,4,5
     {
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
 
         if (count_a == 1)
         {
@@ -9723,19 +9723,19 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("count_a 6以上");
+            Debug.Log("count_a 6以上");
         }
-        //Debug.Log("【JK-03】手を壁にセット");
+        Debug.Log("【JK-03】手を壁にセット");
         PlayerTeNumSet(88);
-        //Debug.Log("【JK-04】手を壁にセットend");
+        Debug.Log("【JK-04】手を壁にセットend");
 
         count_a++;
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
     }
 
     public void SelectWFlag()     // 【JK-03】手を白旗にセット  1,2,3,4,5
     {
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
 
         if (count_a == 1)
         {
@@ -9769,53 +9769,53 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("count_a 6以上");
+            Debug.Log("count_a 6以上");
         }
-        //Debug.Log("【JK-03】手を白旗にセット");
+        Debug.Log("【JK-03】手を白旗にセット");
         PlayerTeNumSet(46);
-        //Debug.Log("【JK-04】手を白旗にセットend");
+        Debug.Log("【JK-04】手を白旗にセットend");
 
         count_a++;
-        //Debug.Log(count_a + ": count_a");
+        Debug.Log(count_a + ": count_a");
     }
 
 
     public void PlayerTeNumSet(int PTN)  // 【JK-04】私のジャンケンの手は「PTN」（0：グー、1：チョキ、2：パー）です。それをセットします。
     {
-        //Debug.Log("【JK-04】************ ********** *********** **********");
-        //Debug.Log(PTN + ": PTN");
+        Debug.Log("【JK-04】************ ********** *********** **********");
+        Debug.Log(PTN + ": PTN");
 
-        //Debug.Log("【JK-04】現在自分がジャンケンカードボタン押したよ");
+        Debug.Log("【JK-04】現在自分がジャンケンカードボタン押したよ");
         if (Int_MyJanken_Te1 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
-            //Debug.Log("【JK-04】Int_MyJanken_Te1 代入前" + Int_MyJanken_Te1);
+            Debug.Log("【JK-04】Int_MyJanken_Te1 代入前" + Int_MyJanken_Te1);
             Int_MyJanken_Te1 = PTN;
-            //Debug.Log("【JK-04】Int_MyJanken_Te1 代入後" + Int_MyJanken_Te1);
-            //Debug.Log("【JK-04】自分_1 手のセットOK");
+            Debug.Log("【JK-04】Int_MyJanken_Te1 代入後" + Int_MyJanken_Te1);
+            Debug.Log("【JK-04】自分_1 手のセットOK");
         }
         else if (Int_MyJanken_Te2 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
             Int_MyJanken_Te2 = PTN;
-            //Debug.Log("【JK-04】自分_2 手のセットOK");
+            Debug.Log("【JK-04】自分_2 手のセットOK");
         }
         else if (Int_MyJanken_Te3 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
             Int_MyJanken_Te3 = PTN;
-            //Debug.Log("【JK-04】自分_3 手のセットOK");
+            Debug.Log("【JK-04】自分_3 手のセットOK");
         }
         else if (Int_MyJanken_Te4 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
             Int_MyJanken_Te4 = PTN;
-            //Debug.Log("【JK-04】自分_4 手のセットOK");
+            Debug.Log("【JK-04】自分_4 手のセットOK");
         }
         else if (Int_MyJanken_Te5 == -1) //手がまだ決まっていなければ（デフォルト値ならば）
         {
             Int_MyJanken_Te5 = PTN;
-            //Debug.Log("【JK-04】自分_5 手のセットOK");
+            Debug.Log("【JK-04】自分_5 手のセットOK");
         }
         else
         {
-            //Debug.Log("【JK-04】現在自分の 5こすべて手が決まったよ");
+            Debug.Log("【JK-04】現在自分の 5こすべて手が決まったよ");
         }
     }
 
@@ -9824,10 +9824,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region// 【JK-02】ジャンケンカードボタン 押した時の処理（フラグを処理済みにする）
     public void Push_Btn_A() // 【JK-02】ジャンケンカードボタン押したよ
     {
-        //Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
-        if (CanPushBtn_A ==0)
+        Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
+        if (CanPushBtn_A == 0)
         {
-            //Debug.Log("【JK-02】RndCreateCard_A ： " + ShuffleCardsMSC.RndCreateCard_A);
+            Debug.Log("【JK-02】RndCreateCard_A ： " + ShuffleCardsMSC.RndCreateCard_A);
             if (ShuffleCardsMSC.RndCreateCard_A == 0) //グー
             {
                 SelectGu();
@@ -9863,7 +9863,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             else
             {
-                //Debug.Log("ランダム値の見直しが必要！！");
+                Debug.Log("ランダム値の見直しが必要！！");
             }
         }
         Btn_A.interactable = false;
@@ -9874,10 +9874,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Push_Btn_B() // 【JK-02】ジャンケンカードボタン押したよ
     {
-        //Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
+        Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
         if (CanPushBtn_B == 0)
         {
-            //Debug.Log("【JK-02】RndCreateCard_B ： " + ShuffleCardsMSC.RndCreateCard_B);
+            Debug.Log("【JK-02】RndCreateCard_B ： " + ShuffleCardsMSC.RndCreateCard_B);
             if (ShuffleCardsMSC.RndCreateCard_B == 0) //グー
             {
                 SelectGu();
@@ -9913,7 +9913,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             else
             {
-                //Debug.Log("ランダム値の見直しが必要！！");
+                Debug.Log("ランダム値の見直しが必要！！");
             }
         }
         Btn_B.interactable = false;
@@ -9924,10 +9924,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Push_Btn_C() // 【JK-02】ジャンケンカードボタン押したよ
     {
-        //Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
+        Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
         if (CanPushBtn_C == 0)
         {
-            //Debug.Log("【JK-02】RndCreateCard_C ： " + ShuffleCardsMSC.RndCreateCard_C);
+            Debug.Log("【JK-02】RndCreateCard_C ： " + ShuffleCardsMSC.RndCreateCard_C);
             if (ShuffleCardsMSC.RndCreateCard_C == 0) //グー
             {
                 SelectGu();
@@ -9963,7 +9963,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             else
             {
-                //Debug.Log("ランダム値の見直しが必要！！");
+                Debug.Log("ランダム値の見直しが必要！！");
             }
         }
         Btn_C.interactable = false;
@@ -9974,10 +9974,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Push_Btn_D() // 【JK-02】ジャンケンカードボタン押したよ
     {
-        //Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
+        Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
         if (CanPushBtn_D == 0)
         {
-            //Debug.Log("【JK-02】RndCreateCard_D ： " + ShuffleCardsMSC.RndCreateCard_D);
+            Debug.Log("【JK-02】RndCreateCard_D ： " + ShuffleCardsMSC.RndCreateCard_D);
             if (ShuffleCardsMSC.RndCreateCard_D == 0) //グー
             {
                 SelectGu();
@@ -10013,7 +10013,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             else
             {
-                //Debug.Log("ランダム値の見直しが必要！！");
+                Debug.Log("ランダム値の見直しが必要！！");
             }
         }
         Btn_D.interactable = false;
@@ -10024,10 +10024,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Push_Btn_E() // 【JK-02】ジャンケンカードボタン押したよ
     {
-        //Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
+        Debug.Log("【JK-02】ジャンケンカードを1枚 押下しました");
         if (CanPushBtn_E == 0)
         {
-            //Debug.Log("【JK-02】RndCreateCard_E ： " + ShuffleCardsMSC.RndCreateCard_E);
+            Debug.Log("【JK-02】RndCreateCard_E ： " + ShuffleCardsMSC.RndCreateCard_E);
             if (ShuffleCardsMSC.RndCreateCard_E == 0) //グー
             {
                 SelectGu();
@@ -10063,7 +10063,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             else
             {
-                //Debug.Log("ランダム値の見直しが必要！！");
+                Debug.Log("ランダム値の見直しが必要！！");
             }
         }
         Btn_E.interactable = false;
@@ -10074,7 +10074,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Push_StockCard_Up() // StockCard_Up ボタン押したよ
     {
-        //Debug.Log("StockCard_Up ボタン を1枚 押下しました");
+        Debug.Log("StockCard_Up ボタン を1枚 押下しました");
         if (ShuffleCardsMSC.int_StockCard_Up >= 0)   // アイテムがジャンケンカードならば
         {
             if (ShuffleCardsMSC.MyJankenPanel.activeSelf)   // Myジャンケンパネルが開かれていたら
@@ -10083,7 +10083,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                 {
                     if (CanPushBtn_StockCard_Up == 0)
                     {
-                        //Debug.Log("int_StockCard_Up ： " + ShuffleCardsMSC.int_StockCard_Up);
+                        Debug.Log("int_StockCard_Up ： " + ShuffleCardsMSC.int_StockCard_Up);
                         if (ShuffleCardsMSC.int_StockCard_Up == 0) //グー
                         {
                             SelectGu();
@@ -10119,7 +10119,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
                         else
                         {
-                            //Debug.Log("ランダム値の見直しが必要！！");
+                            Debug.Log("ランダム値の見直しが必要！！");
                         }
                     }
                     Btn_StockCard_Up.interactable = false;
@@ -10131,76 +10131,76 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         }
         else
         {
-            //Debug.Log("ジャンケンカード以外のアイテムです");
+            Debug.Log("ジャンケンカード以外のアイテムです");
         }
     }
 
     public void Push_StockCard_Down() // StockCard_Down ボタン押したよ
     {
-        //Debug.Log("StockCard_Down ボタン を1枚 押下しました");
+        Debug.Log("StockCard_Down ボタン を1枚 押下しました");
         if (ShuffleCardsMSC.int_StockCard_Down >= 0)   // ジャンケンカード以外のアイテムならば
         {
             if (ShuffleCardsMSC.MyJankenPanel.activeSelf)   // Myジャンケンパネルが開かれていたら
-        {
-            if ((CanPushBtn_A + CanPushBtn_B + CanPushBtn_C + CanPushBtn_D + CanPushBtn_E + CanPushBtn_StockCard_Up + CanPushBtn_StockCard_Down) < 5)  // 合計5枚分のじゃんけんカードをまだ押していないならば
             {
-                if (CanPushBtn_StockCard_Down == 0)
+                if ((CanPushBtn_A + CanPushBtn_B + CanPushBtn_C + CanPushBtn_D + CanPushBtn_E + CanPushBtn_StockCard_Up + CanPushBtn_StockCard_Down) < 5)  // 合計5枚分のじゃんけんカードをまだ押していないならば
                 {
-                    //Debug.Log("int_StockCard_Down ： " + ShuffleCardsMSC.int_StockCard_Down);
-                    if (ShuffleCardsMSC.int_StockCard_Down == 0) //グー
+                    if (CanPushBtn_StockCard_Down == 0)
                     {
-                        SelectGu();
-                    }
-                    else if (ShuffleCardsMSC.int_StockCard_Down == 1) //チョキ
-                    {
-                        SelectChoki();
-                    }
-                    else if (ShuffleCardsMSC.int_StockCard_Down == 2) //パー
-                    {
-                        SelectPa();
-                    }
-                    else if (ShuffleCardsMSC.int_StockCard_Down == 13) //王さま
-                    {
-                        SelectKing();
-                    }
-                    else if (ShuffleCardsMSC.int_StockCard_Down == 23) //どれい
-                    {
-                        SelectDorei();
-                    }
-                    else if (ShuffleCardsMSC.int_StockCard_Down == 601) //むてき
-                    {
-                        SelectMuteki();
-                    }
-                    else if (ShuffleCardsMSC.int_StockCard_Down == 88) //壁
-                    {
-                        SelectWall();
-                    }
-                    else if (ShuffleCardsMSC.int_StockCard_Down == 46) //白旗
-                    {
-                        SelectWFlag();
-                    }
+                        Debug.Log("int_StockCard_Down ： " + ShuffleCardsMSC.int_StockCard_Down);
+                        if (ShuffleCardsMSC.int_StockCard_Down == 0) //グー
+                        {
+                            SelectGu();
+                        }
+                        else if (ShuffleCardsMSC.int_StockCard_Down == 1) //チョキ
+                        {
+                            SelectChoki();
+                        }
+                        else if (ShuffleCardsMSC.int_StockCard_Down == 2) //パー
+                        {
+                            SelectPa();
+                        }
+                        else if (ShuffleCardsMSC.int_StockCard_Down == 13) //王さま
+                        {
+                            SelectKing();
+                        }
+                        else if (ShuffleCardsMSC.int_StockCard_Down == 23) //どれい
+                        {
+                            SelectDorei();
+                        }
+                        else if (ShuffleCardsMSC.int_StockCard_Down == 601) //むてき
+                        {
+                            SelectMuteki();
+                        }
+                        else if (ShuffleCardsMSC.int_StockCard_Down == 88) //壁
+                        {
+                            SelectWall();
+                        }
+                        else if (ShuffleCardsMSC.int_StockCard_Down == 46) //白旗
+                        {
+                            SelectWFlag();
+                        }
 
-                    else
-                    {
-                        //Debug.Log("ランダム値の見直しが必要！！");
+                        else
+                        {
+                            Debug.Log("ランダム値の見直しが必要！！");
+                        }
                     }
+                    Btn_StockCard_Down.interactable = false;
+                    CanPushBtn_StockCard_Down = 1;
+                    Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
+                    BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
                 }
-                Btn_StockCard_Down.interactable = false;
-                CanPushBtn_StockCard_Down = 1;
-                Check_CanAppear_KetteiBtn();  // ジャンケン手「決定ボタン」を表示できるか確認
-                BGM_SE_MSC.Card_Mekuri_SE();         // じゃんけんカードめくる音
             }
-        }
         }
         else
         {
-            //Debug.Log("ジャンケンカード以外のアイテムです");
+            Debug.Log("ジャンケンカード以外のアイテムです");
         }
     }
 
     public void PushBtn_Omakase() // 【JK-02】おまかせボタン押したよ
     {
-        //Debug.Log("【JK-02】おまかせボタン押したよ");
+        Debug.Log("【JK-02】おまかせボタン押したよ");
         if (CanPushBtn_Omakase)
         {
             Push_Btn_A();
@@ -10222,7 +10222,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void ToCanPush_All()   //【JK-02】 【JK-31】じゃんけんカードボタン を押せるようにする(フラグのリセット）（bool）
     {
-        //Debug.Log("【JK-02】【JK-31】すべてのジャンケンカードボタン を押せるようにします(フラグのリセット）");
+        Debug.Log("【JK-02】【JK-31】すべてのジャンケンカードボタン を押せるようにします(フラグのリセット）");
         ToCanPush_A();
         ToCanPush_B();
         ToCanPush_C();
@@ -10301,7 +10301,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         Int_MyJanken_Te4 = -1;
         Int_MyJanken_Te5 = -1;
 
-        //Debug.Log("【JK-04】【JK-29】自分のジャンケン手をリセットしました");
+        Debug.Log("【JK-04】【JK-29】自分のジャンケン手をリセットしました");
     }
     #endregion
 
@@ -10311,10 +10311,10 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (Flg_FromWin_ToJumpDone == 0)
         {
             Flg_FromWin_ToJumpDone = 1;
-            //Debug.Log("ジャンケン勝者の位置に応じて、SubCamera を移動します");
+            Debug.Log("ジャンケン勝者の位置に応じて、SubCamera を移動します");
             SetPosX_SubCamera_AccordingTo_Winner();  // ジャンケン勝者の位置に応じて、SubCamera を移動する
 
-            //Debug.Log("【JK-107】FromWin_ToJump （ジャンプ移動）処理に入ります");
+            Debug.Log("【JK-107】FromWin_ToJump （ジャンプ移動）処理に入ります");
             Set_StepNum();               //【JK-108】ジャンプする回数を設定する（変数上書き） 
             bridge_JumpToRight();        //【JK-109】右方向へ 指定された回数 ぴょん と跳ねながら移動する
         }
@@ -10327,18 +10327,18 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Set_StepNum()        //【JK-108】ジャンプする回数を設定する（変数上書き） 
     {
-        //Debug.Log("【JK-108】ジャンプする回数を設定（変数上書き）します");
-        //Debug.Log("PlayerSC.MoveForward_StepNum :" + PlayerSC.MoveForward_StepNum);
-        //Debug.Log("original_StepNum :" + original_StepNum);
+        Debug.Log("【JK-108】ジャンプする回数を設定（変数上書き）します");
+        Debug.Log("PlayerSC.MoveForward_StepNum :" + PlayerSC.MoveForward_StepNum);
+        Debug.Log("original_StepNum :" + original_StepNum);
         PlayerSC.MoveForward_StepNum = original_StepNum;   // ジャンプして移動するステップ数（の元となる変数）に上書きする
-        //Debug.Log("PlayerSC.MoveForward_StepNum :" + PlayerSC.MoveForward_StepNum);
+        Debug.Log("PlayerSC.MoveForward_StepNum :" + PlayerSC.MoveForward_StepNum);
     }
 
     public void bridge_JumpToRight()  //【JK-109】右方向へ 指定された回数 ぴょん と跳ねながら移動する
     {
-        //Debug.Log("【JK-109】bridge_JumpToRight（ジャンプ移動） を実行します");
-        //Debug.Log("【JK-109】処理前に " + JumpMaeTaiki + "秒 待機します");
-        //Debug.Log("【JK-109】JumpMaeTaiki : " + JumpMaeTaiki);
+        Debug.Log("【JK-109】bridge_JumpToRight（ジャンプ移動） を実行します");
+        Debug.Log("【JK-109】処理前に " + JumpMaeTaiki + "秒 待機します");
+        Debug.Log("【JK-109】JumpMaeTaiki : " + JumpMaeTaiki);
 
         var sequence = DOTween.Sequence();
         sequence.InsertCallback(JumpMaeTaiki, () => PlayerSC.JumpRight());
@@ -10356,7 +10356,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void bridge_GetDamage()
     {
-        //Debug.Log("bridge_GetDamage を実行します");
+        Debug.Log("bridge_GetDamage を実行します");
         PlayerSC.receivedDammage();
         BGM_SE_MSC.korede_iikana_SE();         // これでいいかな？ SEを流す
 
@@ -10365,9 +10365,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region // サブカメラの処理一連
     public void SetPosX_SubCamera_AccordingTo_Winner()  // ジャンケン勝者の位置に応じて、SubCamera を移動する
     {
-        //Debug.Log("PosX_Winner : " + PosX_Winner);
+        Debug.Log("PosX_Winner : " + PosX_Winner);
         PosX_Winner = MyKage.transform.position.x;
-        //Debug.Log("PosX_Winner : " + PosX_Winner);
+        Debug.Log("PosX_Winner : " + PosX_Winner);
         share_SubCamera_Position();                // サブカメラの位置を移動して共有する ＆＆ サブカメラの表示ON
 
         var sequence = DOTween.Sequence();
@@ -10430,7 +10430,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void AppearSubCamera_Group()
     {
-        //Debug.Log("SubCamera サブカメラ 表示します");
+        Debug.Log("SubCamera サブカメラ 表示します");
         SubCamera_Group.SetActive(true);
         SubCamera.SetActive(true);
         ToLeft_SubCamera = false;
@@ -10439,7 +10439,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void CloseSubCamera_Group()
     {
-        //Debug.Log("SubCamera サブカメラ 非表示");
+        Debug.Log("SubCamera サブカメラ 非表示");
         SubCamera_Group.SetActive(false);
         SubCamera.SetActive(false);
         ToLeft_SubCamera = false;
@@ -10537,7 +10537,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void share_SubCamera_Position()                // サブカメラの位置を移動して共有する ＆＆ サブカメラの表示ON
     {
-        //Debug.Log("サブカメラの位置を移動して共有する");
+        Debug.Log("サブカメラの位置を移動して共有する");
 
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
@@ -10957,11 +10957,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         /*
         if (stream.IsWriting)        //データの送信
         {
-
         }
         else                       //データの受信
         {
-
         }
         */
     }
@@ -10990,9 +10988,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void CheckCanUseTaihou()     // 人間大砲が撃てるか確認します
     {
-        //Debug.Log("CheckCanUseTaihou 人間大砲が撃てるか確認します");
-        //Debug.Log("X_dis_betweenTop : " + X_dis_betweenTop);
-        //Debug.Log("(X_dis30po/2)-1 : " + ((X_dis30po / 2) - 1));
+        Debug.Log("CheckCanUseTaihou 人間大砲が撃てるか確認します");
+        Debug.Log("X_dis_betweenTop : " + X_dis_betweenTop);
+        Debug.Log("(X_dis30po/2)-1 : " + ((X_dis30po / 2) - 1));
 
         if (X_dis_betweenTop >= ((X_dis30po / 2) - 1))      // 首位との差が 14 以上開いていたら
         {
@@ -11078,7 +11076,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void WhoIsTaihouFlyer()                // 大砲で飛んでいるのは誰？
     {
-        //Debug.Log("大砲で飛んでいるのは誰？");
+        Debug.Log("大砲で飛んでいるのは誰？");
         WinnerNum = -1;                      // 一旦リセット
 
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
@@ -11112,7 +11110,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         SetMyAvator_ForChamp();         // チャンプ のアバターを ゴールパネル（表彰台）にセットします。  
     }
 
-#endregion
+    #endregion
 
 
     [PunRPC]
@@ -11152,8 +11150,8 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void WhoAreYou()    // 私の名前（真名）を表示
     {
-        //Debug.Log("私の名前(真名)は・・・");
-        //Debug.Log("PhotonNetwork.NickName ランチャー：" + PhotonNetwork.NickName);
+        Debug.Log("私の名前(真名)は・・・");
+        Debug.Log("PhotonNetwork.NickName ランチャー：" + PhotonNetwork.NickName);
     }
 
     #region// じゃんけんカードの再配布
@@ -11257,9 +11255,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                                                                         //.SetRelative()     // 今いる位置を基準にする  
                     .OnComplete(() =>                                   // ジャンプが終了したら、以下の操作をする
                     {
-                    //Tarai.transform.DORotate(new Vector3(0f, 0f,180), 0.5f);
-                    Tarai_Guwan.Play();                             // tarai当たった時のエフェクト
-                    BGM_SE_MSC.Tarai_Guwan_SE();
+                        //Tarai.transform.DORotate(new Vector3(0f, 0f,180), 0.5f);
+                        Tarai_Guwan.Play();                             // tarai当たった時のエフェクト
+                        BGM_SE_MSC.Tarai_Guwan_SE();
                         int minus_Life = UnityEngine.Random.Range(1, 11);
                         if (minus_Life <= 7)
                         {
@@ -11276,7 +11274,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                         var sequence3 = DOTween.Sequence();
                         sequence3.InsertCallback(1.5f, () => Tarai_Fukki());
 
-                        //Debug.Log("たらいを回転させる");
+                        Debug.Log("たらいを回転させる");
                         Tarai.transform.DORotate(new Vector3(0f, 0f, 180), 0.3f);
                         var sequence = DOTween.Sequence();
                         sequence.InsertCallback(0.3f, () => FallTarai_After03());
@@ -11285,9 +11283,9 @@ public class SelectJanken : MonoBehaviour, IPunObservable
             }
             else   // 安全ヨシカードが1枚以上有れば
             {
-                Tarai.transform  
+                Tarai.transform
                     .DOMove(PosMyHead + new Vector3(0f, 0.2f, 10), 0.5f)                            // たらいを下（キャラの頭の位置）に移動する（落下させる） (PosMyHead)
-                                                        //.SetRelative()     // 今いる位置を基準にする  
+                                                                                                    //.SetRelative()     // 今いる位置を基準にする  
                     .OnComplete(() =>                                   // ジャンプが終了したら、以下の操作をする
                     {
                         //Tarai.transform.DORotate(new Vector3(0f, 0f,180), 0.5f);
@@ -11295,7 +11293,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                         Tarai_Guwan.Play();                             // tarai当たった時のエフェクト
                         BGM_SE_MSC.barrier_SE();
                         ResetCountdown_timer_Kettei_1();                // 自動カウントダウンを一時停止
-                        //Debug.Log("たらいを回転させる");
+                        Debug.Log("たらいを回転させる");
                         Tarai.transform.DORotate(new Vector3(0f, 0f, 180), 0.3f);
                         Tarai.transform.DOMove(new Vector3(PlayerSC.ToTarai.transform.position.x, PlayerSC.ToTarai.transform.position.y + 10f, PlayerSC.ToTarai.transform.position.z), 1.0f);
                         Sum_AnzenYoshi_Card--;
@@ -11351,7 +11349,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void share_tarai_Position()                // たらいの位置をジャンパーの位置に移動して全員に共有する
     {
-        //Debug.Log("たらいの位置を移動して共有する");
+        Debug.Log("たらいの位置を移動して共有する");
         Tarai.transform.position = PlayerSC.MyTenjo.transform.position;
         Tarai_Guwan.transform.position = new Vector3(PlayerSC.MyTenjo.transform.position.x, PlayerSC.MyHead.transform.position.y, PlayerSC.MyTenjo.transform.position.z);
 
@@ -11380,7 +11378,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     [PunRPC]
     public void Tarai_MoveTo_PosX_Player1()   // Tarai を realPosX_Player1 の位置に移動する
     {
-        //Debug.Log("Tarai を realPosX_Player1 の位置に移動する");
+        Debug.Log("Tarai を realPosX_Player1 の位置に移動する");
         Sara.transform.position = new Vector3(PosX_Player1, PosY_taraiSet + flo_sky_taraiSet, Tarai.transform.position.z);
         Sara_Guwan.transform.position = new Vector3(PosX_Player1, PosY_taraiSet + 0.8f, Tarai_Guwan.transform.position.z);
 
@@ -11421,7 +11419,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         if (myPlayer.transform.position.x >= GoalCorn_Head.transform.position.x)  // ゴールにたどり着いた！
         {
-            //Debug.Log("GOOOOOALLL！！！！");
+            Debug.Log("GOOOOOALLL！！！！");
             Check_Champ_Avator();
             photonView.RPC("ShareGameSet", RpcTarget.All);
             GoalFlg = true;
@@ -11434,12 +11432,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Check_Champ_Avator()
     {
-        //Debug.Log("チャンピョンのアバターをセットします。");
+        Debug.Log("チャンピョンのアバターをセットします。");
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
             if (WinnerNum == 1)          // プレイヤー1 が勝利者
             {
-                //Debug.Log("P1 私がチャンプだ！！！！");
+                Debug.Log("P1 私がチャンプだ！！！！");
             }
         }
 
@@ -11447,7 +11445,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (WinnerNum == 2)          // プレイヤー2 が勝利者
             {
-                //Debug.Log("P2 私がチャンプだ！！！！");
+                Debug.Log("P2 私がチャンプだ！！！！");
             }
         }
 
@@ -11455,7 +11453,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (WinnerNum == 3)          // プレイヤー3 が勝利者
             {
-                //Debug.Log("P3 私がチャンプだ！！！！");
+                Debug.Log("P3 私がチャンプだ！！！！");
             }
         }
 
@@ -11463,7 +11461,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             if (WinnerNum == 4)          // プレイヤー4 が勝利者
             {
-                //Debug.Log("P4 私がチャンプだ！！！！");
+                Debug.Log("P4 私がチャンプだ！！！！");
             }
         }
         SetMyAvator_ForChamp();  // チャンプ のアバターを ゴールパネル（表彰台）にセットします。
@@ -11474,7 +11472,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         photonView.RPC("CloseWinner_avator_All", RpcTarget.All);
 
-        //Debug.Log("チャンプ のアバターを ゴールパネル（表彰台）にセットします。");
+        Debug.Log("チャンプ のアバターを ゴールパネル（表彰台）にセットします。");
         if (int_conMyCharaAvatar == 1)  // うたこ
         {
             photonView.RPC("AppearWinner_avator_1", RpcTarget.All);
@@ -11495,13 +11493,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("AppearWinner_avator_5", RpcTarget.All);
         }
-        //Debug.Log("チャンプ のアバターを ゴールパネル（表彰台）にセットしました。");
+        Debug.Log("チャンプ のアバターを ゴールパネル（表彰台）にセットしました。");
     }
 
     [PunRPC]
     public void ShareGameSet()          // GOAL して GameSet した旨を全員に共有する
     {
-        //Debug.Log("GOOOOOALLL！！！！");
+        Debug.Log("GOOOOOALLL！！！！");
         Countdown_Push_OpenMyJankenPanel_Button_Flg = false;
         GameSet_Flg = true;
         Erase_Text_Announcement();
@@ -11827,7 +11825,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         logon_player1 = false;
         alivePlayer1 = 0;            // これ以降、常に alivePlayerフラグ が 0 になる
-        int_NowWaiting_Player1 =0;  // これ以降、常に待機フラグが OFFになる
+        int_NowWaiting_Player1 = 0;  // これ以降、常に待機フラグが OFFになる
         AppearLogout_Kakejiku1();    // 掛け軸を表示する 
     }
 
@@ -11836,7 +11834,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         logon_player2 = false;
         alivePlayer2 = 0;         // これ以降、常に alivePlayerフラグ が 0 になる
-        int_NowWaiting_Player2 =0;  // これ以降、常に待機フラグが OFFになる
+        int_NowWaiting_Player2 = 0;  // これ以降、常に待機フラグが OFFになる
         AppearLogout_Kakejiku2();    // 掛け軸を表示する
     }
 
@@ -11845,7 +11843,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         logon_player3 = false;
         alivePlayer3 = 0;         // これ以降、常に alivePlayerフラグ が 0 になる
-        int_NowWaiting_Player3 =0;  // これ以降、常に待機フラグが OFFになる
+        int_NowWaiting_Player3 = 0;  // これ以降、常に待機フラグが OFFになる
         AppearLogout_Kakejiku3();    // 掛け軸を表示する
     }
 
@@ -11854,13 +11852,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         logon_player4 = false;
         alivePlayer4 = 0;         // これ以降、常に alivePlayerフラグ が 0 になる
-        int_NowWaiting_Player4 =0;  // これ以降、常に待機フラグが OFFになる
+        int_NowWaiting_Player4 = 0;  // これ以降、常に待機フラグが OFFになる
         AppearLogout_Kakejiku4();    // 掛け軸を表示する
     }
 
     public void Ctrl_Check_NowLoginMember()   // 一旦全員のフラグをログアウトにして、ログインしている人から返答をもらう              
     {
-        //Debug.Log("全員に対してログイン状況を確認します");
+        Debug.Log("全員に対してログイン状況を確認します");
 
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
         {
@@ -11892,7 +11890,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         {
             photonView.RPC("ChangeFlg_False_Check_NowLoginMember", RpcTarget.All);
 
-            //Debug.Log("一旦全部のログオンフラグをfalseにする");
+            Debug.Log("一旦全部のログオンフラグをfalseにする");
             photonView.RPC("ChangeFlg_Logout_Player1", RpcTarget.All);   // player1 が退出しました
             photonView.RPC("ChangeFlg_Logout_Player2", RpcTarget.All);   // player2 が退出しました
             photonView.RPC("ChangeFlg_Logout_Player3", RpcTarget.All);   // player3 が退出しました
@@ -11903,7 +11901,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
                                                                          //logon_player4 = false;
             photonView.RPC("AppearLogout_Kakejiku_All", RpcTarget.All);   // すべての掛け軸を開く
 
-            //Debug.Log("全員に対して死活監視を実行 & 自分の掛け軸を閉じます");
+            Debug.Log("全員に対して死活監視を実行 & 自分の掛け軸を閉じます");
             photonView.RPC("Response_AliveMonitoring", RpcTarget.All);  // 全員に対して死活監視を実行 → ログイン中ならば返答が返ってくる
 
             var sequence = DOTween.Sequence();
@@ -12129,7 +12127,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         Encounter_ItemCard_Down.SetActive(true);
     }
-    
+
     public void CloseEncounter_ItemCard_Down()
     {
         Encounter_ItemCard_Down.SetActive(false);
@@ -12139,7 +12137,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     {
         int RandomChange_ItemCard = UnityEngine.Random.Range(1, 11);
 
-        if(RandomChange_ItemCard <= 2)
+        if (RandomChange_ItemCard <= 2)
         {
             ChangeTo_Fatigue_Card();   // 図柄を 疲労カード にする
         }
@@ -12183,16 +12181,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
         if (ShuffleCardsMSC.Stock_Button_Up.activeSelf == false || ShuffleCardsMSC.Stock_Button_Down.activeSelf == false)  // どちらか一方のストックが開いていたら
         {
             text_Item_Setsumei.text = "むてきチョキ をストック";
-            //Debug.Log("むてきチョキ をストック");
+            Debug.Log("むてきチョキ をストック");
             if (ShuffleCardsMSC.Stock_Button_Up.activeSelf == false)  // StockU が非表示（未セット）ならば
             {
-                //Debug.Log("StockU が非表示（未セット）ならば");
+                Debug.Log("StockU が非表示（未セット）ならば");
                 ShuffleCardsMSC.StockUp_Set_MutekiCard();     // StockU に むてきカード をセットします  
                 ShuffleCardsMSC.Stock_Button_Up.SetActive(true);
             }
             else
             {
-                //Debug.Log("StockU が アクティブ ならば");
+                Debug.Log("StockU が アクティブ ならば");
                 ShuffleCardsMSC.StockDown_Set_MutekiCard();     // StockDown に むてきカード をセットします  
                 ShuffleCardsMSC.Stock_Button_Down.SetActive(true);
             }
@@ -12213,16 +12211,16 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
             if (ShuffleCardsMSC.Stock_Button_Up.activeSelf == false)  // StockU が非表示（未セット）ならば
             {
-                //Debug.Log("StockU が非表示（未セット）ならば");
-                //Debug.Log("StockU に AnzenYoshi_Card をセットします  ");
+                Debug.Log("StockU が非表示（未セット）ならば");
+                Debug.Log("StockU に AnzenYoshi_Card をセットします  ");
                 ShuffleCardsMSC.Stock_Button_Up.gameObject.GetComponent<Image>().sprite = AnzenYoshi_Card;
                 ShuffleCardsMSC.Stock_Button_Up.SetActive(true);
                 ShuffleCardsMSC.int_StockCard_Up = -1;
             }
             else
             {
-                //Debug.Log("StockU が アクティブ ならば");
-                //Debug.Log("StockDown に AnzenYoshi_Card をセットします  ");
+                Debug.Log("StockU が アクティブ ならば");
+                Debug.Log("StockDown に AnzenYoshi_Card をセットします  ");
                 ShuffleCardsMSC.Stock_Button_Down.gameObject.GetComponent<Image>().sprite = AnzenYoshi_Card;
                 ShuffleCardsMSC.Stock_Button_Down.SetActive(true);
                 ShuffleCardsMSC.int_StockCard_Down = -1;
@@ -12285,7 +12283,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     public void CureKatakori2()  // 肩こりが治癒しました2
     {
         HariQ_Button.SetActive(false);    //非表示にする
-        //Debug.Log("肩こりが治癒しました");
+        Debug.Log("肩こりが治癒しました");
         Text_Katakori_cure.text = "";
         Katakori_hajimari_Flg = true;
         Redistribute_JankenCards();    // じゃんけんカードの再配布
@@ -12323,13 +12321,13 @@ public class SelectJanken : MonoBehaviour, IPunObservable
     #region // 安全ヨシ
     public void AppearBarrier()
     {
-        //Debug.Log("AppearBarrier！");
+        Debug.Log("AppearBarrier！");
         PlayerSC.Barrier.SetActive(true);
     }
 
     public void CloseBarrier()
     {
-        //Debug.Log("CloseBarrier！");
+        Debug.Log("CloseBarrier！");
         PlayerSC.Barrier.SetActive(false);
     }
     #endregion
@@ -12346,7 +12344,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void StartSet_Life_Players()   // 体力をセットします[初期値のセット]
     {
-        //Debug.Log("体力をセットします[初期値のセット]");
+        Debug.Log("体力をセットします[初期値のセット]");
 
         int_calculation_Life = 0;
         if (PhotonNetwork.NickName == TestRoomControllerSC.string_PName1) // 自身がプレイヤー1 であるなら
@@ -13300,7 +13298,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Check_DamageUmu()  // ダメージの有無を確認する
     {
-        if(int_calculation_Life < 0)      // int_calculation_Life がマイナスであれば
+        if (int_calculation_Life < 0)      // int_calculation_Life がマイナスであれば
         {
             Direction_Heart_Damage();  // 被ダメージ時、ハートを白く点滅させる
         }
@@ -13333,7 +13331,7 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void Direction_Heart_Damage_P1()  // 被ダメージ時、ハートを白く点滅させる
     {
-        //Debug.Log("被ダメージ時、ハートを白く点滅させる");
+        Debug.Log("被ダメージ時、ハートを白く点滅させる");
         AppearHeart_Damage_P1();
 
         var sequence = DOTween.Sequence();
@@ -13354,22 +13352,22 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void AppearHeart_Damage_P1()
     {
-        Heart_Damage_P1.SetActive(true);       
+        Heart_Damage_P1.SetActive(true);
     }
 
     public void CloseHeart_Damage_P1()
     {
-        Heart_Damage_P1.SetActive(false);        
+        Heart_Damage_P1.SetActive(false);
     }
 
     #region// LifeZERO（体力ゼロの時の処理＆回復）
 
     public void Check_LifeZERO()  // 体力がゼロになっているか確認する → セロなら白旗ALL
     {
-        //Debug.Log("Check_LifeZERO スタート");
+        Debug.Log("Check_LifeZERO スタート");
         if (Shiai_Kaishi)        // 試合中であれば
         {
-            //Debug.Log("試合中です");
+            Debug.Log("試合中です");
             if (Life_MyPlayer <= 0)        // 体力がゼロになっているなら
             {
                 LoseTurns();       // 体力がゼロになっているため、ジャンケンカードを白旗のみにします（一回休み）
@@ -13379,20 +13377,20 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void LoseTurns()       // 体力がゼロになっているため、ジャンケンカードを白旗のみにします（一回休み）
     {
-        //Debug.Log("LoseTurns スタート");
+        Debug.Log("LoseTurns スタート");
 
         PlayerSC.anim.SetBool("down", true);
-        //Debug.Log("anim down スタート");
+        Debug.Log("anim down スタート");
 
         ShuffleCardsMSC.SetAll_WFlagCard();    // すべて白旗カード でセットします（このターンは負け確定）  
 
-        //Debug.Log("SetAll_WFlagCard スタート");
+        Debug.Log("SetAll_WFlagCard スタート");
 
         if (Level_MyHealing <= 0)
         {
             var sequence = DOTween.Sequence();
             sequence.InsertCallback(0.5f, () => AppearPanel_Kizetsu());
-        }       
+        }
     }
 
     public void Check_IamHealed()  // 完治して体力が全快したか確認（一定値で回復）
@@ -13456,12 +13454,12 @@ public class SelectJanken : MonoBehaviour, IPunObservable
 
     public void AppearPanel_Kizetsu()
     {
-        Panel_Kizetsu.SetActive(true);        
+        Panel_Kizetsu.SetActive(true);
     }
 
     public void ClosePanel_Kizetsu()
     {
-        Panel_Kizetsu.SetActive(false);        
+        Panel_Kizetsu.SetActive(false);
     }
     #endregion
 

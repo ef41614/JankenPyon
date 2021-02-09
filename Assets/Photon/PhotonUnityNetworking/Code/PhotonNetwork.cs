@@ -1304,6 +1304,7 @@ namespace Photon.Pun
         /// </remarks>
         public static void Disconnect()
         {
+            Debug.Log("PhotonNetwork.Disconnect ‚Í‚¶‚Ü‚è");
             if (OfflineMode)
             {
                 OfflineMode = false;
@@ -1313,12 +1314,15 @@ namespace Photon.Pun
                 return;
             }
 
+            Debug.Log("PhotonNetwork.Disconnect ’†ŠÔ01");
+
             if (NetworkingClient == null)
             {
                 return; // Surpress error when quitting playmode in the editor
             }
-
+            Debug.Log("PhotonNetwork.Disconnect ’†ŠÔ02");
             NetworkingClient.Disconnect();
+            Debug.Log("PhotonNetwork.Disconnect ‚¨‚í‚è");
         }
 
         /// <summary>Can be used to reconnect to the master server after a disconnect.</summary>

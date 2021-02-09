@@ -288,7 +288,10 @@ namespace Photon.Pun
                 {
                     if (view.isRuntimeInstantiated)
                     {
-                        instantiatedGos.Add(view.gameObject); // HashSet keeps each object only once
+                        if (view != null)
+                        {
+                            instantiatedGos.Add(view.gameObject); // HashSet keeps each object only once
+                        }
                     }
                     // For non-instantiated objects (scene objects) - reset the view
                     else
@@ -1447,7 +1450,6 @@ namespace Photon.Pun
 
             for (int index = 0; index < removeKeys.Count; index++)
             {
-
                 int key = removeKeys[index];
                 Debug.LogError("NewScene Clean " + key);
                 photonViewList.Remove(key);

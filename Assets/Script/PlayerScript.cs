@@ -30,6 +30,11 @@ public class PlayerScript : MonoBehaviour
     public GameObject Barrier;   // 魔方陣と上バリアのセット
 
 
+    private void Awake()
+    {
+        Debug.Log("PlayerScript Awake 出席確認");
+    }
+
     // Start is called before the first frame update
     void Start()
     {

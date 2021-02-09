@@ -51936,7 +51936,7 @@ MonoBehaviour:
     type: 3}
   playerPrefab_pchan: {fileID: 261074773749362242, guid: 951d5defec470e746a1c8be0e3863877,
     type: 3}
-  playerPrefab_mobuchan: {fileID: 6857760471485967512, guid: 2bffeb6a5e7ded643aad02a3d0132eb9,
+  playerPrefab_mobuchan: {fileID: 3655861814758769932, guid: 2bffeb6a5e7ded643aad02a3d0132eb9,
     type: 3}
   playerPrefab_Zunko: {fileID: 2239757030654393519, guid: 4d2c0fdf92593dc4eba8ef40f2a3261e,
     type: 3}

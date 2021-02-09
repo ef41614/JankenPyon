@@ -42,6 +42,8 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         Debug.Log("****** CLauncherScript Awake **");
         Debug.Log(" firstPush ： " + firstPush);
         Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
+        BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
+        BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
 
         firstPush = false; //初期化
         if (PhotonNetwork.IsConnected)  // 2週目以降で既にルームに入室していたら
@@ -57,15 +59,17 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         }
         Debug.Log(" firstPush ： " + firstPush);
         Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
-        BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
+        //BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
         //Volume_Panel = GameObject.Find("Volume_Panel");
         //Credit_Panel = GameObject.Find("Credit_Panel");
     }
 
     void Start()
     {
+        Debug.Log("CLauncherScript Start 出席確認");
+
         AppearVolume_Panel();
-        BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
+        //BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
         BGM_SE_MSC.Dadadadau_BGM();
         BGM_SE_MSC.find_Vol_Panel();
         CloseVolume_Panel();
@@ -80,6 +84,14 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         ClosePlayStartButton_Panel();
         CloseCredit_Panel();
         CloseAikotoba_Panel();
+
+        if (PhotonNetwork.IsConnected)  // 2週目以降で既にルームに入室していたら
+        {
+            Debug.Log("ルームに入っていたので、一旦退出します");
+            PhotonNetwork.Disconnect();
+            //PhotonNetwork.LeaveRoom();
+            Debug.Log("ルームから退出しました");
+        }
     }
 
 
@@ -87,6 +99,9 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     //ログインボタンを押したときに実行される
     public void Connect()     // 「ランダムマッチ」ボタンを押した時の処理
     {
+        BGM_SE_Manager = GameObject.Find("BGM_SE_Manager");
+        BGM_SE_MSC = BGM_SE_Manager.GetComponent<BGM_SE_Manager>();
+
         Debug.Log("CLauncherScript で「Play」が押されました。");
         Debug.Log(" firstPush ： " + firstPush);
         Debug.Log(" PhotonNetwork.IsConnected ： " + PhotonNetwork.IsConnected);
