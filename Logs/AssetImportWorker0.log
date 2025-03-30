@@ -1,6 +1,6 @@
 Using pre-set license
 Built from '2020.2/staging' branch; Version is '2020.2.3f1 (8ff31bc5bf5b) revision 9433883'; Using compiler version '192528614'; Build Type 'Release'
-OS: 'Windows 10 Home; OS build 18363.1316; Version 1909; 64bit' Language: 'ja' Physical Memory: 8107 MB
+OS: 'Windows 10 Home; OS build 26100.3476; Version 2009; 64bit' Language: 'ja' Physical Memory: 32478 MB
 BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
 
  COMMAND LINE ARGUMENTS:
@@ -11,29 +11,636 @@ C:\Program Files\Unity\Hub\Editor\2020.2.3f1\Editor\Unity.exe
 -name
 AssetImportWorker0
 -projectPath
-C:/Users/accho/Desktop/Unity/JankenPyon/JankenPyon
+P:/自作ゲーム/ジャンケンピョン/JankenPyon-master/JankenPyon
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-52524
-Successfully changed project path to: C:/Users/accho/Desktop/Unity/JankenPyon/JankenPyon
-C:/Users/accho/Desktop/Unity/JankenPyon/JankenPyon
+54870
+Successfully changed project path to: P:/自作ゲーム/ジャンケンピョン/JankenPyon-master/JankenPyon
+P:/自作ゲーム/ジャンケンピョン/JankenPyon-master/JankenPyon
 Using Asset Import Pipeline V2.
-Refreshing native plugins compatible for Editor in 2687.08 ms, found 0 plugins.
+Refreshing native plugins compatible for Editor in 134.44 ms, found 0 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2020.2.3f1 (8ff31bc5bf5b)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.2.3f1/Editor/Data/Resources/UnitySubsystems
-[Subsystems] Discovering subsystems at path C:/Users/accho/Desktop/Unity/JankenPyon/JankenPyon/Assets
+[Subsystems] Discovering subsystems at path P:/自作ゲーム/ジャンケンピョン/JankenPyon-master/JankenPyon/Assets
 GfxDevice: creating device client; threaded=0
 Direct3D:
     Version:  Direct3D 11.0 [level 11.1]
-    Renderer: Intel(R) HD Graphics 4600 (ID=0x416)
+    Renderer: AMD Radeon RX 7700 XT (ID=0x747e)
     Vendor:   
-    VRAM:     2048 MB
-    Driver:   20.19.15.4835
+    VRAM:     12076 MB
+    Driver:   31.0.24002.92
 Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.2.3f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.2.3f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.2.3f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56180
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56688
 Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.2.3f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.2.3f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.001043 seconds.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 76.87 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.570 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 1.287301 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.57 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  6.417 seconds
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Refreshing native plugins compatible for Editor in 0.57 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1790 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 87.3 MB.
+System memory in use after: 87.4 MB.
+
+Unloading 45 unused Assets to reduce memory usage. Loaded Objects now: 2215.
+Total: 1.177100 ms (FindLiveObjects: 0.121200 ms CreateObjectMapping: 0.023900 ms MarkObjects: 0.980800 ms  DeleteObjects: 0.050300 ms)
+
+========================================================================
+Received Import Request.
+  path: Assets/Resources/playerPrefab_pchan.prefab
+  artifactKey: Guid(951d5defec470e746a1c8be0e3863877) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/playerPrefab_pchan.prefab using Guid(951d5defec470e746a1c8be0e3863877) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2227afc950cc7308bc20fd4e0396fdb5') in 0.215068 seconds
+  Import took 0.218098 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000234 seconds.
+  path: Assets/Resources/playerPrefab_utako.prefab
+  artifactKey: Guid(0b21657f021417446b84e6cdf8c8d238) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/playerPrefab_utako.prefab using Guid(0b21657f021417446b84e6cdf8c8d238) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cfdebc9be2108240f7e6f7c592d24aad') in 0.056183 seconds
+  Import took 0.058746 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000213 seconds.
+  path: Assets/Resources/RoomElement.prefab
+  artifactKey: Guid(0707c5421722137439df36ff666ae671) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/RoomElement.prefab using Guid(0707c5421722137439df36ff666ae671) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7f5fbf700f31d7bacb69f8d0d34c9c75') in 0.024146 seconds
+  Import took 0.026301 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000225 seconds.
+  path: Assets/Animation
+  artifactKey: Guid(2942c89d8bfc3cf41a040571d2bce20c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation using Guid(2942c89d8bfc3cf41a040571d2bce20c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '78676f7baffa1c38eb24739cb12e1c89') in 0.019994 seconds
+  Import took 0.021871 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000178 seconds.
+  path: Assets/Resources/DOTweenSettings.asset
+  artifactKey: Guid(3a8468e19dc1d7e4fb68103876cec8e2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/DOTweenSettings.asset using Guid(3a8468e19dc1d7e4fb68103876cec8e2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5ca5506c74a0024bad4a3f705d6c3bbc') in 0.023706 seconds
+  Import took 0.025520 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000225 seconds.
+  path: Assets/Resources/playerPrefab_mobuchan.prefab
+  artifactKey: Guid(2bffeb6a5e7ded643aad02a3d0132eb9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/playerPrefab_mobuchan.prefab using Guid(2bffeb6a5e7ded643aad02a3d0132eb9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00a33b6cf99f661065e3b1c33cb3c340') in 0.064440 seconds
+  Import took 0.066795 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000214 seconds.
+  path: Assets/Resources/playerPrefab_yuzuru.prefab
+  artifactKey: Guid(bbceed3b12e98ed48ad33b5df89fbe37) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/playerPrefab_yuzuru.prefab using Guid(bbceed3b12e98ed48ad33b5df89fbe37) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'df9334da00f0d15cc9707f06b37133a5') in 0.077455 seconds
+  Import took 0.080025 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000216 seconds.
+  path: Assets/Resources/playerPrefab_Zunko.prefab
+  artifactKey: Guid(4d2c0fdf92593dc4eba8ef40f2a3261e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/playerPrefab_Zunko.prefab using Guid(4d2c0fdf92593dc4eba8ef40f2a3261e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c9d498e919e0c8b47933d17485ac684f') in 0.055346 seconds
+  Import took 0.057915 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000228 seconds.
+  path: Assets/Resources/playerPrefab_unitychan.prefab
+  artifactKey: Guid(c383db6425352c9468410f6b18951cba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/playerPrefab_unitychan.prefab using Guid(c383db6425352c9468410f6b18951cba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '83f3992311fe7efc0e58f078f9cc2bb6') in 0.065888 seconds
+  Import took 0.068377 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.358818 seconds.
+  path: Assets/Animation/yuzuru_anime
+  artifactKey: Guid(536f7afaaaa5769488cda94a6963b48a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/yuzuru_anime using Guid(536f7afaaaa5769488cda94a6963b48a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '18ea7c25189448897323b2c56f46356a') in 0.014598 seconds
+  Import took 0.016475 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.125982 seconds.
+  path: Assets/Animation/yuzuru_anime/yuzuru_animator.controller
+  artifactKey: Guid(b6dd64f5b161a6346b77a4b88ec5864c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/yuzuru_anime/yuzuru_animator.controller using Guid(b6dd64f5b161a6346b77a4b88ec5864c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b2d8bef0be7b6d45ef0a8a3b13120b6c') in 0.015346 seconds
+  Import took 0.017250 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 14.476159 seconds.
+  path: Assets/Animation/yuzuru_anime/yuzuru_stand.anim
+  artifactKey: Guid(869db3e563baf0543bd1284888ca66a7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/yuzuru_anime/yuzuru_stand.anim using Guid(869db3e563baf0543bd1284888ca66a7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0c88337b1eab24630cf295c3c27a8934') in 0.018634 seconds
+  Import took 0.020587 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 16.424154 seconds.
+  path: Assets/sozai
+  artifactKey: Guid(201ca77378544174f8329a39d641d8bd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai using Guid(201ca77378544174f8329a39d641d8bd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '148bc64d9b3cf48782537afe946c46ea') in 0.016099 seconds
+  Import took 0.018015 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.056742 seconds.
+  path: Assets/sozai/yuzuru
+  artifactKey: Guid(0706c6d0124a854459202b50e4cf0b10) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru using Guid(0706c6d0124a854459202b50e4cf0b10) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e22aa4b35acc976ba3580eafa7e9c227') in 0.014534 seconds
+  Import took 0.016354 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.028280 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_damage1.png
+  artifactKey: Guid(4d01b6140e639e94ebf1e3cccfb48b79) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_damage1.png using Guid(4d01b6140e639e94ebf1e3cccfb48b79) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b832e61f0eb6994e6bfc3147df42e912') in 0.069415 seconds
+  Import took 0.071440 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000215 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri3_open.png
+  artifactKey: Guid(5a077be2347ef304da1fd45ca98c32cf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri3_open.png using Guid(5a077be2347ef304da1fd45ca98c32cf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9d872a275b4522c58ac76d98cf87966a') in 0.034737 seconds
+  Import took 0.036509 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000246 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri5_close.png
+  artifactKey: Guid(5207dd4e9b5eecd49901639e148b6baf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri5_close.png using Guid(5207dd4e9b5eecd49901639e148b6baf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5369b1b14149191f9df26682a5814d2f') in 0.033316 seconds
+  Import took 0.035334 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000245 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri4_close.png
+  artifactKey: Guid(6d4670e76bc545c45a239365213ec605) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri4_close.png using Guid(6d4670e76bc545c45a239365213ec605) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'de53373abddcfe189394d255ad3ec982') in 0.032989 seconds
+  Import took 0.034873 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000223 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_koke2.png
+  artifactKey: Guid(1fbd153fdd0881845974ed2ab45009c1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_koke2.png using Guid(1fbd153fdd0881845974ed2ab45009c1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6b9a6bf4b03dec96b74d0eeeeaa1af6f') in 0.027578 seconds
+  Import took 0.029427 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000204 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hakusyu2.png
+  artifactKey: Guid(b3480c858d49d3d4197b6472ecd39c07) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hakusyu2.png using Guid(b3480c858d49d3d4197b6472ecd39c07) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fd0bc8ea459cad74f988514ceb26c6cd') in 0.036995 seconds
+  Import took 0.038819 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000229 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri2_close.png
+  artifactKey: Guid(4b0f76c0244c79944be85302554daf7f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri2_close.png using Guid(4b0f76c0244c79944be85302554daf7f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd33d2dbb6732272e5b789dedbdcb790f') in 0.035449 seconds
+  Import took 0.037357 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000206 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_tachi2.png
+  artifactKey: Guid(4db8d01032f6d654db8c6aab5284c787) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_tachi2.png using Guid(4db8d01032f6d654db8c6aab5284c787) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '530a0f1becc267344916aab02b2941eb') in 0.038804 seconds
+  Import took 0.040707 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000193 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_koke1.png
+  artifactKey: Guid(46a70aa9d9f5ca84cb3334b11b2244d8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_koke1.png using Guid(46a70aa9d9f5ca84cb3334b11b2244d8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6d25afec12b001b006d23d2c9ba1f639') in 0.031318 seconds
+  Import took 0.033263 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000215 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri1_open.png
+  artifactKey: Guid(bb474817a5a580348a1092411daae705) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri1_open.png using Guid(bb474817a5a580348a1092411daae705) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6adb098e631878aa7603d254f54b15e4') in 0.036586 seconds
+  Import took 0.038459 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000221 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_damage2.png
+  artifactKey: Guid(59692c4e2807b0544ae6328def89f1b5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_damage2.png using Guid(59692c4e2807b0544ae6328def89f1b5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1275cf1fc6f3893a787adc011735f459') in 0.034748 seconds
+  Import took 0.036585 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000195 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_walk1.png
+  artifactKey: Guid(9a4c1038cb91ba847b1f7cb99c2280a7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_walk1.png using Guid(9a4c1038cb91ba847b1f7cb99c2280a7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6facfef5dfb63d7885a7b9a861703fa0') in 0.032973 seconds
+  Import took 0.034812 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000217 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_icon.png
+  artifactKey: Guid(3560948f600ec334095bdd78162dc231) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_icon.png using Guid(3560948f600ec334095bdd78162dc231) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ee7cfb5b8bd595eea54762c0d6260096') in 0.028360 seconds
+  Import took 0.030288 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000212 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hakusyu1.png
+  artifactKey: Guid(c0a609ce256f7f94dbaa17423416bddd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hakusyu1.png using Guid(c0a609ce256f7f94dbaa17423416bddd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bc116c2b10bee3bb78a098e3e83d9fe4') in 0.035606 seconds
+  Import took 0.037540 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000207 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri4_open.png
+  artifactKey: Guid(ed1c15165ad65f14d9a4c09c83e03aaa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri4_open.png using Guid(ed1c15165ad65f14d9a4c09c83e03aaa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9a2d5d50da9c9811554d04dc694fb94c') in 0.032112 seconds
+  Import took 0.033968 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000223 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri2_open.png
+  artifactKey: Guid(50c8ebbaefe439b418d19e829cdc4d59) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri2_open.png using Guid(50c8ebbaefe439b418d19e829cdc4d59) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6fba6037c485eab5c377b0f304e9bbb6') in 0.032387 seconds
+  Import took 0.034261 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000220 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri5_open.png
+  artifactKey: Guid(1aca7f87efefb4a43bd09d8f289ad37a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri5_open.png using Guid(1aca7f87efefb4a43bd09d8f289ad37a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6df9d6aa89329f44dae1d0ec9e377981') in 0.032791 seconds
+  Import took 0.034611 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000216 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_kiotsuke.png
+  artifactKey: Guid(2fa19360ad6f5864881d9f17eb327c81) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_kiotsuke.png using Guid(2fa19360ad6f5864881d9f17eb327c81) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '01b9bb08349dca8894b431f3cef85691') in 0.035032 seconds
+  Import took 0.036956 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000195 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_tachi1.png
+  artifactKey: Guid(b1cf27c14cb5e614e941cacd0ce0a388) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_tachi1.png using Guid(b1cf27c14cb5e614e941cacd0ce0a388) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'db1ec6446029eb962c5b330a5b3e9612') in 0.033836 seconds
+  Import took 0.035706 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000222 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri6_open.png
+  artifactKey: Guid(855da34a00a757a45a7f227c74d5b59a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri6_open.png using Guid(855da34a00a757a45a7f227c74d5b59a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f2a2b0ab8470b5f1a3c12e7e2a0b3cde') in 0.033150 seconds
+  Import took 0.035040 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000205 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri3_close.png
+  artifactKey: Guid(cbf66d817ac8441498a7fc332e00bcd5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri3_close.png using Guid(cbf66d817ac8441498a7fc332e00bcd5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '02e182f4efaec91a7d09583b689d4895') in 0.032535 seconds
+  Import took 0.034547 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000207 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri1_close.png
+  artifactKey: Guid(8780bb894cda107438a97bbe9cd66499) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri1_close.png using Guid(8780bb894cda107438a97bbe9cd66499) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f5e67835cf0304790fc2a708c7952f3d') in 0.033491 seconds
+  Import took 0.035311 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000220 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_walk2.png
+  artifactKey: Guid(e8072affbe7d6e443a299f8cafd55fa6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_walk2.png using Guid(e8072affbe7d6e443a299f8cafd55fa6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4e9f5adde6cbf2b300ee97690f946117') in 0.031808 seconds
+  Import took 0.033681 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000207 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_down.png
+  artifactKey: Guid(e44aecf5f47a2a345995943dc0baa45b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_down.png using Guid(e44aecf5f47a2a345995943dc0baa45b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2808405b0a9e0bae6f9371fd425feb9b') in 0.035282 seconds
+  Import took 0.037146 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000227 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_fly.png
+  artifactKey: Guid(023cd6fe5c62062439c7673762b2f693) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_fly.png using Guid(023cd6fe5c62062439c7673762b2f693) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '51fb46156b3e77638dfdba78dad25e53') in 0.034567 seconds
+  Import took 0.036554 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000203 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_happy.png
+  artifactKey: Guid(a993a2fe7f5774f4ba53ace85f554ca7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_happy.png using Guid(a993a2fe7f5774f4ba53ace85f554ca7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '20b218025f24619867c4caeab66eaebd') in 0.032850 seconds
+  Import took 0.034661 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000218 seconds.
+  path: Assets/sozai/yuzuru/yuzuru_hashiri6_close.png
+  artifactKey: Guid(1e95fc9c0da88de429017f9c52b88cf3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/yuzuru/yuzuru_hashiri6_close.png using Guid(1e95fc9c0da88de429017f9c52b88cf3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '78b2c2a0b3b0662827b2a5fde73e0bee') in 0.033301 seconds
+  Import took 0.035130 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 135.045666 seconds.
+  path: Assets/Resources
+  artifactKey: Guid(be0e2027f2a8ac741af2fbdf04a826ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources using Guid(be0e2027f2a8ac741af2fbdf04a826ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '188b7d4cdf102dadd6d8b2ebce23a1cc') in 0.020622 seconds
+  Import took 0.023012 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 55.197099 seconds.
+  path: Assets/Animation/yuzuru_anime/yuzuru_damage.anim
+  artifactKey: Guid(bfe04581eac275a4fa0eb367cb5ed998) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/yuzuru_anime/yuzuru_damage.anim using Guid(bfe04581eac275a4fa0eb367cb5ed998) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4bb789b9866953bbff1dc274318f90fe') in 0.017303 seconds
+  Import took 0.019251 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 55.728530 seconds.
+  path: Assets/Animation/yuzuru_anime/New Animator Controller.controller
+  artifactKey: Guid(0561ef8bb02c7ee41b11cc2698974c57) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/yuzuru_anime/New Animator Controller.controller using Guid(0561ef8bb02c7ee41b11cc2698974c57) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1cee333d461cedb04d19e8194c738eb3') in 0.015977 seconds
+  Import took 0.018516 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 203.531078 seconds.
+  path: Assets/Animation/yuzuru_anime/yuzuru_run.anim
+  artifactKey: Guid(3ff4e356991f0284a846c25730b193c4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/yuzuru_anime/yuzuru_run.anim using Guid(3ff4e356991f0284a846c25730b193c4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd46499f500040de3685735f8b9aa4b58') in 0.017017 seconds
+  Import took 0.019738 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 503.622264 seconds.
+  path: Assets/Animation/yuzuru_anime/yuzuru_KeepDown.anim
+  artifactKey: Guid(f842dde39bafaa94e9fad365153b435c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/yuzuru_anime/yuzuru_KeepDown.anim using Guid(f842dde39bafaa94e9fad365153b435c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '54084010e32800a5b97d6d8020ed5e70') in 0.014158 seconds
+  Import took 0.016746 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 36.691069 seconds.
+  path: Assets/Animation/utako_anime
+  artifactKey: Guid(cf469afdbc3bb8449b7ea1600ff945f2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/utako_anime using Guid(cf469afdbc3bb8449b7ea1600ff945f2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5a3f507c9ecb44a6b1bb61b06ab04098') in 0.013741 seconds
+  Import took 0.016983 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.566448 seconds.
+  path: Assets/Animation/utako_anime/utako_KeepDown.anim
+  artifactKey: Guid(33296abbed14c4949ba25d713a386550) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/utako_anime/utako_KeepDown.anim using Guid(33296abbed14c4949ba25d713a386550) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0de1c1f8fbdde2c3ea6136acaa4caaa8') in 0.015667 seconds
+  Import took 0.017505 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000210 seconds.
+  path: Assets/sozai/utako/utako_down.png
+  artifactKey: Guid(99de2a14b04c7984cb6521796ddc635a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/sozai/utako/utako_down.png using Guid(99de2a14b04c7984cb6521796ddc635a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e3a89d790872d3fa3cc26235c1b953a7') in 0.037504 seconds
+  Import took 0.039396 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 59.545602 seconds.
+  path: Assets/Animation/yuzuru_anime/yuzuru_fly.anim
+  artifactKey: Guid(d5d1970ff0ba0f5489cc17206591efde) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/yuzuru_anime/yuzuru_fly.anim using Guid(d5d1970ff0ba0f5489cc17206591efde) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '29b99aa2f308941c2af7ebfda5836db2') in 0.006836 seconds
+  Import took 0.009875 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 153.050003 seconds.
+  path: Assets/Animation/yuzuru_anime/yuzuru_down.anim
+  artifactKey: Guid(9ebea8e0940d07f47812b593fb37cd9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/yuzuru_anime/yuzuru_down.anim using Guid(9ebea8e0940d07f47812b593fb37cd9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f4b0e1e64d6461723d18c0561859f469') in 0.007314 seconds
+  Import took 0.009454 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.002868 seconds.
+  path: Assets/Animation/yuzuru_anime/yuzuru_down.anim
+  artifactKey: Guid(9ebea8e0940d07f47812b593fb37cd9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/yuzuru_anime/yuzuru_down.anim using Guid(9ebea8e0940d07f47812b593fb37cd9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f4b0e1e64d6461723d18c0561859f469') in 0.005446 seconds
+  Import took 0.007357 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 1.323000 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.65 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  5.974 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.65 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1772 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 89.9 MB.
+System memory in use after: 90.0 MB.
+
+Unloading 39 unused Assets to reduce memory usage. Loaded Objects now: 2233.
+Total: 1.134200 ms (FindLiveObjects: 0.084200 ms CreateObjectMapping: 0.027400 ms MarkObjects: 0.965400 ms  DeleteObjects: 0.056100 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.235836 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.59 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  6.221 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.66 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1771 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 89.9 MB.
+System memory in use after: 90.0 MB.
+
+Unloading 35 unused Assets to reduce memory usage. Loaded Objects now: 2236.
+Total: 1.058000 ms (FindLiveObjects: 0.085800 ms CreateObjectMapping: 0.020200 ms MarkObjects: 0.936300 ms  DeleteObjects: 0.014900 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 1.161119 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.61 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.514 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.64 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1771 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 89.9 MB.
+System memory in use after: 90.0 MB.
+
+Unloading 35 unused Assets to reduce memory usage. Loaded Objects now: 2239.
+Total: 1.035500 ms (FindLiveObjects: 0.078900 ms CreateObjectMapping: 0.019000 ms MarkObjects: 0.920800 ms  DeleteObjects: 0.016100 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 1.169451 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.69 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.486 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.58 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1771 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 89.9 MB.
+System memory in use after: 90.0 MB.
+
+Unloading 35 unused Assets to reduce memory usage. Loaded Objects now: 2242.
+Total: 1.123500 ms (FindLiveObjects: 0.079600 ms CreateObjectMapping: 0.025700 ms MarkObjects: 0.999800 ms  DeleteObjects: 0.017700 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 1.151481 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.61 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  6.103 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.60 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1771 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 89.9 MB.
+System memory in use after: 90.0 MB.
+
+Unloading 35 unused Assets to reduce memory usage. Loaded Objects now: 2245.
+Total: 1.198200 ms (FindLiveObjects: 0.091200 ms CreateObjectMapping: 0.020700 ms MarkObjects: 1.066500 ms  DeleteObjects: 0.018800 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 1.323246 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.63 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  6.647 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.58 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1771 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 89.9 MB.
+System memory in use after: 90.1 MB.
+
+Unloading 35 unused Assets to reduce memory usage. Loaded Objects now: 2248.
+Total: 1.463200 ms (FindLiveObjects: 0.114700 ms CreateObjectMapping: 0.029000 ms MarkObjects: 1.301100 ms  DeleteObjects: 0.017100 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 887.399019 seconds.
+  path: Assets/Scenes/Battle.unity
+  artifactKey: Guid(091a7e9934aedcf449f2bc24100766b4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Battle.unity using Guid(091a7e9934aedcf449f2bc24100766b4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8f1cbcb2f239d988f3537357343a95dd') in 0.019419 seconds
+  Import took 0.021379 seconds .
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file

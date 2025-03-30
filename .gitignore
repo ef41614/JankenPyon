@@ -34,3 +34,26 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Unityのログファイル
+Logs/
+*.log
+
+# プロファイリングやメモリキャプチャのキャッシュ
+MemoryCaptures/
+
+# Rider IDE
+.idea/
+*.iml
+
+# Visual Studio Code
+.vscode/
+
+# その他のエディタのバックアップファイル
+*.swp
+*.bak
+
+# Unityバックアップファイル
+*.tmp
+*.bak
+*.svd

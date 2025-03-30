@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+//using static System.Net.Mime.MediaTypeNames;
 
 public class CLauncherScript : MonoBehaviourPunCallbacks
 {
@@ -20,6 +21,7 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
     public GameObject Pchan_Button;
     public GameObject Mobuchan_Button;
     public GameObject Zunko_Button;
+    public GameObject Yuzuru_Button;  // yuzuru用のボタン    
 
     public GameObject PlayStartButton_Panel;
 
@@ -205,6 +207,11 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         int_MyCharaAvatar = 5;
     }
 
+    public void Select_CharaAvatar_yuzuru()
+    {
+        int_MyCharaAvatar = 6;  // yuzuruのアバターIDに設定
+    }
+
     public static int get_int_MyCharaAvatar()
     {
         return int_MyCharaAvatar;
@@ -240,6 +247,12 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         Zunko_Button.GetComponent<Image>().color = Color.green;
     }
 
+    public void Select_Yuzuru_Avatar()
+    {
+        Reset_AvatarAll();
+        Yuzuru_Button.GetComponent<Image>().color = Color.green;
+    }
+
     public void Reset_AvatarAll()
     {
         Utako_Button.GetComponent<Image>().color = Color.gray;
@@ -247,6 +260,7 @@ public class CLauncherScript : MonoBehaviourPunCallbacks
         Pchan_Button.GetComponent<Image>().color = Color.gray;
         Mobuchan_Button.GetComponent<Image>().color = Color.gray;
         Zunko_Button.GetComponent<Image>().color = Color.gray;
+        Yuzuru_Button.GetComponent<Image>().color = Color.gray;  // yuzuruのボタン色をリセット
     }
 
     //●表示させる

@@ -55,7 +55,33 @@ namespace BEFOOL.PhotonTest
         private void Awake()
         {
             Debug.Log("TestRoomController Awake 出席確認");
+
+            // joinedMembersTextがnullの場合、動的に生成
+            if (joinedMembersText == null)
+            {
+                Debug.LogWarning("joinedMembersTextが設定されていないため、動的に生成します。");
+
+                // 新しいGameObjectを作成し、Textコンポーネントを追加
+                GameObject dummyTextGO = new GameObject("DummyText");
+                dummyTextGO.transform.SetParent(this.transform); // 親オブジェクトを設定（オプション）
+                joinedMembersText = dummyTextGO.AddComponent<Text>();
+
+                // 初期設定
+                joinedMembersText.font = Resources.GetBuiltinResource<Font>("Arial.ttf"); // フォントを設定
+                joinedMembersText.text = ""; // 初期値を設定
+                joinedMembersText.enabled = false; // 表示しない設定
+            }
+
+            // joinedMembersTextが存在していることを確認
+            if (joinedMembersText != null)
+            {
+                Debug.Log("joinedMembersTextが正常に生成または設定されています");
+                Debug.Log($"joinedMembersTextの親オブジェクト: {joinedMembersText.gameObject.transform.parent.name}");
+            }
+
+            // その他の初期化処理があればここに追加
         }
+
 
         void Start()
         {
@@ -330,7 +356,12 @@ namespace BEFOOL.PhotonTest
 
         public void UpdateMemberList()
         {
+            Debug.Log("PlayerListの状態: " + (PhotonNetwork.PlayerList != null ? "正常" : "null"));
+
             allPlayers = PhotonNetwork.PlayerList; // プレイヤーの配列（自身を含む）
+
+            Debug.Log("PlayerListの状態: " + (PhotonNetwork.PlayerList != null ? "正常" : "null"));
+
             joinedMembersText.text = "";
             foreach (var p in PhotonNetwork.PlayerList)
             {
